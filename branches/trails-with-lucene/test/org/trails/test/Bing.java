@@ -12,8 +12,9 @@
 package org.trails.test;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratorType;
 import javax.persistence.Id;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 
 import org.trails.validation.ValidateUniqueness;
 
@@ -66,7 +67,8 @@ public class Bing
     /**
      * @hibernate.id generator-class="native"
      */
-    @Id(generate=GeneratorType.AUTO)
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     public Integer getId()
     {
         return id;

@@ -38,7 +38,8 @@ public class User implements Serializable
     private boolean accountLocked = false;
     private boolean credentialsExpired = false;
 
-    @Id(generate = GeneratorType.AUTO)
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @PropertyDescriptor(index = 0)
     public Integer getId()
     {
@@ -95,7 +96,7 @@ public class User implements Serializable
 
     @ManyToMany(fetch = javax.persistence.FetchType.EAGER)
     @JoinTable(
-            table = @Table(name = "user_role"),
+            name = "user_role",
             joinColumns = {@JoinColumn(name = "user_ID")},
             inverseJoinColumns = {@JoinColumn(name = "role_ID")})
     public Set<Role> getRoles()

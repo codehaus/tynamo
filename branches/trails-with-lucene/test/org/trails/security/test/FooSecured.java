@@ -7,8 +7,9 @@
 package org.trails.security.test;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratorType;
 import javax.persistence.Id;
+import javax.persistence.GenerationType;
+import javax.persistence.GeneratedValue;
 
 import org.trails.security.RestrictionType;
 import org.trails.security.annotation.Restriction;
@@ -29,7 +30,8 @@ public class FooSecured {
 	public void setFooField(String fooField) {
 		this.fooField = fooField;
 	}
-    @Id(generate=GeneratorType.AUTO)
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
 	public int getId() {
 		return id;
 	}

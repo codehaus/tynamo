@@ -17,4 +17,12 @@ public interface IDescriptor extends Cloneable
     public void setDisplayName(String displayName);
     
     public Object clone();
+
+    boolean isIndexedByLucene();
+
+    void setIndexedByLucene(boolean indexed);
+
+    String getLuceneFieldName();
+
+    void setLuceneFieldName(String luceneFieldName);
 }

@@ -32,6 +32,8 @@ public class TrailsDescriptor implements IDescriptor
     private String shortDescription;
     protected Class type;
     private boolean hidden;
+    boolean indexedByLucene = false;
+    String luceneFieldName = "";
 
     public TrailsDescriptor(IDescriptor descriptor)
     {
@@ -123,4 +125,23 @@ public class TrailsDescriptor implements IDescriptor
         this.type = type;
     }
 
+    public boolean isIndexedByLucene()
+    {
+        return indexedByLucene;
+    }
+
+    public void setIndexedByLucene(boolean indexedByLucene)
+    {
+        this.indexedByLucene = indexedByLucene;
+    }
+
+    public String getLuceneFieldName()
+    {
+        return luceneFieldName;
+    }
+
+    public void setLuceneFieldName(String luceneFieldName)
+    {
+        this.luceneFieldName = luceneFieldName;
+    }
 }

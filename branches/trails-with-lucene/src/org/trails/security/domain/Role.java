@@ -32,7 +32,8 @@ public class Role implements Serializable
     private Set<User> users = new HashSet<User>();
 
 
-    @Id(generate = GeneratorType.AUTO)
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     public Integer getId()
     {
         return id;
@@ -71,7 +72,7 @@ public class Role implements Serializable
 
     @ManyToMany
     @JoinTable(
-            table = @Table(name = "user_role"),
+            name = "user_role",
             joinColumns = {@JoinColumn(name = "role_ID")},
             inverseJoinColumns = {@JoinColumn(name = "user_ID")})
     public Set<User> getUsers()

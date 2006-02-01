@@ -1,48 +1,46 @@
 package org.trails.test;
 
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.GeneratorType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class Embeddor
 {
-	private Integer id;
-	
-	private String name;
+    private Integer id;
 
-	@Id(generate=GeneratorType.AUTO)
-	public Integer getId()
-	{
-		return id;
-	}
+    private String name;
 
-	public void setId(Integer id)
-	{
-		this.id = id;
-	}
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    public Integer getId()
+    {
+        return id;
+    }
 
-	public String getName()
-	{
-		return name;
-	}
+    public void setId(Integer id)
+    {
+        this.id = id;
+    }
 
-	public void setName(String name)
-	{
-		this.name = name;
-	}
-	
-	private Embeddee embeddee;
+    public String getName()
+    {
+        return name;
+    }
 
-	@Embedded
-	public Embeddee getEmbeddee()
-	{
-		return embeddee;
-	}
+    public void setName(String name)
+    {
+        this.name = name;
+    }
 
-	public void setEmbeddee(Embeddee embeddee)
-	{
-		this.embeddee = embeddee;
-	}
+    private Embeddee embeddee;
+
+    @Embedded
+    public Embeddee getEmbeddee()
+    {
+        return embeddee;
+    }
+
+    public void setEmbeddee(Embeddee embeddee)
+    {
+        this.embeddee = embeddee;
+    }
 }

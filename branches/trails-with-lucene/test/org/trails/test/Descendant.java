@@ -2,8 +2,10 @@ package org.trails.test;
 
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
+import javax.persistence.DiscriminatorValue;
 
-@Inheritance(discriminatorValue="descendant")
+@Inheritance
+@DiscriminatorValue(value = "descendant")
 @Entity
 public class Descendant extends Ancestor
 {
@@ -22,7 +24,7 @@ public class Descendant extends Ancestor
         // TODO Auto-generated method stub
 
     }
-    
+
     private String extra;
 
     public String getExtra()
