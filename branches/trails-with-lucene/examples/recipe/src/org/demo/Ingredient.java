@@ -1,8 +1,9 @@
 package org.demo;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratorType;
 import javax.persistence.Id;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.trails.descriptor.annotation.PropertyDescriptor;
@@ -28,7 +29,8 @@ public class Ingredient
     }
 
     @PropertyDescriptor(index=0)
-    @Id(generate=GeneratorType.AUTO)
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     public Integer getId()
     {
         return id;

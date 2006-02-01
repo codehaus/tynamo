@@ -77,7 +77,8 @@
 			<list>
 				<ref local="hibernateDescriptorDecorator" />
 				<bean name="annotationDecorator" class="org.trails.descriptor.annotation.AnnotationDecorator" />
-			</list>
+                <bean name="luceneDecorator" class="org.trails.lucene.LuceneDescriptorDecorator" />
+            </list>
 		</property>
 	</bean>
 

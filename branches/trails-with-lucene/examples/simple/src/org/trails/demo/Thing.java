@@ -13,7 +13,6 @@ package org.trails.demo;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratorType;
 import javax.persistence.Id;
 
 import org.hibernate.validator.NotNull;

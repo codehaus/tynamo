@@ -18,7 +18,21 @@
 		<mapping class="org.trails.demo.Thing" />
 		<mapping class="org.trails.demo.Apple" />
 		<mapping class="org.trails.demo.Item2" />
-		<listener type="pre-update"
+
+        <mapping class="org.trails.demo.IndexedPojo" />
+
+        <event type="post-commit-update">
+            <listener class="org.hibernate.lucene.event.LuceneEventListener"/>
+        </event>
+        <event type="post-commit-insert">
+            <listener class="org.hibernate.lucene.event.LuceneEventListener"/>
+        </event>
+        <event type="post-commit-delete">
+            <listener class="org.hibernate.lucene.event.LuceneEventListener"/>
+        </event>
+
+
+        <listener type="pre-update"
 			class="org.hibernate.validator.event.ValidatePreUpdateEventListener" />
 		<listener type="merge"
 			class="org.trails.validation.ValidateMergeEventListener" />

@@ -1,9 +1,6 @@
 package org.trails.demo;
 
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.GeneratorType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 import org.trails.descriptor.annotation.ClassDescriptor;
 
@@ -21,7 +18,8 @@ public class Person
         // TODO Auto-generated constructor stub
     }
     
-    @Id(generate=GeneratorType.AUTO)
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     public Integer getId()
     {
         return id;

@@ -1,9 +1,6 @@
 package org.trails.demo;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratorType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 @Entity
 public class Car
@@ -16,10 +13,11 @@ public class Car
     }
 
     private Integer id;
-    
+
     private String name;
 
-    @Id(generate=GeneratorType.AUTO)
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     public Integer getId()
     {
         return id;
@@ -39,9 +37,9 @@ public class Car
     {
         this.name = name;
     }
-    
+
     private Make make;
-    
+
     private Model model;
 
     @ManyToOne
@@ -65,5 +63,5 @@ public class Car
     {
         this.model = model;
     }
-    
+
 }
