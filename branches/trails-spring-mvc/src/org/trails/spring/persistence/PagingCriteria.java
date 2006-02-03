@@ -14,7 +14,10 @@ import org.hibernate.criterion.Projections;
 import org.trails.descriptor.IClassDescriptor;
 
 /**
+ * A PagingCriteria is used for paging.
+ * 
  * @author Jurjan Woltman
+ * 
  */
 public class PagingCriteria extends DetachedCriteria {
 
@@ -43,16 +46,18 @@ public class PagingCriteria extends DetachedCriteria {
     
     Integer count = (Integer) criteria.uniqueResult();
     int x = (count != null ? count.intValue() : 0);
-    setTotalPageNumbers( x / getPageSize());
+    // make sure it is rounded up. so we need floats for that.
+    int tot = Math.round((float)x / (float) getPageSize());
+    setTotalPageNumbers( tot );
     
     //Restore original criteria
     criteria.setProjection(null);
     criteria.addOrder(Order.asc(classDescriptor.getIdentifierDescriptor().getName()));
     criteria.setResultTransformer(Criteria.ROOT_ENTITY);
-    
-    criteria.setMaxResults(getPageSize());
-    criteria.setFirstResult(getPageSize() * getPageNumber());
 
+    criteria.setFirstResult(getPageSize() * (getPageNumber()-1)); // substract 1 as it is 0 based...
+    criteria.setMaxResults(getPageSize());
+    
     return criteria;
   }
 

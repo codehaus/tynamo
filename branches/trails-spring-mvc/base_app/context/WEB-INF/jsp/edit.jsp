@@ -41,7 +41,7 @@ Edit instance of <c:out value="${trailsModel.classDescriptor.pluralDisplayName}"
       
     </table>
     <p>
-      <a href="javascript:document.forms['edit'].action = '<c:url value="/saveInstance.htm"/>';document.forms['edit'].submit();"><img title="Save" src="images/save.gif"></a>
+      <a href="javascript:document.forms['edit'].action = '<c:url value="/saveInstance.htm"/>';document.forms['edit'].submit();"><img title="Save" src="images/save.gif"></a>&nbsp;&nbsp;&nbsp;
       <a href="javascript:document.forms['edit'].action = '<c:url value="/deleteInstance.htm"/>';document.forms['edit'].submit();"><img title="Delete" src="images/delete.gif"></a>
     </p>  
 	</form>

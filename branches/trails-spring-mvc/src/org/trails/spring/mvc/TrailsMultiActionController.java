@@ -104,11 +104,14 @@ public class TrailsMultiActionController extends MultiActionController {
     
     List instances = null;
     int totalNumberOfPages = -1;
-    
+    log.debug("PagingSize: " + getPagingSize());
     if (getPagingSize() > 0) {
+      log.debug("PagingNumber: " + command.getPageNumber());
+
       PagingCriteria pagingCriteria = new PagingCriteria(classDescriptor, command.getPageNumber(), getPagingSize());
       instances = getPersistenceService().getInstances(pagingCriteria);
       totalNumberOfPages = pagingCriteria.getTotalPageNumbers();
+      log.debug("pagingCriteria of pages: " + totalNumberOfPages);
     } else {
       instances = getPersistenceService().getAllInstances(classDescriptor.getType());
     }

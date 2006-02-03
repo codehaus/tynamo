@@ -23,10 +23,10 @@ public class TrailsCommand {
   private Collection items = null;
   
   private String id = null;
-  
-  private int pageNumber = 0;
-  
-  private int totalNumberOfPages = 0;
+  // default 1.
+  private int pageNumber = 1;
+  // default 1
+  private int totalNumberOfPages = 1;
   
   public TrailsCommand() {}
   

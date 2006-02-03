@@ -8,7 +8,7 @@
 <%
   int selected = selectedPageNumber.intValue();
   int total = totalNumberOfPages.intValue();
-  int pageNumber = 1;
+  int pageNumber = 0;
   
   if (selected == 0) {
     selected++;
