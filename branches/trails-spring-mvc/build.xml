@@ -11,10 +11,8 @@
 	<property name="ant.home" value="${env.ANT_HOME}" />
 	<available file="${ant.home}/lib/ant-apt.jar" property="apt.installed" />
 	<property name="jdk.home" value="${env.JAVA_HOME}" />
-	<property name="example.name" value="simple" />
 	<property name="saxon.jar" value="c:/java/saxon/saxon8.jar" />
 	<property name="junit.report.dir" value="junit-reports" />
-	<property name="example.basedir" value="${basedir}/examples/" />
 	<property name="tomcat.home" value="${env.TOMCAT_HOME}"/>
  
 	<property name="generate.force" value="true"/>
@@ -52,7 +50,7 @@
     
 	<taskdef name="apt" classname="org.apache.tools.ant.taskdefs.Apt" classpathref="class.path"/>
 
-	<target name="all" depends="clean,junit,deploy-example,functional-tests" />
+	<target name="all" depends="clean,junit" />
 	
 	<target name="dist" depends="clean">
 		<delete file="${dist.file}" />
@@ -77,12 +75,7 @@
 		<delete dir="${compile.dir}" />
 		<delete dir="${deploy.dir}" />
 		<delete dir="${basedir}/work" />
-		<delete dir="${example.basedir}/${example.name}/deploy" />
 		<delete dir="${junit.report.dir}" />
-		<delete >
-			<fileset dir="${example.basedir}" includes="**/lib/*,**/WEB-INF/classes/**/*">
-			</fileset>
-		</delete>
 	</target>
 		
 	<target name="build-hibernate-config" depends="jar" description="builds the hibernate config for the unit tests">
@@ -156,21 +149,10 @@
 		</copy>
 	</target>
 	
-	<target name="build-example" depends="update-example">
-		<ant dir="${example.basedir}/${example.name}" inheritall="false"></ant>
-	</target>
-	
 	<target name="update-tutorial">
 		<antcall target="update-project">
 			<param name="project.dir" value="c:/chris/tmp/trails-tutorial" />
 			<param name="project.name" value="trails-tutorial" />
-		</antcall>
-	</target>
-				
-	<target name="update-example">
-		<antcall target="update-project">
-			<param name="project.dir" value="${example.basedir}/${example.name}" />
-			<param name="project.name" value="${example.name}" />
 		</antcall>
 	</target>
 	
@@ -336,12 +318,6 @@
 			</test>
 		</junit>
 	</target>
-	
-	<target name="deploy-example" depends="update-example" description="Redeploys the examples/simple application">
-		<ant dir="examples/simple" target="redeploy" inheritall="false"></ant>
-		<!-- Give tomcat the time to deploy... i know it's bad...-->
-		<sleep seconds="30"/>
-	</target>
 		
 	<target name="functional-tests" depends="compile-tests" description="Run the functional tests agains the examples/simple application" >
 		
@@ -394,10 +370,7 @@
 			destdir="upgraded" extension=".jwc" force="true">
 			<include name="**/*.jwc"/>
 		</style>
-			<style basedir="${basedir}/examples" style="upgradeTapestry3to4.xsl" 
-				destdir="upgraded" extension=".page">
-				<include name="**/*.page"/>
-			</style>
+
 	</target>
 	<target name="junit-report" depends="junit">
 	     <mkdir dir="${junit.report.dir}/html"/>
