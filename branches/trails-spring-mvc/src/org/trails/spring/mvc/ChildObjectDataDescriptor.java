@@ -1,9 +1,3 @@
-/*
- * Copyright 2005, Inspiring BV, the Netherlands
- *
- * info@inspiring.nl
- */
-
 package org.trails.spring.mvc;
 
 public class ChildObjectDataDescriptor extends ObjectDataDescriptor {

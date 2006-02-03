@@ -43,7 +43,7 @@ public class PagingCriteria extends DetachedCriteria {
   @Override
   public Criteria getExecutableCriteria(Session session) {
     Criteria criteria = super.getExecutableCriteria(session).setProjection(Projections.rowCount());
-    
+    // get the total number of entities.
     Integer count = (Integer) criteria.uniqueResult();
     int x = (count != null ? count.intValue() : 0);
     // make sure it is rounded up. so we need floats for that.

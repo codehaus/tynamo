@@ -1,17 +1,7 @@
-/*
- * Copyright 2005, Inspiring BV, the Netherlands
- *
- * info@inspiring.nl
- */
-
 package org.trails.spring.mvc;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
 
 import org.trails.descriptor.TrailsPropertyDescriptor;
 
