@@ -14,7 +14,7 @@
   List of <c:out value="${trailsModel.classDescriptor.pluralDisplayName}" />
 <p>
 
-<table>
+<table border="1">
 
 <!-- Create the column headers. -->
 <tr>
