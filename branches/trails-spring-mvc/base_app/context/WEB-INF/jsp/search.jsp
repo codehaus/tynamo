@@ -19,7 +19,7 @@ Search instance of <c:out value="${trailsModel.classDescriptor.pluralDisplayName
          	<c:out value="${column.propertyDescriptor.displayName}"/>
         </td>
         <td>
-        	<trails:property property="${column}" classDescriptor="${trailsModel.classDescriptor}"/>
+        	<trails:property property="${column}"/>
       	</td>
     	</tr>
 		</c:if>

@@ -24,10 +24,11 @@ public class PagingCriteria extends DetachedCriteria {
   private int pageNumber;
   private int pageSize;
   private int totalPageNumbers;
+  private IClassDescriptor classDescriptor;
   
   public PagingCriteria(IClassDescriptor classDescriptor, int pageNumber, int pageSize) {
     super(classDescriptor.getType().getName());
-    
+    this.classDescriptor = classDescriptor;
     setEntityClass(classDescriptor.getType());
     setPageNumber(pageNumber);
     setPageSize(pageSize);
@@ -38,13 +39,15 @@ public class PagingCriteria extends DetachedCriteria {
    */
   @Override
   public Criteria getExecutableCriteria(Session session) {
-    Criteria criteria = super.getExecutableCriteria(session).addOrder(Order.asc("id"));
-    criteria.setProjection(Projections.rowCount());
+    Criteria criteria = super.getExecutableCriteria(session).setProjection(Projections.rowCount());
     
-    setTotalPageNumbers(((Integer)criteria.uniqueResult()).intValue() / getPageSize());
+    Integer count = (Integer) criteria.uniqueResult();
+    int x = (count != null ? count.intValue() : 0);
+    setTotalPageNumbers( x / getPageSize());
     
     //Restore original criteria
     criteria.setProjection(null);
+    criteria.addOrder(Order.asc(classDescriptor.getIdentifierDescriptor().getName()));
     criteria.setResultTransformer(Criteria.ROOT_ENTITY);
     
     criteria.setMaxResults(getPageSize());
