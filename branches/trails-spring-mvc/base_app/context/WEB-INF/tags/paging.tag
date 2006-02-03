@@ -8,7 +8,7 @@
 <%
   int selected = selectedPageNumber.intValue();
   int total = totalNumberOfPages.intValue();
-  int pageNumber = 0;
+  int pageNumber = 1;
   
   if (selected == 0) {
     selected++;
@@ -25,9 +25,7 @@
      pageNumber++;
   }
   
-  if (selected > 0) {
-    out.print("["+selected+"]");
-  } 
+  out.print("["+selected+"]");
 
   pageNumber = selected + 1;
 
@@ -41,8 +39,3 @@
     pageNumber++;
   }
 %>  
-
-
-
-
-
