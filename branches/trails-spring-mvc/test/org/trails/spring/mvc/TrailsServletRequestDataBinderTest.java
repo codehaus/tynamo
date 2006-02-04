@@ -6,6 +6,12 @@
 
 package org.trails.spring.mvc;
 
+import static org.easymock.EasyMock.expect;
+import static org.easymock.classextension.EasyMock.createMock;
+import static org.easymock.classextension.EasyMock.replay;
+import static org.easymock.classextension.EasyMock.reset;
+import static org.easymock.classextension.EasyMock.verify;
+
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -15,8 +21,6 @@ import javax.servlet.http.HttpServletRequest;
 import junit.framework.TestCase;
 
 import org.apache.commons.collections.ArrayEnumeration;
-import org.easymock.MockControl;
-import org.easymock.classextension.MockClassControl;
 import org.springframework.validation.BindException;
 import org.trails.descriptor.DescriptorService;
 import org.trails.descriptor.IClassDescriptor;
@@ -26,52 +30,32 @@ import org.trails.persistence.PersistenceService;
 
 public class TrailsServletRequestDataBinderTest extends TestCase {
   
-
-
-  private MockControl controlPersistence = MockControl.createControl(PersistenceService.class);
-  private PersistenceService mockPersistence = (PersistenceService) controlPersistence.getMock();
-  
-  private MockControl controlDescriptor = MockControl.createControl(DescriptorService.class);
-  private DescriptorService mockDescriptor = (DescriptorService) controlDescriptor.getMock(); 
-  
-  private MockControl controlPropertyDescriptor = MockControl.createControl(IPropertyDescriptor.class);
-  private IPropertyDescriptor mockPropertyDescriptor = (IPropertyDescriptor) controlPropertyDescriptor.getMock();
-  
-  private MockControl controlClassDescriptor = MockControl.createControl(IClassDescriptor.class);
-  private IClassDescriptor mockClassDescriptor = (IClassDescriptor) controlClassDescriptor.getMock();
-  
-  private MockControl controlClassDescriptor2 = MockControl.createControl(IClassDescriptor.class);
-  private IClassDescriptor mockClassDescriptor2 = (IClassDescriptor) controlClassDescriptor2.getMock();  
-  
-  private MockControl controlRequest = MockControl.createControl(HttpServletRequest.class);
-  private HttpServletRequest mockRequest = (HttpServletRequest) controlRequest.getMock();
-  
-  private MockControl controlPropertyDescriptor1 = MockClassControl.createControl(TrailsPropertyDescriptor.class);
-  private TrailsPropertyDescriptor mockPropertyDescriptor1 = (TrailsPropertyDescriptor) controlPropertyDescriptor1.getMock();
-  
-  private MockControl controlPropertyDescriptor2 = MockClassControl.createControl(TrailsPropertyDescriptor.class);
-  private TrailsPropertyDescriptor mockPropertyDescriptor2 = (TrailsPropertyDescriptor) controlPropertyDescriptor2.getMock();
-
-  private MockControl controlPropertyDescriptor3 = MockClassControl.createControl(TrailsPropertyDescriptor.class);
-  private TrailsPropertyDescriptor mockPropertyDescriptor3 = (TrailsPropertyDescriptor) controlPropertyDescriptor3.getMock();
+  private PersistenceService mockPersistence = createMock(PersistenceService.class);
+  private DescriptorService mockDescriptor =  createMock(DescriptorService.class);
+  private IPropertyDescriptor mockPropertyDescriptor = createMock(IPropertyDescriptor.class);
+  private IClassDescriptor mockClassDescriptor = createMock(IClassDescriptor.class);
+  private IClassDescriptor mockClassDescriptor2 = createMock(IClassDescriptor.class);
+  private HttpServletRequest mockRequest = createMock(HttpServletRequest.class);
+  private TrailsPropertyDescriptor mockPropertyDescriptor1 = createMock(TrailsPropertyDescriptor.class);
+  private TrailsPropertyDescriptor mockPropertyDescriptor2 = createMock(TrailsPropertyDescriptor.class);
+  private TrailsPropertyDescriptor mockPropertyDescriptor3 = createMock(TrailsPropertyDescriptor.class);
   
   /**
    * @see junit.framework.TestCase#setUp()
    */
   @Override
   protected void setUp() throws Exception {
-    controlPersistence.reset();
-    controlDescriptor.reset();
-    controlPropertyDescriptor.reset();
-    controlPropertyDescriptor1.reset();
-    controlPropertyDescriptor2.reset();
-    controlPropertyDescriptor3.reset();
-    controlClassDescriptor2.reset();
-    controlClassDescriptor.reset();
-    controlRequest.reset();
+    reset(mockPersistence);
+    reset(mockDescriptor);
+    reset(mockPropertyDescriptor);
+    reset(mockClassDescriptor);
+    reset(mockClassDescriptor2);
+    reset(mockRequest);
+    reset(mockPropertyDescriptor1);
+    reset(mockPropertyDescriptor2);
+    reset(mockPropertyDescriptor3);
     
-    mockPropertyDescriptor.getDisplayName();
-    controlPropertyDescriptor.setDefaultReturnValue("DisplayName");
+    expect(mockPropertyDescriptor.getDisplayName()).andStubReturn("DisplayName");
   }
 
   /**
@@ -82,10 +66,9 @@ public class TrailsServletRequestDataBinderTest extends TestCase {
     binder.setErrors(new BindException(new Object(), "dummy"));
     
     DummyClass dummyClass = new DummyClass();
-    mockPropertyDescriptor.isRequired();
-    controlPropertyDescriptor.setReturnValue(true);
+    expect(mockPropertyDescriptor.isRequired()).andReturn(Boolean.TRUE);
     
-    controlPropertyDescriptor.replay();
+    replay(mockPropertyDescriptor);
     
     binder.parseValidateAndSetParameterValueOntoInstance(dummyClass, mockPropertyDescriptor, "");
     
@@ -99,10 +82,10 @@ public class TrailsServletRequestDataBinderTest extends TestCase {
     binder.setErrors(new BindException(new Object(), "dummy"));
     
     DummyClass dummyClass = new DummyClass();
-    mockPropertyDescriptor.isRequired();
-    controlPropertyDescriptor.setReturnValue(true);
+
+    expect(mockPropertyDescriptor.isRequired()).andReturn(Boolean.TRUE);
     
-    controlPropertyDescriptor.replay();
+    replay(mockPropertyDescriptor);
     
     binder.parseValidateAndSetParameterValueOntoInstance(dummyClass, mockPropertyDescriptor, null);
     
@@ -119,14 +102,11 @@ public class TrailsServletRequestDataBinderTest extends TestCase {
     DummyClass dummyClass = new DummyClass();
     dummyClass.setAString("XX");
     
-    mockPropertyDescriptor.isRequired();
-    controlPropertyDescriptor.setReturnValue(false);
-    mockPropertyDescriptor.getName();
-    controlPropertyDescriptor.setDefaultReturnValue("aString");
-    mockPropertyDescriptor.isString();
-    controlPropertyDescriptor.setDefaultReturnValue(true);
-    
-    controlPropertyDescriptor.replay();
+    expect(mockPropertyDescriptor.isRequired()).andReturn(false);
+    expect(mockPropertyDescriptor.getName()).andStubReturn("aString");
+    expect(mockPropertyDescriptor.isString()).andStubReturn(true);
+
+    replay(mockPropertyDescriptor);
     
     binder.parseValidateAndSetParameterValueOntoInstance(dummyClass, mockPropertyDescriptor, null);
     
@@ -144,14 +124,11 @@ public class TrailsServletRequestDataBinderTest extends TestCase {
     DummyClass dummyClass = new DummyClass();
     dummyClass.setAString("XX");
     
-    mockPropertyDescriptor.isRequired();
-    controlPropertyDescriptor.setReturnValue(false);
-    mockPropertyDescriptor.getName();
-    controlPropertyDescriptor.setDefaultReturnValue("aString");
-    mockPropertyDescriptor.isString();
-    controlPropertyDescriptor.setDefaultReturnValue(true);
+    expect(mockPropertyDescriptor.isRequired()).andReturn(false);
+    expect(mockPropertyDescriptor.getName()).andStubReturn("aString");
+    expect(mockPropertyDescriptor.isString()).andStubReturn(Boolean.TRUE);
     
-    controlPropertyDescriptor.replay();
+    replay(mockPropertyDescriptor);
     
     binder.parseValidateAndSetParameterValueOntoInstance(dummyClass, mockPropertyDescriptor, "BB");
     
@@ -169,16 +146,13 @@ public class TrailsServletRequestDataBinderTest extends TestCase {
     
     DummyClass dummyClass = new DummyClass();
     dummyClass.setAnInteger(new Integer(3));
-    mockPropertyDescriptor.isRequired();
-    controlPropertyDescriptor.setReturnValue(false);
-    mockPropertyDescriptor.isString();
-    controlPropertyDescriptor.setReturnValue(false);
-    mockPropertyDescriptor.getName();
-    controlPropertyDescriptor.setDefaultReturnValue("anInteger");
-    mockPropertyDescriptor.getPropertyType();
-    controlPropertyDescriptor.setDefaultReturnValue(Integer.class);
     
-    controlPropertyDescriptor.replay();
+    expect(mockPropertyDescriptor.isRequired()).andReturn(false);
+    expect(mockPropertyDescriptor.isString()).andReturn(false);
+    expect(mockPropertyDescriptor.getName()).andStubReturn("anInteger");
+    expect(mockPropertyDescriptor.getPropertyType()).andStubReturn(Integer.class);
+    
+    replay(mockPropertyDescriptor);
     
     binder.parseValidateAndSetParameterValueOntoInstance(dummyClass, mockPropertyDescriptor, null);
     
@@ -195,16 +169,12 @@ public class TrailsServletRequestDataBinderTest extends TestCase {
     
     DummyClass dummyClass = new DummyClass();
     
-    mockPropertyDescriptor.isRequired();
-    controlPropertyDescriptor.setReturnValue(false);
-    mockPropertyDescriptor.isString();
-    controlPropertyDescriptor.setReturnValue(false);
-    mockPropertyDescriptor.getName();
-    controlPropertyDescriptor.setDefaultReturnValue("anInteger");
-    mockPropertyDescriptor.getPropertyType();
-    controlPropertyDescriptor.setDefaultReturnValue(Integer.class);
+    expect(mockPropertyDescriptor.isRequired()).andReturn(false);
+    expect(mockPropertyDescriptor.isString()).andReturn(false);
+    expect(mockPropertyDescriptor.getName()).andStubReturn("anInteger");
+    expect(mockPropertyDescriptor.getPropertyType()).andStubReturn(Integer.class);
     
-    controlPropertyDescriptor.replay();
+    replay(mockPropertyDescriptor);
     
     binder.parseValidateAndSetParameterValueOntoInstance(dummyClass, mockPropertyDescriptor, "3");
     
@@ -218,19 +188,14 @@ public class TrailsServletRequestDataBinderTest extends TestCase {
   public void testParseValidateAndSetParameterValueOntoInstanceIntValueNull() {
     TrailsServletRequestDataBinder binder = new TrailsServletRequestDataBinder(mockDescriptor, mockPersistence);
     binder.setErrors(new BindException(new Object(), "dummy"));
-    
     DummyClass dummyClass = new DummyClass();
-    dummyClass.setPrimInt(new Integer(3));
-    mockPropertyDescriptor.isRequired();
-    controlPropertyDescriptor.setReturnValue(false);
-    mockPropertyDescriptor.isString();
-    controlPropertyDescriptor.setReturnValue(false);
-    mockPropertyDescriptor.getName();
-    controlPropertyDescriptor.setDefaultReturnValue("primInt");
-    mockPropertyDescriptor.getPropertyType();
-    controlPropertyDescriptor.setDefaultReturnValue(int.class);
     
-    controlPropertyDescriptor.replay();
+    expect(mockPropertyDescriptor.isRequired()).andReturn(false);
+    expect(mockPropertyDescriptor.isString()).andReturn(false);
+    expect(mockPropertyDescriptor.getName()).andStubReturn("primInt");
+    expect(mockPropertyDescriptor.getPropertyType()).andStubReturn(int.class);
+    
+    replay(mockPropertyDescriptor);
     
     binder.parseValidateAndSetParameterValueOntoInstance(dummyClass, mockPropertyDescriptor, null);
     
@@ -247,16 +212,12 @@ public class TrailsServletRequestDataBinderTest extends TestCase {
     
     DummyClass dummyClass = new DummyClass();
     
-    mockPropertyDescriptor.isRequired();
-    controlPropertyDescriptor.setReturnValue(false);
-    mockPropertyDescriptor.isString();
-    controlPropertyDescriptor.setReturnValue(false);
-    mockPropertyDescriptor.getName();
-    controlPropertyDescriptor.setDefaultReturnValue("primInt");
-    mockPropertyDescriptor.getPropertyType();
-    controlPropertyDescriptor.setDefaultReturnValue(int.class);
+    expect(mockPropertyDescriptor.isRequired()).andReturn(false);
+    expect(mockPropertyDescriptor.isString()).andReturn(false);
+    expect(mockPropertyDescriptor.getName()).andStubReturn("primInt");
+    expect(mockPropertyDescriptor.getPropertyType()).andStubReturn(int.class);
     
-    controlPropertyDescriptor.replay();
+    replay(mockPropertyDescriptor);
     
     binder.parseValidateAndSetParameterValueOntoInstance(dummyClass, mockPropertyDescriptor, "3");
     
@@ -274,16 +235,12 @@ public class TrailsServletRequestDataBinderTest extends TestCase {
     
     DummyClass dummyClass = new DummyClass();
     dummyClass.setALong(new Long(3));
-    mockPropertyDescriptor.isRequired();
-    controlPropertyDescriptor.setReturnValue(false);
-    mockPropertyDescriptor.isString();
-    controlPropertyDescriptor.setReturnValue(false);
-    mockPropertyDescriptor.getName();
-    controlPropertyDescriptor.setDefaultReturnValue("aLong");
-    mockPropertyDescriptor.getPropertyType();
-    controlPropertyDescriptor.setDefaultReturnValue(Long.class);
+    expect(mockPropertyDescriptor.isRequired()).andReturn(false);
+    expect(mockPropertyDescriptor.isString()).andReturn(false);
+    expect(mockPropertyDescriptor.getName()).andStubReturn("aLong");
+    expect(mockPropertyDescriptor.getPropertyType()).andStubReturn(Long.class);
     
-    controlPropertyDescriptor.replay();
+    replay(mockPropertyDescriptor);
     
     binder.parseValidateAndSetParameterValueOntoInstance(dummyClass, mockPropertyDescriptor, null);
     
@@ -300,16 +257,12 @@ public class TrailsServletRequestDataBinderTest extends TestCase {
     
     DummyClass dummyClass = new DummyClass();
     
-    mockPropertyDescriptor.isRequired();
-    controlPropertyDescriptor.setReturnValue(false);
-    mockPropertyDescriptor.isString();
-    controlPropertyDescriptor.setReturnValue(false);
-    mockPropertyDescriptor.getName();
-    controlPropertyDescriptor.setDefaultReturnValue("aLong");
-    mockPropertyDescriptor.getPropertyType();
-    controlPropertyDescriptor.setDefaultReturnValue(Long.class);
+    expect(mockPropertyDescriptor.isRequired()).andReturn(false);
+    expect(mockPropertyDescriptor.isString()).andReturn(false);
+    expect(mockPropertyDescriptor.getName()).andStubReturn("aLong");
+    expect(mockPropertyDescriptor.getPropertyType()).andStubReturn(Long.class);
     
-    controlPropertyDescriptor.replay();
+    replay(mockPropertyDescriptor);
     
     binder.parseValidateAndSetParameterValueOntoInstance(dummyClass, mockPropertyDescriptor, "3");
     
@@ -325,17 +278,13 @@ public class TrailsServletRequestDataBinderTest extends TestCase {
     binder.setErrors(new BindException(new Object(), "dummy"));
     
     DummyClass dummyClass = new DummyClass();
-    dummyClass.setPrimLong(new Integer(3));
-    mockPropertyDescriptor.isRequired();
-    controlPropertyDescriptor.setReturnValue(false);
-    mockPropertyDescriptor.isString();
-    controlPropertyDescriptor.setReturnValue(false);
-    mockPropertyDescriptor.getName();
-    controlPropertyDescriptor.setDefaultReturnValue("primLong");
-    mockPropertyDescriptor.getPropertyType();
-    controlPropertyDescriptor.setDefaultReturnValue(long.class);
+    dummyClass.setPrimLong(new Long(3));
+    expect(mockPropertyDescriptor.isRequired()).andReturn(false);
+    expect(mockPropertyDescriptor.isString()).andReturn(false);
+    expect(mockPropertyDescriptor.getName()).andStubReturn("primLong");
+    expect(mockPropertyDescriptor.getPropertyType()).andStubReturn(long.class);
     
-    controlPropertyDescriptor.replay();
+    replay(mockPropertyDescriptor);
     
     binder.parseValidateAndSetParameterValueOntoInstance(dummyClass, mockPropertyDescriptor, null);
     
@@ -352,16 +301,13 @@ public class TrailsServletRequestDataBinderTest extends TestCase {
     
     DummyClass dummyClass = new DummyClass();
     
-    mockPropertyDescriptor.isRequired();
-    controlPropertyDescriptor.setReturnValue(false);
-    mockPropertyDescriptor.isString();
-    controlPropertyDescriptor.setReturnValue(false);
-    mockPropertyDescriptor.getName();
-    controlPropertyDescriptor.setDefaultReturnValue("primLong");
-    mockPropertyDescriptor.getPropertyType();
-    controlPropertyDescriptor.setDefaultReturnValue(long.class);
+    expect(mockPropertyDescriptor.isRequired()).andReturn(false);
+    expect(mockPropertyDescriptor.isString()).andReturn(false);
+    expect(mockPropertyDescriptor.getName()).andStubReturn("primLong");
+    expect(mockPropertyDescriptor.getPropertyType()).andStubReturn(long.class);
     
-    controlPropertyDescriptor.replay();
+    replay(mockPropertyDescriptor);
+    
     
     binder.parseValidateAndSetParameterValueOntoInstance(dummyClass, mockPropertyDescriptor, "3");
     
@@ -379,17 +325,14 @@ public class TrailsServletRequestDataBinderTest extends TestCase {
     
     DummyClass dummyClass = new DummyClass();
     dummyClass.setBigDecimal(new BigDecimal(3));
-    mockPropertyDescriptor.isRequired();
-    controlPropertyDescriptor.setReturnValue(false);
-    mockPropertyDescriptor.isString();
-    controlPropertyDescriptor.setReturnValue(false);
-    mockPropertyDescriptor.getName();
-    controlPropertyDescriptor.setDefaultReturnValue("bigDecimal");
-    mockPropertyDescriptor.getPropertyType();
-    controlPropertyDescriptor.setDefaultReturnValue(BigDecimal.class);
     
-    controlPropertyDescriptor.replay();
+    expect(mockPropertyDescriptor.isRequired()).andReturn(false);
+    expect(mockPropertyDescriptor.isString()).andReturn(false);
+    expect(mockPropertyDescriptor.getName()).andStubReturn("BigDecimal");
+    expect(mockPropertyDescriptor.getPropertyType()).andStubReturn(BigDecimal.class);
     
+    replay(mockPropertyDescriptor);
+        
     binder.parseValidateAndSetParameterValueOntoInstance(dummyClass, mockPropertyDescriptor, null);
     
     assertFalse(binder.hasErrors());
@@ -405,16 +348,12 @@ public class TrailsServletRequestDataBinderTest extends TestCase {
     
     DummyClass dummyClass = new DummyClass();
     
-    mockPropertyDescriptor.isRequired();
-    controlPropertyDescriptor.setReturnValue(false);
-    mockPropertyDescriptor.isString();
-    controlPropertyDescriptor.setReturnValue(false);
-    mockPropertyDescriptor.getName();
-    controlPropertyDescriptor.setDefaultReturnValue("bigDecimal");
-    mockPropertyDescriptor.getPropertyType();
-    controlPropertyDescriptor.setDefaultReturnValue(BigDecimal.class);
+    expect(mockPropertyDescriptor.isRequired()).andReturn(false);
+    expect(mockPropertyDescriptor.isString()).andReturn(false);
+    expect(mockPropertyDescriptor.getName()).andStubReturn("bigDecimal");
+    expect(mockPropertyDescriptor.getPropertyType()).andStubReturn(BigDecimal.class);
     
-    controlPropertyDescriptor.replay();
+    replay(mockPropertyDescriptor);
     
     binder.parseValidateAndSetParameterValueOntoInstance(dummyClass, mockPropertyDescriptor, "3");
     
@@ -432,20 +371,15 @@ public class TrailsServletRequestDataBinderTest extends TestCase {
     
     DummyClass dummyClass = new DummyClass();
     dummyClass.setADate(new Date());
-    mockPropertyDescriptor.isRequired();
-    controlPropertyDescriptor.setReturnValue(false);
-    mockPropertyDescriptor.isString();
-    controlPropertyDescriptor.setReturnValue(false);
-    mockPropertyDescriptor.isDate();
-    controlPropertyDescriptor.setReturnValue(true);   
-    mockPropertyDescriptor.getName();
-    controlPropertyDescriptor.setDefaultReturnValue("aDate");
-    mockPropertyDescriptor.getPropertyType();
-    controlPropertyDescriptor.setDefaultReturnValue(Date.class);
-    mockPropertyDescriptor.getFormat();
-    controlPropertyDescriptor.setDefaultReturnValue("dd-MM-yyyy");
     
-    controlPropertyDescriptor.replay();
+    expect(mockPropertyDescriptor.isRequired()).andReturn(false);
+    expect(mockPropertyDescriptor.isString()).andReturn(false);
+    expect(mockPropertyDescriptor.isDate()).andReturn(true);
+    expect(mockPropertyDescriptor.getName()).andStubReturn("aDate");
+    expect(mockPropertyDescriptor.getPropertyType()).andStubReturn(Date.class);
+    expect(mockPropertyDescriptor.getFormat()).andStubReturn("dd-MM-yyyy");
+    
+    replay(mockPropertyDescriptor);
     
     binder.parseValidateAndSetParameterValueOntoInstance(dummyClass, mockPropertyDescriptor, null);
     
@@ -464,20 +398,14 @@ public class TrailsServletRequestDataBinderTest extends TestCase {
     
     DummyClass dummyClass = new DummyClass();
     
-    mockPropertyDescriptor.isRequired();
-    controlPropertyDescriptor.setReturnValue(false);
-    mockPropertyDescriptor.isString();
-    controlPropertyDescriptor.setReturnValue(false);
-    mockPropertyDescriptor.isDate();
-    controlPropertyDescriptor.setReturnValue(true);    
-    mockPropertyDescriptor.getName();
-    controlPropertyDescriptor.setDefaultReturnValue("aDate");
-    mockPropertyDescriptor.getPropertyType();
-    controlPropertyDescriptor.setDefaultReturnValue(Date.class);
-    mockPropertyDescriptor.getFormat();
-    controlPropertyDescriptor.setDefaultReturnValue("dd-MM-yyyy");
+    expect(mockPropertyDescriptor.isRequired()).andReturn(false);
+    expect(mockPropertyDescriptor.isString()).andReturn(false);
+    expect(mockPropertyDescriptor.isDate()).andReturn(true);
+    expect(mockPropertyDescriptor.getName()).andStubReturn("aDate");
+    expect(mockPropertyDescriptor.getPropertyType()).andStubReturn(Date.class);
+    expect(mockPropertyDescriptor.getFormat()).andStubReturn("dd-MM-yyyy");
     
-    controlPropertyDescriptor.replay();
+    replay(mockPropertyDescriptor);
     
     binder.parseValidateAndSetParameterValueOntoInstance(dummyClass, mockPropertyDescriptor, "01-01-2005");
     
@@ -494,20 +422,14 @@ public class TrailsServletRequestDataBinderTest extends TestCase {
     
     DummyClass dummyClass = new DummyClass();
     
-    mockPropertyDescriptor.isRequired();
-    controlPropertyDescriptor.setReturnValue(false);
-    mockPropertyDescriptor.isString();
-    controlPropertyDescriptor.setReturnValue(false);
-    mockPropertyDescriptor.isDate();
-    controlPropertyDescriptor.setReturnValue(true);    
-    mockPropertyDescriptor.getName();
-    controlPropertyDescriptor.setDefaultReturnValue("aDate");
-    mockPropertyDescriptor.getPropertyType();
-    controlPropertyDescriptor.setDefaultReturnValue(Date.class);
-    mockPropertyDescriptor.getFormat();
-    controlPropertyDescriptor.setDefaultReturnValue("dd-MM-yyyy");
+    expect(mockPropertyDescriptor.isRequired()).andReturn(false);
+    expect(mockPropertyDescriptor.isString()).andReturn(false);
+    expect(mockPropertyDescriptor.isDate()).andReturn(true);
+    expect(mockPropertyDescriptor.getName()).andStubReturn("aDate");
+    expect(mockPropertyDescriptor.getPropertyType()).andStubReturn(Date.class);
+    expect(mockPropertyDescriptor.getFormat()).andStubReturn("dd-MM-yyyy");
     
-    controlPropertyDescriptor.replay();
+    replay(mockPropertyDescriptor);
     
     binder.parseValidateAndSetParameterValueOntoInstance(dummyClass, mockPropertyDescriptor, "xx-01-2005");
     
@@ -524,16 +446,12 @@ public class TrailsServletRequestDataBinderTest extends TestCase {
     
     DummyClass dummyClass = new DummyClass();
     
-    mockPropertyDescriptor.isRequired();
-    controlPropertyDescriptor.setReturnValue(false);
-    mockPropertyDescriptor.isString();
-    controlPropertyDescriptor.setReturnValue(false);
-    mockPropertyDescriptor.getName();
-    controlPropertyDescriptor.setDefaultReturnValue("aLong");
-    mockPropertyDescriptor.getPropertyType();
-    controlPropertyDescriptor.setDefaultReturnValue(Long.class);
+    expect(mockPropertyDescriptor.isRequired()).andReturn(false);
+    expect(mockPropertyDescriptor.isString()).andReturn(false);
+    expect(mockPropertyDescriptor.getName()).andStubReturn("aLong");
+    expect(mockPropertyDescriptor.getPropertyType()).andStubReturn(Long.class);
     
-    controlPropertyDescriptor.replay();
+    replay(mockPropertyDescriptor);
     
     binder.parseValidateAndSetParameterValueOntoInstance(dummyClass, mockPropertyDescriptor, "XX");
     
@@ -561,62 +479,40 @@ public class TrailsServletRequestDataBinderTest extends TestCase {
     };
     DummyClass dummyClass = new DummyClass();
     
-    mockClassDescriptor.getType();
-    controlClassDescriptor.setDefaultReturnValue(DummyClass2.class);
-    
-    mockRequest.getParameterNames();
+    expect(mockClassDescriptor.getType()).andStubReturn(DummyClass2.class);
     ArrayEnumeration enumeration = new ArrayEnumeration(new String[] {"aString", "dummyClass.anInteger"});
-    controlRequest.setDefaultReturnValue(enumeration);
+    expect(mockRequest.getParameterNames()).andStubReturn(enumeration);
+    expect(mockClassDescriptor.getPropertyDescriptor("aString")).andReturn(mockPropertyDescriptor1);
+    expect(mockClassDescriptor.getPropertyDescriptor("dummyClass")).andReturn(mockPropertyDescriptor2);
+
     
-    mockClassDescriptor.getPropertyDescriptor("aString");
-    controlClassDescriptor.setReturnValue(mockPropertyDescriptor1);
+    expect(mockPropertyDescriptor1.isCollection()).andStubReturn(false);
+    expect(mockPropertyDescriptor1.isObjectReference()).andStubReturn(false);
+    expect(mockPropertyDescriptor1.isIdentifier()).andStubReturn(false);
     
-    mockClassDescriptor.getPropertyDescriptor("dummyClass");
-    controlClassDescriptor.setReturnValue(mockPropertyDescriptor2);
+    expect(mockPropertyDescriptor2.isCollection()).andStubReturn(false);
+    expect(mockPropertyDescriptor2.isObjectReference()).andStubReturn(true);
+    expect(mockPropertyDescriptor2.isIdentifier()).andStubReturn(false);
     
-    mockPropertyDescriptor1.isCollection();
-    controlPropertyDescriptor1.setDefaultReturnValue(false);
-    mockPropertyDescriptor1.isObjectReference();
-    controlPropertyDescriptor1.setDefaultReturnValue(false);
-    mockPropertyDescriptor1.isIdentifier();
-    controlPropertyDescriptor1.setDefaultReturnValue(false);
+    expect(mockPropertyDescriptor2.getPropertyType()).andStubReturn(DummyClass.class);
+    expect(mockDescriptor.getClassDescriptor(DummyClass.class)).andReturn(mockClassDescriptor2);
     
-    mockPropertyDescriptor2.isCollection();
-    controlPropertyDescriptor2.setDefaultReturnValue(false);
-    mockPropertyDescriptor2.isObjectReference();
-    controlPropertyDescriptor2.setDefaultReturnValue(true);
-    mockPropertyDescriptor2.isIdentifier();
-    controlPropertyDescriptor2.setDefaultReturnValue(false);
+    expect(mockClassDescriptor2.getIdentifierDescriptor()).andReturn(mockPropertyDescriptor3);
     
-    mockPropertyDescriptor2.getPropertyType();
-    controlPropertyDescriptor2.setDefaultReturnValue(DummyClass.class);
+    expect(mockPropertyDescriptor3.getPropertyType()).andStubReturn(Integer.class);
+    expect(mockRequest.getParameter("aString")).andReturn("2");
+    expect(mockRequest.getParameter("dummyClass.anInteger")).andReturn("4");
     
-    mockDescriptor.getClassDescriptor(DummyClass.class);
-    controlDescriptor.setReturnValue(mockClassDescriptor2);
+    expect(mockPersistence.getInstance(DummyClass.class, new Integer(4))).andReturn(dummyClass);
     
-    mockClassDescriptor2.getIdentifierDescriptor();
-    controlClassDescriptor2.setReturnValue(mockPropertyDescriptor3);
-    
-    mockPropertyDescriptor3.getPropertyType();
-    controlPropertyDescriptor3.setDefaultReturnValue(Integer.class);
-    
-    mockRequest.getParameter("aString");
-    controlRequest.setReturnValue("2");
-    
-    mockRequest.getParameter("dummyClass.anInteger");
-    controlRequest.setReturnValue("4");
-    
-    mockPersistence.getInstance(DummyClass.class, new Integer(4));
-    controlPersistence.setReturnValue(dummyClass);
-    
-    controlClassDescriptor.replay();
-    controlClassDescriptor2.replay();
-    controlPropertyDescriptor1.replay();
-    controlPropertyDescriptor2.replay();
-    controlPropertyDescriptor3.replay();
-    controlDescriptor.replay();
-    controlPersistence.replay();
-    controlRequest.replay();
+    replay(mockClassDescriptor);
+    replay(mockClassDescriptor2);
+    replay(mockPropertyDescriptor1);
+    replay(mockPropertyDescriptor2);
+    replay(mockPropertyDescriptor3);
+    replay(mockDescriptor);
+    replay(mockPersistence);
+    replay(mockRequest);
 
     // TEST IT
     Object boundedInstance = binderToTest.bind(mockRequest, mockClassDescriptor);
@@ -624,12 +520,14 @@ public class TrailsServletRequestDataBinderTest extends TestCase {
     assertNotNull(boundedInstance);
     assertTrue(boundedInstance.getClass().equals(DummyClass2.class));
     assertTrue(((DummyClass2)boundedInstance).getDummyClass().equals(dummyClass));
-    controlClassDescriptor.verify();
-    controlPropertyDescriptor1.verify();
-    controlPropertyDescriptor2.verify();
-    controlDescriptor.verify();
-    controlPersistence.verify();
-    controlRequest.verify();
+
+    verify(mockClassDescriptor);
+    verify(mockPropertyDescriptor1);
+    verify(mockPropertyDescriptor2);
+    verify(mockDescriptor);
+    verify(mockPersistence);
+    verify(mockRequest);
+
   }
   // ====================================================================
   // Static test class

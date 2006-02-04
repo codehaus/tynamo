@@ -54,7 +54,7 @@
 	<classpathentry kind="lib" path="lib/tapestry-annotations-4.0-beta-11.jar"/>
 	<classpathentry kind="lib" path="lib/tapestry-contrib-4.0-beta-11.jar"/>
 	<classpathentry kind="lib" path="lib/acegi-security-1.0.0-RC1.jar"/>
-	<classpathentry kind="lib" path="lib/easymock-1.2_Java1.3.jar"/>
+	<classpathentry kind="lib" path="lib/easymock.jar"/>
 	<classpathentry kind="lib" path="lib/easymockclassextension.jar"/>
 	<classpathentry kind="output" path="build"/>
 </classpath>
