@@ -54,7 +54,7 @@ public class TrailsMultiActionController extends MultiActionController {
   private int pagingSize;  
   
   // ==========================================================================
-  // Services references
+  // Trails Services references
   // ==========================================================================
 
   /** 
@@ -65,6 +65,12 @@ public class TrailsMultiActionController extends MultiActionController {
   
   /** The persisentence service that is needed to perform the necessary database actions. */
   private PersistenceService persistenceService = null;
+  
+  // ==========================================================================
+  // Handler references
+  // ==========================================================================
+  /** The handler for creating {@link ObjectDataDescriptor}'s. */
+  private ObjectDataDescriptorHandler dataDescriptorHandler = null;
   
   // ==========================================================================
   // Trails default model operations
@@ -108,7 +114,7 @@ public class TrailsMultiActionController extends MultiActionController {
     }
     
     List propertiesDescriptors = classDescriptor.getPropertyDescriptors();
-    ObjectDataDescriptorList objectDataDescriptorListParent = createObjectDataDescriptorList(instances, classDescriptor, false, command.getPageNumber(), totalNumberOfPages);
+    ObjectDataDescriptorList objectDataDescriptorListParent = getDataDescriptorHandler().create(instances, classDescriptor, false, command.getPageNumber(), totalNumberOfPages);
     ModelAndView nextView = new ModelAndView(TrailsControllerConstants.LIST_VIEW, TrailsControllerConstants.TRAILS_COMMAND_NAME, objectDataDescriptorListParent);
     nextView.addObject(TrailsControllerConstants.TRAILS_ENTITY_LIST, getDescriptorService().getAllDescriptors());
     
@@ -126,7 +132,7 @@ public class TrailsMultiActionController extends MultiActionController {
    */
   public ModelAndView prepareToSearchInstances(HttpServletRequest request, HttpServletResponse response, TrailsCommand command) {
     Object searchInstance = ReflectionUtils.getNewInstance(getSelectedClassDescriptor(command).getType());
-    ObjectDataDescriptorList objectDataDescriptorList = createObjectDataDescriptorList(searchInstance, getSelectedClassDescriptor(command));
+    ObjectDataDescriptorList objectDataDescriptorList = getDataDescriptorHandler().create(searchInstance, getSelectedClassDescriptor(command));
     
     ModelAndView nextView = new ModelAndView(TrailsControllerConstants.SEARCH_VIEW, TrailsControllerConstants.TRAILS_COMMAND_NAME, objectDataDescriptorList); 
     nextView.addObject(TrailsControllerConstants.TRAILS_ENTITY_LIST, getDescriptorService().getAllDescriptors());
@@ -351,10 +357,26 @@ public class TrailsMultiActionController extends MultiActionController {
   public void setPersistenceService(PersistenceService persistenceService) {
     this.persistenceService = persistenceService;
   }
+  
+  /**
+   * @return Returns the dataDescriptorHandler.
+   */
+  public ObjectDataDescriptorHandler getDataDescriptorHandler() {
+    return dataDescriptorHandler;
+  }
+
+  /**
+   * @param dataDescriptorHandler The dataDescriptorHandler to set.
+   */
+  public void setDataDescriptorHandler(ObjectDataDescriptorHandler dataDescriptorHandler) {
+    this.dataDescriptorHandler = dataDescriptorHandler;
+  }
+  
   // ==========================================================================
   // Protected methods.
   //===========================================================================
-  
+
+
   /**
    * Returns correct type of id to retrieve an instance or null in case id could not determined.
    * 
@@ -400,7 +422,7 @@ public class TrailsMultiActionController extends MultiActionController {
    * @param mav the model and view.
    */
   protected void addTrailsModelToModelAndView(IClassDescriptor classDescriptor, Object instance, ModelAndView mav) {
-	  mav.addObject(TrailsControllerConstants.TRAILS_COMMAND_NAME, createObjectDataDescriptorList(instance, classDescriptor));
+	  mav.addObject(TrailsControllerConstants.TRAILS_COMMAND_NAME, getDataDescriptorHandler().create(instance, classDescriptor));
   }
 
   /**
@@ -424,7 +446,7 @@ public class TrailsMultiActionController extends MultiActionController {
   protected ModelAndView handleObjectCreation(HttpServletRequest request, HttpServletResponse response, IClassDescriptor classDescriptor, Object instance) {
     ModelAndView result;
     
-    ObjectDataDescriptorList objectTable = createObjectDataDescriptorList(instance, classDescriptor);
+    ObjectDataDescriptorList objectTable = getDataDescriptorHandler().create(instance, classDescriptor);
     result = new ModelAndView(TrailsControllerConstants.EDIT_VIEW, TrailsControllerConstants.TRAILS_COMMAND_NAME, objectTable);
     result.addObject(TrailsControllerConstants.TRAILS_ENTITY_LIST, getDescriptorService().getAllDescriptors());
 
@@ -443,7 +465,7 @@ public class TrailsMultiActionController extends MultiActionController {
   protected ModelAndView handleObjectEdit(HttpServletRequest request, HttpServletResponse response, IClassDescriptor classDescriptor, Object instance) {
     ModelAndView result;
     
-    ObjectDataDescriptorList objectTable = createObjectDataDescriptorList(instance, classDescriptor);
+    ObjectDataDescriptorList objectTable = getDataDescriptorHandler().create(instance, classDescriptor);
     result = new ModelAndView(TrailsControllerConstants.EDIT_VIEW, TrailsControllerConstants.TRAILS_COMMAND_NAME, objectTable);
     result.addObject(TrailsControllerConstants.TRAILS_ENTITY_LIST, getDescriptorService().getAllDescriptors());
 
@@ -465,7 +487,7 @@ public class TrailsMultiActionController extends MultiActionController {
     ModelAndView result = null;
     
     getPersistenceService().save(instance);
-    ObjectDataDescriptorList objectDataDescriptorList = createObjectDataDescriptorList(instance, classDescriptor);
+    ObjectDataDescriptorList objectDataDescriptorList = getDataDescriptorHandler().create(instance, classDescriptor);
     result = new ModelAndView(TrailsControllerConstants.EDIT_VIEW, TrailsControllerConstants.TRAILS_COMMAND_NAME, objectDataDescriptorList);
     return result;
   }  
@@ -528,113 +550,6 @@ public class TrailsMultiActionController extends MultiActionController {
       }
     }
   }
-  
-  /**
-   * Method creates an {@link ObjectDataDescriptorList} for the given instance with
-   * its corresponding {@link IClassDescriptor}.
-   * @param instances The instances for which the {@link ObjectDataDescriptorList} is created.
-   * @param classDescriptor The {@link IClassDescriptor} describing the given <code>instance</code>.
-   * @param resolveAllChildern indicator whether or not all the childern of an instance shoudl be resolved
-   *      in case of an object reference.
-   * @return An {@link ObjectDataDescriptorList}.
-   */
-  private ObjectDataDescriptorList createObjectDataDescriptorList(List instances, IClassDescriptor classDescriptor, boolean resolveAllChildern, int pageNumber, int totalNumberOfPages) {
-    // Create a new ObjectDataDescriptorList that holds the information to be rendered in the view.
-    ObjectDataDescriptorList objectDataDescriptorList = new ObjectDataDescriptorList(classDescriptor, pageNumber, totalNumberOfPages);
-    List propertyDescriptors = classDescriptor.getPropertyDescriptors();
-    for (Iterator iter = instances.iterator(); iter.hasNext();) {
-      Object instance = (Object) iter.next();
-      ObjectDataDescriptor objectDataDescriptor = createObjectDataDescriptor(instance, classDescriptor, resolveAllChildern);
-      objectDataDescriptorList.add(objectDataDescriptor);
-    }
-
-    return objectDataDescriptorList;
-  }  
-  /**
-   * Method creates an {@link ObjectDataDescriptorList} for the given instance with
-   * its corresponding {@link IClassDescriptor}.
-   * @param instance The instance for which the {@link ObjectDataDescriptorList} is created.
-   * @param classDescriptor The {@link IClassDescriptor} describing the given <code>instance</code>.
-   * @return An {@link ObjectDataDescriptorList}.
-   */
-  private ObjectDataDescriptorList createObjectDataDescriptorList(Object instance, IClassDescriptor classDescriptor) {
-    // Create a new ObjectDataDescriptorList that holds the information to be rendered in the view.
-    ObjectDataDescriptorList objectDataDescriptorList = new ObjectDataDescriptorList(classDescriptor);
-    
-    // Create a row for the instance to be edited, added or search.
-    ObjectDataDescriptor objectDataDescriptor = createObjectDataDescriptor(instance, classDescriptor, true);
-    objectDataDescriptorList.add(objectDataDescriptor);
-    return objectDataDescriptorList;
-  }
- 
-  /**
-   * Method creates an {@link ObjectDataDescriptor} for the given instance with
-   * its corresponding {@link IClassDescriptor}.
-   * @param instance The instance for which the {@link ObjectDataDescriptor} is created.
-   * @param classDescriptor The {@link IClassDescriptor} describing the given <code>instance</code>.
-   * @param resolveAllChildern indicator whether or not all the childern of an instance shoudl be resolved
-   *      in case of an object reference.
-   * @return An {@link ObjectDataDescriptor}.
-   */
-  private ObjectDataDescriptor createObjectDataDescriptor(Object instance, IClassDescriptor classDescriptor, boolean resolveAllChildern) {
-    // Create a row for the instance to be edited or added.
-    ObjectDataDescriptor objectDataDescriptor = new ObjectDataDescriptor();
-    objectDataDescriptor.setInstance(instance);
-    
-    List propertyDescriptors = classDescriptor.getPropertyDescriptors();
-    log.debug("Creating object data descriptor with #descriptors " + propertyDescriptors.size());
-    
-    List<PropertyDataDescriptor> propertyDataDescriptors = new ArrayList<PropertyDataDescriptor>();
-    // Loop through all the properties and create a column for each property
-    // then add the necessary information into that column for that property
-    // so that it can be rendered correctly in the View.
-    for (Object object: propertyDescriptors) {
-      
-      TrailsPropertyDescriptor propertyDescriptor = (TrailsPropertyDescriptor) object;
-      PropertyDataDescriptor propertyDataDescriptor = new PropertyDataDescriptor(propertyDescriptor);
-      Object value = ReflectionUtils.getFieldValueByGetMethod(instance, propertyDescriptor.getName());
-      // If the property is an object reference it means it has can have a reference to multiple instances of another type.
-      // Locate all the instances of that type and add it to the column as value. Also we set an indicator (valueInObjectTable) 
-      // that indicates that the value is an ObjectDataDescriptorList to true, this gives us easy rendering in the View.
-      if (propertyDescriptor.isObjectReference() && resolveAllChildern) {
-
-        List instances = getPersistenceService().getAllInstances(propertyDescriptor.getPropertyType());
-        IClassDescriptor descriptor = getDescriptorService().getClassDescriptor(propertyDescriptor.getPropertyType());
-        ObjectDataDescriptorList table = new ObjectDataDescriptorList(instances, descriptor, value);
-        propertyDataDescriptor.setValue(table);
-        propertyDataDescriptor.setValueInObjectTable(true);
-
-      } else if(propertyDescriptor.isCollection()) {
-        // If it is a Collection we retrieve all the childern and put them into a seperate ObjectDataDescriptorList
-        // so they can be rendered in the view.
-        CollectionDescriptor collectionDescriptor = (CollectionDescriptor) propertyDescriptor;
-        IClassDescriptor classDescriptorChild = getDescriptorService().getClassDescriptor(collectionDescriptor.getElementType());
-        String identifierName = classDescriptorChild.getIdentifierDescriptor().getName();
-        Collection childern = (Collection) value;
-        ObjectDataDescriptorList objectDataDescriptorList = new ObjectDataDescriptorList(classDescriptorChild);
-        for (Iterator iter = childern.iterator(); iter.hasNext();) {
-          Object child = (Object) iter.next();
-          ChildObjectDataDescriptor childObjectDataDescriptor = new ChildObjectDataDescriptor();
-          childObjectDataDescriptor.setInstance(child);
-          Object id = ReflectionUtils.getFieldValueByGetMethod(child, identifierName);
-          childObjectDataDescriptor.setId(id);
-          objectDataDescriptorList.add(childObjectDataDescriptor);
-        }
-        propertyDataDescriptor.setValueInObjectTable(true);
-        propertyDataDescriptor.setValue(objectDataDescriptorList);
-    
-      } else {
-        // a "normal" property.
-        propertyDataDescriptor.setValue(value);
-      }
-      propertyDataDescriptors.add(propertyDataDescriptor);
-    }
-    objectDataDescriptor.setColumns(propertyDataDescriptors);
-    return objectDataDescriptor;
-
-  }
-
-  
   /**
    * Retrieves the IClassDescriptor from the DescriptorService using the 
    * 'type' attribute in given TrailsCommand.
@@ -643,19 +558,8 @@ public class TrailsMultiActionController extends MultiActionController {
   protected IClassDescriptor getSelectedClassDescriptor(TrailsCommand command) {
     // If command.getType() is null, or doesnot result in an IClassDescriptor it has to be a programming exception.
     // In that case we just let it result in a Runtime and do not peform any unnesesary checks.
-    return getSelectedClassDescriptor(command.getType());
+    return getDescriptorService().getClassDescriptor((command.getType()));
   }
-
-  /**
-   * Returns a class descriptor for the given class.
-   * 
-   * @param clazz the class.
-   * @return the class descriptor.
-   */
-  protected IClassDescriptor getSelectedClassDescriptor(Class clazz) {
-	  return getDescriptorService().getClassDescriptor(clazz);
-  }
-  
 
   /**
    * Performs validation using the Hibernate annotations. This is done explicitly

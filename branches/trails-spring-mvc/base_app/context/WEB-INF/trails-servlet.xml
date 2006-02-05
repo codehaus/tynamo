@@ -30,7 +30,17 @@
 		<property name="descriptorService" ref="descriptorService" />
 		<property name="persistenceService" ref="persistenceService" />
  		<property name="pagingSize" value="10"/>
+ 		<property name="dataDescriptorHandler" ref="dataDescriptorHandler" />
 	</bean>
+	
+		<!--
+	- This bean is the DataDescriptorHandler
+	-->
+	<bean id="dataDescriptorHandler"
+		class="org.trails.spring.mvc.DefaultObjectDataDescriptorHandler">
+		<property name="descriptorService" ref="descriptorService" />
+		<property name="persistenceService" ref="persistenceService" />
+	</bean>	
 	
 	<!--
 	- This bean is a MethodNameResolver definition for all MultiActionControllers.

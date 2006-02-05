@@ -3,6 +3,7 @@ package org.trails.spring.mvc;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.criterion.DetachedCriteria;
 import org.springframework.web.servlet.ModelAndView;
 import org.trails.descriptor.DescriptorService;
 import org.trails.descriptor.IClassDescriptor;
@@ -23,6 +24,7 @@ public class TrailsMultiActionControllerTest extends TestCase {
   
   private DescriptorService mockDescriptorService = createMock(DescriptorService.class);
   private PersistenceService mockPersistenceService = createMock(PersistenceService.class);
+  private ObjectDataDescriptorHandler mockHandler = createMock(ObjectDataDescriptorHandler.class);
   
   private List allTypes = new ArrayList();
  
@@ -32,9 +34,11 @@ public class TrailsMultiActionControllerTest extends TestCase {
     
     reset(mockDescriptorService);
     reset(mockPersistenceService);
+    reset(mockHandler);
     
     trailsMultiActionController.setDescriptorService(mockDescriptorService);
     trailsMultiActionController.setPersistenceService(mockPersistenceService);
+    trailsMultiActionController.setDataDescriptorHandler(mockHandler);
   }
 
   /*
@@ -46,14 +50,14 @@ public class TrailsMultiActionControllerTest extends TestCase {
     
     expect(mockDescriptorService.getAllDescriptors()).andReturn(descriptors);
     
-    replayPersistenceAndDescriptor();
+    replayDefaultMocks();
     
     ModelAndView modelAndView = trailsMultiActionController.listAllEntities(null, null);
     
     assertNotNull(modelAndView);
     assertEntityList(modelAndView, descriptors);
     
-    verifyPersistenceAndDescriptor();
+    verifyDefaultMocks();
   }
 
   /*
@@ -70,9 +74,10 @@ public class TrailsMultiActionControllerTest extends TestCase {
     expect(mockDescriptorService.getClassDescriptor(TrailsMultiActionControllerTest.class)).andStubReturn(testClassDescriptor);
     expect(mockPersistenceService.getAllInstances(testClassDescriptor.getType())).andReturn(instances);
     expect(mockDescriptorService.getAllDescriptors()).andReturn(allTypes);
+    expect(mockHandler.create(instances, testClassDescriptor, false, 0, -1)).andReturn(new ObjectDataDescriptorList(testClassDescriptor));
     
     // replay mocks
-    replayPersistenceAndDescriptor();
+    replayDefaultMocks();
 
     ModelAndView modelAndView = trailsMultiActionController.listAllInstances(null, null, trailsCommand);
     
@@ -84,7 +89,7 @@ public class TrailsMultiActionControllerTest extends TestCase {
     assertEquals(0, table.getRows().size());
     assertEntityList(modelAndView, allTypes);
     
-    verifyPersistenceAndDescriptor();
+    verifyDefaultMocks();
   }
   
   /*
@@ -102,9 +107,10 @@ public class TrailsMultiActionControllerTest extends TestCase {
     expect(mockDescriptorService.getClassDescriptor(TrailsMultiActionControllerTest.class)).andStubReturn(testClassDescriptor);
     expect(mockPersistenceService.getInstances(isA(PagingCriteria.class))).andReturn(instances);
     expect(mockDescriptorService.getAllDescriptors()).andReturn(allTypes);
+    expect(mockHandler.create(instances, testClassDescriptor, false, 1, 0)).andReturn(new ObjectDataDescriptorList(testClassDescriptor));
     
     // replay mocks
-    replayPersistenceAndDescriptor();
+    replayDefaultMocks();
 
     // TEST
     ModelAndView modelAndView = trailsMultiActionController.listAllInstances(null, null, trailsCommand);
@@ -117,7 +123,7 @@ public class TrailsMultiActionControllerTest extends TestCase {
     assertEquals(0, table.getRows().size());
     assertEntityList(modelAndView, allTypes);
     
-    verifyPersistenceAndDescriptor();
+    verifyDefaultMocks();
   }  
 
   /*
@@ -130,9 +136,10 @@ public class TrailsMultiActionControllerTest extends TestCase {
     
     expect(mockDescriptorService.getClassDescriptor(TrailsMultiActionControllerTest.class)).andStubReturn(testClassDescriptor);
     expect(mockDescriptorService.getAllDescriptors()).andReturn(allTypes);
+    expect(mockHandler.create(isA(TrailsMultiActionControllerTest.class), isA(IClassDescriptor.class))).andReturn(new ObjectDataDescriptorList(testClassDescriptor));
     
     // replay mocks
-    replayPersistenceAndDescriptor();
+    replayDefaultMocks();
    
     // TEST
     ModelAndView modelAndView = trailsMultiActionController.prepareToSearchInstances(null, null, trailsCommand);
@@ -140,11 +147,8 @@ public class TrailsMultiActionControllerTest extends TestCase {
     assertNotNull(modelAndView);
     assertEquals(SEARCH_VIEW, modelAndView.getViewName());
     assertEquals(ObjectDataDescriptorList.class, modelAndView.getModel().get(TRAILS_COMMAND_NAME).getClass());
-    ObjectDataDescriptorList table = (ObjectDataDescriptorList)modelAndView.getModel().get(TRAILS_COMMAND_NAME);
-    assertEquals(1, table.getRows().size());
-    assertEquals(testClassDescriptor, table.getClassDescriptor());
     
-    verifyPersistenceAndDescriptor();
+    verifyDefaultMocks();
   }
 
   /*
@@ -158,8 +162,10 @@ public class TrailsMultiActionControllerTest extends TestCase {
     expect(mockDescriptorService.getClassDescriptor(TrailsMultiActionControllerTest.class)).andStubReturn(testClassDescriptor);
     expect(mockDescriptorService.getAllDescriptors()).andReturn(allTypes);
     
+    expect(mockHandler.create(isA(TrailsMultiActionControllerTest.class), isA(IClassDescriptor.class))).andReturn(new ObjectDataDescriptorList(testClassDescriptor));
+    
     // replay mocks
-    replayPersistenceAndDescriptor();
+    replayDefaultMocks();
    
     // TEST
     ModelAndView modelAndView = trailsMultiActionController.prepareToEditOrAddAnInstance(null, null, trailsCommand);
@@ -167,11 +173,8 @@ public class TrailsMultiActionControllerTest extends TestCase {
     assertNotNull(modelAndView);
     assertEquals(EDIT_VIEW, modelAndView.getViewName());
     assertEquals(ObjectDataDescriptorList.class, modelAndView.getModel().get(TRAILS_COMMAND_NAME).getClass());
-    ObjectDataDescriptorList table = (ObjectDataDescriptorList)modelAndView.getModel().get(TRAILS_COMMAND_NAME);
-    assertEquals(testClassDescriptor, table.getClassDescriptor());
-    assertEquals(1, table.getRows().size());
    
-    verifyPersistenceAndDescriptor();
+    verifyDefaultMocks();
   }
   
   /*
@@ -182,19 +185,23 @@ public class TrailsMultiActionControllerTest extends TestCase {
     TrailsCommand trailsCommand = createTrailsCommand(0,0);
     trailsCommand.setId("1");
     IClassDescriptor mockClassDescriptor = createMock(IClassDescriptor.class);
+    IClassDescriptor realClassDescriptor = new TrailsClassDescriptor(TrailsMultiActionControllerTest.class);
     IPropertyDescriptor idDescriptor = createMock(IPropertyDescriptor.class);
     
-    
+    // add mock behaviour.
     expect(mockClassDescriptor.getType()).andStubReturn(TrailsMultiActionControllerTest.class);
     expect(mockClassDescriptor.getIdentifierDescriptor()).andStubReturn(idDescriptor);
+    expect(mockClassDescriptor.getPropertyDescriptors()).andStubReturn(new ArrayList());
     expect(idDescriptor.getName()).andStubReturn("id");
     expect(idDescriptor.isNumeric()).andStubReturn(true);
     expect(mockDescriptorService.getClassDescriptor(TrailsMultiActionControllerTest.class)).andStubReturn(mockClassDescriptor);
     expect(mockPersistenceService.getInstance(TrailsMultiActionControllerTest.class, new Integer(1))).andReturn(this);
     expect(mockDescriptorService.getAllDescriptors()).andReturn(allTypes);
     expect(mockClassDescriptor.getPropertyDescriptors()).andStubReturn(new ArrayList());
+    expect(mockHandler.create(this, mockClassDescriptor)).andReturn(new ObjectDataDescriptorList(realClassDescriptor));
+    
     // replay mocks
-    replayPersistenceAndDescriptor();
+    replayDefaultMocks();
     replay(mockClassDescriptor);
     replay(idDescriptor);
    
@@ -204,20 +211,35 @@ public class TrailsMultiActionControllerTest extends TestCase {
     assertNotNull(modelAndView);
     assertEquals(EDIT_VIEW, modelAndView.getViewName());
     assertEquals(ObjectDataDescriptorList.class, modelAndView.getModel().get(TRAILS_COMMAND_NAME).getClass());
-    ObjectDataDescriptorList table = (ObjectDataDescriptorList)modelAndView.getModel().get(TRAILS_COMMAND_NAME);
-    assertEquals(1, table.getRows().size());
-    assertEquals(this, table.getRows().get(0).getInstance());
     
-    assertEquals(mockClassDescriptor, table.getClassDescriptor());
-    
-    verifyPersistenceAndDescriptor();
+    verifyDefaultMocks();
   }  
 
   /*
    * Test method for 'org.trails.spring.mvc.TrailsMultiActionController.searchInstances(HttpServletRequest, HttpServletResponse, TrailsCommand)'
    */
   public void testSearchInstances() {
-
+    //  objects needed for testing
+    TrailsCommand trailsCommand = createTrailsCommand(0,0);
+    IClassDescriptor testClassDescriptor = new TrailsClassDescriptor(TrailsMultiActionControllerTest.class);
+    List instances = new ArrayList();
+   
+    // add behaviour for mocks.
+    expect(mockDescriptorService.getClassDescriptor(TrailsMultiActionControllerTest.class)).andStubReturn(testClassDescriptor);
+    expect(mockDescriptorService.getAllDescriptors()).andReturn(allTypes);
+    expect(mockPersistenceService.getInstances(isA(DetachedCriteria.class))).andReturn(instances);
+    expect(mockHandler.create(instances, testClassDescriptor, false, 0, -1)).andReturn(new ObjectDataDescriptorList(instances, testClassDescriptor));
+    
+    replayDefaultMocks();
+    // TEST
+    ModelAndView modelAndView = trailsMultiActionController.searchInstances(null, null, trailsCommand);
+    
+    assertNotNull(modelAndView);
+    assertEquals(LIST_VIEW, modelAndView.getViewName());
+    assertEquals(ObjectDataDescriptorList.class, modelAndView.getModel().get(TRAILS_COMMAND_NAME).getClass());
+    assertEquals(testClassDescriptor, ((ObjectDataDescriptorList)modelAndView.getModel().get(TRAILS_COMMAND_NAME)).getClassDescriptor());
+    verifyDefaultMocks();
+    
   }
 
   /*
@@ -380,20 +402,22 @@ public class TrailsMultiActionControllerTest extends TestCase {
   }
 
   /**
-   * Verifies the {@link #mockDescriptorService} and the {@link #mockPersistenceService}.
+   * Verifies the {@link #mockDescriptorService},the {@link #mockPersistenceService} and the {@link #mockHandler}.
    *
    */
-  private void verifyPersistenceAndDescriptor() {
+  private void verifyDefaultMocks() {
     verify(mockDescriptorService);
     verify(mockPersistenceService);
+    verify(mockHandler);
   }
   
   /**
-   * Verifies the {@link #mockDescriptorService} and the {@link #mockPersistenceService}.
+   * Replays the {@link #mockDescriptorService},the {@link #mockPersistenceService} and the {@link #mockHandler}.
    *
    */
-  private void replayPersistenceAndDescriptor() {
+  private void replayDefaultMocks() {
     replay(mockDescriptorService);
     replay(mockPersistenceService);
+    replay(mockHandler);
   }  
 }
