@@ -1,5 +1,18 @@
 package org.trails.spring.mvc;
 
+import static org.easymock.EasyMock.eq;
+import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.isA;
+import static org.easymock.classextension.EasyMock.createMock;
+import static org.easymock.classextension.EasyMock.replay;
+import static org.easymock.classextension.EasyMock.reset;
+import static org.easymock.classextension.EasyMock.verify;
+import static org.trails.spring.mvc.TrailsControllerConstants.EDIT_VIEW;
+import static org.trails.spring.mvc.TrailsControllerConstants.LIST_VIEW;
+import static org.trails.spring.mvc.TrailsControllerConstants.SEARCH_VIEW;
+import static org.trails.spring.mvc.TrailsControllerConstants.TRAILS_COMMAND_NAME;
+import static org.trails.spring.mvc.TrailsControllerConstants.TRAILS_ENTITY_LIST;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -8,7 +21,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratorType;
 import javax.persistence.Id;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+
+import junit.framework.TestCase;
 
 import org.hibernate.criterion.DetachedCriteria;
 import org.springframework.validation.BindException;
@@ -22,10 +36,6 @@ import org.trails.descriptor.TrailsPropertyDescriptor;
 import org.trails.persistence.PersistenceService;
 import org.trails.spring.mvc.commands.TrailsCommand;
 import org.trails.spring.persistence.PagingCriteria;
-
-import junit.framework.TestCase;
-import static org.easymock.classextension.EasyMock.*;
-import static org.trails.spring.mvc.TrailsControllerConstants.*;
 
 public class TrailsMultiActionControllerTest extends TestCase {
 
@@ -361,27 +371,9 @@ public class TrailsMultiActionControllerTest extends TestCase {
     verifyDefaultMocks();
   }
 
-  /*
-   * Test method for 'org.trails.spring.mvc.TrailsMultiActionController.bindAndValidate(HttpServletRequest, TrailsServletRequestDataBinder, IClassDescriptor)'
-   */
-  public void testBindAndValidate() {
-
-  }
-
-  /*
-   * Test method for 'org.trails.spring.mvc.TrailsMultiActionController.bindAndValidate(HttpServletRequest, TrailsServletRequestDataBinder, IClassDescriptor, Object)'
-   */
-  public void testBindAndValidateWithExistingObject() {
-
-  }
-
-  /*
-   * Test method for 'org.trails.spring.mvc.TrailsMultiActionController.performValidation(Object, BindException)'
-   */
-  public void testPerformValidation() {
-
-  }
-
+  // =======================================================
+  // convenience methods.
+  // =======================================================
   
   private TrailsCommand createTrailsCommand(int pageNumber, int totalNumberOfPages) {
 

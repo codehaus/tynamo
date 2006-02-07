@@ -15,6 +15,12 @@ import org.trails.spring.mvc.ObjectDataDescriptorList;
 import org.trails.spring.mvc.TrailsControllerConstants;
 
 /**
+ * A TrailsView is an extension on a JstlView and
+ * allows to overwrite the default views used. 
+ * <p>
+ * See {@link #prepareForRendering(HttpServletRequest, HttpServletResponse)} for
+ * more information about overwriting the default views.
+ * 
  * @author Jurjan Woltman
  *
  */
@@ -24,13 +30,18 @@ public class TrailsView extends JstlView {
    * Logging instance.
    */
   private final static Log log = LogFactory.getLog(TrailsView.class);
-  
+  /** Name of the default view View. */
   private final static String DEFAULT_VIEW_URL   = "view";
+  /** Name of the default edit View. */
   private final static String DEFAULT_EDIT_URL   = "edit";
+  /** Name of the default list View. */
   private final static String DEFAULT_LIST_URL   = "list";
+  /** Name of the default seach View. */
   private final static String DEFAULT_SEARCH_URL = "search";
+  /** Name of the default create View. */
   private final static String DEFAULT_CREATE_URL = "create";
 
+  /** list of all available view names. */
   private final static List DEFAULT_VIEW_LIST = Arrays.asList(new String[]{DEFAULT_VIEW_URL, DEFAULT_EDIT_URL, DEFAULT_SEARCH_URL, DEFAULT_CREATE_URL, DEFAULT_LIST_URL});
   
   /**
@@ -62,10 +73,10 @@ public class TrailsView extends JstlView {
         
         log.debug("View name suffix: " + viewNameSuffix);
         String customUrlPath = getUrl().replaceAll(viewName, viewName + viewNameSuffix);
-        
-        if (new File(getWebApplicationContext().getServletContext().getRealPath(customUrlPath)).exists()) {
+
+        if (doesViewExist(customUrlPath)) {
           log.debug("Custom view found.");
-          
+
           customUrl = customUrlPath;
         } else {
           log.debug("No custom view found, using default view.");
@@ -74,6 +85,16 @@ public class TrailsView extends JstlView {
     }
     
     return customUrl;
+  }
+  
+  /**
+   * Checks if the given customUrlPathToView points to a real file.
+   * @param customUrlPathToView The path to a possible custom view.
+   * @return Returns <code>true</code> if the customUrlPathToView points 
+   *    to an exising file, <code>false</code> if not.
+   */
+  protected boolean doesViewExist(String customUrlPathToView) {
+    return new File(getWebApplicationContext().getServletContext().getRealPath(customUrlPathToView)).exists();
   }
 
 }

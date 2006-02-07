@@ -490,7 +490,8 @@ public class TrailsMultiActionController extends MultiActionController {
   /**
    * Binds data from the request using the provided binder instance and class descriptor, then validates
    * the bound object using the {@link ClassValidator} from Hibernate. At the end it validates the bound
-   * data using any validators configured for this controller.
+   * data using any validators configured for this controller using the
+   * {@link #performValidation(Object, BindException)} method.
    * 
    * @param request the request.
    * @param binder the binder.
@@ -500,7 +501,6 @@ public class TrailsMultiActionController extends MultiActionController {
   protected Object bindAndValidate(HttpServletRequest request, TrailsServletRequestDataBinder binder, IClassDescriptor classDescriptor) {
     Object result = binder.bind(request, classDescriptor);
     // validate the Hibernate validators.
-    // TODO refactor to a ValidationService...    
     performHibernateValidation(binder.getErrors(), classDescriptor, result);
     // validate by the declared Validators.
     performValidation(result, binder.getErrors());
@@ -509,18 +509,20 @@ public class TrailsMultiActionController extends MultiActionController {
 
   /**
    * Binds data from the request using the provided binder instance and class descriptor on the provided instance, 
-   * then validates the bound data using any validators configured for this controller.
+   * then validates the bound data using any validators configured for this controller using the
+   * {@link #performValidation(Object, BindException)} method.
    * 
    * @param request the request.
    * @param binder the binder.
    * @param classDescriptor the class descriptor.
+   * @param instance The instance bound onto.
    * @return the newly bound instance. Any errors are contained in the binder instance.
    */
   protected Object bindAndValidate(HttpServletRequest request, TrailsServletRequestDataBinder binder, IClassDescriptor classDescriptor, Object instance) {
     Object result = binder.bind(request, classDescriptor, instance);
     // validate the Hibernate validators.
-    // TODO refactor to a ValidationService...
     performHibernateValidation(binder.getErrors(), classDescriptor, result);
+    // validate by the declared Validators.
     performValidation(result, binder.getErrors());
     return result;
   }
