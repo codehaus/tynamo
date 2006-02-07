@@ -10,10 +10,12 @@ import org.trails.spring.util.ReflectionUtils;
 /**
  * An ObjectDataDescriptorList holds a collection of {@link org.trails.spring.mvc.ObjectDataDescriptor}'s
  * and some additional information such as the {@link org.trails.descriptor.IClassDescriptor}
- * describing the instances in this ObjectDataDescriptorList.
+ * describing the instances in this ObjectDataDescriptorList, actually all the instances
+ * in the collection of {@link org.trails.spring.mvc.ObjectDataDescriptor}'s should be of the
+ * type described by the associated {@link #getClassDescriptor() classDescriptor}. 
  * <p>
- * The ObjectDataDescriptorList is used in the view's for rendering the data of the object's
- * that need to be rendered in those views. One can iterate of the {@link #getRows()} that contain
+ * The ObjectDataDescriptorList is used in the view's for rendering the the object's and acts
+ * as a sort of ObjectTable. One can iterate of the {@link #getRows() rows} that contain
  * {@link org.trails.spring.mvc.ObjectDataDescriptor}'s.
  * <p>
  * The {@link org.trails.spring.mvc.PropertyDataDescriptor#getValue()} 
@@ -26,16 +28,20 @@ import org.trails.spring.util.ReflectionUtils;
  */
 public class ObjectDataDescriptorList {
   /**
-   * The rows in this table.
+   * The rows in this ObjectDataDescriptorList.
    */
   private List<ObjectDataDescriptor> rows = new ArrayList<ObjectDataDescriptor>();
   /**
-   * The class decriptor.
+   * The class decriptor describing the {@link ObjectDataDescriptor}'s in
+   * the {@link #getRows() rows}.
    */
   private IClassDescriptor classDescriptor = null;
   
   /**
-   * Holds the name of the columns.
+   * Holds the {@link IPropertyDescriptor}'s as columnNames. This
+   * is used for convenience so the ObjectDataDescriptorList
+   * knows which properties the ObjectDataDescriptor in the {@link #getRows() rows}
+   * contains.
    */
   private List<IPropertyDescriptor> columnNames = new ArrayList<IPropertyDescriptor>();
   /** The current page number, used for paging. */

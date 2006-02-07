@@ -3,12 +3,20 @@ package org.trails.spring.mvc;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.trails.descriptor.TrailsPropertyDescriptor;
-
 /**
- * A <code>ObjectDataDescriptor</code> is a row in an {@link org.trails.spring.mvc.ObjectDataDescriptorList}.
- * A row is a collection of {@link org.trails.spring.mvc.PropertyDataDescriptor}'s.
- * 
+ * An <code>ObjectDataDescriptor</code> describes an instance of an Object. This
+ * is the instance counterpart of the {@link org.trails.descriptor.IClassDescriptor}.
+ * <p>
+ * An <code>ObjectDataDescriptor</code> is always wrapped in an
+ * {@link org.trails.spring.mvc.ObjectDataDescriptorList}. This
+ * list holds the {@link org.trails.descriptor.IClassDescriptor}
+ * describing the type of the {@link #getInstance() instance}
+ * encapsulated by this <code>ObjectDataDescriptor</code>.
+ * <p>
+ * The prupose of this class is to be able to add extra information
+ * about a certain instance of a Class that is described by an 
+ * {@link org.trails.descriptor.IClassDescriptor}.
+ * <p>
  * @author Lars Vonk
  *
  */
@@ -20,7 +28,8 @@ public class ObjectDataDescriptor {
   private Object instance = null;
   
   /**
-   * 
+   * Is the value selected in case this ObjectDataDescriptor
+   * is rendered in a list of values?
    */
   private boolean selected = false;
   /**
@@ -28,10 +37,10 @@ public class ObjectDataDescriptor {
    * TODO: This really should be sorted somehow.
    */
   private List<PropertyDataDescriptor> columns = new ArrayList<PropertyDataDescriptor>();
-  //private Map namedColumns = new TreeMap();
 
   /**
-   * Returns the columns.
+   * Returns the columns. Or an empty list is now
+   * columns are set.
    * @return Returns the columns.
    */
   public List<PropertyDataDescriptor> getColumns() {
@@ -44,15 +53,7 @@ public class ObjectDataDescriptor {
    */
   public void setColumns(List<PropertyDataDescriptor> columns) {
     this.columns = columns;
-    //initMap();
   }
-
-//  private void initMap() {
-//    namedColumns.clear();
-//    for(PropertyDataDescriptor d : columns) {
-//      namedColumns.put(d.getPropertyDescriptor().getName(), d);
-//    }
-//  }
 
   /**
    * Returns the instance.
@@ -73,11 +74,16 @@ public class ObjectDataDescriptor {
   // Convenience methods
   // ==========================================================================
   
+  /**
+   * Returns the value of the identifier property
+   * of the encapsulated {@link #getInstance() instance}.
+   * @return The value of the identifer property.
+   */
   public Object getIdentifierValue() {
     Object value = null;
     
     for (PropertyDataDescriptor column: columns) {
-      if (((TrailsPropertyDescriptor)column.getPropertyDescriptor()).isIdentifier()) {
+      if (column.getPropertyDescriptor().isIdentifier()) {
         value = column.getValue();
       }
     }
@@ -99,8 +105,4 @@ public class ObjectDataDescriptor {
   public void setSelected(boolean selected) {
     this.selected = selected;
   }
-  
-//  public Map getColumnMap() {
-//    return namedColumns;
-//  }
 }
