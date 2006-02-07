@@ -3,12 +3,28 @@ package org.trails.spring.mvc;
 import org.trails.descriptor.IPropertyDescriptor;
 
 /**
- * A <code>PropertyDataDescriptor</code> encapsulates a the property that needs
- * to be rendered on the screen and the {@link org.trails.descriptor.IPropertyDescriptor}
- * described the property to be rendered.
- * Also this <code>PropertyDataDescriptor</code> has some more information that can be usefull
- * when rendering the property on the screen.
- * 
+ * A <code>PropertyDataDescriptor</code> encapsulates a property and its value that needs
+ * to be rendered on the view. Like the {@link org.trails.spring.mvc.ObjectDataDescriptor}
+ * that has the {@link org.trails.descriptor.IClassDescriptor} as its counterpart
+ * , the <code>PropertyDataDescriptor</code> has the {@link org.trails.descriptor.IPropertyDescriptor}
+ * as its counterpart.
+ * <p>
+ * The {@link #getValue() value} of the property can also be put in
+ * an {@link org.trails.spring.mvc.ObjectDataDescriptorList}. This is usefull is for instance
+ * the value of this property is a collection of other objects. By putting the
+ * value in an {@link org.trails.spring.mvc.ObjectDataDescriptorList} the values
+ * can be rendered as an option select box in the view. To check if the {@link #getValue() value}
+ * is in an{@link org.trails.spring.mvc.ObjectDataDescriptorList}the method {@link #isValueInObjectTable()}
+ * can be called. That also means that if one put the value in an 
+ * {@link org.trails.spring.mvc.ObjectDataDescriptorList} the indicator {@link #isValueInObjectTable()}
+ * should be set to <code>true</code> via the method {@link #setValueInObjectTable(boolean)}.
+ * <p>
+ * There is also a need to support invalid entered values in a form. To be able to do so
+ * the indicator {@link #isValueInvalid()} can be used. If this method returns <code>true</code>
+ * than it can be that the {@link #getValue() value} of this <code>PropertyDataDescriptor</code> 
+ * is not of the type described by the associated {@link #getPropertyDescriptor()}!
+ * <br>By default a value is NOT invalid.
+ * <p>
  * @author Lars Vonk
  *
  */
@@ -42,6 +58,7 @@ public class PropertyDataDescriptor {
   /**
    * Creates a <code>PropertyDataDescriptor</code>.
    * @param propertyDescriptor The descriptor of the property in this <code>PropertyDataDescriptor</code>.
+   *      <code>null</code> is not allowed as value for this parameter.
    */
   public PropertyDataDescriptor(IPropertyDescriptor propertyDescriptor) {
     this.propertyDescriptor = propertyDescriptor;
@@ -64,7 +81,7 @@ public class PropertyDataDescriptor {
   }
 
   /**
-   * Returns the value.
+   * Returns the value or "" if the value is <code>null</code>.
    * @return Returns the value.
    */
   public Object getValue() {
