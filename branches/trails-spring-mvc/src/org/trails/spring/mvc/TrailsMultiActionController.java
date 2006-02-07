@@ -3,8 +3,6 @@ package org.trails.spring.mvc;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -12,7 +10,6 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -27,7 +24,6 @@ import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
-import org.trails.descriptor.CollectionDescriptor;
 import org.trails.descriptor.DescriptorService;
 import org.trails.descriptor.IClassDescriptor;
 import org.trails.descriptor.IPropertyDescriptor;
@@ -114,7 +110,7 @@ public class TrailsMultiActionController extends MultiActionController {
     }
     
     List propertiesDescriptors = classDescriptor.getPropertyDescriptors();
-    ObjectDataDescriptorList objectDataDescriptorListParent = getDataDescriptorHandler().create(instances, classDescriptor, false, command.getPageNumber(), totalNumberOfPages);
+    ObjectDataDescriptorList objectDataDescriptorListParent = getDataDescriptorHandler().create(instances, classDescriptor, command.getPageNumber(), totalNumberOfPages);
     ModelAndView nextView = new ModelAndView(TrailsControllerConstants.LIST_VIEW, TrailsControllerConstants.TRAILS_COMMAND_NAME, objectDataDescriptorListParent);
     nextView.addObject(TrailsControllerConstants.TRAILS_ENTITY_LIST, getDescriptorService().getAllDescriptors());
     
@@ -132,7 +128,7 @@ public class TrailsMultiActionController extends MultiActionController {
    */
   public ModelAndView prepareToSearchInstances(HttpServletRequest request, HttpServletResponse response, TrailsCommand command) {
     Object searchInstance = ReflectionUtils.getNewInstance(getSelectedClassDescriptor(command).getType());
-    ObjectDataDescriptorList objectDataDescriptorList = getDataDescriptorHandler().create(searchInstance, getSelectedClassDescriptor(command));
+    ObjectDataDescriptorList objectDataDescriptorList = getDataDescriptorHandler().createAndResolveChildern(searchInstance, getSelectedClassDescriptor(command));
     
     ModelAndView nextView = new ModelAndView(TrailsControllerConstants.SEARCH_VIEW, TrailsControllerConstants.TRAILS_COMMAND_NAME, objectDataDescriptorList); 
     nextView.addObject(TrailsControllerConstants.TRAILS_ENTITY_LIST, getDescriptorService().getAllDescriptors());
@@ -237,10 +233,10 @@ public class TrailsMultiActionController extends MultiActionController {
    * @return The ModelAndView, see the {@link #saveInstance(HttpServletRequest, HttpServletResponse, TrailsCommand) method}
    *      description for more information.
    */
-  public ModelAndView saveInstance(HttpServletRequest request, HttpServletResponse response, TrailsCommand command) throws Exception {
+  public ModelAndView saveInstance(HttpServletRequest request, HttpServletResponse response, TrailsCommand command) {
     ModelAndView nextView  = null;
 
-    TrailsServletRequestDataBinder dataBinder = getNewDataBinder();
+    TrailsServletRequestDataBinder dataBinder = getDataBinder();
     IClassDescriptor classDescriptor = getSelectedClassDescriptor(command);
     Serializable instanceId = getId(classDescriptor, command);
     
@@ -289,9 +285,8 @@ public class TrailsMultiActionController extends MultiActionController {
    * @param response The response.
    * @param command The {@link TrailsCommand} command object.
    * @return a ModelAndView with the list of all 'left' instance for the selectedClassDescriptor. 
-   * @throws Exception
    */
-  public ModelAndView deleteInstance(HttpServletRequest request, HttpServletResponse response, TrailsCommand command) throws Exception {
+  public ModelAndView deleteInstance(HttpServletRequest request, HttpServletResponse response, TrailsCommand command) {
     IClassDescriptor classDescriptor = getSelectedClassDescriptor(command);
 
     Serializable instanceId = getId(classDescriptor, command);
@@ -422,15 +417,15 @@ public class TrailsMultiActionController extends MultiActionController {
    * @param mav the model and view.
    */
   protected void addTrailsModelToModelAndView(IClassDescriptor classDescriptor, Object instance, ModelAndView mav) {
-	  mav.addObject(TrailsControllerConstants.TRAILS_COMMAND_NAME, getDataDescriptorHandler().create(instance, classDescriptor));
+	  mav.addObject(TrailsControllerConstants.TRAILS_COMMAND_NAME, getDataDescriptorHandler().createAndResolveChildern(instance, classDescriptor));
   }
 
   /**
    * Returns a new instance of a Trails data binder.
-   * 
+   * Override this method if you want an existing databinder to be used.
    * @return the data binder instance.
    */
-  protected TrailsServletRequestDataBinder getNewDataBinder() {
+  protected TrailsServletRequestDataBinder getDataBinder() {
 	  return new TrailsServletRequestDataBinder(getDescriptorService(), getPersistenceService());
   }
   
@@ -446,7 +441,7 @@ public class TrailsMultiActionController extends MultiActionController {
   protected ModelAndView handleObjectCreation(HttpServletRequest request, HttpServletResponse response, IClassDescriptor classDescriptor, Object instance) {
     ModelAndView result;
     
-    ObjectDataDescriptorList objectTable = getDataDescriptorHandler().create(instance, classDescriptor);
+    ObjectDataDescriptorList objectTable = getDataDescriptorHandler().createAndResolveChildern(instance, classDescriptor);
     result = new ModelAndView(TrailsControllerConstants.EDIT_VIEW, TrailsControllerConstants.TRAILS_COMMAND_NAME, objectTable);
     result.addObject(TrailsControllerConstants.TRAILS_ENTITY_LIST, getDescriptorService().getAllDescriptors());
 
@@ -465,7 +460,7 @@ public class TrailsMultiActionController extends MultiActionController {
   protected ModelAndView handleObjectEdit(HttpServletRequest request, HttpServletResponse response, IClassDescriptor classDescriptor, Object instance) {
     ModelAndView result;
     
-    ObjectDataDescriptorList objectTable = getDataDescriptorHandler().create(instance, classDescriptor);
+    ObjectDataDescriptorList objectTable = getDataDescriptorHandler().createAndResolveChildern(instance, classDescriptor);
     result = new ModelAndView(TrailsControllerConstants.EDIT_VIEW, TrailsControllerConstants.TRAILS_COMMAND_NAME, objectTable);
     result.addObject(TrailsControllerConstants.TRAILS_ENTITY_LIST, getDescriptorService().getAllDescriptors());
 
@@ -487,7 +482,7 @@ public class TrailsMultiActionController extends MultiActionController {
     ModelAndView result = null;
     
     getPersistenceService().save(instance);
-    ObjectDataDescriptorList objectDataDescriptorList = getDataDescriptorHandler().create(instance, classDescriptor);
+    ObjectDataDescriptorList objectDataDescriptorList = getDataDescriptorHandler().createAndResolveChildern(instance, classDescriptor);
     result = new ModelAndView(TrailsControllerConstants.EDIT_VIEW, TrailsControllerConstants.TRAILS_COMMAND_NAME, objectDataDescriptorList);
     return result;
   }  
@@ -602,29 +597,32 @@ public class TrailsMultiActionController extends MultiActionController {
     modelAndView.getModel().putAll(model);      
     // set the errornous attribtues in the ObjectDataDescriptorList.
     ObjectDataDescriptorList dataDescriptorList = (ObjectDataDescriptorList) model.get(TrailsControllerConstants.TRAILS_COMMAND_NAME);
-    // there can be only one object.
-    Assert.isTrue(dataDescriptorList.getRows().size() == 1, "There can be only one instance in the ObjectDataDescriptorList.");
+    // there should be exactly one object, if not it might be deleted in the mean while for now we log and ignore this.
+    if (dataDescriptorList.getRows().size() == 1) {
     ObjectDataDescriptor objectDataDescriptor = dataDescriptorList.getRows().get(0);
-    // overwrite the errournous attributes.
-    for (Iterator iter = objectDataDescriptor.getColumns().iterator(); iter.hasNext();) {
-      PropertyDataDescriptor propertyDataDescriptor = (PropertyDataDescriptor) iter.next();
-      TrailsPropertyDescriptor trailsPropertyDescriptor = (TrailsPropertyDescriptor) propertyDataDescriptor.getPropertyDescriptor();
-      if (TrailsUtil.isNormalProperty(trailsPropertyDescriptor)) {
-        // retrieve the value from the request.
-        String value = request.getParameter(trailsPropertyDescriptor.getName());
-        log.debug("Cheking property: " + trailsPropertyDescriptor.getName() + " for errors.");
-        if (errors.getFieldError(trailsPropertyDescriptor.getDisplayName()) != null) {
-          log.debug("Property: " + trailsPropertyDescriptor.getName() + " contained an invalid value.");
-          propertyDataDescriptor.setValueInvalid(true);
-          // now overwrite the value with value from the request
-          propertyDataDescriptor.setValue(value);
-        } else if (trailsPropertyDescriptor.isDate()) {
-          propertyDataDescriptor.setValue(convertToDate(value, trailsPropertyDescriptor.getFormat()));
-        } else {
-          propertyDataDescriptor.setValue(value);
+      // overwrite the errournous attributes.
+      for (Iterator iter = objectDataDescriptor.getColumns().iterator(); iter.hasNext();) {
+        PropertyDataDescriptor propertyDataDescriptor = (PropertyDataDescriptor) iter.next();
+        TrailsPropertyDescriptor trailsPropertyDescriptor = (TrailsPropertyDescriptor) propertyDataDescriptor.getPropertyDescriptor();
+        if (TrailsUtil.isNormalProperty(trailsPropertyDescriptor)) {
+          // retrieve the value from the request.
+          String value = request.getParameter(trailsPropertyDescriptor.getName());
+          log.debug("Cheking property: " + trailsPropertyDescriptor.getName() + " for errors.");
+          if (errors.getFieldError(trailsPropertyDescriptor.getDisplayName()) != null) {
+            log.debug("Property: " + trailsPropertyDescriptor.getName() + " contained an invalid value.");
+            propertyDataDescriptor.setValueInvalid(true);
+            // now overwrite the value with value from the request
+            propertyDataDescriptor.setValue(value);
+          } else if (trailsPropertyDescriptor.isDate()) {
+            propertyDataDescriptor.setValue(convertToDate(value, trailsPropertyDescriptor.getFormat()));
+          } else {
+            propertyDataDescriptor.setValue(value);
+          }
         }
-        
       }
+    } else {
+      log.warn("There should be exactly one instance of : " + classDescriptor.getType() 
+              + " in the ObjectDataDescriptorList. current number: " + dataDescriptorList.getRows().size());
     }
     return modelAndView;
   }

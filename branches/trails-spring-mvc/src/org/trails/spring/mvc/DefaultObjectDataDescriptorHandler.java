@@ -30,9 +30,9 @@ public class DefaultObjectDataDescriptorHandler implements ObjectDataDescriptorH
   private DescriptorService descriptorService = null;
   
   /**
-   * @see org.trails.spring.mvc.ObjectDataDescriptorHandler#create(java.lang.Object, org.trails.descriptor.IClassDescriptor)
+   * @see org.trails.spring.mvc.ObjectDataDescriptorHandler#createAndResolveChildern(java.lang.Object, org.trails.descriptor.IClassDescriptor)
    */
-  public ObjectDataDescriptorList create(Object instance, IClassDescriptor classDescriptor) {
+  public ObjectDataDescriptorList createAndResolveChildern(Object instance, IClassDescriptor classDescriptor) {
     // Create a new ObjectDataDescriptorList that holds the information to be rendered in the view.
     ObjectDataDescriptorList objectDataDescriptorList = new ObjectDataDescriptorList(classDescriptor);
     
@@ -45,14 +45,14 @@ public class DefaultObjectDataDescriptorHandler implements ObjectDataDescriptorH
   /**
    * @see org.trails.spring.mvc.ObjectDataDescriptorHandler#createObjectDataDescriptorList(java.util.List, org.trails.descriptor.IClassDescriptor, boolean, int, int)
    */
-  public ObjectDataDescriptorList create(List instances, IClassDescriptor classDescriptor, boolean resolveAllChildern,
-      int pageNumber, int totalNumberOfPages) {
+  public ObjectDataDescriptorList create(List instances, IClassDescriptor classDescriptor, int pageNumber,
+      int totalNumberOfPages) {
     // Create a new ObjectDataDescriptorList that holds the information to be rendered in the view.
     ObjectDataDescriptorList objectDataDescriptorList = new ObjectDataDescriptorList(classDescriptor, pageNumber, totalNumberOfPages);
     List propertyDescriptors = classDescriptor.getPropertyDescriptors();
     for (Iterator iter = instances.iterator(); iter.hasNext();) {
       Object instance = (Object) iter.next();
-      ObjectDataDescriptor objectDataDescriptor = createObjectDataDescriptor(instance, classDescriptor, resolveAllChildern);
+      ObjectDataDescriptor objectDataDescriptor = createObjectDataDescriptor(instance, classDescriptor, false);
       objectDataDescriptorList.add(objectDataDescriptor);
     }
 
@@ -89,14 +89,16 @@ public class DefaultObjectDataDescriptorHandler implements ObjectDataDescriptorH
       // Locate all the instances of that type and add it to the column as value. Also we set an indicator (valueInObjectTable) 
       // that indicates that the value is an ObjectDataDescriptorList to true, this gives us easy rendering in the View.
       if (propertyDescriptor.isObjectReference() && resolveAllChildern) {
-
+        log.debug("Handeling ObjectReference for property: " + propertyDescriptor.getName() + ", resolveAllChildern = " + resolveAllChildern);
         List instances = getPersistenceService().getAllInstances(propertyDescriptor.getPropertyType());
         IClassDescriptor descriptor = getDescriptorService().getClassDescriptor(propertyDescriptor.getPropertyType());
         ObjectDataDescriptorList table = new ObjectDataDescriptorList(instances, descriptor, value);
         propertyDataDescriptor.setValue(table);
         propertyDataDescriptor.setValueInObjectTable(true);
 
-      } else if(propertyDescriptor.isCollection()) {
+      } else if(propertyDescriptor.isCollection() && value != null) {
+        
+        log.debug("Handeling Collections for property: " + propertyDescriptor.getName() + "value = " + value);
         // If it is a Collection we retrieve all the childern and put them into a seperate ObjectDataDescriptorList
         // so they can be rendered in the view.
         CollectionDescriptor collectionDescriptor = (CollectionDescriptor) propertyDescriptor;
@@ -111,11 +113,14 @@ public class DefaultObjectDataDescriptorHandler implements ObjectDataDescriptorH
           Object id = ReflectionUtils.getFieldValueByGetMethod(child, identifierName);
           childObjectDataDescriptor.setId(id);
           objectDataDescriptorList.add(childObjectDataDescriptor);
+          
+          log.debug("Child added to ObjectDataDescriptorList.");
         }
         propertyDataDescriptor.setValueInObjectTable(true);
         propertyDataDescriptor.setValue(objectDataDescriptorList);
     
       } else {
+        log.debug("Nomral property: " + propertyDescriptor.getName());
         // a "normal" property.
         propertyDataDescriptor.setValue(value);
       }

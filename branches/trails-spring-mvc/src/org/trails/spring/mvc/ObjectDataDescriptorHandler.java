@@ -14,24 +14,24 @@ import org.trails.descriptor.IClassDescriptor;
 public interface ObjectDataDescriptorHandler {
   /**
    * Method creates an {@link ObjectDataDescriptorList} for the given instance with
-   * its corresponding {@link IClassDescriptor}.
+   * its corresponding {@link IClassDescriptor}. this method will also resolve
+   * all child object associated with the given <code>instance</code>.
    * 
    * @param instance The instance for which the {@link ObjectDataDescriptorList} is created.
    * @param classDescriptor The {@link IClassDescriptor} describing the given <code>instance</code>.
    * @return An {@link ObjectDataDescriptorList}.
    */
-  public ObjectDataDescriptorList create(Object instance, IClassDescriptor classDescriptor);
+  public ObjectDataDescriptorList createAndResolveChildern(Object instance, IClassDescriptor classDescriptor);
   /**
-   * Method creates an {@link ObjectDataDescriptorList} for the given instance with
-   * its corresponding {@link IClassDescriptor}. This method should also resolve the child object instances.
+   * Method creates an {@link ObjectDataDescriptorList} for the given instances with
+   * its corresponding {@link IClassDescriptor}. This method does not resolve all child
+   * entities available, it only gets the one associated.
    * 
    * @param instances The instances for which the {@link ObjectDataDescriptorList} is created.
    * @param classDescriptor The {@link IClassDescriptor} describing the given <code>instance</code>.
-   * @param resolveAllChildern indicator whether or not all the childern of an instance shoudl be resolved
-   *      in case of an object reference.
    * @param pageNumber The current page number.
    * @param totalNumberOfPages The total number of pages.
    * @return An {@link ObjectDataDescriptorList}.
    */  
-  public ObjectDataDescriptorList create(List instances, IClassDescriptor classDescriptor, boolean resolveAllChildern, int pageNumber, int totalNumberOfPages);
+  public ObjectDataDescriptorList create(List instances, IClassDescriptor classDescriptor, int pageNumber, int totalNumberOfPages);
 }
