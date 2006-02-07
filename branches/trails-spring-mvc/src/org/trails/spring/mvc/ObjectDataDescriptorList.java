@@ -3,16 +3,24 @@ package org.trails.spring.mvc;
 import java.util.ArrayList;
 import java.util.List;
 
-
 import org.trails.descriptor.IClassDescriptor;
 import org.trails.descriptor.IPropertyDescriptor;
 import org.trails.spring.util.ReflectionUtils;
 
 /**
- * Holds a <i>table</i> of instances of the same <code>Class</code> and
- * some usefull data that is used for rendering the instances
- * on the screen.
- * 
+ * An ObjectDataDescriptorList holds a collection of {@link org.trails.spring.mvc.ObjectDataDescriptor}'s
+ * and some additional information such as the {@link org.trails.descriptor.IClassDescriptor}
+ * describing the instances in this ObjectDataDescriptorList.
+ * <p>
+ * The ObjectDataDescriptorList is used in the view's for rendering the data of the object's
+ * that need to be rendered in those views. One can iterate of the {@link #getRows()} that contain
+ * {@link org.trails.spring.mvc.ObjectDataDescriptor}'s.
+ * <p>
+ * The {@link org.trails.spring.mvc.PropertyDataDescriptor#getValue()} 
+ * of a {@link org.trails.spring.mvc.PropertyDataDescriptor} in the 
+ * {@link org.trails.spring.mvc.ObjectDataDescriptor}'s can also contain be
+ * an ObjectDatadescriptorList, for instance if the value is collection.
+ * <p> 
  * @author Lars Vonk
  *
  */
@@ -30,11 +38,36 @@ public class ObjectDataDescriptorList {
    * Holds the name of the columns.
    */
   private List<IPropertyDescriptor> columnNames = new ArrayList<IPropertyDescriptor>();
-  
+  /** The current page number, used for paging. */
   private int currentPageNumber;
-  
+  /** The total number of pages that this list is devided into. */
   private int totalNumberOfPages;
   
+  /**
+   * Creates an empty <code>ObjectDataDescriptorList</code>. The rows can
+   * be added by the {@link #add(ObjectDataDescriptor)} method.
+   * <p>
+   * Use this constructor when the created {@link ObjectDataDescriptor}'s 
+   * and its {@link PropertyDataDescriptor}'s need extra information
+   * besides the {@link IPropertyDescriptor}'s and the {@link IClassDescriptor}'s, for example
+   * when an property is an object reference the user needs to be able to choose
+   * from all available instances for that property. The <code>ObjectDataDescriptorList</code>
+   * cannot handle such actions because the {@link org.trails.persistence.PersistenceService}
+   * is then necessary and an <code>ObjectDataDescriptorList</code> does not have access to the
+   * {@link org.trails.persistence.PersistenceService}.
+   * <p>
+   * @param classDescriptor The descriptor of the type of the instances in this <code>ObjectDataDescriptorList</code>.
+   */
+  public ObjectDataDescriptorList(IClassDescriptor classDescriptor) {
+    this.classDescriptor = classDescriptor;
+    
+    List propertiesDescriptors = this.classDescriptor.getPropertyDescriptors();
+    for (Object object : propertiesDescriptors) {
+      IPropertyDescriptor propertyDescriptor = (IPropertyDescriptor) object;
+        columnNames.add(propertyDescriptor);
+    }
+  }
+
   /**
    * Creates an empty <code>ObjectDataDescriptorList</code>. The rows can
    * be added by the {@link #add(ObjectDataDescriptor)} method.
@@ -46,51 +79,13 @@ public class ObjectDataDescriptorList {
    * {@link org.trails.persistence.PersistenceService}.
    * 
    * @param classDescriptor The descriptor of the type of the instances in this <code>ObjectDataDescriptorList</code>.
-   */
-  public ObjectDataDescriptorList(IClassDescriptor classDescriptor) {
-    this.classDescriptor = classDescriptor;
-    
-    List propertiesDescriptors = this.classDescriptor.getPropertyDescriptors();
-    for (Object object : propertiesDescriptors) {
-      IPropertyDescriptor propertyDescriptor = (IPropertyDescriptor) object;
-      // only add the column name to the list of column names if its not present yet.
-//      if(!columnNames.contains(propertyDescriptor)) {
-        columnNames.add(propertyDescriptor);
-//      }
-    }
-  }
-
-  /**
-   * Creates an empty <code>ObjectDataDescriptorList</code>. The rows can
-   * be added by the {@link #add(ObjectDataDescriptor)} method.
-   * This is done when the created {@link ObjectDataDescriptor}'s and {@link PropertyDataDescriptor}'s need extra information
-   * besides the {@link IPropertyDescriptor}'s and the {@link IClassDescriptor}'s, for example
-   * when an property is an object reference the user needs to be able to choose
-   * from all available instances for that proerty. For this the {@link org.trails.persistence.PersistenceService}
-   * is necessary and an <code>ObjectDataDescriptorList</code> does not have access to the
-   * {@link org.trails.persistence.PersistenceService}.
-   * 
-   * @param classDescriptor The descriptor of the type of the instances in this <code>ObjectDataDescriptorList</code>.
-   * @param pageNumber the current page in case pagination.
+   * @param pageNumber the current page in case of paging.
    * @param totalNumberOfPages the total number of pages.
    */
   public ObjectDataDescriptorList(IClassDescriptor classDescriptor, int pageNumber, int totalNumberOfPages) {
     this(classDescriptor);
     setCurrentPageNumber(pageNumber);
     setTotalNumberOfPages(totalNumberOfPages);
-  }
-  
-  /**
-   * Creates an <code>ObjectDataDescriptorList</code> initialized with the values
-   * of the given <code>instance</code>.
-   *   
-   * @param instance The instance that is rendered on the screen.is put in this <code>ObjectDataDescriptorList</code>
-   * @param classDescriptor The descriptor of the type of the instance.
-   */
-  public ObjectDataDescriptorList(Object instance, IClassDescriptor classDescriptor) {
-    List list = new ArrayList();
-    list.add(instance);
-    init(list, classDescriptor, null);
   }
   
   /**
@@ -102,9 +97,15 @@ public class ObjectDataDescriptorList {
     init(instances, classDescriptor, null);
   }
   /**
-   * Creates and instantiates this ObjectDataDescriptorList.
+   * Creates and instantiates this ObjectDataDescriptorList. This construtor will also 
+   * set the flag {@link ObjectDataDescriptor#setSelected(boolean)} flag
+   * to <code>true</code> in the {@link ObjectDataDescriptor} for the given selectedInstance.
+   * <br>This is usefull in case the to be created ObjectDataDescriptorList is actually
+   * used for rendering an attribute in another ObjectDataDescriptorList.   * 
+   * 
    * @param instances A List of instances to put in this ObjectDataDescriptorList.
    * @param classDescriptor The descriptor of the type of the instances.
+   * @param selectedInstance The instance that should be selected in the list.
    */
   public <T> ObjectDataDescriptorList(List<T> instances, IClassDescriptor classDescriptor, Object selectedInstance) {
     init(instances, classDescriptor, selectedInstance);
