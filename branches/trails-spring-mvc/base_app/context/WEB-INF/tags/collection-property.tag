@@ -10,6 +10,7 @@
 <%@ attribute name="property" required="true" type="java.lang.Object" %>
 <%@ attribute name="classDescriptor" type="java.lang.Object" %>
 <%@ attribute name="identifierValue" type="java.lang.Object" %>
+<%@ attribute name="action"%>
 
 <c:if test="${property.valueInObjectTable}">
 	<c:forEach var="objectDescriptor" items="${property.value.rows}">
@@ -20,8 +21,10 @@
 		</a> <br>
 	</c:forEach>
 </c:if>
-<a href="<c:url value="/prepareToEditOrAddAnInstance.htm">
-			<c:param name="type" value="${property.propertyDescriptor.elementType.name}"/>
-		 </c:url>">
-	Add new
-</a> 
+<c:if test='${action != "search"}'>
+	<a href="<c:url value="/prepareToEditOrAddAnInstance.htm">
+				<c:param name="type" value="${property.propertyDescriptor.elementType.name}"/>
+			 </c:url>">
+		Add new
+	</a> 
+</c:if>

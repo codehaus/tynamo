@@ -13,7 +13,7 @@
 
 <c:choose>
 	<c:when test="${property.propertyDescriptor.collection}">
-		<trails:collection-property property="${property}"/>
+		<trails:collection-property property="${property}" action="${action}"/>
 	</c:when>
 	<c:when test="${property.propertyDescriptor.date}">
 		<trails:date-property property="${property}" readOnly="${readOnly}" />

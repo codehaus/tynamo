@@ -12,6 +12,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.validation.BindException;
@@ -130,7 +131,7 @@ public class TrailsServletRequestDataBinder {
       } else if (propertyDescriptor.isObjectReference()) {
         // get the id value from the request.
         String idValueAsString = getIdValueForObjectReference(request, attributeName);         
-        if (idValueAsString != null) {
+        if (StringUtils.isNotEmpty(idValueAsString)) {
           if (log.isDebugEnabled()) {
             log.debug("Setting object reference attribute: " + attributeName + " to an instance of: " + propertyDescriptor.getPropertyType() + " with with id: " + idValueAsString);
           }  
