@@ -8,6 +8,7 @@
 <%@ taglib prefix="trails" tagdir="/WEB-INF/tags" %>
 
 <%@ attribute name="property" required="true" type="java.lang.Object" %>
+<%@ attribute name="action" %>
 <%@ attribute name="readOnly" required="true" %>
 <c:choose>
 	<c:when test='${property.propertyDescriptor.readOnly || readOnly == "true"}'>
@@ -25,6 +26,9 @@
 	<c:otherwise>
 		<% // The name should be something like project.projectId. %>
 		<select name="<c:out value="${property.propertyDescriptor.name}"/>.<c:out value="${property.value.classDescriptor.identifierDescriptor.name}"/>">
+			<c:if test='${action == "search"}'>
+				<option value=""/>
+			</c:if>		
 			<c:forEach var="row" items="${property.value.rows}">
 				<c:forEach var="column" items="${row.columns}">
 					<c:if test="${column.propertyDescriptor.identifier}">
