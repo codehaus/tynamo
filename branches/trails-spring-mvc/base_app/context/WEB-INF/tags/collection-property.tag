@@ -8,6 +8,8 @@
 <%@ taglib prefix="trails" tagdir="/WEB-INF/tags" %>
 
 <%@ attribute name="property" required="true" type="java.lang.Object" %>
+<%@ attribute name="classDescriptor" type="java.lang.Object" %>
+<%@ attribute name="identifierValue" type="java.lang.Object" %>
 
 <c:if test="${property.valueInObjectTable}">
 	<c:forEach var="objectDescriptor" items="${property.value.rows}">
@@ -19,6 +21,7 @@
 	</c:forEach>
 </c:if>
 <a href="<c:url value="/prepareToEditOrAddAnInstance.htm">
-	<c:param name="type" value="${property.propertyDescriptor.elementType.name}"/></c:url>">
+			<c:param name="type" value="${property.propertyDescriptor.elementType.name}"/>
+		 </c:url>">
 	Add new
 </a> 

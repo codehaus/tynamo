@@ -1,9 +1,10 @@
 package org.trails.spring.mvc;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -76,7 +77,7 @@ public class DefaultObjectDataDescriptorHandler implements ObjectDataDescriptorH
     List propertyDescriptors = classDescriptor.getPropertyDescriptors();
     log.debug("Creating object data descriptor with #descriptors " + propertyDescriptors.size());
     
-    List<PropertyDataDescriptor> propertyDataDescriptors = new ArrayList<PropertyDataDescriptor>();
+    SortedSet<PropertyDataDescriptor> propertyDataDescriptors = new TreeSet<PropertyDataDescriptor>();
     // Loop through all the properties and create a column for each property
     // then add the necessary information into that column for that property
     // so that it can be rendered correctly in the View.

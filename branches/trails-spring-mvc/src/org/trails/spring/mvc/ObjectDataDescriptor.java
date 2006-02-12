@@ -2,6 +2,9 @@ package org.trails.spring.mvc;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 /**
  * An <code>ObjectDataDescriptor</code> describes an instance of an Object. This
@@ -34,16 +37,15 @@ public class ObjectDataDescriptor {
   private boolean selected = false;
   /**
    * A List of columns.
-   * TODO: This really should be sorted somehow.
    */
-  private List<PropertyDataDescriptor> columns = new ArrayList<PropertyDataDescriptor>();
+  private SortedSet<PropertyDataDescriptor> columns = new TreeSet<PropertyDataDescriptor>();
 
   /**
    * Returns the columns. Or an empty list is now
    * columns are set.
    * @return Returns the columns.
    */
-  public List<PropertyDataDescriptor> getColumns() {
+  public SortedSet<PropertyDataDescriptor> getColumns() {
     return columns;
   }
 
@@ -51,7 +53,7 @@ public class ObjectDataDescriptor {
    * Sets the columns.
    * @param columns The columns to set.
    */
-  public void setColumns(List<PropertyDataDescriptor> columns) {
+  public void setColumns(SortedSet<PropertyDataDescriptor> columns) {
     this.columns = columns;
   }
 

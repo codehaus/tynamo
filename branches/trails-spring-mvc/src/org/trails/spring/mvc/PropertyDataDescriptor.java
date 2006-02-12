@@ -28,7 +28,7 @@ import org.trails.descriptor.IPropertyDescriptor;
  * @author Lars Vonk
  *
  */
-public class PropertyDataDescriptor { 
+public class PropertyDataDescriptor implements Comparable { 
   /**
    * Holds the value of the property of this column.
    */
@@ -134,6 +134,25 @@ public class PropertyDataDescriptor {
    */
   public void setValueInvalid(boolean valueInvalid) {
     this.valueInvalid = valueInvalid;
+  }
+
+  /**
+   * Compares this this PropertyDataDescriptor to the given
+   * object.
+   * @param o
+   * @return
+   */
+  public int compareTo(Object o) {
+    // default less then..
+    int result = -1;
+    // check if it is the same object.
+    if (this == o) {
+      result = 0;
+    } else if (o instanceof PropertyDataDescriptor) {
+      PropertyDataDescriptor other = (PropertyDataDescriptor) o;
+      result = (other.getPropertyDescriptor().getIndex() < getPropertyDescriptor().getIndex() ? 1 : -1);    
+    }
+    return result;
   }
   
 }

@@ -2,8 +2,13 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt_rt"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="trails" tagdir="/WEB-INF/tags" %>
-
+<%
+// property 				= The PropertyDataDescriptor.
+// readOnly 				= Is the property to be displayed readOnly?
+// action 					= The action being or about to be performed, e.g. search, edit etc.
+%>
 <%@ attribute name="property" required="true" type="java.lang.Object" %>
+<%@ attribute name="action" %>
 <%@ attribute name="readOnly" %>
 
 <c:choose>
@@ -23,7 +28,7 @@
 		<trails:string-property property="${property}" readOnly="${readOnly}" />
 	</c:when>
 	<c:when test="${property.propertyDescriptor.objectReference}">
-		<trails:object-reference-property property="${property}" readOnly="${readOnly}" />
+		<trails:object-reference-property property="${property}" readOnly="${readOnly}" action="${action}"/>
 	</c:when>
 	<c:otherwise>
 		

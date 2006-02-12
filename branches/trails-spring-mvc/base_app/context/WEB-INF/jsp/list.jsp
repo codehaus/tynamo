@@ -39,7 +39,8 @@
 			<c:forEach var="column" items="${row.columns}">
 				<c:if test="${!column.propertyDescriptor.hidden}">
 					<td>
-						<trails:property property="${column}" readOnly="true" />
+						<trails:property property="${column}" 
+										 readOnly="true" />
 					</td>
 				</c:if>
 			</c:forEach>

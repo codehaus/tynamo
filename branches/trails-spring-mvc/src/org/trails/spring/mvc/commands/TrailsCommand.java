@@ -1,27 +1,32 @@
 package org.trails.spring.mvc.commands;
 
-import java.util.Collection;
-
-
 import org.trails.descriptor.IClassDescriptor;
 import org.trails.spring.util.ReflectionUtils;
 
 /**
+ * Command class for Trails.
+ * 
  * @author Jurjan Woltman
  *
  */
 public class TrailsCommand {
 
+  /** the type of the class shown. */
   private Class type = null;
-  
-  private Collection items = null;
-  
+  /** The id of the class.*/
   private String id = null;
-  // default 1.
+  /** The current page number. Default 1. */
   private int pageNumber = 1;
-  // default 1
+  /** The total number of pages that can be shown. Default 1.*/
   private int totalNumberOfPages = 1;
-  
+  /** Holds the id of the parent class in case of an parent-child relationship. */
+  private String parentId = null;
+  /** Holds the parent class in case of an parent-child relationship. */
+  private String parentClass = null;
+  /**
+   * Default constructor.
+   *
+   */
   public TrailsCommand() {}
   
   /**
@@ -53,23 +58,6 @@ public class TrailsCommand {
   public void setId(String id) {
     this.id = id;
   }
-
-  /**
-   * Returns the items.
-   * @return Returns the items.
-   */
-  public Collection getItems() {
-    return items;
-  }
-
-  /**
-   * Sets the items.
-   * @param items The items to set.
-   */
-  public void setItems(Collection items) {
-    this.items = items;
-  }
-
   /**
    * Returns the pageNumber.
    * @return Returns the pageNumber.
@@ -116,5 +104,33 @@ public class TrailsCommand {
    */
   public void setType(Class type) {
     this.type = type;
+  }
+
+  /**
+   * @return Returns the parentClass.
+   */
+  public String getParentClass() {
+    return parentClass;
+  }
+
+  /**
+   * @param parentClass The parentClass to set.
+   */
+  public void setParentClass(String parentClass) {
+    this.parentClass = parentClass;
+  }
+
+  /**
+   * @return Returns the parentId.
+   */
+  public String getParentId() {
+    return parentId;
+  }
+
+  /**
+   * @param parentId The parentId to set.
+   */
+  public void setParentId(String parentId) {
+    this.parentId = parentId;
   }
 }

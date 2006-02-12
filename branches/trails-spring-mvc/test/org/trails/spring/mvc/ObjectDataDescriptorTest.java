@@ -2,6 +2,8 @@ package org.trails.spring.mvc;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import org.trails.descriptor.IPropertyDescriptor;
 
@@ -19,7 +21,7 @@ public class ObjectDataDescriptorTest extends TestCase {
     assertNotNull(dataDescriptor.getColumns());
     assertEquals(0, dataDescriptor.getColumns().size());
     
-    List<PropertyDataDescriptor> columns = new ArrayList<PropertyDataDescriptor>();
+    SortedSet<PropertyDataDescriptor> columns = new TreeSet<PropertyDataDescriptor>();
     dataDescriptor.setColumns(columns);
     assertTrue(columns.equals(dataDescriptor.getColumns()));
   }
@@ -43,7 +45,7 @@ public class ObjectDataDescriptorTest extends TestCase {
     PropertyDataDescriptor propertyDataDescriptor = createMock(PropertyDataDescriptor.class);
     IPropertyDescriptor propertyDescriptor = createMock(IPropertyDescriptor.class);
     
-    List<PropertyDataDescriptor> columns = new ArrayList<PropertyDataDescriptor>();
+    SortedSet<PropertyDataDescriptor> columns = new TreeSet<PropertyDataDescriptor>();
     columns.add(propertyDataDescriptor);
     
     expect(propertyDataDescriptor.getPropertyDescriptor()).andStubReturn(propertyDescriptor);

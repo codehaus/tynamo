@@ -2,6 +2,8 @@ package org.trails.spring.mvc;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import org.trails.descriptor.IClassDescriptor;
 import org.trails.descriptor.IPropertyDescriptor;
@@ -127,28 +129,32 @@ public class ObjectDataDescriptorList {
     for (int i = 0; i< instances.size(); i++) {
       Object instance = instances.get(i);
       ObjectDataDescriptor row = new ObjectDataDescriptor();
-      if (selectedInstance != null && instance.equals(selectedInstance)) {
+      if (selectedInstance != null && selectedInstance.equals(instance)) {
         row.setSelected(true);
       }
       
       row.setInstance(instance);
-      List<PropertyDataDescriptor> columns = new ArrayList<PropertyDataDescriptor>();
-      for (Object object : propertiesDescriptors) {
-
-        IPropertyDescriptor propertyDescriptor = (IPropertyDescriptor) object;
-        // only add the column name to the list of column names if its not present yet.
-        if (i==0) {
-          columnNames.add(propertyDescriptor);
+      // there can also be a null value in the list, e.g. on the
+      // search page where the first "instance" should be empty.
+      if (instance != null) {
+        SortedSet<PropertyDataDescriptor> columns = new TreeSet<PropertyDataDescriptor>();
+        for (Object object : propertiesDescriptors) {
+  
+          IPropertyDescriptor propertyDescriptor = (IPropertyDescriptor) object;
+          // only add the column name to the list of column names if its not present yet.
+          if (i==0) {
+            columnNames.add(propertyDescriptor);
+          }
+          
+          PropertyDataDescriptor column = new PropertyDataDescriptor(propertyDescriptor);
+          Object value = ReflectionUtils.getFieldValueByGetMethod(instance, propertyDescriptor.getName());
+          column.setValue(value);
+          columns.add(column);
+          
         }
         
-        PropertyDataDescriptor column = new PropertyDataDescriptor(propertyDescriptor);
-        Object value = ReflectionUtils.getFieldValueByGetMethod(instance, propertyDescriptor.getName());
-        column.setValue(value);
-        columns.add(column);
-        
+        row.setColumns(columns);
       }
-      
-      row.setColumns(columns);
       rows.add(row);
     }    
   }
