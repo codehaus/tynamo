@@ -11,9 +11,23 @@
 <%@ attribute name="readOnly" %>
 <c:choose>
 	<c:when test='${property.propertyDescriptor.readOnly || readOnly == "true"}'>
-		<c:out value="${property.value}"/>
+		<c:choose>
+			<c:when test="${property.propertyDescriptor.large}">
+				<textarea readonly="readonly" rows="3" cols="30"><c:out value="${property.value}"/></textarea>
+			</c:when>
+			<c:otherwise>
+				<c:out value="${property.value}"/>
+			</c:otherwise>
+		</c:choose>
 	</c:when>
 	<c:otherwise>
-		<input name="<c:out value="${property.propertyDescriptor.name}"/>" value="<c:out value="${property.value}"/>">
+		<c:choose>
+			<c:when test="${property.propertyDescriptor.large}">
+				<textarea name="<c:out value="${property.propertyDescriptor.name}"/>" rows="3" cols="30"><c:out value="${property.value}"/></textarea>
+			</c:when>
+			<c:otherwise>
+				<input name="<c:out value="${property.propertyDescriptor.name}"/>" value="<c:out value="${property.value}"/>">				
+			</c:otherwise>
+		</c:choose>
 	</c:otherwise>
 </c:choose>
