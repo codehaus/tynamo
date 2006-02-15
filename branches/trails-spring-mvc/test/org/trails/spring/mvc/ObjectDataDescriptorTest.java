@@ -21,7 +21,7 @@ public class ObjectDataDescriptorTest extends TestCase {
     assertNotNull(dataDescriptor.getColumns());
     assertEquals(0, dataDescriptor.getColumns().size());
     
-    SortedSet<PropertyDataDescriptor> columns = new TreeSet<PropertyDataDescriptor>();
+    List<PropertyDataDescriptor> columns = new ArrayList<PropertyDataDescriptor>();
     dataDescriptor.setColumns(columns);
     assertTrue(columns.equals(dataDescriptor.getColumns()));
   }
@@ -45,7 +45,7 @@ public class ObjectDataDescriptorTest extends TestCase {
     PropertyDataDescriptor propertyDataDescriptor = createMock(PropertyDataDescriptor.class);
     IPropertyDescriptor propertyDescriptor = createMock(IPropertyDescriptor.class);
     
-    SortedSet<PropertyDataDescriptor> columns = new TreeSet<PropertyDataDescriptor>();
+    List<PropertyDataDescriptor> columns = new ArrayList<PropertyDataDescriptor>();
     columns.add(propertyDataDescriptor);
     
     expect(propertyDataDescriptor.getPropertyDescriptor()).andStubReturn(propertyDescriptor);
