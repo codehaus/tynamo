@@ -552,9 +552,18 @@ public class TrailsMultiActionController extends MultiActionController {
    * TODO : add extra exception handling if descriptor could not retrieved.
    */
   protected IClassDescriptor getSelectedClassDescriptor(TrailsCommand command) {
+    return getSelectedClassDescriptor(command.getType());
+  }
+
+  /**
+   * Retrieves the IClassDescriptor from the DescriptorService using the 
+   * 'type' attribute in given TrailsCommand.
+   * TODO : add extra exception handling if descriptor could not retrieved.
+   */
+  protected IClassDescriptor getSelectedClassDescriptor(Class clazz) {
     // If command.getType() is null, or doesnot result in an IClassDescriptor it has to be a programming exception.
     // In that case we just let it result in a Runtime and do not peform any unnesesary checks.
-    return getDescriptorService().getClassDescriptor((command.getType()));
+    return getDescriptorService().getClassDescriptor(clazz);
   }
 
   /**
@@ -591,7 +600,8 @@ public class TrailsMultiActionController extends MultiActionController {
     ModelAndView modelAndView = null;
 
     TrailsCommand command = new TrailsCommand(instance, classDescriptor);
-    modelAndView = prepareToEditOrAddAnInstance(request, response, command);
+    modelAndView = handleObjectEdit(request, response, classDescriptor, instance);
+
     // add the errors
     Map model = errors.getModel();
     model.putAll(modelAndView.getModel());
