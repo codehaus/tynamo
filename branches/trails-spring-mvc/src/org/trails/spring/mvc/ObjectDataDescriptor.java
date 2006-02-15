@@ -38,23 +38,23 @@ public class ObjectDataDescriptor {
   /**
    * A List of columns.
    */
-  private SortedSet<PropertyDataDescriptor> columns = new TreeSet<PropertyDataDescriptor>();
+  private List<PropertyDataDescriptor> columns = new ArrayList<PropertyDataDescriptor>();
 
   /**
    * Returns the columns. Or an empty list is now
    * columns are set.
    * @return Returns the columns.
    */
-  public SortedSet<PropertyDataDescriptor> getColumns() {
+  public List<PropertyDataDescriptor> getColumns() {
     return columns;
   }
 
   /**
    * Sets the columns.
-   * @param columns The columns to set.
+   * @param propertyDataDescriptors The columns to set.
    */
-  public void setColumns(SortedSet<PropertyDataDescriptor> columns) {
-    this.columns = columns;
+  public void setColumns(List<PropertyDataDescriptor> propertyDataDescriptors) {
+    this.columns = propertyDataDescriptors;
   }
 
   /**

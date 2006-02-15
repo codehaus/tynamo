@@ -137,7 +137,7 @@ public class ObjectDataDescriptorList {
       // there can also be a null value in the list, e.g. on the
       // search page where the first "instance" should be empty.
       if (instance != null) {
-        SortedSet<PropertyDataDescriptor> columns = new TreeSet<PropertyDataDescriptor>();
+        List<PropertyDataDescriptor> columns = new ArrayList<PropertyDataDescriptor>();
         for (Object object : propertiesDescriptors) {
   
           IPropertyDescriptor propertyDescriptor = (IPropertyDescriptor) object;
