@@ -481,8 +481,7 @@ public class TrailsMultiActionController extends MultiActionController {
     ModelAndView result = null;
     
     getPersistenceService().save(instance);
-    ObjectDataDescriptorList objectDataDescriptorList = getDataDescriptorHandler().createAndResolveChildern(instance, classDescriptor);
-    result = new ModelAndView(TrailsControllerConstants.EDIT_VIEW, TrailsControllerConstants.TRAILS_COMMAND_NAME, objectDataDescriptorList);
+    result = listAllInstances(request, response, new TrailsCommand(instance, classDescriptor)); 
     return result;
   }  
 
@@ -579,10 +578,15 @@ public class TrailsMultiActionController extends MultiActionController {
     InvalidValue[] invalidValues = validator.getInvalidValues(instance);
     
     for (InvalidValue invalidValue : invalidValues) {
+      String message = invalidValue.getMessage();
+      IPropertyDescriptor propertyDescriptor = classDescriptor.getPropertyDescriptor(invalidValue.getPropertyName());
+      if (propertyDescriptor != null) {
+        message = propertyDescriptor.getDisplayName() + " " + invalidValue.getMessage();
+      }
       errors.addError(new FieldError(errors.getObjectName()
                                      , invalidValue.getPropertyName()
                                      , invalidValue.getValue()
-                                     , false, null, null, invalidValue.getMessage()));
+                                     , false, null, null, message));
     }
   }  
 
