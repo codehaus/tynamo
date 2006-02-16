@@ -24,10 +24,9 @@ Search instance of <c:out value="${trailsModel.classDescriptor.pluralDisplayName
     	</tr>
 		</c:if>
   </c:forEach>
-	<input type="submit" value="search">
-
 </c:forEach>
 </table>
+<input type="submit" value="search">
 </form>
 
 <%@ include file="/WEB-INF/jsp/includes/end.jsp" %>
