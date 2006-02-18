@@ -3,9 +3,12 @@ package org.trails.descriptor;
 import java.beans.BeanInfo;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
+import javax.persistence.Transient;
 
 import org.apache.commons.beanutils.BeanUtils;
 
@@ -50,7 +53,7 @@ public class ReflectionDescriptorFactory implements DescriptorFactory
         for (int i = 0; i < beanInfo.getPropertyDescriptors().length; i++)
         {
             PropertyDescriptor beanPropDescriptor = beanInfo.getPropertyDescriptors()[i];
-            if (!isExcluded(beanPropDescriptor.getName(), getPropertyExcludes()))
+            if (!isExcluded(beanPropDescriptor, getPropertyExcludes()))
             {
                 TrailsPropertyDescriptor propDescriptor = new TrailsPropertyDescriptor(beanType, beanPropDescriptor.getPropertyType());
                 BeanUtils.copyProperties(propDescriptor, beanPropDescriptor);
@@ -60,7 +63,19 @@ public class ReflectionDescriptorFactory implements DescriptorFactory
         return propertyDescriptors;
     }
 
-	public List getMethodExcludes()
+	private boolean isExcluded(PropertyDescriptor beanPropDescriptor, List propertyExcludes) {
+    boolean result = isExcluded(beanPropDescriptor.getName(), propertyExcludes);
+    if (!result) {
+      Method readMethod = beanPropDescriptor.getReadMethod();
+      // transient methods reflect non-persistent / non-Trails properties
+      if (readMethod != null && readMethod.isAnnotationPresent(Transient.class)) {
+        result = true;
+      }
+    }
+    return result;
+	}
+
+  public List getMethodExcludes()
 	{
 		return methodExcludes;
 	}
