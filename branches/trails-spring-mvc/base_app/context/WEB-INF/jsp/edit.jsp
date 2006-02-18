@@ -3,10 +3,10 @@
 Edit instance of <c:out value="${trailsModel.classDescriptor.pluralDisplayName}" />
 <p>
 <form name="edit" method="post" action="<c:url value="/saveInstance.htm"/>">
-  <input type="hidden" name="id" value="<c:out value="${row.identifierValue}"/>"/>  
-  <input type="hidden" name="type" value="<c:out value="${trailsModel.classDescriptor.type.name}"/>"/>
   <% // Loop over all rows. %>
   <c:forEach var="row" items="${trailsModel.rows}">
+	  <input type="hidden" name="id" value="<c:out value="${row.identifierValue}"/>"/>  
+	  <input type="hidden" name="type" value="<c:out value="${trailsModel.classDescriptor.type.name}"/>"/>
      <table border="1">
      <% // Loop over all rows. %>
      <c:forEach var="column" items="${row.columns}" begin="0">
