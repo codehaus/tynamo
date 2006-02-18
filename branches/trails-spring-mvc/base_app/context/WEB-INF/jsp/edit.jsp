@@ -21,7 +21,7 @@ Edit instance of <c:out value="${trailsModel.classDescriptor.pluralDisplayName}"
         		     <c:out value="${column.value}"/>
           	   </c:when>
           	   <c:otherwise>
-          		  <trails:property property="${column}"/>
+          		  <trails:property property="${column}" action="edit"/>
           	   </c:otherwise>
           	 </c:choose>
             </td>

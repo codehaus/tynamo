@@ -13,20 +13,26 @@
 <%@ attribute name="action"%>
 
 <c:if test="${property.valueInObjectTable}">
+	<table>
 	<c:forEach var="objectDescriptor" items="${property.value.rows}">
+		<tr>
+		<td>
 		<trails:link url="//prepareToEditOrAddAnInstance.htm"
 								 className="${property.propertyDescriptor.elementType.name}"
 								 identifierValue="${objectDescriptor.id}"
 								 linkName="${objectDescriptor.instance}"/>	
-		&nbsp; &nbsp;
+		</td>
 		<c:if test='${action == "edit"}'>
+		<td>
 			<trails:link url="/deleteInstance.htm"
 									 className="${property.propertyDescriptor.elementType.name}"
 									 identifierValue="${objectDescriptor.id}"
 									 linkName="delete"/>
+		</td>
 		</c:if>
-	<br>
+		</tr>
 	</c:forEach>
+	</table>
 </c:if>
 <c:if test='${action != "search"}'>
 	<a href="<c:url value="/prepareToEditOrAddAnInstance.htm">
