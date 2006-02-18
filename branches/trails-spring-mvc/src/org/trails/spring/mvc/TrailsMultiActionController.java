@@ -15,7 +15,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.validator.ClassValidator;
-import org.hibernate.validator.InvalidStateException;
 import org.hibernate.validator.InvalidValue;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
@@ -33,6 +32,7 @@ import org.trails.spring.persistence.PagingCriteria;
 import org.trails.spring.util.HibernateUtil;
 import org.trails.spring.util.ReflectionUtils;
 import org.trails.spring.util.TrailsUtil;
+import org.trails.validation.ValidationException;
 /**
  * The TrailsMultiActionController is the controller as defined in the MVC layers. This controller
  * has the default implementations of all the actions in a Trails application.
@@ -249,7 +249,7 @@ public class TrailsMultiActionController extends MultiActionController {
       // if updating an existing instance succeeded we forward to EDIT_VIEW.
       if (!dataBinder.hasErrors()) {
         log.debug("Updating instance: " + instance);
-        nextView = handleObjectSave(request, response, classDescriptor, instance);
+        nextView = handleObjectSave(request, response, classDescriptor, instance, dataBinder);
       } 
       
     } else {
@@ -258,7 +258,7 @@ public class TrailsMultiActionController extends MultiActionController {
       // if creating a new instance succeeded we forward to listAllInstances.
       if (!dataBinder.hasErrors()) {
         log.debug("Saving instance: " + instance);
-        nextView = handleObjectSave(request, response, classDescriptor, instance);
+        nextView = handleObjectSave(request, response, classDescriptor, instance, dataBinder);
       }
     }  
 
@@ -475,14 +475,21 @@ public class TrailsMultiActionController extends MultiActionController {
    * @param classDescriptor the class descriptor
    * @param instance the instance to be stored
    * @return the next view
-   * @throws InvalidStateException
    */
-  protected ModelAndView handleObjectSave(HttpServletRequest request, HttpServletResponse response, IClassDescriptor classDescriptor, Object instance) throws InvalidStateException {
-    ModelAndView result = null;
-    
-    getPersistenceService().save(instance);
-    result = listAllInstances(request, response, new TrailsCommand(instance, classDescriptor)); 
-    return result;
+  protected ModelAndView handleObjectSave(HttpServletRequest request, HttpServletResponse response
+                                          , IClassDescriptor classDescriptor, Object instance, TrailsServletRequestDataBinder dataBinder) {
+    ModelAndView modelAndView = null;
+    try {
+      getPersistenceService().save(instance);
+      modelAndView = listAllInstances(request, response, new TrailsCommand(instance, classDescriptor));
+    } catch (ValidationException e) {
+      
+      dataBinder.getErrors().addError(new FieldError(dataBinder.getErrors().getObjectName()
+          , null
+          , null
+          , false, null, null, e.getMessage()));
+    }
+    return modelAndView; 
   }  
 
   /**

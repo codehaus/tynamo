@@ -21,6 +21,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratorType;
 import javax.persistence.Id;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import junit.framework.TestCase;
 
@@ -58,9 +59,17 @@ public class TrailsMultiActionControllerTest extends TestCase {
     reset(mockHandler);
     reset(mockRequest);
     
-    trailsMultiActionController.setDescriptorService(mockDescriptorService);
-    trailsMultiActionController.setPersistenceService(mockPersistenceService);
-    trailsMultiActionController.setDataDescriptorHandler(mockHandler);
+    pupulate(trailsMultiActionController);
+  }
+
+  /**
+   * populates the controller.
+   * @param controller
+   */
+  private void pupulate(TrailsMultiActionController controller) {
+    controller.setDescriptorService(mockDescriptorService);
+    controller.setPersistenceService(mockPersistenceService);
+    controller.setDataDescriptorHandler(mockHandler);
   }
 
   /*
@@ -267,24 +276,32 @@ public class TrailsMultiActionControllerTest extends TestCase {
    * Test method for 'org.trails.spring.mvc.TrailsMultiActionController.saveInstance(HttpServletRequest, HttpServletResponse, TrailsCommand)'
    */
   public void testSaveInstanceNewInstanceNoBindErrors() {
+    final ModelAndView testModelAndView = new ModelAndView("test");
+    trailsMultiActionController = new TrailsMultiActionController() {
+      //overridden ad saveInstance forwards to listAllInstances and that one is already tested.
+      @Override
+      public ModelAndView listAllInstances(HttpServletRequest request, HttpServletResponse response, TrailsCommand command) {
+        return testModelAndView;
+      }
+      
+    };
+    pupulate(trailsMultiActionController);
     //  objects needed for testing
     TrailsCommand trailsCommand = createTrailsCommand(0,0);
     trailsCommand.setId(null);
-    IClassDescriptor testClassDescriptor = new TrailsClassDescriptor(TrailsMultiActionControllerTest.class);
+    trailsCommand.setType(TestBean.class);
+    IClassDescriptor testClassDescriptor = new TrailsClassDescriptor(TestBean.class);
+    testClassDescriptor.setPropertyDescriptors(Arrays.asList(new IdentifierDescriptor[] {new IdentifierDescriptor(TestBean.class, "id", Integer.class)}));
     
     // add behaviour for mocks.
-    expect(mockDescriptorService.getClassDescriptor(TrailsMultiActionControllerTest.class)).andStubReturn(testClassDescriptor);
+    expect(mockDescriptorService.getClassDescriptor(TestBean.class)).andStubReturn(testClassDescriptor);
     expect(mockDescriptorService.getAllDescriptors()).andReturn(allTypes);
-    expect(mockPersistenceService.save(isA(TrailsMultiActionControllerTest.class))).andReturn(new TrailsMultiActionControllerTest());
-    expect(mockHandler.createAndResolveChildern(isA(TrailsMultiActionControllerTest.class), eq(testClassDescriptor))).andReturn(new ObjectDataDescriptorList(testClassDescriptor));
-    
+    expect(mockPersistenceService.save(isA(TestBean.class))).andReturn(new TestBean());
     replayDefaultMocks();
     //TEST
     ModelAndView modelAndView = trailsMultiActionController.saveInstance(mockRequest, null, trailsCommand);
     
-    assertEquals(EDIT_VIEW, modelAndView.getViewName());
-    assertEquals(ObjectDataDescriptorList.class, modelAndView.getModel().get(TRAILS_COMMAND_NAME).getClass());
-    assertEquals(testClassDescriptor, ((ObjectDataDescriptorList)modelAndView.getModel().get(TRAILS_COMMAND_NAME)).getClassDescriptor());
+    assertEquals(testModelAndView, modelAndView);
     verifyDefaultMocks();
   }
   
