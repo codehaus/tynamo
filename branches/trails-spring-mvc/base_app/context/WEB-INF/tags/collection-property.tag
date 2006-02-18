@@ -14,11 +14,18 @@
 
 <c:if test="${property.valueInObjectTable}">
 	<c:forEach var="objectDescriptor" items="${property.value.rows}">
-		<a href="<c:url value="/prepareToEditOrAddAnInstance.htm">
-		<c:param name="type" value="${property.propertyDescriptor.elementType.name}"/>
-		<c:param name="id" value="${objectDescriptor.id}"/></c:url>">
-		<c:out value="${objectDescriptor.instance}"/>
-		</a> <br>
+		<trails:link url="//prepareToEditOrAddAnInstance.htm"
+								 className="${property.propertyDescriptor.elementType.name}"
+								 identifierValue="${objectDescriptor.id}"
+								 linkName="${objectDescriptor.instance}"/>	
+		&nbsp; &nbsp;
+		<c:if test='${action == "edit"}'>
+			<trails:link url="/deleteInstance.htm"
+									 className="${property.propertyDescriptor.elementType.name}"
+									 identifierValue="${objectDescriptor.id}"
+									 linkName="delete"/>
+		</c:if>
+	<br>
 	</c:forEach>
 </c:if>
 <c:if test='${action != "search"}'>
@@ -28,3 +35,4 @@
 		Add new
 	</a> 
 </c:if>
+
