@@ -202,7 +202,7 @@ public class TrailsMultiActionControllerTest extends TestCase {
     ModelAndView modelAndView = trailsMultiActionController.prepareToEditOrAddAnInstance(null, null, trailsCommand);
     
     assertNotNull(modelAndView);
-    assertEquals(EDIT_VIEW, modelAndView.getViewName());
+    assertEquals(TrailsControllerConstants.ADD_VIEW, modelAndView.getViewName());
     assertEquals(ObjectDataDescriptorList.class, modelAndView.getModel().get(TRAILS_COMMAND_NAME).getClass());
    
     verifyDefaultMocks();

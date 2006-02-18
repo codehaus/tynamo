@@ -21,14 +21,17 @@ public interface TrailsControllerConstants {
   // Default available views
   // ==========================================================================
   
-  /** Default view bame for index. */
+  /** Default view name for index. */
   public final static String INDEX_VIEW = "index";
   
-  /** Default view bame for listings. */
+  /** Default view name for listings. */
   public final static String LIST_VIEW = "list";
   
-  /** Default view bame for edit. */
+  /** Default view name for edit. */
   public final static String EDIT_VIEW = "edit";
+  
+  /** Default view name for edit. */
+  public final static String ADD_VIEW = "add";  
   
   /** Default view name for search. */
   public final static String SEARCH_VIEW = "search";

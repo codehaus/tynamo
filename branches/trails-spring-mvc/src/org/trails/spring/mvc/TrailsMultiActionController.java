@@ -441,7 +441,7 @@ public class TrailsMultiActionController extends MultiActionController {
     ModelAndView result;
     
     ObjectDataDescriptorList objectTable = getDataDescriptorHandler().createAndResolveChildern(instance, classDescriptor);
-    result = new ModelAndView(TrailsControllerConstants.EDIT_VIEW, TrailsControllerConstants.TRAILS_COMMAND_NAME, objectTable);
+    result = new ModelAndView(TrailsControllerConstants.ADD_VIEW, TrailsControllerConstants.TRAILS_COMMAND_NAME, objectTable);
     result.addObject(TrailsControllerConstants.TRAILS_ENTITY_LIST, getDescriptorService().getAllDescriptors());
 
     return result;
