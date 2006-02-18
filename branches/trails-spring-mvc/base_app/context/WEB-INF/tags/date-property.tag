@@ -19,12 +19,17 @@
 			<c:when test="${!property.valueInvalid}">
 				<input name="<c:out value="${property.propertyDescriptor.name}"/>" value="<fmt:formatDate value="${property.value}" pattern="${property.propertyDescriptor.format}"/>">
 			</c:when>
+			<c:when test="${property.propertyDescriptor.hidden}">
+				<input type="hidden" name="<c:out value="${property.propertyDescriptor.name}"/>" value="<c:out value="${property.value}"/>">				
+			</c:when>			
 			<c:otherwise>
 				<% // show the invalid value. %>
 				<input name="<c:out value="${property.propertyDescriptor.name}"/>" value="<c:out value="${property.value}"/>">	
 			</c:otherwise>
 		</c:choose>
-		<% // show the date picker. %>		
-		<input type=button value="select" onclick="displayDatePicker('<c:out value="${property.propertyDescriptor.name}"/>', false, 'dmy', '-');">
+		<c:if test="${!property.propertyDescriptor.hidden}">
+			<% // show the date picker. %>		
+			<input type=button value="select" onclick="displayDatePicker('<c:out value="${property.propertyDescriptor.name}"/>', false, 'dmy', '-');">
+	  </c:if>
 	</c:otherwise>
 </c:choose>

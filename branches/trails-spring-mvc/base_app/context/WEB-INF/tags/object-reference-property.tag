@@ -11,12 +11,21 @@
 <%@ attribute name="action" %>
 <%@ attribute name="readOnly" required="true" %>
 <c:choose>
-	<c:when test='${property.propertyDescriptor.readOnly || readOnly == "true"}'>
+	<c:when test='${property.propertyDescriptor.readOnly || readOnly == "true" || property.propertyDescriptor.hidden}'>
 		<c:choose>
 			<c:when test="${property.valueInObjectTable}">
 				<c:forEach var="row" items="${property.value.rows}">
 					<c:if test='${row.selected}'>
-						<c:out value="${row.instance}"/>
+						<c:choose>
+							<c:when test="${property.propertyDescriptor.hidden}">
+								<input type="hidden"
+											 name="<c:out value="${property.propertyDescriptor.name}"/>.<c:out value="${property.value.classDescriptor.identifierDescriptor.name}"/>"
+											 value="${row.identifierValue}"/>
+							</c:when>
+							<c:otherwise>
+								<c:out value="${row.instance}"/>
+							</c:otherwise>
+						</c:choose>
 					</c:if>
 				</c:forEach>						
 			</c:when>

@@ -20,6 +20,9 @@
 			</c:otherwise>
 		</c:choose>
 	</c:when>
+	<c:when test="${property.propertyDescriptor.hidden}">
+		<input type="hidden" name="<c:out value="${property.propertyDescriptor.name}"/>" value="<c:out value="${property.value}"/>">				
+	</c:when>
 	<c:otherwise>
 		<c:choose>
 			<c:when test="${property.propertyDescriptor.large}">

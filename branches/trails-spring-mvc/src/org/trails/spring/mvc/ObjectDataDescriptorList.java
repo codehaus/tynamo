@@ -2,8 +2,6 @@ package org.trails.spring.mvc;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.SortedSet;
-import java.util.TreeSet;
 
 import org.trails.descriptor.IClassDescriptor;
 import org.trails.descriptor.IPropertyDescriptor;
@@ -102,28 +100,20 @@ public class ObjectDataDescriptorList {
    * @param classDescriptor The descriptor of the type of the instances.
    */
   public <T> ObjectDataDescriptorList(List<T> instances, IClassDescriptor classDescriptor) {
-    init(instances, classDescriptor, null);
+    this(instances, classDescriptor, null);
   }
   /**
    * Creates and instantiates this ObjectDataDescriptorList. This construtor will also 
    * set the flag {@link ObjectDataDescriptor#setSelected(boolean)} flag
    * to <code>true</code> in the {@link ObjectDataDescriptor} for the given selectedInstance.
    * <br>This is usefull in case the to be created ObjectDataDescriptorList is actually
-   * used for rendering an attribute in another ObjectDataDescriptorList.   * 
+   * used for rendering an attribute in another ObjectDataDescriptorList.
    * 
    * @param instances A List of instances to put in this ObjectDataDescriptorList.
    * @param classDescriptor The descriptor of the type of the instances.
    * @param selectedInstance The instance that should be selected in the list.
    */
   public <T> ObjectDataDescriptorList(List<T> instances, IClassDescriptor classDescriptor, Object selectedInstance) {
-    init(instances, classDescriptor, selectedInstance);
-  }  
-  /**
-   * Creates and instantiates this ObjectDataDescriptorList.
-   * @param instances A List of instances to put in this ObjectDataDescriptorList.
-   * @param classDescriptor The descriptor of the type of the instances.
-   */
-  private <T> void init(List<T> instances, IClassDescriptor classDescriptor, Object selectedInstance) {
     this.classDescriptor = classDescriptor;
     List propertiesDescriptors = this.classDescriptor.getPropertyDescriptors();
     for (int i = 0; i< instances.size(); i++) {
@@ -157,8 +147,7 @@ public class ObjectDataDescriptorList {
       }
       rows.add(row);
     }    
-  }
-
+  }  
   /**
    * Adds a row to this ObjectDataDescriptorList.
    * @param tableRow The row to be added.
