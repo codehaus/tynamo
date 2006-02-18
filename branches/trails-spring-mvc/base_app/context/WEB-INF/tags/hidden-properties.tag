@@ -12,7 +12,7 @@
 
 <%// loop over all columns, a column is a propertyName, propertyValue pair, which result in a table row. %>
 <c:forEach var="column" items="${objectDataDescriptor.columns}">
- 	<c:if test="${column.propertyDescriptor.hidden}">
+ 	<c:if test="${column.propertyDescriptor.hidden && !column.propertyDescriptor.identifier}">
 	  <trails:property property="${column}"/>
   </c:if>
 </c:forEach>

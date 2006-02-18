@@ -10,6 +10,9 @@
 <%@ attribute name="property" required="true" type="java.lang.Object" %>
 <%@ attribute name="readOnly" %>
 <c:choose>
+	<c:when test="${property.propertyDescriptor.hidden}">
+		<input type="hidden" name="<c:out value="${property.propertyDescriptor.name}"/>" value="<c:out value="${property.value}"/>">				
+	</c:when>
 	<c:when test='${property.propertyDescriptor.readOnly || readOnly == "true"}'>
 		<fmt:formatNumber value="${property.value}" pattern="${property.propertyDescriptor.format}"/>
 	</c:when>
@@ -17,9 +20,6 @@
 		<c:choose>
 			<c:when test="${!property.valueInvalid}">
 				<input name="<c:out value="${property.propertyDescriptor.name}"/>" value="<fmt:formatNumber value="${property.value}" pattern="${property.propertyDescriptor.format}"/>">
-			</c:when>
-			<c:when test="${property.propertyDescriptor.hidden}">
-				<input type="hidden" name="<c:out value="${property.propertyDescriptor.name}"/>" value="<c:out value="${property.value}"/>">				
 			</c:when>
 			<c:otherwise>
 				<input name="<c:out value="${property.propertyDescriptor.name}"/>" value="<c:out value="${property.value}"/>">
