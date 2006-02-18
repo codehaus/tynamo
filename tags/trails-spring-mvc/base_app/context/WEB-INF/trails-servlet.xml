@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+
+
+	<!-- ======================================================================= -->
+	
+	<!-- These are simple non-form urls that need to be populated in the appropriate handler of the various Controllers -->
+	<bean id="urlMapping"
+		class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+		<property name="mappings">
+			<props>
+				<prop key="/listAllEntities.htm">defaultController</prop>
+				<prop key="/listAllInstances.htm">defaultController</prop>
+				<prop key="/prepareToEditOrAddAnInstance.htm">defaultController</prop>
+     		<prop key="/saveInstance.htm">defaultController</prop>
+    		<prop key="/prepareToSearchInstances.htm">defaultController</prop>
+     		<prop key="/searchInstances.htm">defaultController</prop>
+     		<prop key="/deleteInstance.htm">defaultController</prop>        
+			</props>
+		</property>
+	</bean>	
+  
+	<!--
+	- This bean is a MultiActionController.
+	-->
+	<bean id="defaultController"
+		class="org.trails.spring.mvc.TrailsMultiActionController">
+		<property name="methodNameResolver"><ref local="defaultControllerMethodNameResolver"/></property>
+		<property name="descriptorService" ref="descriptorService" />
+		<property name="persistenceService" ref="persistenceService" />
+ 		<property name="pagingSize" value="10"/>
+ 		<property name="dataDescriptorHandler" ref="dataDescriptorHandler" />
+	</bean>
+	
+		<!--
+	- This bean is the DataDescriptorHandler
+	-->
+	<bean id="dataDescriptorHandler"
+		class="org.trails.spring.mvc.DefaultObjectDataDescriptorHandler">
+		<property name="descriptorService" ref="descriptorService" />
+		<property name="persistenceService" ref="persistenceService" />
+	</bean>	
+	
+	<!--
+	- This bean is a MethodNameResolver definition for all MultiActionControllers.
+	-->
+	<bean id="defaultControllerMethodNameResolver"
+		class="org.springframework.web.servlet.mvc.multiaction.PropertiesMethodNameResolver">
+		<property name="mappings">
+			<props>
+				<prop key="/listAllEntities.htm">listAllEntities</prop>
+				<prop key="/listAllInstances.htm">listAllInstances</prop>
+				<prop key="/prepareToEditOrAddAnInstance.htm">prepareToEditOrAddAnInstance</prop>
+				<prop key="/saveInstance.htm">saveInstance</prop>
+				<prop key="/prepareToSearchInstances.htm">prepareToSearchInstances</prop>
+				<prop key="/searchInstances.htm">searchInstances</prop>
+				<prop key="/deleteInstance.htm">deleteInstance</prop>
+      </props>
+		</property>
+	</bean>	
+
+	<bean id="viewResolver"
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="viewClass">
+			<value>org.trails.spring.mvc.view.TrailsView</value>
+			</property>
+		<property name="prefix"><value>/WEB-INF/jsp/</value></property>
+		<property name="suffix"><value>.jsp</value></property>
+	</bean>
+</beans>
