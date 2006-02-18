@@ -46,7 +46,7 @@ public class TrailsMultiActionController extends MultiActionController {
   private static Log log = LogFactory.getLog(TrailsMultiActionController.class);
   
   /** Config parameter for pagingsize. */
-  private int pagingSize;  
+  private int pagingSize = 10; // default paging size  
   
   // ==========================================================================
   // Trails Services references
@@ -100,20 +100,44 @@ public class TrailsMultiActionController extends MultiActionController {
     List instances = null;
     int totalNumberOfPages = -1;
 
-    if (getPagingSize() > 0) {
-      PagingCriteria pagingCriteria = new PagingCriteria(classDescriptor, command.getPageNumber(), getPagingSize());
-      instances = getPersistenceService().getInstances(pagingCriteria);
-      totalNumberOfPages = pagingCriteria.getTotalPageNumbers();
-    } else {
-      instances = getPersistenceService().getAllInstances(classDescriptor.getType());
-    }
+    PagingCriteria pagingCriteria = new PagingCriteria(classDescriptor, command.getPageNumber(), getPagingSize());
+    instances = getPersistenceService().getInstances(pagingCriteria);
+    totalNumberOfPages = pagingCriteria.getTotalPageNumbers();
+    request.getSession().setAttribute("pagingCriteria", pagingCriteria);
     
-    List propertiesDescriptors = classDescriptor.getPropertyDescriptors();
     ObjectDataDescriptorList objectDataDescriptorListParent = getDataDescriptorHandler().create(instances, classDescriptor, command.getPageNumber(), totalNumberOfPages);
     ModelAndView nextView = new ModelAndView(TrailsControllerConstants.LIST_VIEW, TrailsControllerConstants.TRAILS_COMMAND_NAME, objectDataDescriptorListParent);
     nextView.addObject(TrailsControllerConstants.TRAILS_ENTITY_LIST, getDescriptorService().getAllDescriptors());
     
     return nextView;
+  }
+
+  /**
+ * @param request
+ * @param response
+ * @param command
+ * @return
+ */
+public ModelAndView list(HttpServletRequest request, HttpServletResponse response, TrailsCommand command) {
+      IClassDescriptor classDescriptor = getSelectedClassDescriptor(command);
+
+      PagingCriteria pagingCriteria = (PagingCriteria) request.getSession().getAttribute("pagingCriteria");
+      if (pagingCriteria == null) {
+          log.error("Found NO paging criteria on session!");
+          throw new IllegalStateException("No paging criteria for list");
+      } else {
+          log.debug("Found paging criteria on session!");
+          pagingCriteria.setPageNumber(command.getPageNumber());
+      }
+      
+      List instances = getPersistenceService().getInstances(pagingCriteria);
+      
+      int totalNumberOfPages = pagingCriteria.getTotalPageNumbers();
+      ObjectDataDescriptorList objectDataDescriptorListParent = getDataDescriptorHandler().create(instances, classDescriptor, command.getPageNumber(), totalNumberOfPages);
+      ModelAndView nextView = new ModelAndView(TrailsControllerConstants.LIST_VIEW, TrailsControllerConstants.TRAILS_COMMAND_NAME, objectDataDescriptorListParent);
+      nextView.addObject(TrailsControllerConstants.TRAILS_ENTITY_LIST, getDescriptorService().getAllDescriptors());
+      
+      return nextView;
   }
   
   /**
@@ -201,12 +225,17 @@ public class TrailsMultiActionController extends MultiActionController {
     Object searchInstance = ReflectionUtils.getNewInstance(classDescriptor.getType());
     TrailsServletRequestDataBinder dataBinder = new TrailsServletRequestDataBinder(getDescriptorService(), getPersistenceService());
     dataBinder.bind(request, classDescriptor, searchInstance);
-    
-    // now retrieve all the instances.
-    DetachedCriteria detachedCriteria = HibernateUtil.createDetachedCriteriaForObject(searchInstance, classDescriptor);
-    List instances = getPersistenceService().getInstances(detachedCriteria);
-    
-    ModelAndView nextView = new ModelAndView(TrailsControllerConstants.LIST_VIEW, TrailsControllerConstants.TRAILS_COMMAND_NAME, new ObjectDataDescriptorList(instances, classDescriptor)); 
+
+    List instances = null;
+    int totalNumberOfPages = -1;
+
+    PagingCriteria pagingCriteria = new PagingCriteria(searchInstance, classDescriptor, command.getPageNumber(), getPagingSize());
+    instances = getPersistenceService().getInstances(pagingCriteria);
+    totalNumberOfPages = pagingCriteria.getTotalPageNumbers();
+    request.getSession().setAttribute("pagingCriteria", pagingCriteria);
+
+    ObjectDataDescriptorList objectDataDescriptorListParent = getDataDescriptorHandler().create(instances, classDescriptor, command.getPageNumber(), totalNumberOfPages);
+    ModelAndView nextView = new ModelAndView(TrailsControllerConstants.LIST_VIEW, TrailsControllerConstants.TRAILS_COMMAND_NAME, objectDataDescriptorListParent); 
     nextView.addObject(TrailsControllerConstants.TRAILS_ENTITY_LIST, getDescriptorService().getAllDescriptors());
     
     return nextView;

@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.hibernate.Criteria;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
@@ -33,8 +34,7 @@ public class HibernateUtil {
    * @return A <code>DetachedCriteria</code> that can be used in e.g.
    *      {@link org.trails.persistence.PersistenceService#getInstances(org.hibernate.criterion.DetachedCriteria)}.
    */
-  public static DetachedCriteria createDetachedCriteriaForObject(final Object example, IClassDescriptor classDescriptor) {
-    DetachedCriteria criteria = DetachedCriteria.forClass(classDescriptor.getType());
+  public static void addRestrictionsForExample(Criteria criteria, final Object example, IClassDescriptor classDescriptor) {
     List propertyDescriptors = classDescriptor.getPropertyDescriptors();
     // loop over all properties.
     for (Iterator iter = propertyDescriptors.iterator(); iter.hasNext();) {
@@ -56,6 +56,5 @@ public class HibernateUtil {
       }
       
     }
-    return criteria;
-  }
+}
 }
