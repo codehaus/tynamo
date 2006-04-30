@@ -25,6 +25,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.orm.hibernate3.HibernateTemplate;
 import org.springframework.orm.hibernate3.SessionFactoryUtils;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
+import org.springframework.test.AbstractTransactionalSpringContextTests;
 import org.trails.persistence.PersistenceException;
 import org.trails.persistence.PersistenceService;
 import org.trails.security.domain.Role;
@@ -43,20 +44,19 @@ import org.trails.test.Foo;
  * TODO To change the template for this generated type comment go to
  * Window - Preferences - Java - Code Style - Code Templates
  */
-public class HibernatePersistenceServiceTest extends MockObjectTestCase
+public class HibernatePersistenceServiceTest extends AbstractTransactionalSpringContextTests
 {
     PersistenceService persistenceService;
     HibernatePersistenceService psvcWithMockTemplate;
     
     Mock templateMock = new Mock(HibernateTemplate.class);
-    ApplicationContext appContext;
+    
     HibernateTemplate template;
 
-    public void setUp() throws Exception
+    
+    public void onSetUpInTransaction() throws Exception
     {
-        appContext = new ClassPathXmlApplicationContext(
-        		"applicationContext-test.xml");
-        persistenceService = (PersistenceService) appContext.getBean(
+        persistenceService = (PersistenceService) applicationContext.getBean(
                 "persistenceService");
     }
 
@@ -208,10 +208,16 @@ public class HibernatePersistenceServiceTest extends MockObjectTestCase
         foo.getBazzes().add(baz);
         persistenceService.save(foo);
         
-        SessionFactory sessionFactory = (SessionFactory)appContext.getBean("sessionFactory");
+        SessionFactory sessionFactory = (SessionFactory)applicationContext.getBean("sessionFactory");
         Session session = SessionFactoryUtils.getSession(sessionFactory, true);
         List foos = session.createQuery("from org.trails.test.Foo").list();
         foo = (Foo)foos.get(0);
         assertEquals("1 baz", 1, foo.getBazzes().size());
     }
+
+	@Override
+	protected String[] getConfigLocations()
+	{
+		return new String[] {"applicationContext-test.xml"};
+	}
 }

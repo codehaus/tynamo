@@ -8,8 +8,8 @@ import org.apache.tapestry.IRequestCycle;
 import org.apache.tapestry.components.Block;
 import org.apache.tapestry.test.Creator;
 import org.apache.tapestry.util.ComponentAddress;
-import org.jmock.cglib.Mock;
-import org.jmock.cglib.MockObjectTestCase;
+import org.jmock.Mock;
+import org.jmock.MockObjectTestCase;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.trails.test.Foo;
@@ -103,7 +103,7 @@ public class TrailsBlockFinderTest extends MockObjectTestCase
         assertEquals("readOnly", editorAddress.getIdPath());
         IPropertyDescriptor passwordDescriptor = new TrailsPropertyDescriptor(Foo.class, "password", String.class);
         editorAddress = editorService.findBlockAddress(passwordDescriptor);
-        assertEquals("password", editorAddress.getIdPath());
+        assertEquals("passwordEditor", editorAddress.getIdPath());
     }
 
 }

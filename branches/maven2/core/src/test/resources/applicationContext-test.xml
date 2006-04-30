@@ -140,12 +140,19 @@
 
 	<bean id="editorService" class="org.trails.descriptor.EditorBlockFinder">
 		<property name="editorMap">
-			<map>
+		<map>
 				<entry>
 				<key><value>readOnly</value></key>
 				<bean class="org.apache.tapestry.util.ComponentAddress">
 					<constructor-arg index="0"><value>trails:Editors</value></constructor-arg>
 					<constructor-arg index="1"><value>readOnly</value></constructor-arg>
+				</bean>
+				</entry>
+				<entry>
+				<key><value>name.toLowerCase().endsWith('password')</value></key>
+				<bean class="org.apache.tapestry.util.ComponentAddress">
+					<constructor-arg index="0"><value>trails:Editors</value></constructor-arg>
+					<constructor-arg index="1"><value>passwordEditor</value></constructor-arg>
 				</bean>
 				</entry>
 				<entry>
@@ -155,6 +162,7 @@
 					<constructor-arg index="1"><value>stringEditor</value></constructor-arg>
 				</bean>
 				</entry>
+
 			</map>
 		</property>
 	</bean>
