@@ -55,7 +55,7 @@ public class HomePageTest extends ComponentTest {
 		Iterator i = descriptors.iterator();
 		while (i.hasNext()) {
 			IClassDescriptor tmp = (IClassDescriptor) i.next();
-			assertTrue(descriptorContains(homeDescriptors,tmp));			
+			if (!tmp.isHidden()) assertTrue(descriptorContains(homeDescriptors,tmp));			
 		}
 	}
 
