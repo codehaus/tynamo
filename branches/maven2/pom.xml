@@ -262,6 +262,12 @@
 			<artifactId>jmock-cglib</artifactId>
 			<version>1.0.1</version>
 			<scope>test</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>cglib</groupId>
+					<artifactId>cglib-full</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>javax.transaction</groupId>
