@@ -17,6 +17,8 @@ public class Apple extends Fruit
     }
     
     private String color;
+    
+    private String name;
 
     public String getColor()
     {
@@ -33,5 +35,15 @@ public class Apple extends Fruit
 	{
 		// TODO Auto-generated method stub
 		return EqualsBuilder.reflectionEquals(this, obj);
+	}
+
+	public String getName()
+	{
+		return name;
+	}
+
+	public void setName(String name)
+	{
+		this.name = name;
 	}
 }
