@@ -36,6 +36,7 @@ import org.trails.test.Baz;
 import org.trails.test.BlogEntry;
 import org.trails.test.Descendant;
 import org.trails.test.Foo;
+import org.trails.test.Wibble;
 
 
 /**
@@ -86,6 +87,22 @@ public class HibernatePersistenceServiceTest extends AbstractTransactionalSpring
         assertEquals("Got 1", 1, 
                 persistenceService.getInstances(criteria).size());
 
+    }
+
+    public void testGetIntancesWithManyToOne() throws Exception
+    {
+       
+		Wibble gazonk = new Wibble();
+		gazonk.setId(new Integer(9874));
+		Bar bar = new Bar();
+		
+		bar = persistenceService.save(bar);
+		gazonk.setBar(bar);
+		gazonk = persistenceService.save(gazonk);
+		DetachedCriteria criteria = DetachedCriteria.forClass(Wibble.class);
+		criteria.add(Restrictions.eq("bar", bar));
+		List list = persistenceService.getInstances(criteria);
+		assertEquals(1, list.size());
     }
     
     public void testQueryByExample() throws Exception

@@ -28,6 +28,7 @@ import org.hibernate.mapping.Column;
 import org.hibernate.mapping.Component;
 import org.hibernate.mapping.PersistentClass;
 import org.hibernate.mapping.Property;
+import org.hibernate.mapping.Selectable;
 import org.hibernate.mapping.SimpleValue;
 import org.hibernate.metadata.ClassMetadata;
 import org.hibernate.metadata.CollectionMetadata;
@@ -44,6 +45,7 @@ import org.trails.descriptor.IClassDescriptor;
 import org.trails.descriptor.IPropertyDescriptor;
 import org.trails.descriptor.IdentifierDescriptor;
 import org.trails.descriptor.ObjectReferenceDescriptor;
+import org.trails.descriptor.EnumReferenceDescriptor;
 
 
 /**
@@ -112,6 +114,11 @@ public class HibernateDescriptorDecorator implements DescriptorDecorator
     
     protected IPropertyDescriptor decoratePropertyDescriptor(Class type, Property mappingProperty, IPropertyDescriptor descriptor)
     {
+    	if (isFormula(mappingProperty))
+    	{
+    		descriptor.setReadOnly(true);
+    		return descriptor;
+    	}
         descriptor.setLength(findColumnLength(mappingProperty));
         descriptor.setLarge(isLarge(mappingProperty));
         if (!mappingProperty.isOptional())
@@ -136,12 +143,28 @@ public class HibernateDescriptorDecorator implements DescriptorDecorator
         {
             return buildReferenceDescriptor(type, descriptor,
                 (AssociationType) hibernateType);
+        } else if (hibernateType.getReturnedClass().isEnum())
+        {
+            descriptor.addExtension(EnumReferenceDescriptor.class.getName(), new EnumReferenceDescriptor(hibernateType.getReturnedClass()));
         }    	
         
         return descriptor;
     }
     
-    private EmbeddedDescriptor buildEmbeddedDescriptor(Class type, Property mappingProperty, IPropertyDescriptor descriptor)
+    private boolean isFormula(Property mappingProperty)
+	{
+		for (Iterator iter = mappingProperty.getColumnIterator(); iter.hasNext();)
+		{
+			Selectable selectable = (Selectable)iter.next();
+			if (selectable.isFormula())
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private EmbeddedDescriptor buildEmbeddedDescriptor(Class type, Property mappingProperty, IPropertyDescriptor descriptor)
 	{
 		Component componentMapping = (Component)mappingProperty.getValue();
 		IClassDescriptor baseDescriptor = getDescriptorFactory().buildClassDescriptor(descriptor.getPropertyType());
@@ -154,13 +177,40 @@ public class HibernateDescriptorDecorator implements DescriptorDecorator
 		for (Iterator iter = embeddedDescriptor.getPropertyDescriptors().iterator(); iter.hasNext();)
 		{
 			IPropertyDescriptor propertyDescriptor = (IPropertyDescriptor)iter.next();
-			decoratedProperties.add(decoratePropertyDescriptor(
-					embeddedDescriptor.getBeanType(),
-					componentMapping.getProperty(propertyDescriptor.getName()),
-					propertyDescriptor));
+			if (notAHibernateProperty(componentMapping, propertyDescriptor))
+			{
+				decoratedProperties.add(propertyDescriptor);
+			}
+			else 
+			{
+				
+				decoratedProperties.add(decoratePropertyDescriptor(
+						embeddedDescriptor.getBeanType(),
+						componentMapping.getProperty(propertyDescriptor.getName()),
+						propertyDescriptor));
+			}
 		}
 		embeddedDescriptor.setPropertyDescriptors(decoratedProperties);
 		return embeddedDescriptor;
+	}
+
+    /**
+     * Checks to see if a property descriptor is in a component mapping
+     * @param componentMapping
+     * @param propertyDescriptor
+     * @return true if the propertyDescriptor property is in componentMapping
+     */
+	protected boolean notAHibernateProperty(Component componentMapping, IPropertyDescriptor propertyDescriptor)
+	{
+		for (Iterator iter = componentMapping.getPropertyIterator(); iter.hasNext();)
+		{
+			Property property = (Property) iter.next();
+			if (property.getName().equals(propertyDescriptor.getName()))
+			{
+				return false;
+			}
+		}
+		return true;
 	}
 
 	/**
