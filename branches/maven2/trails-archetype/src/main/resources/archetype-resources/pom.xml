@@ -1,22 +1,20 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>$groupId</groupId>
-  <artifactId>$artifactId</artifactId>
-  <version>$version</version>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>${groupId}</groupId>
+	<artifactId>${artifactId}</artifactId>
+	<packaging>war</packaging>
+	<version>${version}</version>
+	<name>A simple trails project</name>
+	<url>https://trails.dev.java.net/</url>
+
 	<build>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<executions>
-					<execution>
-						<phase>compile</phase>
-						<goals>
-							<goal>compile</goal><!-- use this goal to weave all your main classes -->
-						</goals>
-					</execution>	
-				</executions>				
+				<artifactId>maven-compiler-plugin</artifactId>				
 				<configuration>
 					<source>1.5</source>
 					<target>1.5</target>
@@ -45,7 +43,6 @@
 					</execution>
 				</executions>
 			</plugin>			
-
 			<plugin>
 				<groupId>org.apache.myfaces.tobago</groupId>
 				<artifactId>maven-apt-plugin</artifactId>
@@ -62,6 +59,7 @@
 						org.trails.hibernate.HibernateAnnotationProcessorFactory
 					</factory>
 					<force>true</force>
+					<nocompile>true</nocompile>
 					<generated>src/generated</generated>
 					<A>
 						configFile=\${basedir}/src/main/resources/hibernate.cfg.xml,

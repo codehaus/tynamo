@@ -1,4 +1,4 @@
-package $org.trails;
+package $packageName;
 
 import junit.framework.Test;
 import junit.framework.TestCase;

@@ -6,7 +6,7 @@
 
 
 <web-app>
-    <display-name>trails</display-name>
+    <display-name>${artifactId}</display-name>
 
     <context-param>
         <param-name>contextConfigLocation</param-name>
