@@ -15,7 +15,7 @@ public class SqueezableSqueezeAdaptorTest extends MockObjectTestCase
 	Mock dataSqueezerMock = new Mock(DataSqueezer.class);
 	Mock persistenceMock = new Mock(PersistenceService.class);
 	Mock descriptorServiceMock = new Mock(DescriptorService.class);
-	SqueezableSqueezeAdaptor adaptor = new SqueezableSqueezeAdaptor();
+	TrailsEntitySqueezerFilter adaptor = new TrailsEntitySqueezerFilter();
 	Foo foo;
 	
 	public void setUp() throws Exception
@@ -53,8 +53,16 @@ public class SqueezableSqueezeAdaptorTest extends MockObjectTestCase
 			}
 			
 		}).will(returnValue("squeezed"));
-		String squeezed = adaptor.squeeze((DataSqueezer)dataSqueezerMock.proxy(), foo);
+		String squeezed = adaptor.squeeze(foo, (DataSqueezer)dataSqueezerMock.proxy());
 		
+	}
+	
+	public void testSqueezeNonEntity()
+	{
+		Double three = new Double(3);
+		descriptorServiceMock.expects(once()).method("getClassDescriptor").with(eq(Double.class)).will(returnValue(null));
+		dataSqueezerMock.expects(once()).method("squeeze").with(eq(three)).will(returnValue("3"));
+		assertEquals("3", adaptor.squeeze(three, (DataSqueezer)dataSqueezerMock.proxy()));
 	}
 	
 	public void testUnsqueeze() throws Exception
@@ -63,8 +71,14 @@ public class SqueezableSqueezeAdaptorTest extends MockObjectTestCase
 		dataSqueezerMock.expects(once()).method("unsqueeze").with(eq("squeezedOid")).will(returnValue(oid));
 		persistenceMock.expects(once()).method("getInstance").with(eq(Foo.class), eq(new Integer(1))).will(returnValue(foo));
 		assertEquals(foo, 
-				adaptor.unsqueeze((DataSqueezer)dataSqueezerMock.proxy(), 
-						SqueezableSqueezeAdaptor.PREFIX +"squeezedOid"));
+				adaptor.unsqueeze(TrailsEntitySqueezerFilter.PREFIX +"squeezedOid",
+					(DataSqueezer)dataSqueezerMock.proxy()));
+	}
+	
+	public void testUnsqueezeNonEntity()
+	{
+		dataSqueezerMock.expects(once()).method("unsqueeze").with(eq("notanentity")).will(returnValue(new Integer(1)));
+		assertEquals(new Integer(1), adaptor.unsqueeze("notanentity", (DataSqueezer)dataSqueezerMock.proxy()));
 	}
 
 }

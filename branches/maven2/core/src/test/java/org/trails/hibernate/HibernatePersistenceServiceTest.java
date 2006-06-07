@@ -182,6 +182,13 @@ public class HibernatePersistenceServiceTest extends AbstractTransactionalSpring
         
     }
     
+    public void testInheritance() throws Exception
+    {
+    	Descendant descendant = new Descendant();
+    	descendant.setName("what");
+    	descendant = persistenceService.save(descendant);
+    }
+    
     public void testGetInstance() throws Exception
     {
     	Foo foo = new Foo();
