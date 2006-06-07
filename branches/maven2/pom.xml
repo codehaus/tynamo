@@ -6,7 +6,7 @@
 		<repository>
 			<id>default</id>
 			<name>Default Repository</name>
-			<url>http://www.ibiblio.org/maven2</url>
+			<url>http://repo.mergere.com/maven2</url>
 		</repository>
 
 		<repository>
@@ -16,13 +16,20 @@
 			</name>
 			<url>http://howardlewisship.com/repository/</url>
 		</repository>
+		<repository>
+			<id>com.carmanconsulting</id>
+			<name>
+				James Carman's Repository for Tapernate, etc
+			</name>
+			<url>http://www.carmanconsulting.com/repository</url>
+		</repository>
 	</repositories>
 
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.trails</groupId>
 	<artifactId>trails</artifactId>
 	<packaging>pom</packaging>
-	<version>0.9-SNAPSHOT</version>
+	<version>1.0-SNAPSHOT</version>
 
 	<modules>
 		<module>core</module>
@@ -227,7 +234,7 @@
 		<dependency>
 			<groupId>htmlunit</groupId>
 			<artifactId>htmlunit</artifactId>
-			<version>1.7</version>
+			<version>1.8</version>
 			<scope>test</scope>
 		</dependency>
 		<!--dependency>
@@ -374,6 +381,11 @@
 			<groupId>com.javaforge.tapestry</groupId>
 			<artifactId>tapestry-spring</artifactId>
 			<version>0.1.2</version>
+		</dependency>
+		<dependency>
+		    <groupId>com.javaforge.tapestry</groupId>
+		    <artifactId>tapernate</artifactId>
+		    <version>0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<!-- Required to use javac -->
