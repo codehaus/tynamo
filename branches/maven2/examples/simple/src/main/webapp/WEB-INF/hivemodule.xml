@@ -6,10 +6,22 @@
 			<create-instance class="org.trails.callback.CallbackStack"/>
 		</state-object>
 	</contribution>
+
+	<implementation service-id="hivemind.hibernate3.SessionFactory">
+	 <invoke-factory service-id="hivemind.lib.SpringLookupFactory">
+	   <lookup-bean name="sessionFactory" />
+	 </invoke-factory>
+	</implementation>
 	
+
+	
+	<contribution configuration-id="hivemind.hibernate3.Configuration">
+		<property name="hibernate.show_sql" value="true" />
+	</contribution>	
+	<!--  
 	<contribution configuration-id="tapestry.data.SqueezeAdaptors">
         <adaptor object="spring:squeezableSqueezer"/>
-    </contribution>
+    </contribution>-->
 	
 	<contribution configuration-id="tapestry.url.ServiceEncoders">
         <page-service-encoder id="page" extension="html" service="page"/>

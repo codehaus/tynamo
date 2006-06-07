@@ -1,12 +1,12 @@
 package org.trails.demo;
 
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 
 @Entity
-@Inheritance
 public class Apple extends Fruit
 {
 
@@ -18,8 +18,6 @@ public class Apple extends Fruit
     
     private String color;
     
-    private String name;
-
     public String getColor()
     {
         return color;
@@ -35,15 +33,5 @@ public class Apple extends Fruit
 	{
 		// TODO Auto-generated method stub
 		return EqualsBuilder.reflectionEquals(this, obj);
-	}
-
-	public String getName()
-	{
-		return name;
-	}
-
-	public void setName(String name)
-	{
-		this.name = name;
 	}
 }
