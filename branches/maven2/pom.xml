@@ -2,6 +2,90 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
+
+	<name>Trails</name>
+	<url>https://trails.dev.java.net/</url>
+
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.trails</groupId>
+	<artifactId>trails</artifactId>
+	<packaging>pom</packaging>
+	<version>1.0-SNAPSHOT</version>
+
+	<modules>
+		<module>core</module>
+		<!--module>examples</module-->
+	</modules>
+
+	<description>
+		A domain driven development framework for Java.
+	</description>
+	<inceptionYear>2004</inceptionYear>
+	<developers>
+		<developer>
+			<id>ccnelson</id>
+			<name>Chris Nelson</name>
+			<email>ccnelson@dev.java.net</email>
+			<url>http://jroller.com/page/ccnelson</url>
+		</developer>
+	</developers>
+	<licenses>
+		<license>
+			<name>Apache License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+	<issueManagement>
+		<system>jira</system>
+		<url>http://trails.inspiring.nl/jira</url>
+	</issueManagement>
+	<mailingLists>
+		<mailingList>
+			<name>Trails User List</name>
+			<subscribe>users-subscribe@trails.dev.java.net</subscribe>
+			<unsubscribe>
+				users-unsubscribe@trails.dev.java.net
+			</unsubscribe>
+			<post>users@trails.dev.java.net</post>
+			<archive>
+				https://trails.dev.java.net/servlets/SummarizeList?listName=users
+			</archive>
+		</mailingList>
+		<mailingList>
+			<name>Trails Developer List</name>
+			<subscribe>dev-subscribe@trails.dev.java.net</subscribe>
+			<unsubscribe>
+				dev-unsubscribe@trails.dev.java.net
+			</unsubscribe>
+			<post>dev@trails.dev.java.net</post>
+			<archive>
+				https://trails.dev.java.net/servlets/SummarizeList?listName=dev
+			</archive>
+		</mailingList>
+	</mailingLists>
+	<scm>
+		<connection>scm:svn:http://trails.inspiring.nl/svn/</connection>
+		<url>http://trails.inspiring.nl/svn/</url>
+	</scm>
+	<ciManagement>
+		<system>Cruise Control</system>
+		<url>
+			http://os.inspiring.nl/cruisecontrol/buildresults/trails
+		</url>
+		<notifiers>
+			<notifier>
+				<type>rss</type>
+				<configuration>
+					<url>
+						http://os.inspiring.nl/cruisecontrol/rss/trails
+					</url>
+				</configuration>
+			</notifier>
+		</notifiers>
+	</ciManagement>
+
+
 	<repositories>
 		<repository>
 			<id>default</id>
@@ -18,23 +102,10 @@
 		</repository>
 		<repository>
 			<id>com.carmanconsulting</id>
-			<name>
-				James Carman's Repository for Tapernate, etc
-			</name>
-			<url>http://www.carmanconsulting.com/repository</url>
+			<name>James Carman's Repository for Tapernate, etc</name>
+			<url>http://www.carmanconsulting.com/mvn</url>
 		</repository>
 	</repositories>
-
-	<modelVersion>4.0.0</modelVersion>
-	<groupId>org.trails</groupId>
-	<artifactId>trails</artifactId>
-	<packaging>pom</packaging>
-	<version>1.0-SNAPSHOT</version>
-
-	<modules>
-		<module>core</module>
-		<!--module>examples</module-->
-	</modules>
 
 	<build>
 		<plugins>
@@ -85,10 +156,12 @@
 					<descriptor>src/main/assembly/dep.xml</descriptor>
 				</configuration>
 			</plugin>
+			<plugin>
+				<artifactId>maven-site-plugin</artifactId>
+				<version>2.0-beta-5</version>
+			</plugin>
 		</plugins>
 	</build>
-	<name>Trails</name>
-	<url>https://trails.dev.java.net/</url>
 	<dependencies>
 		<dependency>
 			<groupId>org.acegisecurity</groupId>
@@ -383,9 +456,9 @@
 			<version>0.1.2</version>
 		</dependency>
 		<dependency>
-		    <groupId>com.javaforge.tapestry</groupId>
-		    <artifactId>tapernate</artifactId>
-		    <version>0.1-SNAPSHOT</version>
+			<groupId>com.javaforge.tapestry</groupId>
+			<artifactId>tapernate</artifactId>
+			<version>0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<!-- Required to use javac -->
