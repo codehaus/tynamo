@@ -1,0 +1,37 @@
+<project name="Trails">
+  <bannerLeft>
+    <name>Trails</name>
+    <!--src>images/trails-logo.png</src-->
+    <href>https://trails.dev.java.net/</href>
+  </bannerLeft>
+  <!-- bannerRight>
+    <name>Trails BANNER</name>
+    <src>images/trails.jpg</src>
+    <href></href>
+  </bannerRight-->
+  <skin>
+    <groupId>org.apache.maven.skins</groupId>
+    <artifactId>maven-stylus-skin</artifactId>
+  </skin>
+  <body>
+    <links>
+      <item name="Trails" href="https://trails.dev.java.net/" />
+      <item name="Tapestry" href="http://jakarta.apache.org/tapestry/" />
+      <item name="Spring Framework" href="http://www.springframework.org/"/>
+      <item name="Hibernate" href="http://www.hibernate.org/"/>
+    </links>
+
+    <!-- menu ref="modules" /-->
+
+    <menu name="Documentation">
+      <item name="First java.net article" href="http://today.java.net/pub/a/today/2005/06/23/trails.html"/>
+      <item name="Second java.net article" href="http://today.java.net/pub/a/today/2005/11/04/further-down-the-trail.html"/>
+      <item name="Javadocs" href="http://trails.dev.java.net/apidocs/overview-summary.html" />
+      <item name="Component Reference" href="http://trails.dev.java.net/component-reference/index.html"/>
+      <item name="Confluence Wiki" href="http://trails.inspiring.nl/confluence"/>
+    </menu>
+
+    ${reports}
+
+  </body>
+</project>
