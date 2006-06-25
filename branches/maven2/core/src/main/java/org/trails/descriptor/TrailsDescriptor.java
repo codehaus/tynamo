@@ -21,6 +21,7 @@ import java.util.Hashtable;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.oro.text.perl.Perl5Util;
+import org.trails.component.Utils;
 
 /**
  * @author fus8882
@@ -53,30 +54,9 @@ public class TrailsDescriptor implements IDescriptor, Serializable
         return new TrailsDescriptor(this);
     }
 
-    /**
-     * @param name
-     * @return
-     */
-    public String unCamelCase(String name)
-    {
-        ArrayList words = new ArrayList();
-        Perl5Util perl = new Perl5Util();
-
-        while (perl.match("/(\\w+?)([A-Z].*)/", name))
-        {
-            String word = perl.group(1);
-            name = perl.group(2);
-            words.add(StringUtils.capitalise(word));
-        }
-
-        words.add(StringUtils.capitalise(name));
-
-        return StringUtils.join(words.iterator(), " ");
-    }
-
     public String getDisplayName()
     {
-        return unCamelCase(displayName);
+        return Utils.unCamelCase(displayName);
     }
 
     public void setDisplayName(String displayName)

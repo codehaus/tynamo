@@ -150,7 +150,7 @@ public class TrailsClassDescriptor extends TrailsDescriptor implements IClassDes
      */
     public String getPluralDisplayName()
     {
-        return Utils.pluralize(unCamelCase(getDisplayName()));
+        return Utils.pluralize(Utils.unCamelCase(getDisplayName()));
     }
     
     /**

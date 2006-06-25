@@ -11,6 +11,10 @@
  */
 package org.trails.component;
 
+import java.util.ArrayList;
+
+import org.apache.commons.lang.StringUtils;
+import org.apache.oro.text.perl.Perl5Util;
 import org.apache.tapestry.IPage;
 import org.apache.tapestry.IRequestCycle;
 import org.apache.tapestry.PageNotFoundException;
@@ -46,24 +50,6 @@ public class Utils
     public static String unqualify(String className)
     {
         return className.substring(className.lastIndexOf(".") + 1);
-    }
-
-    public static IPage findPage(IRequestCycle cycle, String pageName,
-        String postfix)
-    {
-        IPage page = null;
-        // Ask howard how to do this right!!
-        try
-        {
-            page = cycle.getPage(pageName);
-        }catch (PageNotFoundException ae)
-        {
-
-            page = cycle.getPage(DEFAULT + postfix);
-
-        }
-
-        return page;
     }
 
     /**
@@ -132,6 +118,27 @@ public class Utils
             }
         }
         return pluralNoun;
+    }
+    
+    /**
+     * @param name
+     * @return the uncamelcased display friendly version of this
+     */
+    public static String unCamelCase(String name)
+    {
+        ArrayList words = new ArrayList();
+        Perl5Util perl = new Perl5Util();
+
+        while (perl.match("/(\\w+?)([A-Z].*)/", name))
+        {
+            String word = perl.group(1);
+            name = perl.group(2);
+            words.add(StringUtils.capitalise(word));
+        }
+
+        words.add(StringUtils.capitalise(name));
+
+        return StringUtils.join(words.iterator(), " ");
     }
     
     /**
