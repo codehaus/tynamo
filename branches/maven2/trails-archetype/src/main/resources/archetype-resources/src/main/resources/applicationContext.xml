@@ -83,10 +83,6 @@
 	
 	<bean id="persistenceService" class="org.trails.hibernate.HibernatePersistenceService" autowire="autodetect"/>
 	
-	<bean id="squeezableSqueezer" class="org.trails.io.SqueezableSqueezeAdaptor" >
-		<property name="descriptorService"><ref local="descriptorService" /></property>
-		<property name="persistenceService"><ref local="persistenceService" /></property>
-	</bean>
 	
 	<bean id="descriptorService" class="org.trails.descriptor.TrailsDescriptorService" init-method="init">
 		<property name="types">

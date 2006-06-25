@@ -105,6 +105,11 @@
 			<artifactId>jaxen</artifactId>
 			<version>1.1-beta-6</version>
 		</dependency>
+		<dependency>
+			<groupId>com.javaforge.tapestry</groupId>
+			<artifactId>tapernate</artifactId>
+			<version>0.1-SNAPSHOT</version>
+		</dependency>		
 	</dependencies>
 	<repositories>
 		<repository>
@@ -117,5 +122,21 @@
 			<id>apache.snapshots</id>
 			<url>http://cvs.apache.org/maven-snapshot-repository</url>
 		</repository>
+
+		<repository>
+			<id>com.javaforge.tapestry</id>
+			<name>
+				Howard Lewis Ship Repository for Tapestry extra modules
+			</name>
+			<url>http://howardlewisship.com/repository/</url>
+		</repository>
+		<repository>
+			<id>com.carmanconsulting</id>
+			<name>
+				James Carman's Repository for Tapernate, etc
+			</name>
+			<url>http://www.carmanconsulting.com/mvn/</url>
+		</repository>
+		
 	</repositories>
 </project>
