@@ -26,7 +26,7 @@
 	<resource>src/main/resources/hibernate.cfg.xml</resource>
 	<resource>src/main/resources/hibernate.properties</resource>
 	<resource>src/main/resources/log4j.properties</resource>
-	<resource>src/main/resources/messages_en.properties</resource>
+	<resource>src/main/resources/messages.properties</resource>
   </resources>
   <testSources>
     <source>src/test/java/AppTest.java</source>
