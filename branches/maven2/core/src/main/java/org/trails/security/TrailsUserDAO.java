@@ -14,9 +14,12 @@ import org.acegisecurity.GrantedAuthorityImpl;
 import org.acegisecurity.userdetails.UserDetails;
 import org.acegisecurity.userdetails.UserDetailsService;
 import org.acegisecurity.userdetails.UsernameNotFoundException;
+import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.dao.DataAccessException;
 import org.trails.persistence.PersistenceService;
 import org.trails.security.domain.Role;
+import org.trails.security.domain.User;
 
 
 public class TrailsUserDAO implements UserDetailsService
@@ -36,10 +39,10 @@ public class TrailsUserDAO implements UserDetailsService
 
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException, DataAccessException
     {
-        org.trails.security.domain.User example = new org.trails.security.domain.User();
-        example.setUsername(username);
+        DetachedCriteria criteria = DetachedCriteria.forClass(User.class);
+        criteria.add(Restrictions.eq("username", username));
 
-        List users = getPersistenceService().getInstances(example);
+        List users = getPersistenceService().getInstances(criteria);
 
         if (users.size() == 0)
         {

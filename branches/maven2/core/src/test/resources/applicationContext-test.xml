@@ -86,6 +86,8 @@
 		</property> -->
 	</bean>
 	
+	<bean name="trailsUserDAO" class="org.trails.security.TrailsUserDAO" autowire="byName" />
+	
 	<bean id="descriptorFactory" class="org.trails.descriptor.ReflectionDescriptorFactory">
 		<property name="methodExcludes">
 			<list>

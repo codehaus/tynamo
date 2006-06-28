@@ -59,11 +59,13 @@ public class SecurityStartup {
 	 * @param args
 	 */
 	public static void main(String args[]) {
+		String appContextFile = "applicationContext.xml";
+		if (args.length == 1)
+		{
+			appContextFile = args[0];
+		}
 		
-		if (args.length != 1)
-			throw new RuntimeException("location of applicationContext.xml must be specified");
-		
-		ApplicationContext context = new ClassPathXmlApplicationContext(args[0]);
+		ApplicationContext context = new ClassPathXmlApplicationContext(appContextFile);
 		SecurityStartup bootStrap = (SecurityStartup) context.getBean("securityStartup");
 		bootStrap.startup();
 	}
