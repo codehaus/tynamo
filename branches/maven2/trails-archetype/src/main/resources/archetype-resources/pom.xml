@@ -20,10 +20,10 @@
 					<target>1.5</target>
 					<aspectLibraries>
 						<aspectLibrary>
-						    <groupId>org.trails</groupId>
-						    <artifactId>trails-core</artifactId>
+							<groupId>org.trails</groupId>
+							<artifactId>trails-core</artifactId>
 						</aspectLibrary>
-					    </aspectLibraries>					
+					</aspectLibraries>
 				</configuration>
 				<executions>
 					<execution>
@@ -33,17 +33,17 @@
 						</goals>
 					</execution>
 				</executions>
-			</plugin>			
+			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>				
+				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
 					<source>1.5</source>
 					<target>1.5</target>
 				</configuration>
-			
+
 			</plugin>
-		
+
 			<plugin>
 				<groupId>org.apache.myfaces.tobago</groupId>
 				<artifactId>maven-apt-plugin</artifactId>
@@ -92,6 +92,7 @@
 					</dependency>
 				</dependencies>
 			</plugin>
+
 		</plugins>
 	</build>
 	<dependencies>
@@ -109,7 +110,7 @@
 			<groupId>com.javaforge.tapestry</groupId>
 			<artifactId>tapernate</artifactId>
 			<version>0.1-SNAPSHOT</version>
-		</dependency>		
+		</dependency>
 	</dependencies>
 	<repositories>
 		<repository>
@@ -132,11 +133,16 @@
 		</repository>
 		<repository>
 			<id>com.carmanconsulting</id>
-			<name>
-				James Carman's Repository for Tapernate, etc
-			</name>
+			<name>James Carman's Repository for Tapernate, etc</name>
 			<url>http://www.carmanconsulting.com/mvn/</url>
 		</repository>
-		
+
 	</repositories>
+	<pluginRepositories>
+		<pluginRepository>
+			<id>codehaus</id>
+			<name>CodeHaus Repository</name>
+			<url>http://repository.codehaus.org/</url>
+		</pluginRepository>
+	</pluginRepositories>
 </project>
