@@ -1,6 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
 
 	<name>Trails</name>
@@ -14,8 +13,10 @@
 
 	<modules>
 		<module>core</module>
-		<!--module>examples</module-->
-	</modules>
+			
+	    <module>trails-archetype</module>
+	    <module>trails-secure-archetype</module>
+	  </modules>
 
 	<description>
 		A domain driven development framework for Java.
@@ -87,11 +88,6 @@
 
 
 	<repositories>
-		<repository>
-			<id>default</id>
-			<name>Default Repository</name>
-			<url>http://repo.mergere.com/maven2</url>
-		</repository>
 
 		<repository>
 			<id>com.javaforge.tapestry</id>
@@ -102,10 +98,13 @@
 		</repository>
 		<repository>
 			<id>com.carmanconsulting</id>
-			<name>James Carman's Repository for Tapernate, etc</name>
-			<url>http://www.carmanconsulting.com/mvn</url>
+			<name>
+				James Carman's Repository for Tapernate, etc
+			</name>
+			<url>http://www.carmanconsulting.com/mvn/</url>
 		</repository>
 	</repositories>
+
 
 	<build>
 		<plugins>
