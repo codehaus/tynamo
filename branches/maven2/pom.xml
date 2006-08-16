@@ -66,8 +66,8 @@
 		</mailingList>
 	</mailingLists>
 	<scm>
-		<connection>scm:svn:http://trails.inspiring.nl/svn/</connection>
-		<url>http://trails.inspiring.nl/svn/</url>
+		<connection>scm:svn:http://trails.inspiring.nl/svn/branches/maven2/</connection>
+		<url>http://trails.inspiring.nl/svn/branches/maven2/</url>
 	</scm>
 	<ciManagement>
 		<system>Cruise Control</system>
