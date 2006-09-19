@@ -45,21 +45,6 @@ public class TrailsClassDescriptor extends TrailsDescriptor implements IClassDes
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Constructors
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
-    public TrailsClassDescriptor(IClassDescriptor descriptor)
-    {
-        super(descriptor);
-        copyPropertyDescriptorsFrom(descriptor);
-        copyMethodDescriptorsFrom(descriptor);
-//        try
-//        {
-//            bfsCache = (BFSCache<IClassDescriptor>)descriptor.getBfsCache().clone();
-//        }
-//        catch (CloneNotSupportedException e)
-//        {
-//            throw new RuntimeException(e);
-//        }
-    }
-
     public TrailsClassDescriptor(Class type)
     {
         super(type);
@@ -74,18 +59,6 @@ public class TrailsClassDescriptor extends TrailsDescriptor implements IClassDes
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Methods
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
-    private void copyMethodDescriptorsFrom(IClassDescriptor descriptor) {
-        for (IMethodDescriptor methodDescriptor : descriptor.getMethodDescriptors()) {
-            getMethodDescriptors().add(IMethodDescriptor.class.cast(methodDescriptor.clone()));
-        }
-    }
-
-    protected void copyPropertyDescriptorsFrom(IClassDescriptor descriptor) {
-        for (IPropertyDescriptor iPropertyDescriptor : descriptor.getPropertyDescriptors()) {
-            getPropertyDescriptors().add(IPropertyDescriptor.class.cast(iPropertyDescriptor.clone()));
-        }
-    }
-
     /**
      * @param ognl
      * @return
@@ -236,12 +209,6 @@ public class TrailsClassDescriptor extends TrailsDescriptor implements IClassDes
     public void setChild(boolean child)
     {
         this.child = child;
-    }
-
-    @Override
-    public Object clone()
-    {
-        return new TrailsClassDescriptor(this);
     }
 
     public boolean isAllowRemove()

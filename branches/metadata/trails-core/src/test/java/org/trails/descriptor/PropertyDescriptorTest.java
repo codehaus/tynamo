@@ -55,28 +55,4 @@ public class PropertyDescriptorTest extends TestCase
         IPropertyDescriptor propertyDescriptor = new TrailsPropertyDescriptor(Foo.class, Date.class);
         assertTrue(propertyDescriptor.isDate());
     }
-    
-    public void testClone() throws Exception
-    {
-        TrailsPropertyDescriptor descriptor1 = new TrailsPropertyDescriptor(Foo.class, "foo", String.class);
-        TrailsPropertyDescriptor descriptor2 = (TrailsPropertyDescriptor)descriptor1.clone();
-        assertEquals("foo", descriptor2.getName());
-    }
-
-    public void testCloneWidthExtensions() throws Exception
-    {
-        String testExtension = "testExtension";
-        IDescriptorExtension descriptorExtension = new IDescriptorExtension()
-        {
-        };
-
-        TrailsPropertyDescriptor descriptor1 = new TrailsPropertyDescriptor(Foo.class, "foo", String.class);
-        descriptor1.addExtension(testExtension, descriptorExtension);
-
-        TrailsPropertyDescriptor descriptor2 = (TrailsPropertyDescriptor) descriptor1.clone();
-
-        assertTrue(descriptor2.supportsExtension(testExtension));
-        assertEquals(descriptorExtension, descriptor2.getExtension(testExtension));
-    }
-    
 }

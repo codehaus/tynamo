@@ -45,22 +45,6 @@ public class TrailsClassDescriptorTest extends TestCase
         
     }
     
-    public void testClone() throws Exception
-    {
-        TrailsClassDescriptor clone = (TrailsClassDescriptor)classDescriptor.clone();
-        assertEquals("still foo", Foo.class, clone.getType());
-        assertEquals("2 props", 2, clone.getPropertyDescriptors().size());
-        assertTrue("clone has id", clone.getPropertyDescriptor("id") instanceof IdentifierDescriptor);
-        assertEquals("still has a method", 1, clone.getMethodDescriptors().size());
-    }
-    
-    public void testCopyConstructor() throws Exception
-    {
-        TrailsClassDescriptor copiedDescriptor = new TrailsClassDescriptor(classDescriptor);
-        assertEquals("Foo", copiedDescriptor.getDisplayName());
-        assertEquals("2 properties", 2, copiedDescriptor.getPropertyDescriptors().size());
-    }
-
     public void testGetIdentifierProperty() throws Exception
     {
         assertEquals("right id prop", idProp,

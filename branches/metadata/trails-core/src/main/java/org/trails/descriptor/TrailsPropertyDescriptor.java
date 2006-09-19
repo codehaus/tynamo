@@ -46,20 +46,11 @@ public class TrailsPropertyDescriptor extends TrailsDescriptor implements IPrope
     private Class beanType;
 
     private IClassDescriptor parentClassDescriptor;
-    
+    private boolean objectReference = false;
+
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
     // constructors
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
-    /**
-     * It's kinda like an old-skool C++ copy constructor
-     *
-     */
-    public TrailsPropertyDescriptor(Class beanType, IPropertyDescriptor descriptor)
-    {
-        this(beanType, descriptor.getPropertyType());
-        copyFrom(descriptor);
-    }
-
     public TrailsPropertyDescriptor(Class beanType, Class type)
     {
         super(type);
@@ -160,9 +151,14 @@ public class TrailsPropertyDescriptor extends TrailsDescriptor implements IPrope
      */
     public boolean isObjectReference()
     {
-        return false;
+        return objectReference;
     }
-    
+
+    public void setObjectReference(boolean objectReference)
+    {
+        this.objectReference = objectReference;
+    }
+
     /**
      * @return Returns the required.
      */
@@ -222,12 +218,6 @@ public class TrailsPropertyDescriptor extends TrailsDescriptor implements IPrope
     public void setName(String name)
     {
         this.name = name;
-    }
-
-    @Override
-    public Object clone()
-    {
-        return new TrailsPropertyDescriptor(beanType, this);
     }
 
     public boolean equals(Object obj)

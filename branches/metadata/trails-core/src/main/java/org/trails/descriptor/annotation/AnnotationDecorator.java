@@ -50,7 +50,7 @@ public class AnnotationDecorator implements DescriptorDecorator
 
 	protected IPropertyDescriptor decoratePropertyDescriptor(IPropertyDescriptor propertyDescriptor)
 	{
-		IPropertyDescriptor clonedDescriptor = (IPropertyDescriptor)propertyDescriptor.clone();
+		IPropertyDescriptor clonedDescriptor = propertyDescriptor; //(IPropertyDescriptor)propertyDescriptor.clone();
 		try
 		{
 		    Field propertyField = clonedDescriptor.getBeanType().getDeclaredField(
@@ -102,7 +102,7 @@ public class AnnotationDecorator implements DescriptorDecorator
 
     private IDescriptor decorateFromAnnotations( IDescriptor descriptor, Annotation[] annotations)
     {
-        IDescriptor clonedDescriptor = (IDescriptor)descriptor.clone();
+        IDescriptor clonedDescriptor = descriptor; //(IDescriptor)descriptor.clone();
         for (int i=0; i < annotations.length; i++)
         {
             Annotation annotation = annotations[i];

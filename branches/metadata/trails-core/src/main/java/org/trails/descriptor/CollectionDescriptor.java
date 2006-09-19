@@ -31,9 +31,10 @@ public class CollectionDescriptor extends TrailsPropertyDescriptor
 
     public CollectionDescriptor(Class beanType, IPropertyDescriptor descriptor)
     {
-        super(beanType, descriptor);
+        super(beanType, descriptor.getPropertyType());
+        copyFrom(descriptor);
     }
-    
+
     /**
      * @param realDescriptor
      */
@@ -91,12 +92,7 @@ public class CollectionDescriptor extends TrailsPropertyDescriptor
         }
     }
 
-    public Object clone()
-    {
-        return new CollectionDescriptor(getBeanType(), this);
-    }
-
-    public String findAddExpression() 
+    public String findAddExpression()
     {
         return findExpression("add");
     }

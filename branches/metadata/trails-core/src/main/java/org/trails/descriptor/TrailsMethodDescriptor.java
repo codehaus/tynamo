@@ -9,11 +9,6 @@ public class TrailsMethodDescriptor extends TrailsDescriptor implements IMethodD
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
     // constructors
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
-    public TrailsMethodDescriptor(IMethodDescriptor methodDescriptor)
-    {
-        super(methodDescriptor);
-    }
-    
     public TrailsMethodDescriptor(String name, Class returnType, Class[] argumentTypes)
     {
         super(returnType);
@@ -59,12 +54,4 @@ public class TrailsMethodDescriptor extends TrailsDescriptor implements IMethodD
     {
         this.name = name;
     }
-
-    @Override
-    public Object clone()
-    {
-        return new TrailsMethodDescriptor(this);
-    }
- 
-    
 }

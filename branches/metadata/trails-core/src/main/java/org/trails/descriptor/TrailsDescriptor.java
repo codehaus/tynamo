@@ -37,21 +37,9 @@ public class TrailsDescriptor implements IDescriptor, Serializable
     protected Class type;
     private boolean hidden;
 
-    public TrailsDescriptor(IDescriptor descriptor)
-    {
-        copyFrom(descriptor);
-    }
-
     public TrailsDescriptor(Class type)
     {
         this.type = type;
-    }
-
-
-    @Override
-    public Object clone()
-    {
-        return new TrailsDescriptor(this);
     }
 
     public String getDisplayName()
@@ -74,7 +62,7 @@ public class TrailsDescriptor implements IDescriptor, Serializable
         this.shortDescription = shortDescription;
     }
 
-    protected void copyFrom(IDescriptor descriptor)
+    public void copyFrom(IDescriptor descriptor)
     {
         try
         {

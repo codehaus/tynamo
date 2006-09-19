@@ -37,6 +37,7 @@ import org.trails.descriptor.IClassDescriptor;
 import org.trails.descriptor.IPropertyDescriptor;
 import org.trails.descriptor.IdentifierDescriptor;
 import org.trails.descriptor.ObjectReferenceDescriptor;
+import org.trails.descriptor.TrailsClassDescriptor;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -122,7 +123,7 @@ public class HibernateDescriptorDecorator implements DescriptorDecorator
         if (mappingProperty.getType() instanceof ComponentType)
         {
             Component componentMapping = (Component) mappingProperty.getValue();
-            IClassDescriptor baseDescriptor = getDescriptorFactory().buildClassDescriptor(descriptor.getPropertyType());
+            TrailsClassDescriptor baseDescriptor = getDescriptorFactory().buildClassDescriptor(descriptor.getPropertyType());
             // build from base descriptor
             EmbeddedDescriptor embeddedDescriptor = new EmbeddedDescriptor(type, baseDescriptor);
             // and copy from property descriptor
@@ -137,6 +138,7 @@ public class HibernateDescriptorDecorator implements DescriptorDecorator
                 }
                 else
                 {
+                    // recursive
                     Property property = componentMapping.getProperty(propertyDescriptor.getName());
                     IPropertyDescriptor iPropertyDescriptor = decoratePropertyDescriptor(embeddedDescriptor.getBeanType(), property, propertyDescriptor, parentClassDescriptor);
                     decoratedProperties.add(iPropertyDescriptor);

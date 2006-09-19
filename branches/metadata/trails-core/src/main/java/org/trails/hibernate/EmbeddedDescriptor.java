@@ -26,7 +26,8 @@ public class EmbeddedDescriptor extends TrailsClassDescriptor implements IProper
 
     public EmbeddedDescriptor(Class beanType, IClassDescriptor descriptor)
     {
-        super(descriptor);
+        super(descriptor.getType());
+        copyFrom(descriptor);
         this.beanType = beanType;
     }
 
@@ -239,7 +240,7 @@ public class EmbeddedDescriptor extends TrailsClassDescriptor implements IProper
 	{
 		return false;
 	}
-	
-	
-	
+
+
+
 }

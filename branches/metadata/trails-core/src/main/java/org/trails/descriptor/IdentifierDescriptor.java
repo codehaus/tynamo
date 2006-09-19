@@ -68,11 +68,4 @@ public class IdentifierDescriptor extends TrailsPropertyDescriptor
     {
         this.generated = generated;
     }
-
-    public Object clone()
-    {
-        return new IdentifierDescriptor(getBeanType(), this);
-    }
-    
-    
 }

@@ -82,7 +82,8 @@ public class HomePageTest extends ComponentTest {
 		assertTrue(hasSecurityAnnotated);
 	}
 
-	public void testGetAllDescriptionsWithRole() {
+    // todo 06-09-18 this is going to fail until security is working again.
+    public void testGetAllDescriptionsWithRole() {
 		SecurityContextImpl context = new SecurityContextImpl();
 		context.setAuthentication(autorities.rootAuthentication);
 		SecurityContextHolder.setContext(context);
@@ -98,7 +99,7 @@ public class HomePageTest extends ComponentTest {
 				hasSecurityAnnotated = true;
 				assertFalse(tmp.isHidden());
 			}
-			if (!tmp.isHidden()) assertTrue(descriptorContains(homeDescriptors,tmp));
+			if (!tmp.isHidden()) assertTrue("this will fail if security is not working", descriptorContains(homeDescriptors,tmp));
 		}
 		
 		assertTrue(hasSecurityAnnotated);
