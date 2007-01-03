@@ -192,11 +192,6 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>jboss</groupId>
-            <artifactId>javassist</artifactId>
-            <version>3.0</version>
-        </dependency>
-        <dependency>
             <groupId>javax.persistence</groupId>
             <artifactId>ejb</artifactId>
             <version>3.0-public-draft-20060118</version>
