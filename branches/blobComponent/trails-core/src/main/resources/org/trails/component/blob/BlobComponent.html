@@ -1,9 +1,6 @@
 <span jwcid="$content$">
-    <!-- img jwcid="@Image"
-         image="ognl:binOutService.getImageAsset(classDescriptor.type.name, model[identifierDescriptor.name], propertyDescriptor.name, 'image/jpeg')"
-         alt="ognl:propertyDescriptor.name"/>
-    <br/-->
-    <input jwcid="@Upload" file="ognl:file" type="file" displayName="File"/>
-    <br/>
-    <a jwcid="@ServiceLink" service="BinaryOutPutService" parameters="ognl:byteArrayAsset">download</a>
+
+    <span jwcid="@TrailsDownload" propertyDescriptor="ognl:descriptor"/>
+    <span jwcid="@TrailsUpload" bytes="ognl:model[descriptor.name]" propertyDescriptor="ognl:descriptor"/>
+    
 </span>

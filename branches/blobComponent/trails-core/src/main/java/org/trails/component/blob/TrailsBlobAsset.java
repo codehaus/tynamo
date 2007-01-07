@@ -5,7 +5,8 @@ import org.apache.tapestry.engine.ILink;
 
 import java.io.InputStream;
 
-public class TrailsBlobAsset extends AbstractAsset {
+public class TrailsBlobAsset extends AbstractAsset
+{
 
     private BlobDownloadService bytesService;
 
@@ -15,7 +16,11 @@ public class TrailsBlobAsset extends AbstractAsset {
 
     private String bytesProperty;
 
-    public TrailsBlobAsset(BlobDownloadService chartService, String entityName, String idProperty, String bytesProperty, String mimeType) {
+    private String mimeType;
+    private String fileName;
+
+    public TrailsBlobAsset(BlobDownloadService chartService, String entityName, String idProperty, String bytesProperty)
+    {
         super(null, null);
         this.bytesService = chartService;
         this.entityName = entityName;
@@ -23,24 +28,50 @@ public class TrailsBlobAsset extends AbstractAsset {
         this.bytesProperty = bytesProperty;
     }
 
-    public String getBytesProperty() {
+    public TrailsBlobAsset(BlobDownloadService chartService, String entityName, String idProperty, String bytesProperty, String mimeType, String fileName)
+    {
+        super(null, null);
+        this.bytesService = chartService;
+        this.entityName = entityName;
+        this.idProperty = idProperty;
+        this.bytesProperty = bytesProperty;
+        this.mimeType = mimeType;
+        this.fileName = fileName;
+    }
+
+    public String getBytesProperty()
+    {
         return bytesProperty;
     }
 
-    public String getEntityName() {
+    public String getEntityName()
+    {
         return entityName;
     }
 
-    public String getIdProperty() {
+    public String getIdProperty()
+    {
         return idProperty;
     }
 
-    public String buildURL() {
-        ILink l = bytesService.getLink(false, this);
+    public String getMimeType()
+    {
+        return mimeType;
+    }
+
+    public String getFileName()
+    {
+        return fileName;
+    }
+
+    public String buildURL()
+    {
+        ILink l = bytesService.getLink(false, new Object[]{this});
         return l.getURL();
     }
 
-    public InputStream getResourceAsStream() {
+    public InputStream getResourceAsStream()
+    {
         // TODO Auto-generated method stub
         return null;
     }

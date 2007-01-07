@@ -21,7 +21,8 @@ import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-public class BlobDownloadService implements IEngineService {
+public class BlobDownloadService implements IEngineService
+{
 
     private static final Log LOG = LogFactory.getLog(BlobDownloadService.class);
 
@@ -37,20 +38,24 @@ public class BlobDownloadService implements IEngineService {
 
     private DescriptorService descriptorService;
 
-    public PersistenceService getPersistenceService() {
+    public PersistenceService getPersistenceService()
+    {
         return persistenceService;
     }
 
-    public void setPersistenceService(PersistenceService persistenceService) {
+    public void setPersistenceService(PersistenceService persistenceService)
+    {
         this.persistenceService = persistenceService;
     }
 
 
-    public DescriptorService getDescriptorService() {
+    public DescriptorService getDescriptorService()
+    {
         return descriptorService;
     }
 
-    public void setDescriptorService(DescriptorService descriptorService) {
+    public void setDescriptorService(DescriptorService descriptorService)
+    {
         this.descriptorService = descriptorService;
     }
 
@@ -60,7 +65,12 @@ public class BlobDownloadService implements IEngineService {
 
     private static final String BYTES_PROPERTY = "property";
 
-    public ILink getLink(boolean post, Object parameter) {
+    private static final String MIME_TYPE = "mimeType";
+    
+    private static final String FILE_NAME = "fileName";
+
+    public ILink getLink(boolean post, Object parameter)
+    {
 
         Defense.isAssignable(((Object[]) parameter)[0], TrailsBlobAsset.class, "parameter");
 
@@ -72,76 +82,117 @@ public class BlobDownloadService implements IEngineService {
         parameters.put(ENTITY_NAME, asset.getEntityName());
         parameters.put(BYTES_PROPERTY, asset.getBytesProperty());
 
+        if (asset.getFileName() != null)
+        {
+            parameters.put(FILE_NAME, asset.getFileName());
+        }
+
+        if (asset.getMimeType() != null)
+        {
+            parameters.put(MIME_TYPE, asset.getMimeType());
+        }
+
         return _linkFactory.constructLink(this, false, parameters, true);
 
     }
 
-    public void service(IRequestCycle cycle) throws IOException {
+    public void service(IRequestCycle cycle) throws IOException
+    {
 
         String binoutID = cycle.getParameter(BINOUTID);
         String entityName = cycle.getParameter(ENTITY_NAME);
         String bytesProp = cycle.getParameter(BYTES_PROPERTY);
+        String fileName = cycle.getParameter(FILE_NAME);
+        String contentType = cycle.getParameter(MIME_TYPE);
 
-        try {
+
+        try
+        {
             BlobDescriptorExtension blobDescriptor = getDescriptorService().getClassDescriptor(Class.forName(entityName)).getPropertyDescriptor(bytesProp).getExtension(BlobDescriptorExtension.class);
 
-            Object model = getPersistenceService().getInstance(Class.forName(entityName), Integer.valueOf(binoutID));
-            byte[] bytes = new byte[0];
+            if (blobDescriptor != null)
+            {
 
-            String fileName = bytesProp;
-            String contentType = "image/jpeg";
+                Object model = getPersistenceService().getInstance(Class.forName(entityName), Integer.valueOf(binoutID));
+                byte[] bytes = new byte[0];
 
-            if (blobDescriptor.isBytes()) {
+                if (blobDescriptor.isBytes())
+                {
 
-                bytes = (byte[]) Ognl.getValue(bytesProp, model);
+                    if (fileName == null)
+                    {
+                        if (!"".equals(blobDescriptor.getFileName()))
+                            fileName = blobDescriptor.getFileName();
+                        else
+                            fileName = bytesProp;
+                    }
 
-                if (!"".equals(blobDescriptor.getContentType()))
-                    contentType = blobDescriptor.getContentType();
+                    if (contentType == null)
+                    {
+                        if (!"".equals(blobDescriptor.getContentType()))
+                            contentType = blobDescriptor.getContentType();
+                        else
+                            contentType = "";
+                    }
 
-                if (!"".equals(blobDescriptor.getFileName()))
-                    fileName = blobDescriptor.getFileName();
+                    bytes = (byte[]) Ognl.getValue(bytesProp, model);
 
-            } else if (blobDescriptor.isITrailsBlob()) {
 
-                ITrailsBlob trailsBlob = (ITrailsBlob) Ognl.getValue(bytesProp, model);
-                if (trailsBlob != null) {
-                    bytes = trailsBlob.getBytes();
-                    contentType = !"".equals(blobDescriptor.getContentType()) ? blobDescriptor.getContentType() : trailsBlob.getContentType();
-                    fileName = !"".equals(blobDescriptor.getFileName()) ? blobDescriptor.getFileName() : trailsBlob.getFileName();
+                } else if (blobDescriptor.isITrailsBlob())
+                {
+
+                    ITrailsBlob trailsBlob = (ITrailsBlob) Ognl.getValue(bytesProp, model);
+                    if (trailsBlob != null)
+                    {
+                        bytes = trailsBlob.getBytes();
+                        contentType = !"".equals(blobDescriptor.getContentType()) ? blobDescriptor.getContentType() : trailsBlob.getContentType();
+                        fileName = !"".equals(blobDescriptor.getFileName()) ? blobDescriptor.getFileName() : trailsBlob.getFileName();
+                    }
                 }
+
+                _response.setHeader("Expires", "0");
+                _response.setHeader("Cache-Control", "must-revalidate, post-check=0,pre-check=0");
+                _response.setHeader("Pragma", "public");
+                _response.setHeader("Content-Disposition", blobDescriptor.getContentDisposition().getValue() + "; filename=" + fileName);
+                _response.setContentLength(bytes.length);
+
+                OutputStream output = _response.getOutputStream(new ContentType(contentType));
+                output.write(bytes);
+
+            } else
+            {
+                LOG.error("");
+                //TODO throw some exception
             }
 
-            _response.setHeader("Expires", "0");
-            _response.setHeader("Cache-Control", "must-revalidate, post-check=0,pre-check=0");
-            _response.setHeader("Pragma", "public");
-//            _response.setHeader("Content-disposition", "inline; filename=" + "newName.txt");            
-            _response.setHeader("Content-Disposition", "attachment; filename=" + fileName);
-            OutputStream output = _response.getOutputStream(new ContentType(contentType));
-            output.write(bytes);
-
-
-        } catch (ClassNotFoundException e) {
+        } catch (ClassNotFoundException e)
+        {
             e.printStackTrace();
-        } catch (OgnlException e) {
+        } catch (OgnlException e)
+        {
             e.printStackTrace();
         }
 
         return;
     }
 
-    public String getName() {
+    public String getName()
+    {
         return SERVICE_NAME;
     }
 
-    public void setExceptionReporter(RequestExceptionReporter exceptionReporter) {
+    public void setExceptionReporter(RequestExceptionReporter exceptionReporter)
+    {
         _exceptionReporter = exceptionReporter;
     }
 
-    public void setLinkFactory(LinkFactory linkFactory) {
+    public void setLinkFactory(LinkFactory linkFactory)
+    {
         _linkFactory = linkFactory;
     }
 
-    public void setResponse(WebResponse response) {
+    public void setResponse(WebResponse response)
+    {
         _response = response;
     }
 }
