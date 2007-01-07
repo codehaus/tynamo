@@ -24,6 +24,12 @@ public abstract class TrailsDownload extends BaseComponent
     @Parameter(required = true)
     public abstract IPropertyDescriptor getPropertyDescriptor();
 
+    @Parameter(required = false)
+    public abstract String getFileName();
+
+    @Parameter(required = false)
+    public abstract String getMimeType();
+
     public IPropertyDescriptor getIdentifierDescriptor()
     {
         return getClassDescriptor().getIdentifierDescriptor();
@@ -47,7 +53,8 @@ public abstract class TrailsDownload extends BaseComponent
         {
             id = "";
         }
-        return new TrailsBlobAsset(getBinOutService(), getClassDescriptor().getType().getName(), id, getPropertyDescriptor().getName());
+
+        return new TrailsBlobAsset(getBinOutService(), getClassDescriptor().getType().getName(), id, getPropertyDescriptor().getName(), getMimeType(), getFileName());
     }
 
     public abstract void setModel(Object model);
