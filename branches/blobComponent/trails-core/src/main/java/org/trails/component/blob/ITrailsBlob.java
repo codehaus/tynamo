@@ -4,20 +4,27 @@ import java.io.Serializable;
 
 public interface ITrailsBlob extends Serializable {
 
-    String getFileName();
+	String getFileName();
 
-    void setFileName(String fileName);
+	void setFileName(String fileName);
 
-    String getFilePath();
+	String getFilePath();
 
-    void setFilePath(String filePath);
+	void setFilePath(String filePath);
 
-    byte[] getBytes();
+	String getFileExtension();
 
-    void setBytes(byte[] bytes);
+	void setFileExtension(String filePath);
 
-    String getContentType();
+	String getContentType();
 
-    void setContentType(String contentType);
+	void setContentType(String contentType);
 
+	Long getNumBytes();
+
+	void setNumBytes(Long contentType);
+
+	byte[] getBytes();
+
+	void setBytes(byte[] bytes);
 }

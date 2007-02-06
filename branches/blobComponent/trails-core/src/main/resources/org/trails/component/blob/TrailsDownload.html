@@ -1,11 +1,14 @@
 <span jwcid="$content$">
     <span jwcid="@If" condition="ognl:blobDescriptorExtension.renderType.image">
-        <img jwcid="@Image" image="ognl:byteArrayAsset" alt="ognl:propertyDescriptor.name"/>
-        <br/>
-        <br/>
+		<a jwcid="@ServiceLink" service="BlobService" parameters="ognl:byteArrayAsset">
+            <img jwcid="@Image"
+        		image="ognl:byteArrayAsset"
+        		alt="ognl:fileName" />
+        </a>
+
     </span>
     <span jwcid="@If" condition="ognl:blobDescriptorExtension.renderType.link">
-        <a jwcid="@ServiceLink" service="BinaryOutPutService" parameters="ognl:byteArrayAsset">download</a>
-        <br/>
+        <a jwcid="@ServiceLink" service="BlobService"
+            parameters="ognl:byteArrayAsset">download</a>
     </span>
 </span>

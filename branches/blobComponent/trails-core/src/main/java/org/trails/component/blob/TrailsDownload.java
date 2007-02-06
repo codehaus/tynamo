@@ -2,46 +2,42 @@ package org.trails.component.blob;
 
 import ognl.Ognl;
 import ognl.OgnlException;
+
 import org.apache.tapestry.BaseComponent;
 import org.apache.tapestry.IAsset;
 import org.apache.tapestry.annotations.InjectObject;
 import org.apache.tapestry.annotations.Parameter;
+import org.apache.tapestry.annotations.Persist;
 import org.trails.descriptor.BlobDescriptorExtension;
 import org.trails.descriptor.IClassDescriptor;
 import org.trails.descriptor.IPropertyDescriptor;
 
 public abstract class TrailsDownload extends BaseComponent
 {
-    @InjectObject("service:trails.BinaryOutPutService")
+    @InjectObject("service:trails.BlobService")
     public abstract BlobDownloadService getBinOutService();
 
-    @Parameter(required = false, defaultValue = "page.model")
-    public abstract Object getModel();
+    @Parameter(required = false, defaultValue = "page.model", cache = true)
+	public abstract Object getModel();
+	public abstract void setModel(Object bytes);
 
-    @Parameter(required = false, defaultValue = "page.classDescriptor")
+	@Parameter(required = false, defaultValue = "page.classDescriptor", cache = true)
     public abstract IClassDescriptor getClassDescriptor();
+    public abstract void setClassDescriptor(IClassDescriptor ClassDescriptor);
 
-    @Parameter(required = true)
-    public abstract IPropertyDescriptor getPropertyDescriptor();
+	@Parameter(required = true, cache = true)
+	public abstract IPropertyDescriptor getPropertyDescriptor();
+	public abstract void setPropertyDescriptor(IPropertyDescriptor propertyDescriptor);
 
-    @Parameter(required = false)
-    public abstract String getFileName();
-
-    @Parameter(required = false)
-    public abstract String getMimeType();
-
-    public IPropertyDescriptor getIdentifierDescriptor()
-    {
+    public IPropertyDescriptor getIdentifierDescriptor() {
         return getClassDescriptor().getIdentifierDescriptor();
     }
 
-    public BlobDescriptorExtension getBlobDescriptorExtension()
-    {
+    public BlobDescriptorExtension getBlobDescriptorExtension() {
         return getPropertyDescriptor().getExtension(BlobDescriptorExtension.class);
     }
 
-    public IAsset getByteArrayAsset()
-    {
+    public IAsset getByteArrayAsset() {
         String id = "";
         try
         {
@@ -54,12 +50,14 @@ public abstract class TrailsDownload extends BaseComponent
             id = "";
         }
 
-        return new TrailsBlobAsset(getBinOutService(), getClassDescriptor().getType().getName(), id, getPropertyDescriptor().getName(), getMimeType(), getFileName());
+        return new TrailsBlobAsset(getBinOutService(), getClassDescriptor().getType().getName(), id, getPropertyDescriptor().getName(), getContentType(), getFileName());
     }
 
-    public abstract void setModel(Object model);
+	@Persist
+	public abstract String getFileName();
+	public abstract void setFileName(String fileName);
 
-    public abstract void setClassDescriptor(IClassDescriptor ClassDescriptor);
-
-    public abstract void setPropertyDescriptor(IPropertyDescriptor iPropertyDescriptor);
+	@Persist
+	public abstract String getContentType();
+	public abstract void setContentType(String contentType);
 }
