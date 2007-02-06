@@ -43,10 +43,10 @@
     </contribution>
     
      <contribution configuration-id="tapestry.services.ApplicationServices">
-        <service name="BinaryOutPutService" object="service:BinaryOutPutService"/>
+        <service name="BlobService" object="service:BlobService"/>
     </contribution>
 
-    <service-point id="BinaryOutPutService" interface="org.trails.component.blob.BlobDownloadService">
+    <service-point id="BlobService" interface="org.trails.component.blob.BlobDownloadService">
         <invoke-factory>
             <construct class="org.trails.component.blob.BlobDownloadService">
                 <set-object property="exceptionReporter" value="infrastructure:requestExceptionReporter"/>
