@@ -33,7 +33,7 @@ public abstract class EditPage extends ModelPage implements IExternalPage
     @Bean(lifecycle=Lifecycle.REQUEST)
     public abstract TrailsValidationDelegate getDelegate();
 
-    
+
     public void activateExternalPage(Object[] parameters, IRequestCycle cycle)
 	{
 		setModel(parameters[0]);
@@ -96,22 +96,17 @@ public abstract class EditPage extends ModelPage implements IExternalPage
 
     public void remove(IRequestCycle cycle)
     {
-
-        try
-		{
+        try	{
 			getPersistenceService().remove(getModel());
-		} catch (PersistenceException pe)
-		{
-			getDelegate().record(pe);
-			return;
-		}
 
-        ICallback callback = getCallbackStack().popPreviousCallback();
-        if (callback instanceof CollectionCallback)
-        {
-            ((CollectionCallback)callback).remove(getPersistenceService(), getModel());
-        }
-        callback.performCallback(cycle);
+	        ICallback callback = getCallbackStack().popPreviousCallback();
+	        if (callback instanceof CollectionCallback) {
+	            ((CollectionCallback)callback).remove(getPersistenceService(), getModel());
+	        }
+	        callback.performCallback(cycle);
+		} catch (PersistenceException pe) {
+			getDelegate().record(pe);
+		}
     }
 
 
