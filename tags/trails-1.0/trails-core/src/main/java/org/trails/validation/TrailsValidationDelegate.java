@@ -53,9 +53,17 @@ public class TrailsValidationDelegate extends ValidationDelegate
         {
 
             IPropertyDescriptor propertyDescriptor = descriptor.getPropertyDescriptor(invalidValue.getPropertyName());
-            FieldTracking fieldTracking = (FieldTracking)
-                getFieldTracking(propertyDescriptor.getDisplayName());
-            String message = propertyDescriptor.getDisplayName() + " " + invalidValue.getMessage(); 
+            FieldTracking fieldTracking = null;
+            String message = null;
+            if (propertyDescriptor != null)
+            {
+              fieldTracking = (FieldTracking) getFieldTracking(propertyDescriptor.getDisplayName());
+              message = propertyDescriptor.getDisplayName() + " " + invalidValue.getMessage();
+            } else
+            {
+              fieldTracking = findCurrentTracking();
+              message = invalidValue.getMessage();
+            }
                    
             fieldTracking.setErrorRenderer(new RenderString(message));
            
