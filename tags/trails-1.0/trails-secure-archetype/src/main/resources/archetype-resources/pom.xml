@@ -182,4 +182,14 @@ it's because of different versions of apt plugin posted as the same version (whi
             <version>1.8.0.1</version>
         </dependency>
     </dependencies>
+
+    <repositories>
+        <repository>
+            <id>trails.codehaus.org</id>
+            <name>Trails Repository</name>
+            <url>http://trails.codehaus.org/repository</url>
+        </repository>
+    </repositories>
+
+
 </project>
