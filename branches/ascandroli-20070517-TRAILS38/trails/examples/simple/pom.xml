@@ -31,7 +31,6 @@
 								</include>
 							</includes>
 							<excludes>
-								<exclude>**/SecurityTest.java</exclude>
 								<exclude>
 									**/FunctionalTest.java
 								</exclude>

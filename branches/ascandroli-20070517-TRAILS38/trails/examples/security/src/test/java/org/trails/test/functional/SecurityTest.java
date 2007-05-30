@@ -11,6 +11,7 @@ public class SecurityTest extends FunctionalTest
 	public void testAdminLogin() throws Exception
 	{
 		login("admin", "admin");
+		assertXPathPresent(startPage, "//a[contains(text(), 'List Recipes')]");
 		assertXPathPresent(startPage, "//a[contains(text(), 'List Users')]");
 	}
 
@@ -26,8 +27,7 @@ public class SecurityTest extends FunctionalTest
 	public void testUserLogin() throws Exception
 	{
 		login("user", "user");
-		assertXPathPresent(startPage,
-			"//a[contains(text(), 'List Secure Things')]");
+		assertXPathPresent(startPage, "//a[contains(text(), 'List Recipes')]");
 		assertXPathNotPresent(startPage, "//a[contains(text(), 'List Users')]");
 	}
 
