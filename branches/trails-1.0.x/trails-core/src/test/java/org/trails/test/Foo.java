@@ -27,6 +27,7 @@ import javax.persistence.OneToMany;
 
 import org.hibernate.annotations.Formula;
 import org.hibernate.annotations.IndexColumn;
+import org.trails.security.annotation.ViewRequiresAssociation;
 import org.trails.validation.AssertNoOrphans;
 
 
@@ -39,6 +40,7 @@ import org.trails.validation.AssertNoOrphans;
  */
 @Entity
 @AssertNoOrphans(childrenProperty="bazzes", message="This is a message")
+@ViewRequiresAssociation("invalidUserAssociation")
 public class Foo
 {
     

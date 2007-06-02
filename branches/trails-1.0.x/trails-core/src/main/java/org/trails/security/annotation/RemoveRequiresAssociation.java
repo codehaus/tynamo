@@ -6,9 +6,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.TYPE, ElementType.METHOD})
-@Deprecated
-public @interface Security
+@Target({ElementType.TYPE})
+public @interface RemoveRequiresAssociation 
 {
-    Restriction[] restrictions();
+    String value() default "";
 }
