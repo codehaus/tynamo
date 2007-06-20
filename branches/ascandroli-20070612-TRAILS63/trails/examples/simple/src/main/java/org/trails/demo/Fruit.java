@@ -11,10 +11,11 @@ import javax.persistence.InheritanceType;
 
 import org.hibernate.validator.NotNull;
 import org.trails.descriptor.annotation.PropertyDescriptor;
+import org.trails.io.Squeezable;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-public class Fruit
+public class Fruit implements Squeezable
 {
 	public enum Origin
 	{

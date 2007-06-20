@@ -8,8 +8,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 
+import org.trails.io.Squeezable;
+
 @Entity
-public class Item
+public class Item implements Squeezable
 {
 	private Integer id;
 

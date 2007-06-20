@@ -6,8 +6,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
+import org.trails.io.Squeezable;
+
 @Entity
-public class Car
+public class Car implements Squeezable
 {
 
 	public Car()

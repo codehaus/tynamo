@@ -18,8 +18,8 @@ import org.apache.tapestry.IRequestCycle;
 import org.apache.tapestry.event.PageBeginRenderListener;
 import org.trails.TrailsRuntimeException;
 import org.trails.callback.ListCallback;
+import org.trails.component.TrailsTableColumn;
 import org.trails.descriptor.IClassDescriptor;
-
 
 /**
  * List all the instances of a type
@@ -28,7 +28,6 @@ import org.trails.descriptor.IClassDescriptor;
  */
 public abstract class ListPage extends TrailsPage implements IExternalPage, PageBeginRenderListener
 {
-
 
 	/**
 	 * (non-Javadoc)
@@ -51,6 +50,10 @@ public abstract class ListPage extends TrailsPage implements IExternalPage, Page
 
 	public abstract void setTypeName(String typeName);
 
+	public abstract TrailsTableColumn getColumn();
+
+	public abstract void setColumn(TrailsTableColumn column);
+
 	public abstract Class getType();
 
 	public abstract void setType(Class type);
@@ -59,8 +62,7 @@ public abstract class ListPage extends TrailsPage implements IExternalPage, Page
 	{
 		try
 		{
-			return getDescriptorService().getClassDescriptor(Class.forName(
-				getTypeName()));
+			return getDescriptorService().getClassDescriptor(Class.forName(getTypeName()));
 		} catch (ClassNotFoundException e)
 		{
 			throw new TrailsRuntimeException(e);

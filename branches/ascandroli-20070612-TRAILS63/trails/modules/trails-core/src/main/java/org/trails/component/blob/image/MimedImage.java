@@ -28,7 +28,7 @@ import org.trails.persistence.PersistenceService;
  * @author kenneth.colassi
  */
 
-@ComponentClass(allowBody = false, allowInformalParameters = false)
+@ComponentClass(allowBody = false, allowInformalParameters = true)
 public abstract class MimedImage extends Image
 {
 	private Map<String, String> map = new HashMap<String, String>();
@@ -40,10 +40,10 @@ public abstract class MimedImage extends Image
 	public abstract PersistenceService getPersistenceService();
 
 	@Parameter(required = true)
-	public abstract IPropertyDescriptor getDescriptor();
+	public abstract IPropertyDescriptor getPropertyDescriptor();
 
-	public abstract void setDescriptor(
-		IPropertyDescriptor descriptor);
+	public abstract void setPropertyDescriptor(
+		IPropertyDescriptor propertyDescriptor);
 
 	@Parameter(required = true)
 	public abstract Object getBytes();
@@ -62,7 +62,7 @@ public abstract class MimedImage extends Image
 
 	public BlobDescriptorExtension getBlobDescriptorExtension()
 	{
-		return getDescriptor().getExtension(
+		return getPropertyDescriptor().getExtension(
 			BlobDescriptorExtension.class);
 	}
 
@@ -132,8 +132,14 @@ public abstract class MimedImage extends Image
 		if (contentType == null)
 		{
 			writer.attribute("src", imageAsset.buildURL());
-		} else if (contentType.equalsIgnoreCase("image/pjpeg")
-			|| contentType.equalsIgnoreCase("image/gif"))
+		} else if (contentType.equalsIgnoreCase("image/jpeg")
+				|| contentType.equalsIgnoreCase("image/pjpeg")
+				|| contentType.equalsIgnoreCase("image/tiff")
+				|| contentType.equalsIgnoreCase("image/bmp")
+				|| contentType.equalsIgnoreCase("video/mpeg")
+				|| contentType.equalsIgnoreCase("video/quicktime")
+				|| contentType.equalsIgnoreCase("video/x-msvideo")
+				|| contentType.equalsIgnoreCase("image/gif"))
 		{
 			writer.attribute("src", imageAsset.buildURL());
 		} else

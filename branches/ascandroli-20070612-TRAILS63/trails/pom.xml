@@ -15,6 +15,7 @@
 	</properties>
 
 	<modules>
+		<module>codehaus-unity-skin</module>
 		<module>modules</module>
 		<module>examples</module>
 		<module>archetypes</module>
@@ -28,12 +29,6 @@
 			<name>Chris Nelson</name>
 			<email>ccnelson@dev.java.net</email>
 			<url>http://jroller.com/page/ccnelson</url>
-		</developer>
-		<developer>
-			<id>topping</id>
-			<name>Brian Topping</name>
-			<email>topping@N05PAMcodehaus.org</email>
-			<url>http://blogs.codehaus.org/people/topping/</url>
 		</developer>
 		<developer>
 			<id>ascandroli</id>
@@ -159,11 +154,11 @@
 		</notifiers>
 	</ciManagement>
 
-
 	<distributionManagement>
 		<site>
 			<id>trails-site</id>
-			<url>dav:https://dav.codehaus.org/trails/site/</url>
+			<!-- Note the url. Only static files deployed in /constant/ can be decorated by Unity -->
+			<url>dav:https://dav.codehaus.org/trails/constant/site/</url>
 		</site>
 		<repository>
 			<id>trails-release</id>

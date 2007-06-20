@@ -11,7 +11,7 @@ public class EntityIdentity implements Serializable
 
 	private final Serializable id;
 
-	private final Serializable version;
+	private final Object version;
 
 	public EntityIdentity(String entityName, Serializable id)
 	{
@@ -20,7 +20,7 @@ public class EntityIdentity implements Serializable
 		this.version = null;
 	}
 
-	public EntityIdentity(String entityName, Serializable id, Serializable version)
+	public EntityIdentity(String entityName, Serializable id, Object version)
 	{
 		this.entityName = entityName;
 		this.id = id;
@@ -37,7 +37,7 @@ public class EntityIdentity implements Serializable
 		return id;
 	}
 
-	public Serializable getVersion()
+	public Object getVersion()
 	{
 		return version;
 	}

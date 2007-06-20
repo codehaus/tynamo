@@ -40,11 +40,11 @@ import org.trails.descriptor.annotation.BlobDescriptor;
 import org.trails.descriptor.annotation.ClassDescriptor;
 import org.trails.descriptor.annotation.PropertyDescriptor;
 import org.trails.security.RestrictionType;
-import org.trails.security.annotation.Restriction;
-import org.trails.security.annotation.Security;
 import org.trails.security.domain.Role;
 import org.trails.util.DatePattern;
 import org.trails.validation.ValidateUniqueness;
+import org.trails.security.annotation.UpdateRequiresRole;
+import org.trails.security.annotation.RemoveRequiresRole;
 
 /**
  * A Person has a photo, eRole and application role
@@ -52,23 +52,24 @@ import org.trails.validation.ValidateUniqueness;
  * @author kenneth.colassi nhhockeyplayer@hotmail.com
  */
 @Entity
-@Security(restrictions = {
-		@Restriction(restrictionType = RestrictionType.UPDATE, requiredRole = "ROLE_ANONYMOUS"),
-		@Restriction(restrictionType = RestrictionType.REMOVE, requiredRole = "ROLE_ANONYMOUS"),
-		@Restriction(restrictionType = RestrictionType.VIEW, requiredRole = "ROLE_ANONYMOUS") })
+@RemoveRequiresRole("ROLE_MANAGER")
+@UpdateRequiresRole("ROLE_MANAGER")
 @ValidateUniqueness(property = "emailAddress")
-@Inheritance(strategy = InheritanceType.JOINED)
-@MappedSuperclass
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+//@Inheritance(strategy = InheritanceType.JOINED)
+//@MappedSuperclass
 @ClassDescriptor(hidden = true)
 public class Person implements UserDetails, Cloneable, Serializable
 {
 	private static final Log log = LogFactory.getLog(Person.class);
 
-	public enum ERole {
-		USER, ADMIN, SYSTEMADMIN
+	public enum ERole
+	{
+		USER, ADMIN
 	}
 
-	public enum EApplicationRole {
+	public enum EApplicationRole
+	{
 		MANAGER, DIRECTOR, SALES, MARKETING
 	}
 
@@ -78,7 +79,7 @@ public class Person implements UserDetails, Cloneable, Serializable
 
 	protected String lastName;
 
-	private Demographics demographics = new Demographics();
+	protected Demographics demographics = new Demographics();
 
 	protected Date dob;
 
@@ -100,11 +101,9 @@ public class Person implements UserDetails, Cloneable, Serializable
 
 	protected boolean enabled = true;
 
-	protected Long created = new Long(GregorianCalendar.getInstance()
-			.getTimeInMillis());
+	protected Long created = new Long(GregorianCalendar.getInstance().getTimeInMillis());
 
-	protected Long accessed = new Long(GregorianCalendar.getInstance()
-			.getTimeInMillis());
+	protected Long accessed = new Long(GregorianCalendar.getInstance().getTimeInMillis());
 
 	/**
 	 * CTOR
@@ -114,6 +113,7 @@ public class Person implements UserDetails, Cloneable, Serializable
 		try
 		{
 			BeanUtils.copyProperties(this, dto);
+			setUsername(emailAddress);
 		} catch (Exception e)
 		{
 			log.error(e.toString());
@@ -278,6 +278,7 @@ public class Person implements UserDetails, Cloneable, Serializable
 	public void setEmailAddress(String emailAddress)
 	{
 		this.emailAddress = emailAddress;
+		setUsername(emailAddress);
 	}
 
 	public void setPassword(String password)
@@ -397,9 +398,9 @@ public class Person implements UserDetails, Cloneable, Serializable
 	@PropertyDescriptor(hidden = true)
 	public GrantedAuthority[] getAuthorities()
 	{
-		log.debug("User " + getUsername() + " has roles " + roles);
+		log.debug("Person " + getUsername() + " has roles " + roles);
 		if (roles == null || roles.size() == 0)
-			throw new UsernameNotFoundException("User has no GrantedAuthority");
+			throw new UsernameNotFoundException("Person has no GrantedAuthority");
 		return roles.toArray(new GrantedAuthority[roles.size()]);
 	}
 
@@ -415,6 +416,7 @@ public class Person implements UserDetails, Cloneable, Serializable
 		this.roles = roles;
 	}
 
+	@PropertyDescriptor(hidden = true)
 	public String getUsername()
 	{
 		return emailAddress;

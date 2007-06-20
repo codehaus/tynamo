@@ -97,5 +97,20 @@ public class EditCallback extends TrailsCallback
 		}
 	}
 
+	public boolean equals(Object o)
+	{
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+
+		EditCallback that = (EditCallback) o;
+
+		return getPageName().equals(that.getPageName());
+	}
+
+	public int hashCode()
+	{
+		return getPageName().hashCode();
+	}
+
 
 }

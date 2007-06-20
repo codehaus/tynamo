@@ -18,8 +18,10 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
+import org.trails.security.annotation.UpdateRequiresAssociation;
 
 @Entity
+@UpdateRequiresAssociation("invalidUserAssociation")
 public class Foo
 {
 

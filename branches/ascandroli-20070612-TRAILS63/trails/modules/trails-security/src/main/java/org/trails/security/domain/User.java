@@ -18,17 +18,19 @@ import org.apache.commons.logging.LogFactory;
 import org.hibernate.validator.NotNull;
 import org.trails.descriptor.annotation.ClassDescriptor;
 import org.trails.descriptor.annotation.PropertyDescriptor;
-import org.trails.security.RestrictionType;
-import org.trails.security.annotation.Restriction;
-import org.trails.security.annotation.Security;
+import org.trails.security.annotation.UpdateRequiresAssociation;
+import org.trails.security.annotation.UpdateRequiresRole;
+import org.trails.security.annotation.ViewRequiresAssociation;
+import org.trails.security.annotation.ViewRequiresRole;
 import org.trails.validation.ValidateUniqueness;
 
 @Entity
 @Table(name = "TRAILS_USER")
 @ValidateUniqueness(property = "username")
-@Security(restrictions = {@Restriction(restrictionType = RestrictionType.VIEW,
-	requiredRole = "ROLE_MANAGER")})
 @ClassDescriptor(hasCyclicRelationships = true)
+@ViewRequiresRole({"ROLE_MANAGER", "ROLE_ROOT"} )
+@ViewRequiresAssociation
+@UpdateRequiresAssociation
 public class User implements UserDetails, Serializable
 {
 	private static final Log log = LogFactory.getLog(User.class);
@@ -107,6 +109,7 @@ public class User implements UserDetails, Serializable
 		name = "user_role",
 		joinColumns = {@JoinColumn(name = "user_ID")},
 		inverseJoinColumns = {@JoinColumn(name = "role_ID")})
+	@UpdateRequiresRole({"ROLE_MANAGER"} )
 	public Set<Role> getRoles()
 	{
 		return roles;

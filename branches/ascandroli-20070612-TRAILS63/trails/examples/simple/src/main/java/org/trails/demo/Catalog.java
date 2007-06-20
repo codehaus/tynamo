@@ -26,6 +26,7 @@ import org.hibernate.validator.NotNull;
 import org.hibernate.validator.Pattern;
 import org.trails.descriptor.annotation.Collection;
 import org.trails.descriptor.annotation.PropertyDescriptor;
+import org.trails.io.Squeezable;
 
 
 /**
@@ -35,7 +36,7 @@ import org.trails.descriptor.annotation.PropertyDescriptor;
  * Window - Preferences - Java - Code Style - Code Templates
  */
 @Entity
-public class Catalog
+public class Catalog implements Squeezable
 {
 	private Integer id;
 	private String name;

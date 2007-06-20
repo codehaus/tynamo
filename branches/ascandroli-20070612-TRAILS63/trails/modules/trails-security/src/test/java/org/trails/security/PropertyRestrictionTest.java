@@ -24,19 +24,19 @@ public class PropertyRestrictionTest extends SecurityRestrictionTest
 		IClassDescriptor classDescriptor = new TrailsClassDescriptor(Foo.class, "Foo");
 		classDescriptor.getPropertyDescriptors().add(propertyDescriptor);
 		PropertySecurityRestriction restriction = new PropertySecurityRestriction();
-		restriction.setRequiredRole("admin");
+		restriction.setRequiredRole(new String[]{"admin"});
 		restriction.setRestrictionType(RestrictionType.VIEW);
 		restriction.setPropertyName("bar");
 
-		restriction.restrict(autorities.adminAuthority, classDescriptor);
+		restriction.restrict(authorities.adminAuthority, classDescriptor);
 		assertFalse(propertyDescriptor.isHidden());
-		restriction.restrict(autorities.noAdminAuthority, classDescriptor);
+		restriction.restrict(authorities.noAdminAuthority, classDescriptor);
 		assertTrue(propertyDescriptor.isHidden());
 
 		restriction.setRestrictionType(RestrictionType.UPDATE);
-		restriction.restrict(autorities.adminAuthority, classDescriptor);
+		restriction.restrict(authorities.adminAuthority, classDescriptor);
 		assertFalse(propertyDescriptor.isReadOnly());
-		restriction.restrict(autorities.noAdminAuthority, classDescriptor);
+		restriction.restrict(authorities.noAdminAuthority, classDescriptor);
 		assertTrue(propertyDescriptor.isReadOnly());
 
 	}

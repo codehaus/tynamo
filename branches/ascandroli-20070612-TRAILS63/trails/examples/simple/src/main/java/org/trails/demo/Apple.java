@@ -3,9 +3,10 @@ package org.trails.demo;
 import javax.persistence.Entity;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
+import org.trails.io.Squeezable;
 
 @Entity
-public class Apple extends Fruit
+public class Apple extends Fruit implements Squeezable
 {
 
 	public Apple()

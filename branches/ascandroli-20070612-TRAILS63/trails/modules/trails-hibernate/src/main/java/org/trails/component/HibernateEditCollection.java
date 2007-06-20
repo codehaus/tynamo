@@ -60,7 +60,7 @@ public abstract class HibernateEditCollection extends EditCollection
 		EditPage editPage = (EditPage) getPageResolver().resolvePage(
 			getPage().getRequestCycle(),
 			Utils.checkForCGLIB(member.getClass()).getName(),
-			PageType.EDIT);
+			PageType.Edit);
 		try
 		{
 			getPersistenceService().reattach(member);
@@ -106,7 +106,7 @@ public abstract class HibernateEditCollection extends EditCollection
 				criteria.add(Restrictions.isNull(getCollectionDescriptor().getInverseProperty()));
 			}
 
-			return new IdentifierSelectionModel(getPersistenceService().getInstances(criteria), elementDescriptor.getIdentifierDescriptor().getName());
+			return new IdentifierSelectionModel(getPersistenceService().getInstances(getCollectionDescriptor().getElementType(), criteria), elementDescriptor.getIdentifierDescriptor().getName());
 		} else
 		{
 			return new IdentifierSelectionModel(getPersistenceService().getAllInstances(getCollectionDescriptor().getElementType()),

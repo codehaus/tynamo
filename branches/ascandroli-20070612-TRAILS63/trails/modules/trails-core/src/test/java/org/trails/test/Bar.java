@@ -11,7 +11,9 @@
  */
 package org.trails.test;
 
-public class Bar implements IBar
+import java.io.Serializable;
+
+public class Bar implements IBar, Serializable
 {
 
 	private Integer id;

@@ -12,8 +12,8 @@ import org.apache.commons.logging.LogFactory;
 import org.trails.descriptor.annotation.ClassDescriptor;
 import org.trails.descriptor.annotation.PropertyDescriptor;
 import org.trails.security.RestrictionType;
-import org.trails.security.annotation.Restriction;
-import org.trails.security.annotation.Security;
+import org.trails.security.annotation.UpdateRequiresRole;
+import org.trails.security.annotation.RemoveRequiresRole;
 
 /**
  * A Coach belongs to an organization and has a team
@@ -21,16 +21,15 @@ import org.trails.security.annotation.Security;
  * @author kenneth.colassi nhhockeyplayer@hotmail.com
  */
 @Entity
-@Security(restrictions = {
-		@Restriction(restrictionType = RestrictionType.UPDATE, requiredRole = "ROLE_ANONYMOUS"),
-		@Restriction(restrictionType = RestrictionType.REMOVE, requiredRole = "ROLE_ANONYMOUS"),
-		@Restriction(restrictionType = RestrictionType.VIEW, requiredRole = "ROLE_ANONYMOUS") })
+@RemoveRequiresRole("ROLE_MANAGER")
+@UpdateRequiresRole("ROLE_MANAGER")
 @ClassDescriptor(hasCyclicRelationships = true, hidden = true)
 public class Coach extends Person
 {
 	private static final Log log = LogFactory.getLog(Coach.class);
 
-	protected enum ETeamRole {
+	protected enum ETeamRole
+	{
 		HEADCOACH, ASSISTANTCOACH, MANAGER, EQUIPMENTMGR, OPERATIONS, TRAINER
 	}
 

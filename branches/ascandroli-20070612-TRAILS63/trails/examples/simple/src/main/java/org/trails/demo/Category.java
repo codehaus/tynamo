@@ -24,6 +24,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.hibernate.annotations.IndexColumn;
 import org.hibernate.validator.Length;
 import org.hibernate.validator.NotNull;
+import org.trails.io.Squeezable;
 
 
 /**
@@ -33,7 +34,7 @@ import org.hibernate.validator.NotNull;
  * Window - Preferences - Java - Code Style - Code Templates
  */
 @Entity
-public class Category
+public class Category implements Squeezable
 {
 	private Integer id;
 	private String description;
