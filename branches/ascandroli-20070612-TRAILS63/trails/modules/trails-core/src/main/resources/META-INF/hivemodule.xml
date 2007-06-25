@@ -51,6 +51,8 @@
 	<service-point id="EntitySqueezeStrategy" interface="org.trails.io.SqueezeFilter">
 		<invoke-factory>
 			<construct class="org.trails.io.EntitySqueezerStrategy">
+				<set property="prefix" value="HIBRN8:"/>
+				<set property="delimiter" value="/"/>
 				<set-object property="persistenceService" value="service:DefaultPersistenceService"/>
 				<set-object property="descriptorService" value="service:DefaultDescriptorService"/>
 			</construct>
@@ -96,7 +98,9 @@
 
 	<service-point id="EntitySqueezerAdaptor" interface="org.apache.tapestry.util.io.SqueezeAdaptor">
 		<invoke-factory>
-			<construct class="org.trails.io.EntitySqueezerAdaptor">
+			<construct class="org.trails.io.EntitySqueezerStrategy">
+				<set property="prefix" value="U"/>
+				<set property="delimiter" value=":"/>
 				<set-object property="persistenceService" value="service:DefaultPersistenceService"/>
 				<set-object property="descriptorService" value="service:DefaultDescriptorService"/>
 			</construct>
@@ -137,14 +141,15 @@
 			</construct>
 		</invoke-factory>
 	</service-point>
-	
+
 	<contribution configuration-id="tapestry.InfrastructureOverrides">
 		<property name="exceptionPresenter" object="service:ApplicationExceptionPresenter"/>
 	</contribution>
-	
+
 	<service-point id="PageResolver" interface="org.trails.page.PageResolver">
 		<invoke-factory>
 			<construct class="org.trails.page.DefaultPageResolver"/>
 		</invoke-factory>
 	</service-point>
-=</module>
+	=
+</module>
