@@ -186,7 +186,7 @@
         <dependency>
             <groupId>org.trailsframework</groupId>
             <artifactId>trails-core</artifactId>
-            <version>1.0</version>
+            <version>1.0.1-SNAPSHOT</version>
             <exclusions>
                 <exclusion>
                     <groupId>javax.servlet</groupId>
