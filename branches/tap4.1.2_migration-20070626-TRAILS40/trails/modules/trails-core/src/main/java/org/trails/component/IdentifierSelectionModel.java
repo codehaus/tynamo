@@ -171,4 +171,9 @@ public class IdentifierSelectionModel implements IPropertySelectionModel
 	{
 		this.labelProperty = labelProperty;
 	}
+
+	public boolean isDisabled(int i)
+	{
+		return false; 
+	}
 }

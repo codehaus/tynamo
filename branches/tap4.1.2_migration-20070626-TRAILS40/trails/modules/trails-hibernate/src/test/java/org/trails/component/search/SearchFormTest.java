@@ -4,7 +4,7 @@ import org.apache.tapestry.IPage;
 import org.apache.tapestry.IRequestCycle;
 import org.apache.tapestry.event.PageEvent;
 import org.hibernate.criterion.DetachedCriteria;
-import org.jmock.cglib.Mock;
+import org.jmock.Mock;
 import org.trails.component.ComponentTest;
 import org.trails.descriptor.IClassDescriptor;
 import org.trails.descriptor.IPropertyDescriptor;

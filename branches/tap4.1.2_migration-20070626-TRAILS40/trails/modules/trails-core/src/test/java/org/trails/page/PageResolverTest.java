@@ -16,14 +16,22 @@ public class PageResolverTest extends MockObjectTestCase
 		Mock pageMock = new Mock(IPage.class);
 		IPage fooSearchPage = (IPage) pageMock.proxy();
 		IPage defaultEditPage = (IPage) pageMock.proxy();
+		IPage defaultListPage = (IPage) pageMock.proxy();
+
 		cycleMock.expects(once()).method("getPage").with(eq("FooSearch")).will(returnValue(fooSearchPage));
 		cycleMock.expects(once()).method("getPage").with(eq("FooEdit")).will(throwException(new PageNotFoundException("blah")));
 		cycleMock.expects(once()).method("getPage").with(eq("DefaultEdit")).will(returnValue(defaultEditPage));
+
+		cycleMock.expects(once()).method("getPage").with(eq("FooList")).will(throwException(new PageNotFoundException("blah")));
+		cycleMock.expects(once()).method("getPage").with(eq("DefaultList")).will(returnValue(defaultListPage));
 
 		assertEquals(fooSearchPage,
 			pageResolver.resolvePage((IRequestCycle) cycleMock.proxy(), Foo.class.getName(), TrailsPage.PageType.Search));
 		assertEquals(defaultEditPage,
 			pageResolver.resolvePage((IRequestCycle) cycleMock.proxy(), Foo.class.getName(), TrailsPage.PageType.Edit));
+
+		assertEquals(defaultEditPage,
+			pageResolver.resolvePage((IRequestCycle) cycleMock.proxy(), Foo.class.getName(), TrailsPage.PageType.List));
 
 	}
 }

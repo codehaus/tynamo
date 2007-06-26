@@ -13,7 +13,7 @@ package org.trails.component;
 
 import org.apache.tapestry.IPage;
 import org.apache.tapestry.IRequestCycle;
-import org.jmock.cglib.Mock;
+import org.jmock.Mock;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.trails.descriptor.DescriptorService;
 import org.trails.descriptor.IClassDescriptor;

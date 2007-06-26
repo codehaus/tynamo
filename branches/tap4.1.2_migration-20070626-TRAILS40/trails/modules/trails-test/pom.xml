@@ -22,18 +22,17 @@
 		<dependency>
 			<groupId>jmock</groupId>
 			<artifactId>jmock</artifactId>
-			<version>1.0.1</version>
+			<version>1.2.0</version>
 		</dependency>
 		<dependency>
 			<groupId>jmock</groupId>
 			<artifactId>jmock-cglib</artifactId>
-			<version>1.0.1</version>
-			<exclusions>
-				<exclusion>
-					<groupId>cglib</groupId>
-					<artifactId>cglib-full</artifactId>
-				</exclusion>
-			</exclusions>
+			<version>1.2.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jmock</groupId>
+			<artifactId>jmock-junit3</artifactId>
+			<version>2.1.0</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>

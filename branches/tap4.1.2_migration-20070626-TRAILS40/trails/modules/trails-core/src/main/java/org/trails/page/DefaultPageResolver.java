@@ -3,6 +3,7 @@ package org.trails.page;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.hivemind.ApplicationRuntimeException;
 import org.apache.tapestry.IPage;
 import org.apache.tapestry.IRequestCycle;
 import org.apache.tapestry.PageNotFoundException;
@@ -29,7 +30,13 @@ public class DefaultPageResolver implements PageResolver
 		try
 		{
 			page = cycle.getPage(pageName);
+
 		} catch (PageNotFoundException ae)
+		{
+
+			page = cycle.getPage(getDefaultPrefix() + getPostFix(pageType));
+
+		} catch (ApplicationRuntimeException arte)
 		{
 
 			page = cycle.getPage(getDefaultPrefix() + getPostFix(pageType));

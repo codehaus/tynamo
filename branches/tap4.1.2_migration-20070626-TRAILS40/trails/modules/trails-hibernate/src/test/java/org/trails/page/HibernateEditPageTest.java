@@ -69,7 +69,7 @@ public class HibernateEditPageTest extends ComponentTest
 
 	public void setUp() throws Exception
 	{
-		persistenceMock = new org.jmock.cglib.Mock(HibernatePersistenceService.class);  // @todo: remove when the components reuse issue goes away
+		persistenceMock = new Mock(HibernatePersistenceService.class);  // @todo: remove when the components reuse issue goes away
 		delegate = new HibernateValidationDelegate();
 
 		foo.setName("foo");
