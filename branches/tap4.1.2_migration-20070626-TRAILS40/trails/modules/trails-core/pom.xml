@@ -59,12 +59,12 @@
 						<dependency>
 							<groupId>org.springframework</groupId>
 							<artifactId>spring-beans</artifactId>
-							<version>2.0.2</version>
+							<version>${spring.version}</version>
 						</dependency>
 						<dependency>
 							<groupId>org.apache.tapestry</groupId>
 							<artifactId>tapestry-contrib</artifactId>
-							<version>4.1.2-SNAPSHOT</version>
+							<version>${tapestry.version}</version>
 						</dependency>
 					</dependencies>
 				</plugin>
@@ -144,38 +144,38 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-aop</artifactId>
-			<version>2.0.2</version>
+			<version>${spring.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
-			<version>2.0.2</version>
+			<version>${spring.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-web</artifactId>
-			<version>2.0.2</version>
+			<version>${spring.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-mock</artifactId>
-			<version>2.0.2</version>
+			<version>${spring.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.tapestry</groupId>
 			<artifactId>tapestry-framework</artifactId>
-			<version>4.1.2-SNAPSHOT</version>
+			<version>${tapestry.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.tapestry</groupId>
 			<artifactId>tapestry-annotations</artifactId>
-			<version>4.1.2-SNAPSHOT</version>
+			<version>${tapestry.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.tapestry</groupId>
 			<artifactId>tapestry-contrib</artifactId>
-			<version>4.1.2-SNAPSHOT</version>
+			<version>${tapestry.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.javaforge.tapestry</groupId>

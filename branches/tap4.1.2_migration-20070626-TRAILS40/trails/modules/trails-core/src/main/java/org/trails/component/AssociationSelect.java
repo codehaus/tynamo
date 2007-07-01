@@ -66,7 +66,7 @@ public abstract class AssociationSelect extends BaseComponent
 	public abstract void setInstances(List instances);
 
 	@Component(type = "PropertySelection", inheritInformalParameters = true,
-				bindings = {"value=model[propertyDescriptor.name]", "model=propertySelectionModel"})
+				bindings = {"value=#this.model[propertyDescriptor.name]", "model=propertySelectionModel"})
 	public abstract PropertySelection getPropertySelection();
 
 	public AssociationSelect()

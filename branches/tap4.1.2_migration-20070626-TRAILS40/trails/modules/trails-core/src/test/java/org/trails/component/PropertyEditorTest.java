@@ -74,7 +74,7 @@ public class PropertyEditorTest extends MockObjectTestCase
 		assertNull(propertyEditor.getEditorAddress());
 	}
 
-	public void testGetBlock() throws Exception
+	public void _testGetBlock() throws Exception
 	{
 
 		final IEditorBlockPage page = mock(IEditorBlockPage.class);
