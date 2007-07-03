@@ -40,6 +40,7 @@ public class PropertyEditorTest extends MockObjectTestCase
 	IPropertyDescriptor descriptor;
 	BlockFinder blockFinder;
 	Messages messages;
+	Foo model;
 
 	Creator creator = new Creator();
 
@@ -53,6 +54,8 @@ public class PropertyEditorTest extends MockObjectTestCase
 
 		descriptor = new TrailsPropertyDescriptor(Foo.class, "number", Double.class);
 		propertyEditor.setDescriptor(descriptor);
+		model = new Foo();
+		propertyEditor.setModel(model);
 	}
 
 	public void testGetEditorAddress()
@@ -74,26 +77,26 @@ public class PropertyEditorTest extends MockObjectTestCase
 		assertNull(propertyEditor.getEditorAddress());
 	}
 
-	public void _testGetBlock() throws Exception
+	public void testGetBlock() throws Exception
 	{
+		final String pageName = "whatever";
 
 		final IEditorBlockPage page = mock(IEditorBlockPage.class);
 		final IRequestCycle cycle = mock(IRequestCycle.class);
-		final Block block = (Block) creator.newInstance(Block.class, new Object[]{"page", page});
-		final ComponentAddress componentAddress = new ComponentAddress("page", "block");
+		final ComponentAddress componentAddress = new ComponentAddress(pageName, "block");
+		final Block block = (Block) creator.newInstance(Block.class, new Object[]{"page", page, "container", page});
 
 		checking(new Expectations()
 		{
 			{
-				ignoring(page).getIdPath(); will(returnValue(null)); // the test failed BADLY without this
-				ignoring(page).getLocation(); will(returnValue(null)); // the test failed BADLY without this
-
 				atLeast(1).of(page).getRequestCycle(); will(returnValue(cycle));
-				atLeast(1).of(cycle).getPage("page"); will(returnValue(page));
+				atLeast(1).of(cycle).getPage(pageName); will(returnValue(page));
+				atLeast(1).of(page).getPageName(); will(returnValue(pageName));
 				atLeast(1).of(page).getNestedComponent("block"); will(returnValue(block));
-				
-				atLeast(1).of(cycle).getPage(); will(returnValue(page));
-				atLeast(1).of(page).getPageName(); will(returnValue("whatever"));
+
+				atLeast(1).of(page).setModel(model);
+				atLeast(1).of(page).setDescriptor(descriptor);
+				atLeast(1).of(page).setEditPageName(pageName);
 
 				atLeast(1).of(blockFinder).findBlockAddress(descriptor); will(returnValue(componentAddress));
 			}

@@ -25,7 +25,7 @@
 	<component id="invokeMethod" type="InvokeMethod" inherit-informal-parameters="no">
 	</component>
 	<component id="saveButton" type="Submit" inherit-informal-parameters="no">
-		<!--<binding name="action">ognl:page.listeners.save</binding>-->
+		<binding name="action">ognl:page.listeners.save</binding>
 	</component>
 	<component id="saveAndReturnButton" type="Submit" inherit-informal-parameters="no">
 		<binding name="action">ognl:page.listeners.saveAndReturn</binding>

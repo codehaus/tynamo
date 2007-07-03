@@ -64,19 +64,15 @@ public class TrailsBlockFinderTest extends MockObjectTestCase
 		final IRequestCycle cycle = mock(IRequestCycle.class);
 		final Foo model = new Foo();
 
-		final Block overrriddenBlock = (Block) creator.newInstance(Block.class, new Object[]{"page", page});
-		overrriddenBlock.setContainer(page);
+		final Block overrriddenBlock = (Block) creator.newInstance(Block.class, new Object[]{"page", page, "container", page});
 
-		final Block block = (Block) creator.newInstance(Block.class, new Object[]{"page", page});
-		block.setContainer(page);
+		final Block block = (Block) creator.newInstance(Block.class, new Object[]{"page", page, "container", page});
 
 		final Map pageComponents = new HashMap();
 		pageComponents.put("overridden", overrriddenBlock);
 
 		checking(new Expectations() {{
-//			atLeast(1).of(page).getPageName(); will(returnValue("trails:Editors"));
-			ignoring(page).getIdPath(); will(returnValue(null)); // the test failed without this
-			ignoring(page).getLocation(); will(returnValue(null)); // the test failed without this
+
 			atLeast(1).of(page).getComponents(); will(returnValue(pageComponents));
 			atLeast(1).of(page).getComponent("overridden"); will(returnValue(overrriddenBlock));
 

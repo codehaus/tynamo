@@ -32,6 +32,8 @@ public abstract class PropertyEditor extends TrailsComponent
 
 	public abstract Object getModel();
 
+	public abstract void setModel(Object model);
+
 	@InjectObject("spring:editorService")
 	public abstract BlockFinder getBlockFinder();
 
