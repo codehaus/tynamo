@@ -24,7 +24,7 @@ public class DefaultPageResolver implements PageResolver
 	public IPage resolvePage(IRequestCycle cycle, String className, PageType pageType)
 	{
 		if (className == null || "".equals(className)) return cycle.getPage(getDefaultPrefix() + getPostFix(pageType));
-		
+
 		String pageName = Utils.unqualify(className) + getPostFix(pageType);
 		IPage page = null;
 		try
@@ -36,7 +36,13 @@ public class DefaultPageResolver implements PageResolver
 
 			page = cycle.getPage(getDefaultPrefix() + getPostFix(pageType));
 
-		} catch (ApplicationRuntimeException arte)
+		}
+		/**
+		 * This is necessary till TAPESTRY-1616 is fixed
+		 * http://issues.apache.org/jira/browse/TAPESTRY-1616
+		 * Tap 4.1.2 PageNotFoundException not caught
+		 */
+		catch (ApplicationRuntimeException arte)
 		{
 
 			page = cycle.getPage(getDefaultPrefix() + getPostFix(pageType));
