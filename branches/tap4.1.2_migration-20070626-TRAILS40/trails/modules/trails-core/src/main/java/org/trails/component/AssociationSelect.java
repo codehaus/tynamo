@@ -1,29 +1,20 @@
 package org.trails.component;
 
-import org.apache.tapestry.BaseComponent;
-import org.apache.tapestry.IRequestCycle;
-import org.apache.tapestry.annotations.Component;
 import org.apache.tapestry.annotations.ComponentClass;
 import org.apache.tapestry.annotations.InjectObject;
-import org.apache.tapestry.annotations.Parameter;
 import org.apache.tapestry.form.IPropertySelectionModel;
-import org.apache.tapestry.form.PropertySelection;
 import org.trails.descriptor.DescriptorService;
 import org.trails.descriptor.IClassDescriptor;
-import org.trails.descriptor.IPropertyDescriptor;
 import org.trails.persistence.PersistenceService;
 
-import java.util.List;
-
 /**
+ * This guy interacts with persistence service to produce a Select
+ * containing all the elements of the PropertyDescriptor's type.
+ *
  * @author Chris Nelson
- *         <p/>
- *         This guy interacts with persistence service to produce a Select
- *         containing all the elements of the PropertyDescriptor's type.  If
- *         a criteria is specified, it will filter the list by it.
  */
-@ComponentClass(allowBody = true, allowInformalParameters = true)
-public abstract class AssociationSelect extends BaseComponent
+@ComponentClass(allowBody = false, allowInformalParameters = true)
+public abstract class AssociationSelect extends AbstractPropertySelection
 {
 	@InjectObject("spring:persistenceService")
 	public abstract PersistenceService getPersistenceService();
@@ -31,68 +22,13 @@ public abstract class AssociationSelect extends BaseComponent
 	@InjectObject("spring:descriptorService")
 	public abstract DescriptorService getDescriptorService();
 
-	public abstract IPropertySelectionModel getPropertySelectionModel();
-
-	public abstract void setPropertySelectionModel(IPropertySelectionModel PropertySelectionModel);
-
-	@Parameter(required = false, defaultValue="page.model")
-	public abstract Object getModel();
-
-	public abstract void setModel(Object bytes);
-
-	@Parameter
-	public abstract Object getValue();
-
-	public abstract void setValue(Object value);
-
-
-	@Parameter(required = true)
-	public abstract IPropertyDescriptor getPropertyDescriptor();
-
-	public abstract void setPropertyDescriptor(IPropertyDescriptor PropertyDescriptor);
-
-	@Parameter(required = false, defaultValue = "not(propertyDescriptor.required)")
-	public abstract boolean isAllowNone();
-
-	public abstract void setAllowNone(boolean AllowNone);
-
-	public abstract String getNoneLabel();
-
-	public abstract void setNoneLabel(String NoneLabel);
-
-	@Parameter(required = false)
-	public abstract List getInstances();
-
-	public abstract void setInstances(List instances);
-
-	@Component(type = "PropertySelection", inheritInformalParameters = true,
-				bindings = {"value=#this.model[propertyDescriptor.name]", "model=propertySelectionModel"})
-	public abstract PropertySelection getPropertySelection();
-
-	public AssociationSelect()
-	{
-		super();
-		// TODO Auto-generated constructor stub
-	}
-
 	public IClassDescriptor getClassDescriptor()
 	{
 		return getDescriptorService().getClassDescriptor(getPropertyDescriptor().getPropertyType());
 	}
 
 	@Override
-	protected void prepareForRender(IRequestCycle arg0)
-	{
-		// Leaving this in causes the select to always use the same
-		// property selectio model.  Not sure why yet :(
-//        if (getPropertySelectionModel() == null)
-//        {
-		buildSelectionModel();
-//        }
-		super.prepareForRender(arg0);
-	}
-
-	public void buildSelectionModel()
+	protected IPropertySelectionModel buildSelectionModel()
 	{
 		IdentifierSelectionModel selectionModel;
 		if (getInstances() != null)
@@ -107,8 +43,6 @@ public abstract class AssociationSelect extends BaseComponent
 				isAllowNone());
 		}
 		selectionModel.setNoneLabel(getNoneLabel());
-		setPropertySelectionModel(selectionModel);
+		return selectionModel;
 	}
-
-
 }

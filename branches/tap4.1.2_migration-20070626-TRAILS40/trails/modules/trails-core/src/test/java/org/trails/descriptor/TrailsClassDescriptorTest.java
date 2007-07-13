@@ -50,6 +50,7 @@ public class TrailsClassDescriptorTest extends TestCase
 		assertEquals("still foo", Foo.class, clone.getType());
 		assertEquals("2 props", 2, clone.getPropertyDescriptors().size());
 		assertTrue("clone has id", clone.getPropertyDescriptor("id") instanceof IdentifierDescriptor);
+		assertEquals("clone has id",idProp.getName(), clone.getIdentifierDescriptor().getName());
 		assertEquals("still has a method", 1, clone.getMethodDescriptors().size());
 		assertEquals("a simple foo", clone.getShortDescription());
 		assertTrue("still has cyclic relationships", clone.getHasCyclicRelationships());
@@ -95,8 +96,8 @@ public class TrailsClassDescriptorTest extends TestCase
 
 	public void testDisplayName() throws Exception
 	{
-		classDescriptor = new TrailsClassDescriptor(BlogEntry.class);
-		classDescriptor.setDisplayName("BlogEntry");
+		ReflectionDescriptorFactory descriptorFactory = new ReflectionDescriptorFactory();
+		IClassDescriptor classDescriptor = descriptorFactory.buildClassDescriptor(BlogEntry.class);
 		assertEquals("Blog Entry", classDescriptor.getDisplayName());
 	}
 
