@@ -44,9 +44,13 @@ public class DefaultPageResolver implements PageResolver
 		 */
 		catch (ApplicationRuntimeException arte)
 		{
-
-			page = cycle.getPage(getDefaultPrefix() + getPostFix(pageType));
-
+			if (arte.getCause() instanceof PageNotFoundException)
+			{
+				page = cycle.getPage(getDefaultPrefix() + getPostFix(pageType));
+			} else
+			{
+				throw arte;
+			}
 		}
 		return page;
 	}
