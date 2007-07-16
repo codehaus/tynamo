@@ -21,11 +21,11 @@ public class DefaultPageResolver implements PageResolver
 		return getPostFixMap().get(pageType);
 	}
 
-	public IPage resolvePage(IRequestCycle cycle, String className, PageType pageType)
+	public IPage resolvePage(IRequestCycle cycle, Class type, PageType pageType)
 	{
-		if (className == null || "".equals(className)) return cycle.getPage(getDefaultPrefix() + getPostFix(pageType));
+		if (type == null) return cycle.getPage(getDefaultPrefix() + getPostFix(pageType));
 
-		String pageName = Utils.unqualify(className) + getPostFix(pageType);
+		String pageName = type.getSimpleName() + getPostFix(pageType);
 		IPage page = null;
 		try
 		{

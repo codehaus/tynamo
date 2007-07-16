@@ -57,7 +57,7 @@ public class SearchFormTest extends ComponentTest
 		searchForm.setCriteria(DetachedCriteria.forClass(Foo.class));
 		pageResolverMock.expects(once()).method("resolvePage").with(
 			isA(IRequestCycle.class),
-			eq(Foo.class.getName()),
+			eq(Foo.class),
 			eq(PageType.List)).will(returnValue(listPage));
 		cycleMock.expects(once()).method("activate").with(eq(listPage));
 		searchForm.search((IRequestCycle) cycleMock.proxy());
