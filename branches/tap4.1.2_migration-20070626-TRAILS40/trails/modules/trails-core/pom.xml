@@ -13,6 +13,16 @@
 		<version>1.1-SNAPSHOT</version>
 	</parent>
 
+	<repositories>
+		<!-- Needed for OGNL snapshots -->
+		<repository>
+			<id>opencomponentry.snapshots</id>
+			<url>http://opencomponentry.com/repository/m2-snapshot-repo/</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
 	<build>
 
 		<plugins>
@@ -163,9 +173,20 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
+			<groupId>ognl</groupId>
+			<artifactId>ognl</artifactId>
+			<version>2.7.1-SNAPSHOT</version>			
+		</dependency>
+		<dependency>
 			<groupId>org.apache.tapestry</groupId>
 			<artifactId>tapestry-framework</artifactId>
-			<version>${tapestry.version}</version>
+			<version>${tapestry.version}</version>			
+			<exclusions>
+				<exclusion>
+					<groupId>ognl</groupId>
+					<artifactId>ognl</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.tapestry</groupId>
