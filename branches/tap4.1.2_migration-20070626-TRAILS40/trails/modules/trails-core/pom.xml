@@ -175,12 +175,12 @@
 		<dependency>
 			<groupId>ognl</groupId>
 			<artifactId>ognl</artifactId>
-			<version>2.7.1-SNAPSHOT</version>			
+			<version>${ognl.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.tapestry</groupId>
 			<artifactId>tapestry-framework</artifactId>
-			<version>${tapestry.version}</version>			
+			<version>${tapestry.version}</version>
 			<exclusions>
 				<exclusion>
 					<groupId>ognl</groupId>

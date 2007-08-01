@@ -13,8 +13,9 @@
 		<!-- Plugin dependencies don't use dependencyManagement section, specify a single log4j version here -->
 		<log4j.version>1.2.14</log4j.version>
 		<hsqldb.version>1.8.0.7</hsqldb.version>
-		<tapestry.version>4.1.2</tapestry.version>
+		<tapestry.version>4.1.3-SNAPSHOT</tapestry.version>
 		<spring.version>2.0.6</spring.version>
+		<ognl.version>2.7.1-SNAPSHOT</ognl.version>
 	</properties>
 
 	<modules>
