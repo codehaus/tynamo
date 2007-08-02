@@ -12,12 +12,6 @@
 		<groupId>org.trailsframework</groupId>
 		<version>1.1-SNAPSHOT</version>
 	</parent>
-	
-	<properties>
-		<!-- Specified version for convenience here as there are several artifacts with the same group id and version -->
-		<tapestry.version>4.1.2</tapestry.version>
-	</properties>
-	
 
 	<repositories>
 		<!-- Needed for OGNL snapshots -->
@@ -181,7 +175,7 @@
 		<dependency>
 			<groupId>ognl</groupId>
 			<artifactId>ognl</artifactId>
-			<version>2.7.1-SNAPSHOT</version>
+			<version>${ognl.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.tapestry</groupId>

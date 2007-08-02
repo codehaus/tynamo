@@ -13,7 +13,11 @@
 		<!-- Plugin dependencies and extensions don't use dependencyManagement section, specify a single version here. 
 		BUT don't just abuse this section, it's a hack. -->
 		<log4j.version>1.2.14</log4j.version>
-		<hsqldb.version>1.8.0.7</hsqldb.version>		
+		<hsqldb.version>1.8.0.7</hsqldb.version>
+
+		<tapestry.version>4.1.2</tapestry.version>
+		<ognl.version>2.7.1-SNAPSHOT</ognl.version>
+		<spring.version>2.0.6</spring.version>
 	</properties>
 
 	<modules>
@@ -193,6 +197,11 @@
 				<artifactId>hsqldb</artifactId>
 				<version>${hsqldb.version}</version>
 			</dependency>
+		<dependency>
+			<groupId>ognl</groupId>
+			<artifactId>ognl</artifactId>
+			<version>${ognl.version}</version>
+		</dependency>
 		</dependencies>
 	</dependencyManagement>
 
