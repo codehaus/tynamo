@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.tapestry.IRequestCycle;
 import org.apache.tapestry.annotations.ComponentClass;
 import org.apache.tapestry.annotations.InjectObject;
 import org.apache.tapestry.annotations.Parameter;
@@ -34,6 +35,8 @@ public abstract class ObjectTable extends ClassDescriptorComponent
 	public static final String LINK_COLUMN = "linkColumnValue";
 
 	public static final String BLOB_COLUMN = "blobColumnValue";
+
+	private List <TrailsTableColumn> columns = new ArrayList<TrailsTableColumn>();
 
 	@Parameter(required = false, defaultValue = "false", cache = true)
 	public abstract boolean isShowCollections();
@@ -92,7 +95,14 @@ public abstract class ObjectTable extends ClassDescriptorComponent
 	@InjectObject("service:tapestry.ognl.ExpressionEvaluator")
 	public abstract ExpressionEvaluator getEvaluator();
 
-	public List<TrailsTableColumn> getColumns()
+	@Override
+	protected void prepareForRender(IRequestCycle cycle)
+	{
+		columns = createColumns();
+		super.prepareForRender(cycle);
+	}
+
+	private List<TrailsTableColumn> createColumns()
 	{
 		ArrayList<TrailsTableColumn> columns = new ArrayList<TrailsTableColumn>();
 		for (Iterator iter = getPropertyDescriptors().iterator(); iter.hasNext();)
@@ -216,5 +226,15 @@ public abstract class ObjectTable extends ClassDescriptorComponent
 	public Object getSource()
 	{
 		return getInstances();
+	}
+
+	public List<TrailsTableColumn> getColumns()
+	{
+		return columns;
+	}
+
+	public void setColumns(List<TrailsTableColumn> columns)
+	{
+		this.columns = columns;
 	}
 }
