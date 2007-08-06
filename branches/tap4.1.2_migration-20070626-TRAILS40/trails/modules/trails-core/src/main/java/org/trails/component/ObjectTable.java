@@ -81,6 +81,11 @@ public abstract class ObjectTable extends ClassDescriptorComponent
 
 	public abstract void setPageSize(int pageSize);
 
+	@Parameter(cache = true)
+	public abstract int getIndex();
+
+	public abstract void setIndex(int index);
+
 	public ComponentAddress getLinkBlockAddress(IPropertyDescriptor descriptor)
 	{
 		if (getBlockAddress(descriptor) != null)
