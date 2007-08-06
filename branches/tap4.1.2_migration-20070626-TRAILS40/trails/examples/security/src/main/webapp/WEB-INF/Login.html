@@ -21,6 +21,11 @@
 					<input jwcid="j_password@TextField" hidden="true" value="ognl:password"
 						   validators="validators:required" class="text medium"/>
 				</li>
+				<li>
+					<input jwcid="j_rememberme@Checkbox" hidden="true" value="ognl:rememberMe"/>
+					<label jwcid="@FieldLabel" field="component:j_rememberme"
+						   displayName="message:org.trails.login.rememberme">Remember me</label>
+				</li>
 				<br/>
 				<li class="buttonBar bottom">
 					<input jwcid="submit@Submit" name="submit" type="submit" value="message:org.trails.login.submit"/>
