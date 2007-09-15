@@ -1,20 +1,4 @@
-<html jwcid="@Shell" title="Trails" stylesheet="ognl:assets.stylesheet"
-	  delegate="ognl: new org.apache.tapestry.components.BlockRenderer(components.headBlock)">
-<head jwcid="headBlock@Block">
-
-	<script type="text/javascript">
-		djConfig = { isDebug: false,
-			baseRelativePath: "js/dojo",
-			preventBackButtonFix: false,
-			parseWidgets: false
-		};
-
-		djConfig.disableFlashStorage = true
-
-	</script>
-	<script jwcid="@Any" type="text/javascript" src="js/dojo/dojo.js"></script>
-
-</head>
+<html jwcid="@Shell" title="Trails" stylesheet="ognl:assets.stylesheet">
 <body jwcid="@Body">
 <div id="page">
 	<div id="header" class="clearfix">
@@ -34,10 +18,10 @@
 		<div id="navcolumn">
 			<h5>Trails</h5>
 			<ul>
-				<div class="glassList" jwcid="@Foreach" source="ognl:descriptorService.allDescriptors.{? not hidden}"
+				<div class="glassList" jwcid="@For" source="ognl:descriptorService.allDescriptors.{? not hidden}"
 					 value="ognl:descriptor">
 					<li>
-						<a href="#" jwcid="@trails:ListAllLink" typeName="ognl:descriptor.type.name"/>
+						<a href="#" jwcid="@trails:ListAllLink" type="ognl:descriptor.type"/>
 					</li>
 				</div>
 			</ul>

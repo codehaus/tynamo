@@ -11,9 +11,9 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.trails.descriptor.annotation.ClassDescriptor;
 import org.trails.descriptor.annotation.PropertyDescriptor;
-import org.trails.security.RestrictionType;
-import org.trails.security.annotation.UpdateRequiresRole;
 import org.trails.security.annotation.RemoveRequiresRole;
+import org.trails.security.annotation.UpdateRequiresRole;
+import org.trails.security.annotation.ViewRequiresRole;
 
 /**
  * A Coach belongs to an organization and has a team
@@ -21,8 +21,9 @@ import org.trails.security.annotation.RemoveRequiresRole;
  * @author kenneth.colassi nhhockeyplayer@hotmail.com
  */
 @Entity
-@RemoveRequiresRole("ROLE_MANAGER")
-@UpdateRequiresRole("ROLE_MANAGER")
+@RemoveRequiresRole({"ROLE_ADMIN", "ROLE_MANAGER"})
+@UpdateRequiresRole({"ROLE_ADMIN", "ROLE_MANAGER"})
+@ViewRequiresRole({"ROLE_ADMIN", "ROLE_MANAGER", "ROLE_USER"})
 @ClassDescriptor(hasCyclicRelationships = true, hidden = true)
 public class Coach extends Person
 {
@@ -96,14 +97,6 @@ public class Coach extends Person
 	public void setOrganization(Organization organization)
 	{
 		this.organization = organization;
-	}
-
-	@Override
-	public String toString()
-	{
-		// return this.getApplicationRole().toString() + " - " + getLastName() +
-		// "," + getFirstName();
-		return getLastName() + "," + getFirstName();
 	}
 
 	@Override

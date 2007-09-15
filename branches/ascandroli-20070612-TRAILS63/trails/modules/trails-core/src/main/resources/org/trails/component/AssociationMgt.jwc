@@ -1,4 +1,4 @@
-<!DOCTYPE component-specification PUBLIC "-//Apache Software Foundation//Tapestry Specification 4.0//EN" "http://jakarta.apache.org/tapestry/dtd/Tapestry_4_0.dtd">
+<!DOCTYPE component-specification PUBLIC "-//Apache Software Foundation//Tapestry Specification 4.1//EN" "http://jakarta.apache.org/tapestry/dtd/Tapestry_4_1.dtd">
 <component-specification class="org.trails.component.AssociationMgt"
 						 allow-body="yes"
 						 allow-informal-parameters="yes">
@@ -20,13 +20,6 @@
 		<binding name="listener">listener:remove</binding>
 		<binding name="defer">false</binding>
 		<binding name="disabled">page.isModelNew()</binding>
-	</component>
-
-	<component id="editLink" type="EditLink">
-		<binding name="model">value</binding>
-	</component>
-	<component id="linkInsert" type="Insert">
-		<binding name="value">value</binding>
 	</component>
 
 	<parameter name="createExpression" required="no">

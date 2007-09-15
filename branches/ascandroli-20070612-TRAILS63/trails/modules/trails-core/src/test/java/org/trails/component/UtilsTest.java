@@ -17,20 +17,16 @@ import junit.framework.TestCase;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
+import org.trails.test.Baz;
 import org.trails.test.Foo;
 
 
-/**
- * @author fus8882
- *         <p/>
- *         TODO To change the template for this generated type comment go to
- *         Window - Preferences - Java - Code Style - Code Templates
- */
 public class UtilsTest extends TestCase
 {
 	public void testUnqualify()
 	{
 		assertEquals("Foo", Utils.unqualify(Foo.class.getName()));
+		assertEquals(Baz.class.getSimpleName(), Utils.unqualify(Baz.class.getName()));
 	}
 
 	public void testPluralize()
@@ -67,5 +63,12 @@ public class UtilsTest extends TestCase
 		assertEquals(Foo.class, Utils.checkForCGLIB(Foo.class));
 		assertEquals(Foo.class, Utils.checkForCGLIB(enb.createClass()));
 		assertEquals(Foo.class, Utils.checkForCGLIB(enbCB.create().getClass()));
+	}
+
+	public void testUnCamelCase()
+	{
+		assertEquals("Born On Date", Utils.unCamelCase("bornOnDate"));
+		assertEquals("Born On Date", Utils.unCamelCase("born On Date"));
+//		assertEquals("BOD", Utils.unCamelCase("BOD")); //@note: should this work?
 	}
 }

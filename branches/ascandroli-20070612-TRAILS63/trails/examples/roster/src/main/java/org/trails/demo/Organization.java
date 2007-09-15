@@ -32,6 +32,8 @@ import org.trails.descriptor.annotation.BlobDescriptor;
 import org.trails.descriptor.annotation.ClassDescriptor;
 import org.trails.descriptor.annotation.Collection;
 import org.trails.descriptor.annotation.PropertyDescriptor;
+import org.trails.security.annotation.RemoveRequiresRole;
+import org.trails.security.annotation.UpdateRequiresRole;
 import org.trails.util.DatePattern;
 import org.trails.validation.ValidateUniqueness;
 
@@ -42,6 +44,8 @@ import org.trails.validation.ValidateUniqueness;
  * @author kenneth.colassi nhhockeyplayer@hotmail.com
  */
 @Entity
+@RemoveRequiresRole( { "ROLE_ADMIN", "ROLE_MANAGER" })
+@UpdateRequiresRole( { "ROLE_ADMIN", "ROLE_MANAGER" })
 @ValidateUniqueness(property = "name")
 @ClassDescriptor(hasCyclicRelationships = true)
 public class Organization implements Cloneable, Serializable
@@ -118,9 +122,9 @@ public class Organization implements Cloneable, Serializable
 		return league;
 	}
 
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne(cascade = CascadeType.REFRESH)
 	@JoinTable(name = "join_table_Organization_Director", joinColumns = @JoinColumn(name = "director_fk", insertable = true, updatable = true, nullable = true), inverseJoinColumns = { @JoinColumn(name = "organization_fk", insertable = true, updatable = true, nullable = true) })
-	@OrderBy("lastName")
+	//@OrderBy("lastName")
 	@PropertyDescriptor(index = 2)
 	public Director getDirector()
 	{
@@ -131,7 +135,7 @@ public class Organization implements Cloneable, Serializable
 	@JoinColumn(name = "coach_organization_fk", insertable = true, updatable = true, nullable = true)
 	@Collection(child = true, inverse = "organization")
 	@PropertyDescriptor(readOnly = false, searchable = true)
-	@OrderBy("lastName")
+	//@OrderBy("lastName")
 	public Set<Coach> getCoaches()
 	{
 		return coaches;

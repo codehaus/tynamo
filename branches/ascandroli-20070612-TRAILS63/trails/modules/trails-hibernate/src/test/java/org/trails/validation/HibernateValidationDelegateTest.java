@@ -8,6 +8,8 @@ import org.hibernate.validator.InvalidStateException;
 import org.hibernate.validator.InvalidValue;
 import org.jmock.Mock;
 import org.trails.component.ComponentTest;
+import org.trails.descriptor.IClassDescriptor;
+import org.trails.descriptor.ReflectionDescriptorFactory;
 import org.trails.descriptor.TrailsClassDescriptor;
 import org.trails.descriptor.TrailsPropertyDescriptor;
 import org.trails.testhibernate.Baz;
@@ -82,14 +84,13 @@ public class HibernateValidationDelegateTest extends ComponentTest
 		delegate.recordFieldInputValue("foodly");
 
 		TrailsClassDescriptor descriptor = new TrailsClassDescriptor(Baz.class, "Baz");
-		descriptor.getPropertyDescriptors().add(new TrailsPropertyDescriptor(Foo.class, "description", String.class));
-		InvalidValue invalidValue = new InvalidValue("is too long", Baz.class, "description", "blarg", new Baz());
+		descriptor.getPropertyDescriptors().add(new TrailsPropertyDescriptor(Foo.class, "Description", String.class));
+		InvalidValue invalidValue = new InvalidValue("is too long", Baz.class, "Description", "blarg", new Baz());
 		InvalidStateException invalidStateException = new InvalidStateException(new InvalidValue[]{invalidValue});
 
 		delegate.record(descriptor, invalidStateException);
 		assertTrue(delegate.getHasErrors());
-		IFieldTracking fieldTracking = (IFieldTracking)
-			delegate.getFieldTracking("Description");
+		IFieldTracking fieldTracking = (IFieldTracking)delegate.getFieldTracking("Description");
 		assertTrue(fieldTracking.isInError());
 		assertEquals("right field tracking", "foo", fieldTracking.getFieldName());
 		RenderString renderString = (RenderString) fieldTracking.getErrorRenderer();
@@ -106,7 +107,9 @@ public class HibernateValidationDelegateTest extends ComponentTest
 	public void testRecordInvalidStateExceptionWithoutPropertyDescriptor() throws Exception
 	{
 
-		TrailsClassDescriptor descriptor = new TrailsClassDescriptor(Baz.class, "Baz");
+		ReflectionDescriptorFactory descriptorFactory = new ReflectionDescriptorFactory();
+		IClassDescriptor descriptor = descriptorFactory.buildClassDescriptor(Baz.class);
+		
 		InvalidValue invalidValue = new InvalidValue("Is not a valid entity", Baz.class, "foo", "blarg", new Baz());
 		InvalidStateException invalidStateException = new InvalidStateException(new InvalidValue[]{invalidValue});
 		delegate.record(descriptor, invalidStateException);
@@ -118,21 +121,21 @@ public class HibernateValidationDelegateTest extends ComponentTest
 		assertTrue(fieldTracking.isInError());
 		assertEquals("right field tracking", "foo", fieldTracking.getFieldName());
 		RenderString renderString = (RenderString) fieldTracking.getErrorRenderer();
-		assertEquals("Is not a valid entity", renderString.getString());
+		assertEquals("Foo Is not a valid entity", renderString.getString());
 
 		IFieldTracking nonErrorTracking = delegate.getFieldTracking("OtherProperty");
 		renderString = (RenderString) nonErrorTracking.getErrorRenderer();
 		assertTrue(nonErrorTracking.isInError());
-		assertEquals("Is not a valid entity", renderString.getString());
+		assertEquals("Foo Is not a valid entity", renderString.getString());
 
 
 		nonErrorTracking = delegate.getFieldTracking("OtherOne");
 		renderString = (RenderString) nonErrorTracking.getErrorRenderer();
 		assertTrue(nonErrorTracking.isInError());
-		assertEquals("Is not a valid entity", renderString.getString());
+		assertEquals("Foo Is not a valid entity", renderString.getString());
 
 		renderString = (RenderString) delegate.getErrorRenderers().get(0);
-		assertEquals("Is not a valid entity", renderString.getString());
+		assertEquals("Foo Is not a valid entity", renderString.getString());
 	}
 
 }

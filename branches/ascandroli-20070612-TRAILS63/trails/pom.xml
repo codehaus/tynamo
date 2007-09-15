@@ -8,10 +8,15 @@
 	<artifactId>trails</artifactId>
 	<packaging>pom</packaging>
 	<version>1.1-SNAPSHOT</version>
+
 	<properties>
-		<!-- Plugin dependencies don't use dependencyManagement section, specify a single log4j version here -->
+		<!-- Plugin dependencies and extensions don't use dependencyManagement section, specify a single version here. 
+		BUT don't just abuse this section, it's a hack. -->
 		<log4j.version>1.2.14</log4j.version>
-		<hsqldb.version>1.8.0.1</hsqldb.version>
+		<hsqldb.version>1.8.0.7</hsqldb.version>
+		<tapestry.version>4.1.3</tapestry.version>
+		<ognl.version>2.7.1</ognl.version>
+		<spring.version>2.0.6</spring.version>
 	</properties>
 
 	<modules>
@@ -33,7 +38,7 @@
 		<developer>
 			<id>ascandroli</id>
 			<name>Alejandro Scandroli</name>
-			<email>ascandroli@codehaus.org</email>
+			<email>ascandroli@N05PAM.codehaus.org</email>
 			<url>http://docs.codehaus.org/display/~ascandroli</url>
 			<timezone>+1</timezone>
 		</developer>
@@ -87,6 +92,13 @@
 			<id>trails.codehaus.org</id>
 			<name>Trails Repository</name>
 			<url>http://trails.codehaus.org/repository</url>
+		</repository>
+		<repository>
+			<id>apache.snapshots</id>
+			<url>http://people.apache.org/repo/m2-snapshot-repository</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
 		</repository>
 		<!-- Don't use snapshots unless absolutely necessary
 				<repository>
@@ -179,6 +191,16 @@
 				<artifactId>log4j</artifactId>
 				<version>${log4j.version}</version>
 			</dependency>
+			<dependency>
+				<groupId>hsqldb</groupId>
+				<artifactId>hsqldb</artifactId>
+				<version>${hsqldb.version}</version>
+			</dependency>
+		<dependency>
+			<groupId>ognl</groupId>
+			<artifactId>ognl</artifactId>
+			<version>${ognl.version}</version>
+		</dependency>
 		</dependencies>
 	</dependencyManagement>
 
@@ -253,7 +275,11 @@
 			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
 				<configuration>
-					<descriptor>src/main/assembly/dep.xml</descriptor>
+					<descriptors>
+						<descriptor>src/main/assembly/bin.xml</descriptor>
+						<descriptor>src/main/assembly/src.xml</descriptor>
+						<descriptor>src/main/assembly/examples.xml</descriptor>
+					</descriptors>
 				</configuration>
 			</plugin>
 			<plugin>

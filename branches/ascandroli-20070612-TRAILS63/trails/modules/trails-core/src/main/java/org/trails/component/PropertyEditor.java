@@ -13,9 +13,11 @@ package org.trails.component;
 
 import org.apache.tapestry.annotations.InjectObject;
 import org.apache.tapestry.components.Block;
+import org.apache.tapestry.form.IFormComponent;
 import org.apache.tapestry.util.ComponentAddress;
 import org.trails.descriptor.BlockFinder;
 import org.trails.descriptor.IPropertyDescriptor;
+import org.trails.page.IEditorBlockPage;
 
 /**
  * @author fus8882
@@ -23,13 +25,15 @@ import org.trails.descriptor.IPropertyDescriptor;
  *         TODO To change the template for this generated type comment go to
  *         Window - Preferences - Java - Code Style - Code Templates
  */
-public abstract class PropertyEditor extends TrailsComponent
+public abstract class PropertyEditor extends TrailsComponent implements IFormComponent
 {
 	public abstract IPropertyDescriptor getDescriptor();
 
 	public abstract void setDescriptor(IPropertyDescriptor Descriptor);
 
 	public abstract Object getModel();
+
+	public abstract void setModel(Object model);
 
 	@InjectObject("spring:editorService")
 	public abstract BlockFinder getBlockFinder();
@@ -39,9 +43,11 @@ public abstract class PropertyEditor extends TrailsComponent
 
 		Block editorBlock = (Block)
 			getEditorAddress().findComponent(getPage().getRequestCycle());
-		editorBlock.getPage().setProperty("model", getModel());
-		editorBlock.getPage().setProperty("descriptor", getDescriptor());
-		editorBlock.getPage().setProperty("editPageName", getPage().getPageName());
+
+		((IEditorBlockPage) editorBlock.getPage()).setModel(getModel());
+		((IEditorBlockPage) editorBlock.getPage()).setDescriptor(getDescriptor());
+		((IEditorBlockPage) editorBlock.getPage()).setEditPageName(getPage().getPageName());
+
 		return editorBlock;
 	}
 

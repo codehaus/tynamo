@@ -132,9 +132,9 @@ public class EditBlobTest extends ComponentTest {
 				UploadableMedia.class, collectionPropertyDescriptor);
 
 		IClassDescriptor doc1 = new TrailsClassDescriptor(
-				UploadableMedia.class, "doc1");
+				UploadableMedia.class, "Doc1");
 		IClassDescriptor doc2 = new TrailsClassDescriptor(
-				UploadableMedia.class, "doc2");
+				UploadableMedia.class, "Doc2");
 
 		descriptorServiceMock.expects(atLeastOnce()).method(
 				"getClassDescriptor").with(eq(UploadableMedia.class)).will(
@@ -170,7 +170,7 @@ public class EditBlobTest extends ComponentTest {
 		Mock pageResolverMock = new Mock(PageResolver.class);
 		Mock cycleMock = new Mock(IRequestCycle.class);
 		pageResolverMock.expects(once()).method("resolvePage").with(
-				isA(IRequestCycle.class), eq(UploadableMedia.class.getName()),
+				isA(IRequestCycle.class), eq(UploadableMedia.class),
 				eq(TrailsPage.PageType.Edit)).will(
 				returnValue(pageMock.proxy()));
 		pageMock.expects(once()).method("getPageName").will(
@@ -217,7 +217,7 @@ public class EditBlobTest extends ComponentTest {
 
 		Mock pageResolverMock = new Mock(PageResolver.class);
 		pageResolverMock.expects(atLeastOnce()).method("resolvePage").with(
-				isA(IRequestCycle.class), eq(UploadableMedia.class.getName()),
+				isA(IRequestCycle.class), eq(UploadableMedia.class),
 				eq(PageType.Edit)).will(returnValue(blobEditPage));
 
 		Mock cycleMock = new Mock(IRequestCycle.class);
@@ -272,7 +272,7 @@ public class EditBlobTest extends ComponentTest {
 
 		Mock pageResolverMock = new Mock(PageResolver.class);
 		pageResolverMock.expects(atLeastOnce()).method("resolvePage").with(
-				isA(IRequestCycle.class), eq(UploadableMedia.class.getName()),
+				isA(IRequestCycle.class), eq(UploadableMedia.class),
 				eq(PageType.Edit)).will(returnValue(blobEditPage));
 
 		Mock cycleMock = new Mock(IRequestCycle.class);
@@ -295,7 +295,7 @@ public class EditBlobTest extends ComponentTest {
 						.getDocument());
 
 		pageResolverMock.expects(atLeastOnce()).method("resolvePage").with(
-		isA(IRequestCycle.class), eq(UploadableMediaDelegate.class.getName()),
+		isA(IRequestCycle.class), eq(UploadableMediaDelegate.class),
 		eq(PageType.Edit)).will(returnValue(delegateEditPage));
 
 		cycleMock.expects(once()).method("getPage").with(

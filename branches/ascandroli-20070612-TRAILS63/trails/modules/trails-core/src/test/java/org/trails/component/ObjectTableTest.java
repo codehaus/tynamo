@@ -25,33 +25,33 @@ import org.trails.descriptor.CollectionDescriptor;
 import org.trails.descriptor.IClassDescriptor;
 import org.trails.descriptor.IPropertyDescriptor;
 import org.trails.descriptor.IdentifierDescriptor;
-import org.trails.descriptor.TrailsClassDescriptor;
+import org.trails.descriptor.ReflectionDescriptorFactory;
 import org.trails.descriptor.TrailsPropertyDescriptor;
 import org.trails.persistence.PersistenceService;
 import org.trails.test.Foo;
 
-
 /**
- * @author fus8882
- *         <p/>
- *         TODO To change the template for this generated type comment go to
- *         Window - Preferences - Java - Code Style - Code Templates
+ * @author fus8882 <p/> TODO To change the template for this generated type
+ *         comment go to Window - Preferences - Java - Code Style - Code
+ *         Templates
  */
 public class ObjectTableTest extends ComponentTest
 {
 	ObjectTable objectTable;
+
 	Mock psvcMock = new Mock(PersistenceService.class);
+
 	Mock pageMock = new Mock(IPage.class);
+
 	IPage page;
+
 	Map components = new HashMap();
 
 	public void setUp() throws Exception
 	{
-
 		page = (IPage) pageMock.proxy();
-		objectTable = (ObjectTable) creator.newInstance(ObjectTable.class, new Object[]{
-			"persistenceService", psvcMock.proxy()
-		});
+		objectTable = (ObjectTable) creator.newInstance(ObjectTable.class, new Object[] { "persistenceService",
+				psvcMock.proxy() });
 		objectTable.setShowCollections(false);
 		Block idColumnValue = (Block) creator.newInstance(Block.class);
 		idColumnValue.setId("linkColumnValue");
@@ -62,13 +62,13 @@ public class ObjectTableTest extends ComponentTest
 		objectTable.setPage(page);
 		objectTable.setContainer(page);
 
-		IClassDescriptor classDescriptor = new TrailsClassDescriptor(Foo.class);
+		ReflectionDescriptorFactory descriptorFactory = new ReflectionDescriptorFactory();
+		IClassDescriptor classDescriptor = descriptorFactory.buildClassDescriptor(Foo.class);
+
 		List propertyDescriptors = new ArrayList();
-		IdentifierDescriptor idProp = new IdentifierDescriptor(Foo.class,
-			"id", Integer.class);
+		IdentifierDescriptor idProp = new IdentifierDescriptor(Foo.class, classDescriptor.getPropertyDescriptor("id"));
 
 		IPropertyDescriptor multiWordProp = new TrailsPropertyDescriptor(Foo.class, "multiWordProperty", String.class);
-
 
 		IPropertyDescriptor hiddenDescriptor = new TrailsPropertyDescriptor(Foo.class, "hidden", String.class);
 		hiddenDescriptor.setHidden(true);
@@ -87,13 +87,15 @@ public class ObjectTableTest extends ComponentTest
 
 		classDescriptor.setPropertyDescriptors(propertyDescriptors);
 		objectTable.setClassDescriptor(classDescriptor);
+
+		pageMock.expects(atLeastOnce()).method("getComponents").will(returnValue(components));
+		pageMock.expects(atLeastOnce()).method("getPageName").will(returnValue("fooPage"));
+		pageMock.expects(atLeastOnce()).method("getIdPath").will(returnValue(null));
+		objectTable.createColumns();
 	}
 
 	public void testGetColumns() throws Exception
 	{
-		pageMock.expects(atLeastOnce()).method("getComponents").will(returnValue(components));
-		pageMock.expects(atLeastOnce()).method("getPageName").will(returnValue("fooPage"));
-		pageMock.expects(atLeastOnce()).method("getIdPath").will(returnValue(null));
 		List columns = objectTable.getColumns();
 		assertEquals("2 columns", 2, columns.size());
 		assertTrue(columns.get(0) instanceof TrailsTableColumn);
@@ -102,12 +104,11 @@ public class ObjectTableTest extends ComponentTest
 
 		Block fakeBlock = (Block) creator.newInstance(Block.class);
 		components.put("multiWordPropertyColumnValue", fakeBlock);
-		objectTable.setPropertyNames(new String[]{"multiWordProperty"});
+		objectTable.setPropertyNames(new String[] { "multiWordProperty" });
 		columns = objectTable.getColumns();
-		assertEquals("1 column", 1, columns.size());
+		assertEquals("2 column", 2, columns.size());
 		TrailsTableColumn column = (TrailsTableColumn) columns.get(0);
 		assertNotNull(column.getBlockAddress());
-
 	}
 
 	public void testGetBlockAddress() throws Exception
@@ -129,7 +130,6 @@ public class ObjectTableTest extends ComponentTest
 	public void testGetLinkBlockAddress() throws Exception
 	{
 		Map components = new HashMap();
-		pageMock.expects(atLeastOnce()).method("getIdPath").will(returnValue(null));
 		pageMock.expects(atLeastOnce()).method("getComponents").will(returnValue(components));
 		pageMock.expects(atLeastOnce()).method("getPageName").will(returnValue("listPage"));
 		IPropertyDescriptor descriptor = new TrailsPropertyDescriptor(Foo.class, "id", Integer.class);
@@ -143,19 +143,19 @@ public class ObjectTableTest extends ComponentTest
 
 	public void testGetTableSource() throws Exception
 	{
-/*		 //@todo: reimplement this test without hibernate
-		DetachedCriteria criteria = DetachedCriteria.forClass(Foo.class);
-		objectTable.setCriteria(criteria);
-		TrailsTableModel tableModel = (TrailsTableModel) objectTable.getSource();
-
-		assertNotNull(tableModel.getPersistenceService());
-		assertEquals(criteria, tableModel.getCriteria());
-
-		objectTable.setCriteria(null);
-		List instances = new ArrayList();
-		objectTable.setInstances(instances);
-		assertEquals(instances, objectTable.getSource());
-		*/
+		/*
+		 * //@todo: reimplement this test without hibernate DetachedCriteria
+		 * criteria = DetachedCriteria.forClass(Foo.class);
+		 * objectTable.setCriteria(criteria); TrailsTableModel tableModel =
+		 * (TrailsTableModel) objectTable.getSource();
+		 * 
+		 * assertNotNull(tableModel.getPersistenceService());
+		 * assertEquals(criteria, tableModel.getCriteria());
+		 * 
+		 * objectTable.setCriteria(null); List instances = new ArrayList();
+		 * objectTable.setInstances(instances); assertEquals(instances,
+		 * objectTable.getSource());
+		 */
 	}
 
 	public void testGetIdentifierProperty() throws Exception

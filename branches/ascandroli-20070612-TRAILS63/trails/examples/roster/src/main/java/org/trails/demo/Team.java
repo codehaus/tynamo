@@ -30,6 +30,8 @@ import org.trails.descriptor.annotation.BlobDescriptor;
 import org.trails.descriptor.annotation.ClassDescriptor;
 import org.trails.descriptor.annotation.Collection;
 import org.trails.descriptor.annotation.PropertyDescriptor;
+import org.trails.security.annotation.RemoveRequiresRole;
+import org.trails.security.annotation.UpdateRequiresRole;
 import org.trails.util.DatePattern;
 
 /**
@@ -38,6 +40,8 @@ import org.trails.util.DatePattern;
  * @author kenneth.colassi nhhockeyplayer@hotmail.com
  */
 @Entity
+@RemoveRequiresRole( { "ROLE_ADMIN", "ROLE_MANAGER" })
+@UpdateRequiresRole( { "ROLE_ADMIN", "ROLE_MANAGER" })
 @ClassDescriptor(hasCyclicRelationships = true)
 public class Team implements Cloneable, Serializable
 {
@@ -151,7 +155,7 @@ public class Team implements Cloneable, Serializable
 	@JoinColumn(name = "team_id")
 	@Collection(child = false, inverse = "team")
 	@PropertyDescriptor(readOnly = false, searchable = true)
-	@OrderBy("lastName")
+	//@OrderBy("lastName")
 	public Set<Coach> getCoaches()
 	{
 		return coaches;
@@ -213,7 +217,7 @@ public class Team implements Cloneable, Serializable
 	@JoinColumn(name = "player_team_fk")
 	@Collection(child = false, inverse = "team")
 	@PropertyDescriptor(readOnly = false, searchable = true)
-	@OrderBy("lastName")
+	//@OrderBy("lastName")
 	public Set<Player> getPlayers()
 	{
 		return players;
@@ -368,8 +372,7 @@ public class Team implements Cloneable, Serializable
 		if (organization == null)
 			return result;
 		else
-			return getOrganization().getDemographics().getCity() + "," + getOrganization().getDemographics().getState()
-					+ " " + getGender().toString() + " " + getAge().toString();
+			return getOrganization().getName();
 	}
 
 	@Override

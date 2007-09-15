@@ -13,32 +13,21 @@ import org.trails.descriptor.IClassDescriptor;
 public abstract class SearchPage extends TrailsPage
 {
 
-	public SearchPage()
-	{
-		super();
-	}
-
 	@Persist
-	public abstract String getTypeName();
+	public abstract Class getType();
 
-	public abstract void setTypeName(String TypeName);
+	public abstract void setType(Class type);
+
 
 	@Override
 	public void pushCallback()
 	{
-		getCallbackStack().push(new SearchCallback(getPageName(), getTypeName()));
+		getCallbackStack().push(new SearchCallback(getPageName(), getType()));
 	}
 
 	public IClassDescriptor getClassDescriptor()
 	{
-		try
-		{
-			return getDescriptorService().getClassDescriptor(Class.forName(getTypeName()));
-		}
-		catch (ClassNotFoundException e)
-		{
-			throw new TrailsRuntimeException(e);
-		}
+		return getDescriptorService().getClassDescriptor(getType());
 	}
 
 	public String[] getSearchableProperties()

@@ -109,9 +109,10 @@ public class EditCollectionTest extends ComponentTest
 	{
 		Mock cycleMock = buildCycleMock("Baz");
 		pageResolverMock.expects(atLeastOnce()).method("resolvePage").with(
-			isA(IRequestCycle.class), eq(Baz.class.getName()), eq(PageType.Edit))
+			isA(IRequestCycle.class), eq(Baz.class), eq(PageType.Edit))
 			.will(returnValue(editPage));
 		cycleMock.expects(atLeastOnce()).method("getPage").will(returnValue(editPage));
+		cycleMock.expects(atLeastOnce()).method("activate");
 		pageMock.expects(atLeastOnce()).method("getRequestCycle").will(returnValue(cycleMock.proxy()));
 		buildCollectionDescriptor("bazzes", Baz.class);
 
@@ -137,7 +138,7 @@ public class EditCollectionTest extends ComponentTest
 	{
 		Mock cycleMock = new Mock(IRequestCycle.class);
 		pageResolverMock.expects(atLeastOnce()).method("resolvePage").with(
-			isA(IRequestCycle.class), eq(Baz.class.getName()), eq(PageType.Edit))
+			isA(IRequestCycle.class), eq(Baz.class), eq(PageType.Edit))
 			.will(returnValue(editPage));
 		buildCollectionDescriptor("bazzes", Baz.class);
 		cycleMock.expects(atLeastOnce()).method("getPage").will(returnValue(editPage));

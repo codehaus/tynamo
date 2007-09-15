@@ -14,14 +14,24 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>commons-logging</groupId>
-			<artifactId>commons-logging</artifactId>
-			<version>1.1</version>
-		</dependency>
-		<dependency>
 			<groupId>net.sf.tacos</groupId>
 			<artifactId>tacos-core</artifactId>
-			<version>4.0.1</version>
+			<version>4.1.1-SNAPSHOT</version>
+			<exclusions>
+				<!-- it depends on tapestry 4.1.2 -->
+				<exclusion>
+					<groupId>org.apache.tapestry</groupId>
+					<artifactId>tapestry-framework</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.tapestry</groupId>
+					<artifactId>tapestry-annotations</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.tapestry</groupId>
+					<artifactId>tapestry-contrib</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 	</dependencies>
 
@@ -34,6 +44,17 @@
 			</snapshots>
 			<releases>
 				<enabled>true</enabled>
+			</releases>
+		</repository>
+		<repository>
+			<id>tacos-snapshot</id>
+			<name>Tacos Snapshot Repo</name>
+			<url>http://tacos.sourceforge.net/nightly/</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+			<releases>
+				<enabled>false</enabled>
 			</releases>
 		</repository>
 	</repositories>

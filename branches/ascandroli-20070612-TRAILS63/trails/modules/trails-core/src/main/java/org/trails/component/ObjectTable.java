@@ -12,15 +12,17 @@
 package org.trails.component;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
+import org.apache.tapestry.IRequestCycle;
 import org.apache.tapestry.annotations.ComponentClass;
 import org.apache.tapestry.annotations.InjectObject;
 import org.apache.tapestry.annotations.Parameter;
 import org.apache.tapestry.contrib.table.model.ITableColumn;
 import org.apache.tapestry.services.ExpressionEvaluator;
 import org.apache.tapestry.util.ComponentAddress;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.trails.descriptor.BlobDescriptorExtension;
 import org.trails.descriptor.IPropertyDescriptor;
 import org.trails.persistence.PersistenceService;
@@ -31,9 +33,13 @@ import org.trails.persistence.PersistenceService;
 @ComponentClass(allowBody = true, allowInformalParameters = true)
 public abstract class ObjectTable extends ClassDescriptorComponent
 {
+	private static final Log LOG = LogFactory.getLog(ObjectTable.class);
+
 	public static final String LINK_COLUMN = "linkColumnValue";
 
 	public static final String BLOB_COLUMN = "blobColumnValue";
+
+	protected List <TrailsTableColumn> columns = new ArrayList<TrailsTableColumn>();
 
 	@Parameter(required = false, defaultValue = "false", cache = true)
 	public abstract boolean isShowCollections();
@@ -78,6 +84,27 @@ public abstract class ObjectTable extends ClassDescriptorComponent
 
 	public abstract void setPageSize(int pageSize);
 
+	@Parameter
+	public abstract int getIndex();
+
+	public abstract void setIndex(int index);
+
+	@Parameter
+	public abstract String getInitialSortColumn();
+
+	public abstract void setInitialSortColumn(String initialSortColumn);
+
+	@Parameter(defaultValue = "false")
+	public abstract boolean getInitialSortOrder();
+
+	public abstract void setInitialSortOrder(boolean initialSortOrder);
+
+	@Parameter(defaultValue = "literal:session")
+	public abstract String getPersist();
+
+	public abstract void setPersist(String persist);
+
+
 	public ComponentAddress getLinkBlockAddress(IPropertyDescriptor descriptor)
 	{
 		if (getBlockAddress(descriptor) != null)
@@ -92,16 +119,23 @@ public abstract class ObjectTable extends ClassDescriptorComponent
 	@InjectObject("service:tapestry.ognl.ExpressionEvaluator")
 	public abstract ExpressionEvaluator getEvaluator();
 
-	public List<TrailsTableColumn> getColumns()
+	@Override
+	protected void prepareForRender(IRequestCycle cycle)
 	{
-		ArrayList<TrailsTableColumn> columns = new ArrayList<TrailsTableColumn>();
-		for (Iterator iter = getPropertyDescriptors().iterator(); iter.hasNext();)
+		createColumns();
+		super.prepareForRender(cycle);
+	}
+
+	protected void createColumns()
+	{
+		LOG.debug("Creating Columns");
+		columns = new ArrayList<TrailsTableColumn>();
+		for (IPropertyDescriptor descriptor : getPropertyDescriptors())
 		{
-			IPropertyDescriptor descriptor = (IPropertyDescriptor) iter.next();
 			if (displaying(descriptor))
 			{
 				if (getLinkProperty().equals(descriptor.getName())
-						&& (getClassDescriptor().isAllowSave() || getClassDescriptor().isAllowRemove()))
+					&& (getClassDescriptor().isAllowSave() || getClassDescriptor().isAllowRemove()))
 				{
 					/**
 					 * Add a link for the edit page following these rules: a)
@@ -113,19 +147,16 @@ public abstract class ObjectTable extends ClassDescriptorComponent
 					columns.add(new TrailsTableColumn(descriptor, getEvaluator(), getLinkBlockAddress(descriptor)));
 
 				} else if (descriptor.supportsExtension(BlobDescriptorExtension.class.getName())
-						&& getBlockAddress(descriptor) == null)
+					&& getBlockAddress(descriptor) == null)
 				{
 					columns.add(new TrailsTableColumn(descriptor, getEvaluator(), new ComponentAddress(
-							getComponent(BLOB_COLUMN))));
+						getComponent(BLOB_COLUMN))));
 				} else
 				{
 					columns.add(new TrailsTableColumn(descriptor, getEvaluator(), getBlockAddress(descriptor)));
 				}
-
 			}
 		}
-
-		return columns;
 	}
 
 	/**
@@ -179,9 +210,8 @@ public abstract class ObjectTable extends ClassDescriptorComponent
 	 */
 	protected IPropertyDescriptor getFirstDisplayableProperty()
 	{
-		for (Iterator iter = getPropertyDescriptors().iterator(); iter.hasNext();)
+		for (IPropertyDescriptor descriptor : getPropertyDescriptors())
 		{
-			IPropertyDescriptor descriptor = (IPropertyDescriptor) iter.next();
 			if (displaying(descriptor))
 			{
 				return descriptor;
@@ -216,5 +246,15 @@ public abstract class ObjectTable extends ClassDescriptorComponent
 	public Object getSource()
 	{
 		return getInstances();
+	}
+
+	public List<TrailsTableColumn> getColumns()
+	{
+		return columns;
+	}
+
+	public void setColumns(List<TrailsTableColumn> columns)
+	{
+		this.columns = columns;
 	}
 }

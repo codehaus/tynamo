@@ -22,7 +22,6 @@ import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.MappedSuperclass;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Transient;
@@ -39,12 +38,11 @@ import org.trails.descriptor.BlobDescriptorExtension.RenderType;
 import org.trails.descriptor.annotation.BlobDescriptor;
 import org.trails.descriptor.annotation.ClassDescriptor;
 import org.trails.descriptor.annotation.PropertyDescriptor;
-import org.trails.security.RestrictionType;
-import org.trails.security.domain.Role;
+import org.trails.security.annotation.RemoveRequiresRole;
+import org.trails.security.annotation.UpdateRequiresRole;
+import org.trails.security.annotation.ViewRequiresRole;
 import org.trails.util.DatePattern;
 import org.trails.validation.ValidateUniqueness;
-import org.trails.security.annotation.UpdateRequiresRole;
-import org.trails.security.annotation.RemoveRequiresRole;
 
 /**
  * A Person has a photo, eRole and application role
@@ -52,12 +50,13 @@ import org.trails.security.annotation.RemoveRequiresRole;
  * @author kenneth.colassi nhhockeyplayer@hotmail.com
  */
 @Entity
-@RemoveRequiresRole("ROLE_MANAGER")
-@UpdateRequiresRole("ROLE_MANAGER")
+@RemoveRequiresRole( { "ROLE_ADMIN", "ROLE_MANAGER" })
+@UpdateRequiresRole( { "ROLE_ADMIN", "ROLE_MANAGER" })
+@ViewRequiresRole( { "ROLE_ADMIN", "ROLE_MANAGER", "ROLE_USER" })
 @ValidateUniqueness(property = "emailAddress")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-//@Inheritance(strategy = InheritanceType.JOINED)
-//@MappedSuperclass
+// @Inheritance(strategy = InheritanceType.JOINED)
+// @MappedSuperclass
 @ClassDescriptor(hidden = true)
 public class Person implements UserDetails, Cloneable, Serializable
 {
@@ -166,14 +165,12 @@ public class Person implements UserDetails, Cloneable, Serializable
 	}
 
 	@PropertyDescriptor(summary = true, index = 3)
-	@NotNull
 	public String getFirstName()
 	{
 		return firstName;
 	}
 
 	@PropertyDescriptor(summary = true, index = 4)
-	@NotNull
 	public String getLastName()
 	{
 		return lastName;
@@ -323,7 +320,7 @@ public class Person implements UserDetails, Cloneable, Serializable
 	@Override
 	public String toString()
 	{
-		return getLastName() + ", " + getFirstName();
+		return getFirstName() + " " + getLastName() + " [" + getUsername() + "]";
 	}
 
 	@Override

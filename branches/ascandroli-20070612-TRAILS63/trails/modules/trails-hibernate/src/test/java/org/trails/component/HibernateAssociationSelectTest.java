@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.criterion.DetachedCriteria;
-import org.jmock.cglib.Mock;
+import org.jmock.Mock;
 import org.trails.descriptor.IPropertyDescriptor;
 import org.trails.descriptor.IdentifierDescriptor;
 import org.trails.descriptor.TrailsClassDescriptor;
@@ -43,20 +43,17 @@ public class HibernateAssociationSelectTest extends ComponentTest
 
 		List instances = new ArrayList();
 		persistenceMock.expects(atLeastOnce()).method("getInstances").with(NOT_NULL, isA(DetachedCriteria.class)).will(returnValue(instances));
-		associationSelect.buildSelectionModel();
-		IdentifierSelectionModel selectionModel = (IdentifierSelectionModel) associationSelect.getPropertySelectionModel();
+
+		AbstractPropertySelectionModel selectionModel = (AbstractPropertySelectionModel) associationSelect.buildSelectionModel();
 		assertEquals(1, selectionModel.getOptionCount());
 
 		associationSelect.setAllowNone(false);
-		associationSelect.buildSelectionModel();
-		selectionModel = (IdentifierSelectionModel) associationSelect.getPropertySelectionModel();
+		selectionModel = (AbstractPropertySelectionModel) associationSelect.buildSelectionModel();
 		assertEquals(0, selectionModel.getOptionCount());
 
 		associationSelect.setNoneLabel("Any");
-		associationSelect.buildSelectionModel();
-		selectionModel = (IdentifierSelectionModel) associationSelect.getPropertySelectionModel();
+		selectionModel = (AbstractPropertySelectionModel) associationSelect.buildSelectionModel();
 		assertEquals("Any", selectionModel.getNoneLabel());
-
 	}
 
 	public void testGetClassDescriptor()

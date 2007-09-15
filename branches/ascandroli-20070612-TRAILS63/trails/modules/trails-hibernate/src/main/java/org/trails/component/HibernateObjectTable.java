@@ -27,7 +27,6 @@ public abstract class HibernateObjectTable extends ObjectTable
 		return getHibernatePersistenceService();
 	}
 
-
 	@Parameter
 	public abstract DetachedCriteria getCriteria();
 

@@ -18,6 +18,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.tapestry.IPage;
+import org.apache.tapestry.IRequestCycle;
 import org.apache.tapestry.components.Block;
 import org.apache.tapestry.util.ComponentAddress;
 import org.hibernate.criterion.DetachedCriteria;
@@ -26,6 +27,7 @@ import org.trails.descriptor.CollectionDescriptor;
 import org.trails.descriptor.IClassDescriptor;
 import org.trails.descriptor.IPropertyDescriptor;
 import org.trails.descriptor.IdentifierDescriptor;
+import org.trails.descriptor.ReflectionDescriptorFactory;
 import org.trails.descriptor.TrailsClassDescriptor;
 import org.trails.descriptor.TrailsPropertyDescriptor;
 import org.trails.persistence.HibernatePersistenceService;
@@ -45,6 +47,7 @@ public class ObjectTableTest extends ComponentTest
 	HibernateObjectTable objectTable;
 	Mock psvcMock = new Mock(HibernatePersistenceService.class);
 	Mock pageMock = new Mock(IPage.class);
+	Mock cycleMock = mock(IRequestCycle.class);
 	IPage page;
 	SecurityAuthorities authorities;
 	IClassDescriptor fooSecuredDescriptor;
@@ -72,12 +75,15 @@ public class ObjectTableTest extends ComponentTest
 		objectTable.setPage(page);
 		objectTable.setContainer(page);
 
-		IClassDescriptor classDescriptor = new TrailsClassDescriptor(Foo.class);
-		fooSecuredDescriptor = new TrailsClassDescriptor(FooSecured.class);
+		ReflectionDescriptorFactory descriptorFactory = new ReflectionDescriptorFactory();
+		IClassDescriptor classDescriptor = descriptorFactory.buildClassDescriptor(Foo.class);
+		//IClassDescriptor classDescriptor = new TrailsClassDescriptor(Foo.class);
+		//fooSecuredDescriptor = new TrailsClassDescriptor(FooSecured.class);
+		fooSecuredDescriptor = descriptorFactory.buildClassDescriptor(FooSecured.class);
 		List propertyDescriptors = new ArrayList();
 		List fooSecuredPropertyDescriptors = new ArrayList();
-		IdentifierDescriptor idProp = new IdentifierDescriptor(Foo.class,
-			"id", Integer.class);
+		IdentifierDescriptor idProp = new IdentifierDescriptor(Foo.class, classDescriptor.getPropertyDescriptor("id") );
+		//IdentifierDescriptor idProp = new IdentifierDescriptor(Foo.class,"id", Integer.class);
 
 		IPropertyDescriptor multiWordProp = new TrailsPropertyDescriptor(Foo.class, "multiWordProperty", String.class);
 
@@ -91,8 +97,10 @@ public class ObjectTableTest extends ComponentTest
 		CollectionDescriptor bazzesDesriptor = new CollectionDescriptor(Foo.class, Set.class);
 		bazzesDesriptor.setName("bazzes");
 
-		idSecured = new IdentifierDescriptor(FooSecured.class, "id", Integer.class);
-		nameSecured = new TrailsPropertyDescriptor(FooSecured.class, "name", String.class);
+		idSecured = new IdentifierDescriptor(FooSecured.class, classDescriptor.getPropertyDescriptor("id") );
+		//idSecured = new IdentifierDescriptor(FooSecured.class, "id", Integer.class);
+		nameSecured = new IdentifierDescriptor(FooSecured.class, classDescriptor.getPropertyDescriptor("name") );
+		//nameSecured = new TrailsPropertyDescriptor(FooSecured.class, "name", String.class);
 		fooFieldSecured = new TrailsPropertyDescriptor(FooSecured.class, "Foo Field", String.class);
 
 		propertyDescriptors.add(idProp);
@@ -115,6 +123,7 @@ public class ObjectTableTest extends ComponentTest
 		pageMock.expects(atLeastOnce()).method("getComponents").will(returnValue(components));
 		pageMock.expects(atLeastOnce()).method("getPageName").will(returnValue("fooPage"));
 		pageMock.expects(atLeastOnce()).method("getIdPath").will(returnValue(null));
+		objectTable.prepareForRender((IRequestCycle)cycleMock.proxy() );
 		List columns = objectTable.getColumns();
 		assertEquals("2 columns", 2, columns.size());
 		assertTrue(columns.get(0) instanceof TrailsTableColumn);
@@ -124,6 +133,8 @@ public class ObjectTableTest extends ComponentTest
 		Block fakeBlock = (Block) creator.newInstance(Block.class);
 		components.put("multiWordPropertyColumnValue", fakeBlock);
 		objectTable.setPropertyNames(new String[]{"multiWordProperty"});
+
+		objectTable.prepareForRender((IRequestCycle)cycleMock.proxy() );
 		columns = objectTable.getColumns();
 		assertEquals("1 column", 1, columns.size());
 		TrailsTableColumn column = (TrailsTableColumn) columns.get(0);
@@ -173,9 +184,10 @@ public class ObjectTableTest extends ComponentTest
 		fooSecuredDescriptor.setAllowSave(false);
 		nameSecured.setHidden(true);
 
+		objectTable.prepareForRender((IRequestCycle)cycleMock.proxy() );
 		List columns = objectTable.getColumns();
 		/* name must be hidden */
-		assertEquals(columns.size(), 2);
+		assertEquals(2, columns.size());
 		TrailsTableColumn idColumn = (TrailsTableColumn) columns.get(0);
 		TrailsTableColumn fooField = (TrailsTableColumn) columns.get(1);
 		assertEquals("Id", idColumn.getDisplayName());
@@ -199,6 +211,7 @@ public class ObjectTableTest extends ComponentTest
 		fooSecuredDescriptor.setAllowSave(false);
 		fooSecuredDescriptor.setAllowRemove(false);
 
+		objectTable.prepareForRender((IRequestCycle)cycleMock.proxy() );
 		columns = objectTable.getColumns();
 		/* name must be hidden */
 		assertEquals(columns.size(), 2);
@@ -216,9 +229,10 @@ public class ObjectTableTest extends ComponentTest
 		pageMock.expects(atLeastOnce()).method("getComponents").will(returnValue(components));
 		objectTable.setClassDescriptor(fooSecuredDescriptor);
 
+		objectTable.prepareForRender((IRequestCycle)cycleMock.proxy() );
 		List columns = objectTable.getColumns();
 		/* name must be hidden */
-		assertEquals(columns.size(), 3);
+		assertEquals(3, columns.size() );
 		TrailsTableColumn idColumn = (TrailsTableColumn) columns.get(0);
 		TrailsTableColumn nameField = (TrailsTableColumn) columns.get(1);
 		TrailsTableColumn fooField = (TrailsTableColumn) columns.get(2);

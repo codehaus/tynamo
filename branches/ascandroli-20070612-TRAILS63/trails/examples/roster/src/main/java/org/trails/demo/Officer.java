@@ -15,6 +15,7 @@ import org.trails.descriptor.annotation.PropertyDescriptor;
 import org.trails.security.RestrictionType;
 import org.trails.security.annotation.UpdateRequiresRole;
 import org.trails.security.annotation.RemoveRequiresRole;
+import org.trails.security.annotation.ViewRequiresRole;
 
 /**
  * A Officer belongs to an league
@@ -22,8 +23,9 @@ import org.trails.security.annotation.RemoveRequiresRole;
  * @author kenneth.colassi nhhockeyplayer@hotmail.com
  */
 @Entity
-@RemoveRequiresRole("ROLE_MANAGER")
-@UpdateRequiresRole("ROLE_MANAGER")
+@RemoveRequiresRole({"ROLE_ADMIN", "ROLE_MANAGER"})
+@UpdateRequiresRole({"ROLE_ADMIN", "ROLE_MANAGER"})
+@ViewRequiresRole({"ROLE_ADMIN", "ROLE_MANAGER", "ROLE_USER"})
 @ClassDescriptor(hasCyclicRelationships = true, hidden = true)
 public class Officer extends Person
 {
@@ -82,14 +84,6 @@ public class Officer extends Person
 	public void setLeague(League league)
 	{
 		this.league = league;
-	}
-
-	@Override
-	public String toString()
-	{
-		// return this.getApplicationRole().toString() + " - " + getLastName() +
-		// "," + getFirstName();
-		return getLastName() + "," + getFirstName();
 	}
 
 	@Override

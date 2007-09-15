@@ -1,10 +1,11 @@
 package org.trails.component;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.tapestry.annotations.ComponentClass;
 import org.apache.tapestry.annotations.InjectObject;
 import org.apache.tapestry.annotations.Parameter;
-import org.apache.tapestry.annotations.Asset;
-import org.apache.tapestry.IAsset;
+import org.apache.tapestry.form.IPropertySelectionModel;
 import org.hibernate.criterion.DetachedCriteria;
 import org.trails.persistence.HibernatePersistenceService;
 
@@ -16,9 +17,7 @@ import org.trails.persistence.HibernatePersistenceService;
 @ComponentClass(allowBody = false, allowInformalParameters = true)
 public abstract class HibernateAssociationSelect extends AssociationSelect
 {
-
-	@Asset(value = "/org/trails/component/AssociationSelect.html")
-	public abstract IAsset get$template();
+	private static final Log LOG = LogFactory.getLog(HibernateAssociationSelect.class);
 
 	/**
 	 * @todo: remove when the components reuse issue goes away
@@ -38,14 +37,20 @@ public abstract class HibernateAssociationSelect extends AssociationSelect
 	@Parameter(required = false)
 	public abstract DetachedCriteria getCriteria();
 
-	public void buildSelectionModel()
+	@Override
+	public IPropertySelectionModel buildSelectionModel()
 	{
+		if (LOG.isDebugEnabled())
+		{
+			LOG.debug("Building propertySelectionModel for " + getClassDescriptor().getDisplayName());
+		}
+
 		DetachedCriteria criteria = getCriteria() != null ? getCriteria() : DetachedCriteria.forClass(getClassDescriptor().getType());
 		IdentifierSelectionModel selectionModel = new IdentifierSelectionModel(
 			getPersistenceService().getInstances(getClassDescriptor().getType(), criteria),
 			getClassDescriptor().getIdentifierDescriptor().getName(),
 			isAllowNone());
 		selectionModel.setNoneLabel(getNoneLabel());
-		setPropertySelectionModel(selectionModel);
+		return selectionModel;
 	}
 }

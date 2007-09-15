@@ -19,6 +19,7 @@ import org.apache.tapestry.event.PageBeginRenderListener;
 import org.trails.TrailsRuntimeException;
 import org.trails.callback.ListCallback;
 import org.trails.component.TrailsTableColumn;
+import org.trails.component.Utils;
 import org.trails.descriptor.IClassDescriptor;
 
 /**
@@ -38,17 +39,12 @@ public abstract class ListPage extends TrailsPage implements IExternalPage, Page
 	{
 		Class instanceClass = (Class) args[0];
 		setType(instanceClass);
-		setTypeName(instanceClass.getName());
 		reloadInstances();
 	}
 
 	public abstract List getInstances();
 
 	public abstract void setInstances(List Instances);
-
-	public abstract String getTypeName();
-
-	public abstract void setTypeName(String typeName);
 
 	public abstract TrailsTableColumn getColumn();
 
@@ -60,18 +56,12 @@ public abstract class ListPage extends TrailsPage implements IExternalPage, Page
 
 	public IClassDescriptor getClassDescriptor()
 	{
-		try
-		{
-			return getDescriptorService().getClassDescriptor(Class.forName(getTypeName()));
-		} catch (ClassNotFoundException e)
-		{
-			throw new TrailsRuntimeException(e);
-		}
+		return getDescriptorService().getClassDescriptor(getType());
 	}
 
 	public void pushCallback()
 	{
-		getCallbackStack().push(new ListCallback(getPageName(), getTypeName(), getType()));
+		getCallbackStack().push(new ListCallback(getPageName(), getType()));
 	}
 
 	private void loadInstances(Class clazz)

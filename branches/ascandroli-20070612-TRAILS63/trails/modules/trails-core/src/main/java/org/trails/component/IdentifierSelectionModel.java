@@ -11,101 +11,27 @@
  */
 package org.trails.component;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import ognl.Ognl;
-import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang.StringUtils;
-import org.apache.tapestry.form.IPropertySelectionModel;
 import org.trails.TrailsRuntimeException;
 
 
-/**
- * @author fus8882
- *         <p/>
- *         TODO To change the template for this generated type comment go to
- *         Window - Preferences - Java - Code Style - Code Templates
- */
-public class IdentifierSelectionModel implements IPropertySelectionModel
+public class IdentifierSelectionModel extends AbstractPropertySelectionModel
 {
-	protected List instances;
 	private String idProperty = "id";
-	protected boolean allowNone;
-
-	protected String labelProperty = "toString()";
-
-	public static String DEFAULT_NONE_LABEL = "None";
-	public static String DEFAULT_NONE_VALUE = "none";
-
-	protected String noneLabel = DEFAULT_NONE_LABEL;
-
-	public IdentifierSelectionModel()
-	{
-	}
 
 	public IdentifierSelectionModel(List instances, String idProperty)
 	{
+		super(instances);
 		this.idProperty = idProperty;
-
-		this.instances = instances;
-	}
-
-	public IdentifierSelectionModel(List instances, boolean allowNone)
-	{
-		setAllowNone(instances, allowNone);
-	}
-
-	protected void setAllowNone(List instances, boolean allowNone)
-	{
-		this.allowNone = allowNone;
-		this.instances = new ArrayList();
-		this.instances.addAll(instances);
-		if (this.allowNone)
-		{
-			this.instances.add(0, null);
-		}
 	}
 
 	public IdentifierSelectionModel(List instances, String idProperty, boolean allowNone)
 	{
-		this(instances, allowNone);
+		super(instances, allowNone);
 		this.idProperty = idProperty;
-	}
-
-	/* (non-Javadoc)
-		 * @see org.apache.tapestry.form.IPropertySelectionModel#getOptionCount()
-		 */
-	public int getOptionCount()
-	{
-		// TODO Auto-generated method stub
-		return instances.size();
-	}
-
-	/* (non-Javadoc)
-		 * @see org.apache.tapestry.form.IPropertySelectionModel#getOption(int)
-		 */
-	public Object getOption(int index)
-	{
-		return instances.get(index);
-	}
-
-	/* (non-Javadoc)
-		 * @see org.apache.tapestry.form.IPropertySelectionModel#getLabel(int)
-		 */
-	public String getLabel(int index)
-	{
-		if (allowNone && index == 0)
-		{
-			return getNoneLabel();
-		}
-		try
-		{
-			return Ognl.getValue(labelProperty, instances.get(index)).toString();
-		} catch (Exception e)
-		{
-			throw new TrailsRuntimeException(e);
-		}
 	}
 
 	/* (non-Javadoc)
@@ -120,7 +46,7 @@ public class IdentifierSelectionModel implements IPropertySelectionModel
 				return DEFAULT_NONE_VALUE;
 			} else
 			{
-				return BeanUtils.getProperty(instances.get(index), idProperty);
+				return Ognl.getValue(idProperty,instances.get(index)).toString();
 			}
 		} catch (Exception e)
 		{
@@ -152,23 +78,9 @@ public class IdentifierSelectionModel implements IPropertySelectionModel
 		}
 	}
 
-	public String getNoneLabel()
-	{
-		return noneLabel;
-	}
 
-	public void setNoneLabel(String noneLabel)
+	public boolean isDisabled(int i)
 	{
-		this.noneLabel = noneLabel;
-	}
-
-	public String getLabelProperty()
-	{
-		return labelProperty;
-	}
-
-	public void setLabelProperty(String labelProperty)
-	{
-		this.labelProperty = labelProperty;
+		return false; 
 	}
 }
