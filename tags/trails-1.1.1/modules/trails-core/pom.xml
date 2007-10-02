@@ -25,6 +25,10 @@
 
 		<plugins>
 			<plugin>
+				<groupId>com.erinors.tapestry</groupId>
+				<artifactId>tapdoc-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>aspectj-maven-plugin</artifactId>
 				<configuration>
@@ -208,12 +212,14 @@
 	</dependencies>
 	
 	<reporting>
+		<!-- Simply doesn't work if declared here
 		<plugins>
 			<plugin>
 				<groupId>com.erinors.tapestry</groupId>
 				<artifactId>tapdoc-maven-plugin</artifactId>
 			</plugin>
 		</plugins>
+		-->
 	</reporting>	
 
 	<profiles>
