@@ -25,10 +25,6 @@
 
 		<plugins>
 			<plugin>
-				<groupId>com.erinors.tapestry</groupId>
-				<artifactId>tapdoc-maven-plugin</artifactId>
-			</plugin>
-			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>aspectj-maven-plugin</artifactId>
 				<configuration>
@@ -213,17 +209,10 @@
 	
 	<reporting>
 		<plugins>
-		<!-- Simply doesn't work if declared here
 			<plugin>
 				<groupId>com.erinors.tapestry</groupId>
 				<artifactId>tapdoc-maven-plugin</artifactId>
-				<configuration>
-					<libraries>
-						<param>/org/trails/component/trails.library</param>
-					</libraries>
-				</configuration>
 			</plugin>
-		-->
 		</plugins>
 	</reporting>	
 
