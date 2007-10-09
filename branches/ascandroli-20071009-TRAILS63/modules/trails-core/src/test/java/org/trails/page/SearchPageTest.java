@@ -42,7 +42,7 @@ public class SearchPageTest extends ComponentTest
 //        assertEquals("got 2 back", 2, searcheeListPage.getInstances().size());
 //        // make sure callback is on stack
 //        assertTrue("SearchCallback is on stack",
-//                searchPage.getCallbackStack().getStack().peek() instanceof SearchCallback);
+//                searchPage.getCallbackStack().peek() instanceof SearchCallback);
 //        // now try searching for one
 //        searchPage.setExampleModel(searchee1);
 //        searchPage.search((IRequestCycle)cycleMock.proxy());

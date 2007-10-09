@@ -16,14 +16,14 @@ public class CallbackStackTest extends TestCase
 		callbackStack.push(editCallback);
 		callbackStack.push(editCallback2);
 		assertEquals(
-			2, callbackStack.getStack().size());
+			2, callbackStack.size());
 
-		callbackStack.getStack().clear();
+		callbackStack.clear();
 		editCallback.setModelNew(true);
 		callbackStack.push(editCallback);
 		callbackStack.push(editCallback2);
 		assertEquals(
-			1, callbackStack.getStack().size());
+			1, callbackStack.size());
 	}
 
 
@@ -35,8 +35,8 @@ public class CallbackStackTest extends TestCase
 		callbackStack.push(callback);
 		callbackStack.push(listCallback);
 		assertEquals(callback, callbackStack.getPreviousCallback());
-		assertEquals(2, callbackStack.getStack().size());
+		assertEquals(2, callbackStack.size());
 		assertEquals(callback, callbackStack.popPreviousCallback());
-		assertTrue("stack is empty", callbackStack.getStack().isEmpty());
+		assertTrue("stack is empty", callbackStack.isEmpty());
 	}
 }

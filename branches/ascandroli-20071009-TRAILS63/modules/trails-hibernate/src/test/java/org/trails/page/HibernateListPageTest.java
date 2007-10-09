@@ -48,7 +48,7 @@ public class HibernateListPageTest extends ComponentTest
 		PageEvent pageEvent = new PageEvent(listPage, (IRequestCycle) cycleMock.proxy());
 		listPage.setCriteria(DetachedCriteria.forClass(Foo.class));
 		listPage.pageBeginRender(pageEvent);
-		assertEquals(1, listPage.getCallbackStack().getStack().size());
+		assertEquals(1, listPage.getCallbackStack().size());
 	}
 
 	public void testExternalPage()
@@ -65,7 +65,7 @@ public class HibernateListPageTest extends ComponentTest
 		listPage.setType(Foo.class);
 		listPage.setCriteria(criteria);
 		listPage.pushCallback();
-		ListCallback listCallback = (ListCallback) listPage.getCallbackStack().getStack().pop();
+		ListCallback listCallback = (ListCallback) listPage.getCallbackStack().pop();
 
 		assertEquals(PAGE_NAME, listCallback.getPageName());
 	}

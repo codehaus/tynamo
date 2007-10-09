@@ -48,7 +48,7 @@ public class ListPageTest extends ComponentTest
 		PageEvent pageEvent = new PageEvent(listPage, (IRequestCycle) cycleMock.proxy());
 		listPage.setType(Foo.class);
 		listPage.pageBeginRender(pageEvent);
-		assertEquals(1, listPage.getCallbackStack().getStack().size());
+		assertEquals(1, listPage.getCallbackStack().size());
 	}
 
 	public void testExternalPage()
@@ -66,7 +66,7 @@ public class ListPageTest extends ComponentTest
 	{
 		listPage.setType(Foo.class);
 		listPage.pushCallback();
-		ListCallback listCallback = (ListCallback) listPage.getCallbackStack().getStack().pop();
+		ListCallback listCallback = (ListCallback) listPage.getCallbackStack().pop();
 
 		assertEquals(PAGE_NAME, listCallback.getPageName());
 	}

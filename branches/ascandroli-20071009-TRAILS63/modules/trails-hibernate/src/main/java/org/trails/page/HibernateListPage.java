@@ -14,7 +14,7 @@ public abstract class HibernateListPage extends ListPage
 	{
 		super.activateExternalPage(args, cycle);
 		setCriteria(DetachedCriteria.forClass(getType()));
-		getCallbackStack().getStack().clear();
+		getCallbackStack().clear();
 	}
 
 	@Persist

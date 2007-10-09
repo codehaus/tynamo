@@ -70,8 +70,8 @@ public class NewLinkTest extends ComponentTest
 		HomePage homePage = (HomePage) buildTrailsPage(HomePage.class);
 		homePage.pushCallback();
 		buildNewLink(homePage);
-		assertTrue("Default callback", homePage.getCallbackStack().getStack().pop() instanceof TrailsCallback);
-		assertTrue("Now is empty", homePage.getCallbackStack().getStack().empty());
+		assertTrue("Default callback", homePage.getCallbackStack().pop() instanceof TrailsCallback);
+		assertTrue("Now is empty", homePage.getCallbackStack().empty());
 	}
 
 	Mock pageResolverMock;

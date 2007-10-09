@@ -269,18 +269,18 @@ public class EditPageTest extends ComponentTest
 
 	public void testPageBeginRender() throws Exception
 	{
-		editPage.getCallbackStack().getStack().clear();
+		editPage.getCallbackStack().clear();
 		PageEvent pageEvent = new PageEvent(editPage, (IRequestCycle) cycleMock.proxy());
 		editPage.pageBeginRender(pageEvent);
-		assertEquals(1, editPage.getCallbackStack().getStack().size());
+		assertEquals(1, editPage.getCallbackStack().size());
 		Foo foo2 = new Foo();
 //        ((HasAssignedIdentifier) foo2).onInsert(new Object[]{"myName"}, new String[]{"name"}, null);
 		foo2.setId(3);
 		editPage.setModel(foo2);
 		editPage.pageBeginRender(pageEvent);
-		EditCallback poppedCallback = (EditCallback) editPage.getCallbackStack().getStack().pop();
+		EditCallback poppedCallback = (EditCallback) editPage.getCallbackStack().pop();
 		assertEquals(foo2, poppedCallback.getModel());
-		assertTrue(editPage.getCallbackStack().getStack().isEmpty());
+		assertTrue(editPage.getCallbackStack().isEmpty());
 	}
 
 

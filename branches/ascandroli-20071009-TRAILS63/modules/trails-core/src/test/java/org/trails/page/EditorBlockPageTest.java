@@ -27,8 +27,8 @@ public class EditorBlockPageTest extends ComponentTest
 		editorBlockPage.setModel(foo);
 
 		editorBlockPage.pushCallback();
-		assertEquals(EditCallback.class, callbackStack.getStack().get(0).getClass());
-		EditCallback callback = (EditCallback) callbackStack.getStack().pop();
+		assertEquals(EditCallback.class, callbackStack.get(0).getClass());
+		EditCallback callback = (EditCallback) callbackStack.pop();
 		assertEquals("FooEdit", callback.getPageName());
 	}
 }

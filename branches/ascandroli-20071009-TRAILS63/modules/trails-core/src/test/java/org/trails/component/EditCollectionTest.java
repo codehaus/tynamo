@@ -121,8 +121,8 @@ public class EditCollectionTest extends ComponentTest
 		editCollection.showAddPage((IRequestCycle) cycleMock.proxy());
 
 		assertTrue("AddToCollectionCallback on stack",
-			editCollection.getCallbackStack().getStack().peek() instanceof CollectionCallback);
-		CollectionCallback callback = (CollectionCallback) editCollection.getCallbackStack().getStack().pop();
+			editCollection.getCallbackStack().peek() instanceof CollectionCallback);
+		CollectionCallback callback = (CollectionCallback) editCollection.getCallbackStack().pop();
 		//assertEquals("right ognl", "bazzes.add", callback.getAddOgnlExpression());
 
 		EditCallback nextPageCallback = (EditCallback) editPage.getNextPage();
@@ -146,7 +146,7 @@ public class EditCollectionTest extends ComponentTest
 		Baz baz = new Baz();
 		EditPage page = (EditPage) editCollection.edit(baz);
 		assertEquals(baz, page.getModel());
-		CollectionCallback callback = (CollectionCallback) editCollection.getCallbackStack().getStack().pop();
+		CollectionCallback callback = (CollectionCallback) editCollection.getCallbackStack().pop();
 		assertNotNull(callback);
 	}
 

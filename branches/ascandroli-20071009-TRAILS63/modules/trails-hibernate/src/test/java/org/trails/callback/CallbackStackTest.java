@@ -15,8 +15,8 @@ public class CallbackStackTest extends TestCase
 		callbackStack.push(callback);
 		callbackStack.push(listCallback);
 		assertEquals(callback, callbackStack.getPreviousCallback());
-		assertEquals(2, callbackStack.getStack().size());
+		assertEquals(2, callbackStack.size());
 		assertEquals(callback, callbackStack.popPreviousCallback());
-		assertTrue("stack is empty", callbackStack.getStack().isEmpty());
+		assertTrue("stack is empty", callbackStack.isEmpty());
 	}
 }
