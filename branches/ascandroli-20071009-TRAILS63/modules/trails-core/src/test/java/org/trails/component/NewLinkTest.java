@@ -28,6 +28,7 @@ import org.trails.page.PageType;
 import org.trails.page.TrailsPage;
 import org.trails.test.BlogEntry;
 import org.trails.test.Foo;
+import org.trails.link.NewLink;
 
 
 public class NewLinkTest extends ComponentTest

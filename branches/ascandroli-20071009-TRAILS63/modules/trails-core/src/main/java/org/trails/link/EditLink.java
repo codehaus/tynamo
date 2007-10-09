@@ -9,9 +9,10 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and limitations under the License.
  */
-package org.trails.component;
+package org.trails.link;
 
 import org.trails.page.PageType;
+import org.trails.component.Utils;
 
 public abstract class EditLink extends Link
 {

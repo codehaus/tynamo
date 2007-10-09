@@ -9,6 +9,7 @@ import org.trails.page.PageResolver;
 import org.trails.page.PageType;
 import org.trails.page.SearchPage;
 import org.trails.test.Foo;
+import org.trails.link.SearchLink;
 
 public class SearchLinkTest extends ComponentTest
 {

@@ -2,7 +2,7 @@
  * Created on 30/11/2005
  *
  */
-package org.trails.component;
+package org.trails.link;
 
 import java.util.Locale;
 

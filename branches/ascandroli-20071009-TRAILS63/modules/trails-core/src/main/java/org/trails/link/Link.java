@@ -9,10 +9,11 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and limitations under the License.
  */
-package org.trails.component;
+package org.trails.link;
 
 import org.apache.tapestry.annotations.InjectObject;
 import org.trails.page.PageResolver;
+import org.trails.component.TrailsComponent;
 
 
 public abstract class Link extends TrailsComponent

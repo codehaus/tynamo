@@ -1,4 +1,4 @@
-package org.trails.component;
+package org.trails.link;
 
 import org.apache.tapestry.IRequestCycle;
 import org.trails.page.PageResolver;

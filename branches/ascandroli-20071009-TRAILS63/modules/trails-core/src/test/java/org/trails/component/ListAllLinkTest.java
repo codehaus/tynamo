@@ -23,6 +23,7 @@ import org.trails.page.PageResolver;
 import org.trails.page.PageType;
 import org.trails.test.BlogEntry;
 import org.trails.test.Foo;
+import org.trails.link.ListAllLink;
 
 public class ListAllLinkTest extends ComponentTest
 {

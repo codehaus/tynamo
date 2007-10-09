@@ -17,6 +17,7 @@ import org.jmock.Mock;
 import org.trails.page.PageResolver;
 import org.trails.page.PageType;
 import org.trails.test.Foo;
+import org.trails.link.EditLink;
 
 
 public class EditLinkTest extends ComponentTest

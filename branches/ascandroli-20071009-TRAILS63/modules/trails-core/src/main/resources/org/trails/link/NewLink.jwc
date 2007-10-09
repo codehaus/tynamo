@@ -1,5 +1,6 @@
 <!DOCTYPE component-specification PUBLIC "-//Apache Software Foundation//Tapestry Specification 4.1//EN" "http://jakarta.apache.org/tapestry/dtd/Tapestry_4_1.dtd">
-<component-specification class="org.trails.component.SearchLink" allow-body="yes" allow-informal-parameters="yes" deprecated="no">
+<component-specification class="org.trails.link.NewLink" allow-body="yes" allow-informal-parameters="yes" deprecated="no">
+	<description>Produces a link to an EditPage containing a new instance of specified type</description>
 
 	<component id="link" type="DirectLink" inherit-informal-parameters="yes">
 		<binding name="listener">listeners.click</binding>
