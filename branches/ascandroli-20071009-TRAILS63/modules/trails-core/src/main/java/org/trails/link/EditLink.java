@@ -11,19 +11,35 @@
  */
 package org.trails.link;
 
-import org.trails.page.PageType;
+import org.apache.hivemind.util.Defense;
+import org.apache.tapestry.annotations.InjectObject;
+import org.apache.tapestry.annotations.Parameter;
 import org.trails.component.Utils;
+import org.trails.descriptor.DescriptorService;
+import org.trails.descriptor.IClassDescriptor;
+import org.trails.page.PageType;
 
-public abstract class EditLink extends Link
+/**
+ * This component displays a link to the EditPage for an object
+ */
+public abstract class EditLink extends TrailsLink
 {
 
+	@Parameter(required = true)
 	public abstract Object getModel();
 
-	public abstract void setModel(Object model);
-
-	public String getEditPageName()
+	public PageType getPageType()
 	{
-		return getPageResolver().resolvePage(getPage().getRequestCycle(), Utils.checkForCGLIB(getModel().getClass()), PageType.Edit).getPageName();
+		return PageType.Edit;
 	}
+
+	public IClassDescriptor getClassDescriptor()
+	{
+		Defense.notNull(getModel(), "model");
+		return getDescriptorService().getClassDescriptor(Utils.checkForCGLIB(getModel().getClass()));
+	}
+
+	@InjectObject("spring:descriptorService")
+	public abstract DescriptorService getDescriptorService();
 
 }

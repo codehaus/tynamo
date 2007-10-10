@@ -13,23 +13,19 @@
  */
 package org.trails.link;
 
-import java.util.Locale;
-
+import org.apache.tapestry.BaseComponent;
+import org.apache.tapestry.IAsset;
 import org.apache.tapestry.IComponent;
-import org.apache.tapestry.IEngine;
-import org.apache.tapestry.IPage;
-import org.apache.tapestry.annotations.InjectObject;
-import org.apache.tapestry.annotations.Parameter;
+import org.apache.tapestry.annotations.*;
 import org.trails.descriptor.DescriptorService;
 import org.trails.descriptor.IClassDescriptor;
-import org.trails.i18n.ResourceBundleMessageSource;
+import org.trails.page.PageType;
 
 /**
  * Common functionality for ListAllLink, NewLink, SearchLink
- *
- * @author fus8882
  */
-public abstract class AbstractTypeNavigationLink extends Link
+@ComponentClass
+public abstract class AbstractTypeNavigationLink extends BaseComponent
 {
 	@InjectObject("spring:descriptorService")
 	public abstract DescriptorService getDescriptorService();
@@ -40,8 +36,6 @@ public abstract class AbstractTypeNavigationLink extends Link
 	@Parameter(required = true)
 	public abstract Class getType();
 
-	public abstract void setType(Class type);
-
 	/**
 	 * @return the class descriptor for the class that this link targets
 	 */
@@ -50,27 +44,24 @@ public abstract class AbstractTypeNavigationLink extends Link
 		return getDescriptorService().getClassDescriptor(getType());
 	}
 
-	protected String generateLinkText(String displayName, String bundleKey, String defaultMessage)
-	{
-		Locale locale = null;
-		IComponent container = getContainer();
+	@Asset(value = "/org/trails/link/AbstractTypeNavigationLink.html")
+	public abstract IAsset get$template();
 
-		// attempt to find the locale or accept null
-		if (container != null)
-		{
-			IPage page = container.getPage();
-			if (page != null)
-			{
-				IEngine engine = page.getEngine();
-				if (engine != null)
-				{
-					locale = engine.getLocale();
-				}
-			}
-		}
+	@Parameter(required = true)
+	public abstract PageType getPageType();
 
-		Object[] params = new Object[]{displayName};
-		ResourceBundleMessageSource messageSource = getResourceBundleMessageSource();
-		return messageSource.getMessageWithDefaultValue(bundleKey, params, locale, defaultMessage);
-	}
+	@Parameter(required = true)
+	public abstract String getBundleKey();
+
+	@Parameter(required = true)
+	public abstract String getDefaultMessage();
+
+
+	@Parameter(required = true)
+	public abstract Object getParams();
+
+	@Component(id = "trailsLink", type = "TrailsLink", inheritInformalParameters = true,
+			bindings = {"classDescriptor=ognl:classDescriptor", "pageType=ognl:pageType"})
+	public abstract IComponent getTrailsLink();
+
 }

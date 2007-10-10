@@ -11,49 +11,33 @@
  */
 package org.trails.link;
 
-import java.lang.reflect.Constructor;
-
-import org.apache.tapestry.IRequestCycle;
-import org.trails.TrailsRuntimeException;
-import org.trails.page.EditPage;
-import org.trails.page.PageResolver;
 import org.trails.page.PageType;
+import org.apache.tapestry.annotations.ComponentClass;
 
 /**
  * Render a link allowing a new entity of the parameterized type to be created.
- *
- * @author fus8882
- * @date Sep 29, 2004
  */
+@ComponentClass
 public abstract class NewLink extends AbstractTypeNavigationLink
 {
-	public static String SUFFIX = "Edit";
 
-	public void click(IRequestCycle cycle)
+	public PageType getPageType()
 	{
-
-		PageResolver pageResolver = getPageResolver();
-		EditPage page = (EditPage) pageResolver.resolvePage(cycle, getType(), PageType.Edit);
-
-		try {
-			Constructor constructor = getType().getDeclaredConstructor();
-			constructor.setAccessible(true);
-			page.setModel(constructor.newInstance());
-			cycle.activate(page);
-		} catch (Exception ex)
-		{
-			throw new TrailsRuntimeException(ex, getType());
-		}
+		return PageType.New;
 	}
 
-	/**
-	 * Get the text for the rendered link
-	 *
-	 * @return Full i18n text in the form "List Foobars"
-	 */
-	public String getLinkText()
+	public String getBundleKey()
 	{
-		String name = getClassDescriptor().getDisplayName();
-		return generateLinkText(name, "org.trails.component.newlink", "[TRAILS][ORG.TRAILS.COMPONENT.NEWLINK]");
+		return "org.trails.component.newlink";
+	}
+
+	public String getDefaultMessage()
+	{
+		return "[TRAILS][ORG.TRAILS.COMPONENT.NEWLINK]";
+	}
+
+	public Object getParams()
+	{
+		return getClassDescriptor().getDisplayName();
 	}
 }

@@ -1,33 +1,35 @@
 package org.trails.link;
 
-import org.apache.tapestry.IRequestCycle;
-import org.trails.page.PageResolver;
+import org.apache.tapestry.annotations.ComponentClass;
 import org.trails.page.PageType;
-import org.trails.page.SearchPage;
 
+/**
+ * Finds the search page for the type specified by the typeName
+ * component parameter and forwards to it, setting the example model
+ * to a new instance.  This instance is use to build a query by
+ * example.
+ */
+@ComponentClass
 public abstract class SearchLink extends AbstractTypeNavigationLink
 {
-	public static final String POSTFIX = "Search";
 
-	/**
-	 * Finds the search page for the type specified by the typeName
-	 * component parameter and forwards to it, setting the example model
-	 * to a new instance.  This instance is use to build a query by
-	 * example.
-	 *
-	 * @param cycle
-	 */
-	public void click(IRequestCycle cycle)
+	public PageType getPageType()
 	{
-		PageResolver pageResolver = getPageResolver();
-		SearchPage searchPage = (SearchPage) pageResolver.resolvePage(cycle, getType(), PageType.Search);
-		searchPage.setType(getType());
-		cycle.activate(searchPage);
+		return PageType.Search;
 	}
 
-	public String getLinkText()
+	public String getBundleKey()
 	{
-		String name = getClassDescriptor().getDisplayName();
-		return generateLinkText(name, "org.trails.component.searchlink", "[TRAILS][ORG.TRAILS.COMPONENT.SEARCHLINK]");
+		return "org.trails.component.searchlink";
+	}
+
+	public String getDefaultMessage()
+	{
+		return "[TRAILS][ORG.TRAILS.COMPONENT.SEARCHLINK]";
+	}
+
+	public Object getParams()
+	{
+		return getClassDescriptor().getPluralDisplayName();
 	}
 }

@@ -15,29 +15,21 @@ package org.trails.page;
 
 import org.apache.tapestry.annotations.InjectObject;
 import org.apache.tapestry.annotations.InjectState;
+import org.apache.tapestry.engine.IEngineService;
 import org.apache.tapestry.event.PageBeginRenderListener;
 import org.apache.tapestry.event.PageEvent;
 import org.apache.tapestry.html.BasePage;
 import org.trails.callback.CallbackStack;
-import org.trails.callback.TrailsCallback;
 import org.trails.descriptor.DescriptorService;
-import org.trails.descriptor.IClassDescriptor;
 import org.trails.i18n.ResourceBundleMessageSource;
 import org.trails.persistence.PersistenceService;
 
-public abstract class TrailsPage extends BasePage implements PageBeginRenderListener
+public abstract class TrailsPage extends BasePage implements PageBeginRenderListener, ITrailsPage
 {
-
-	/**
-	 * This method is a patch for TRAILS-86
-	 * It provides a common superclass to avoid CCE when using compiled OGNL expresions.
-	 * @return
-	 */
-	public abstract IClassDescriptor getClassDescriptor();
 
 	public void pushCallback()
 	{
-		getCallbackStack().push(new TrailsCallback(getPageName()));
+
 	}
 
 	/**
@@ -74,7 +66,13 @@ public abstract class TrailsPage extends BasePage implements PageBeginRenderList
 
 	public void pageBeginRender(PageEvent event)
 	{
-		pushCallback();
+		if (!event.getRequestCycle().isRewinding())
+		{
+			pushCallback();
+		}
 	}
+
+	@InjectObject(value = "service:trails.core.TrailsPagesService")
+	public abstract IEngineService getTrailsPagesService();
 
 }

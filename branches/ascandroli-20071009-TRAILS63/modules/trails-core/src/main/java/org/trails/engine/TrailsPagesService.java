@@ -2,6 +2,7 @@ package org.trails.engine;
 
 import org.apache.hivemind.ApplicationRuntimeException;
 import org.apache.hivemind.util.Defense;
+import org.apache.tapestry.IExternalPage;
 import org.apache.tapestry.IPage;
 import org.apache.tapestry.IRequestCycle;
 import org.apache.tapestry.PageNotFoundException;
@@ -15,10 +16,7 @@ import org.trails.Trails;
 import org.trails.TrailsRuntimeException;
 import org.trails.descriptor.CollectionDescriptor;
 import org.trails.descriptor.IClassDescriptor;
-import org.trails.page.ITrailsPage;
-import org.trails.page.ModelPage;
-import org.trails.page.PageResolver;
-import org.trails.page.PageType;
+import org.trails.page.*;
 import org.trails.services.ServiceConstants;
 
 import java.io.IOException;
@@ -90,8 +88,6 @@ public class TrailsPagesService implements IEngineService
 
 		activateTrailsPage(cycle, pageType, classDescriptor, model, parent, collectionDescriptor);
 
-//		page.activateExternalPage(parameters, cycle);
-
 		responseRenderer.renderResponse(cycle);
 	}
 
@@ -139,7 +135,6 @@ public class TrailsPagesService implements IEngineService
 		{
 			((ModelPage) page).setModel(model);
 
-/*
 			if (PageType.New.equals(pageType))
 			{
 				((ModelPage) page).setModelNew(true);
@@ -153,14 +148,16 @@ public class TrailsPagesService implements IEngineService
 				((EditPage) page).setParent(parent);
 				((EditPage) page).setAssociationDescriptor(collectionDescriptor);
 			}
-*/
 		}
 
 		Object[] parameters = linkFactory.extractListenerParameters(cycle);
-
 		cycle.setListenerParameters(parameters);
-
 		cycle.activate(page);
+
+		if (page instanceof IExternalPage)
+		{
+			((IExternalPage) page).activateExternalPage(parameters, cycle);
+		}
 	}
 
 	public String getName()
@@ -187,5 +184,53 @@ public class TrailsPagesService implements IEngineService
 	{
 		this.pageResolver = pageResolver;
 	}
+
+	protected Object buildNewMemberInstance(IClassDescriptor classDescriptor, CollectionDescriptor collectionDescriptor) throws InstantiationException, IllegalAccessException
+	{
+		Object object = null;
+/*
+		if (getCreateExpression() == null)
+		{
+			object = collectionDescriptor.getElementType().newInstance();
+		} else
+		{
+			try
+			{
+				object = Ognl.getValue(getCreateExpression(), getModel());
+			}
+			catch (OgnlException oe)
+			{
+				oe.printStackTrace();
+				return null;
+			}
+		}
+
+		if (getCollectionDescriptor().getInverseProperty() != null && getCollectionDescriptor().isOneToMany())
+		{
+			try
+			{
+				Ognl.setValue(getCollectionDescriptor().getInverseProperty(), object, getModel());
+			} catch (OgnlException e)
+			{
+				LOG.error(e.getMessage());
+			}
+		}
+*/
+		return object;
+	}
+
+/*
+	@Override
+	protected boolean isModelNew(Object model)
+	{
+		if (model instanceof HasAssignedIdentifier)
+		{
+			return !((HasAssignedIdentifier) getModel()).isSaved();
+		} else
+		{
+			return super.isModelNew(model);
+		}
+	}
+*/
 }
 

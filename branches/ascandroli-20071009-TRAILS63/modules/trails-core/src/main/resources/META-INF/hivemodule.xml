@@ -104,4 +104,19 @@
 			<construct class="org.trails.page.DefaultPageResolver"/>
 		</invoke-factory>
 	</service-point>
+
+	<service-point id="TrailsPagesService" interface="org.apache.tapestry.engine.IEngineService">
+		<invoke-factory>
+			<construct class="org.trails.engine.TrailsPagesService">
+				<set-object property="responseRenderer" value="infrastructure:responseRenderer"/>
+				<set-object property="linkFactory" value="infrastructure:linkFactory"/>
+				<set-object property="dataSqueezer" value="service:tapestry.data.DataSqueezer"/>
+			</construct>
+		</invoke-factory>
+	</service-point>
+
+	<contribution configuration-id="tapestry.services.FactoryServices">
+		<service name="trailsPagesService" object="service:TrailsPagesService"/>
+	</contribution>
+
 </module>

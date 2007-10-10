@@ -1,7 +1,6 @@
 package org.trails.page;
 
 import org.apache.tapestry.annotations.InjectObject;
-import org.trails.callback.EditCallback;
 import org.trails.descriptor.IPropertyDescriptor;
 import org.trails.validation.ValidatorTranslatorService;
 
@@ -14,12 +13,6 @@ import org.trails.validation.ValidatorTranslatorService;
  */
 public abstract class EditorBlockPage extends ModelPage implements IEditorBlockPage
 {
-	@Override
-	public void pushCallback()
-	{
-		EditCallback callback = new EditCallback(getEditPageName(), getModel());
-		getCallbackStack().push(callback);
-	}
 
 	@InjectObject("spring:validatorTranslatorService")
 	public abstract ValidatorTranslatorService getValidatorTranslatorService();
@@ -28,7 +21,4 @@ public abstract class EditorBlockPage extends ModelPage implements IEditorBlockP
 
 	public abstract void setDescriptor(IPropertyDescriptor Descriptor);
 
-	public abstract String getEditPageName();
-
-	public abstract void setEditPageName(String EditPageName);
 }

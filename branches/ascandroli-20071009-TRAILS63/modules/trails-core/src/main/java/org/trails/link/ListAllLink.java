@@ -11,42 +11,35 @@
  */
 package org.trails.link;
 
-import org.apache.tapestry.IPage;
-import org.apache.tapestry.IRequestCycle;
+import org.apache.tapestry.annotations.ComponentClass;
 import org.trails.page.PageType;
 
 /**
  * ListAllLink renders a single link that has a target of the List page for a given object.  It is abstract because
  * Tapestry will populate the bean with getter/setters for fields in it.  The base class is constructed with the name
  * of the type that this link will connect to, and all list operations are synthesized from that single name.
- *
- * @author fus8882
- * @date Sep 26, 2004
  */
+@ComponentClass
 public abstract class ListAllLink extends AbstractTypeNavigationLink
 {
 
-	/**
-	 * Get the text for the rendered link
-	 *
-	 * @return Full i18n text in the form "List Foobars"
-	 */
-	public String getLinkText()
+	public PageType getPageType()
 	{
-		String name = getClassDescriptor().getPluralDisplayName();
-		return generateLinkText(name, "org.trails.component.listalllink", "[TRAILS][ORG.TRAILS.COMPONENT.LISTALLLINK]");
+		return PageType.List;
 	}
 
-	/**
-	 * For the page type PageType.LIST, try to get the name of the page.  Called by ListAllLink.jwc
-	 *
-	 * @return Name of the page
-	 */
-	public String getListPageName()
+	public String getBundleKey()
 	{
-		IRequestCycle cycle = getPage().getRequestCycle();
-		IPage iPage = getPageResolver().resolvePage(cycle, getType(), PageType.List);
+		return "org.trails.component.listalllink";
+	}
 
-		return iPage.getPageName();
+	public String getDefaultMessage()
+	{
+		return "[TRAILS][ORG.TRAILS.COMPONENT.LISTALLLINK]";
+	}
+
+	public Object getParams()
+	{
+		return getClassDescriptor().getPluralDisplayName();
 	}
 }

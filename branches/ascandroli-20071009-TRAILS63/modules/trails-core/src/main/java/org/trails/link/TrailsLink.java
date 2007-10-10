@@ -9,7 +9,6 @@ import org.apache.tapestry.engine.IEngineService;
 import org.apache.tapestry.engine.ILink;
 import org.apache.tapestry.link.AbstractLinkComponent;
 import org.apache.tapestry.link.ILinkRenderer;
-import org.trails.callback.CallbackStack;
 import org.trails.descriptor.CollectionDescriptor;
 import org.trails.descriptor.IClassDescriptor;
 import org.trails.engine.TrailsPagesServiceParameter;
@@ -44,9 +43,6 @@ public abstract class TrailsLink extends AbstractLinkComponent
 
 	@Parameter
 	public abstract Object getModel();
-
-	@Parameter
-	public abstract CallbackStack getStack();
 
 	@Parameter
 	public abstract CollectionDescriptor getAssociationDescriptor();

@@ -1,0 +1,11 @@
+<span jwcid="$content$">
+	<a href="#" jwcid="trailsLink">
+		<span jwcid="hasBody@If" condition="bodyCount &gt; 0">
+			<span jwcid="@RenderBody"/>
+		</span>
+		<span jwcid="hasNoBody@If" condition="bodyCount == 0">
+			<span jwcid="@InsertI18N" bundleKey="ognl:bundleKey" defaultMessage="ognl:defaultMessage"
+				  params="ognl:params"/>
+		</span>
+	</a>
+</span>
