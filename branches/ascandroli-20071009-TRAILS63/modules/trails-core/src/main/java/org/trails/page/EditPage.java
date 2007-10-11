@@ -46,13 +46,10 @@ public abstract class EditPage extends ModelPage
 	@Bean(lifecycle = Lifecycle.REQUEST)
 	public abstract TrailsValidationDelegate getDelegate();
 
-
-//	@Persist("client:form")
 	public abstract CollectionDescriptor getAssociationDescriptor();
 
 	public abstract void setAssociationDescriptor(CollectionDescriptor associationDescriptor);
 
-//	@Persist("client:form")
 	public abstract Object getParent();
 
 	public abstract void setParent(Object parent);

@@ -7,7 +7,7 @@
 						<tr jwcid="foreach@For" source="ognl:collection" value="ognl:currentObject" index="ognl:index"
 							renderTag="true">
 							<td>
-								<a jwcid="editLink@LinkSubmit" listener="listener:edit" parameters="ognl:currentObject">
+								<a href="#" jwcid="@EditLink" model="ognl:currentObject" collectionProperty="ognl:propertyDescriptor.name">
 									<span jwcid="insert@Insert" value="ognl:currentObject"/>
 								</a>
 							</td>
@@ -41,9 +41,14 @@
 			 sort="ognl:sortMode"/>
 	</div>
     <div jwcid="allowCreate@If" condition="ognl:allowCreate">
-		<input jwcid="addbutton@Submit" type="button"
-			   value="ognl:getMessage(@org.trails.component.Utils@ADD_NEW_MESSAGE)"
-			   listener="listener:showAddPage" disabled="ognl:page.modelNew"/>
+		<a class="button" href="#" jwcid="@TrailsLink"
+		   classDescriptor="ognl:descriptorService.getClassDescriptor(propertyDescriptor.elementType)"
+		   pageType="ognl:@org.trails.page.PageType@New" 
+		   associationDescriptor="ognl:propertyDescriptor"
+		   parent="ognl:model"
+		   disabled="ognl:page.modelNew">
+			<span jwcid="@InsertI18N" bundleKey="org.trails.i18n.addNew" defaultMessage="[TRAILS][ORG.TRAILS.I18N.ADDNEW]"/>
+		</a>
 	</div>
     
 </span>
