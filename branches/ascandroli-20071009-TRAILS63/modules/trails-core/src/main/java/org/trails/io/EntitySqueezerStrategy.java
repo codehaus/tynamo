@@ -97,7 +97,7 @@ public class EntitySqueezerStrategy implements SqueezeFilter, SqueezeAdaptor
 
 				if (id == null)
 				{
-					return _prefix + next.squeeze(classDescriptor.getType()) + _delimiter + next.squeeze(-1);
+					return _prefix + next.squeeze(classDescriptor.getType()); // + _delimiter + next.squeeze(-1);
 				}
 
 //			Serializable version = (Serializable) persistenceService.getVersion(data, classDescriptor);
