@@ -40,15 +40,16 @@
 		<div jwcid="palette@contrib:Palette" model="ognl:selectionModel" selected="ognl:selectedList"
 			 sort="ognl:sortMode"/>
 	</div>
-    <div jwcid="allowCreate@If" condition="ognl:allowCreate">
-		<a class="button" href="#" jwcid="@TrailsLink"
+	<div jwcid="allowCreate@If" condition="ognl:allowCreate">
+		<span type="button" jwcid="@TrailsLink"
 		   classDescriptor="ognl:descriptorService.getClassDescriptor(propertyDescriptor.elementType)"
 		   pageType="ognl:@org.trails.page.PageType@New" 
 		   associationDescriptor="ognl:propertyDescriptor"
 		   parent="ognl:model"
-		   disabled="ognl:page.modelNew">
-			<span jwcid="@InsertI18N" bundleKey="org.trails.i18n.addNew" defaultMessage="[TRAILS][ORG.TRAILS.I18N.ADDNEW]"/>
-		</a>
+		   disabled="ognl:page.modelNew"
+		   renderer="ognl:renderer"
+		   name="ognl:getMessage(@org.trails.component.Utils@ADD_NEW_MESSAGE)">
+		<span jwcid="@InsertI18N" bundleKey="org.trails.i18n.addNew" defaultMessage="[TRAILS][ORG.TRAILS.I18N.ADDNEW]"/>
+		</span>
 	</div>
-    
 </span>

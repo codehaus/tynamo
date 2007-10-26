@@ -4,10 +4,10 @@ import org.apache.tapestry.IExternalPage;
 import org.apache.tapestry.IRequestCycle;
 import org.hibernate.criterion.DetachedCriteria;
 
-public abstract class HibernateListPage extends ListPage implements IExternalPage
+public abstract class HibernateListPage extends ListPage
 {
 
-	public void activateExternalPage(Object[] args, IRequestCycle cycle)
+	public void activateTrailsPage(Object[] args, IRequestCycle cycle)
 	{
 		setCriteria(DetachedCriteria.forClass(getClassDescriptor().getType()));
 	}

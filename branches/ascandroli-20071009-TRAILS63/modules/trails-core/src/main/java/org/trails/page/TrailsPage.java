@@ -13,18 +13,17 @@
  */
 package org.trails.page;
 
+import org.apache.tapestry.IRequestCycle;
 import org.apache.tapestry.annotations.InjectObject;
 import org.apache.tapestry.annotations.InjectState;
 import org.apache.tapestry.engine.IEngineService;
-import org.apache.tapestry.event.PageBeginRenderListener;
-import org.apache.tapestry.event.PageEvent;
 import org.apache.tapestry.html.BasePage;
 import org.trails.callback.CallbackStack;
 import org.trails.descriptor.DescriptorService;
 import org.trails.i18n.ResourceBundleMessageSource;
 import org.trails.persistence.PersistenceService;
 
-public abstract class TrailsPage extends BasePage implements PageBeginRenderListener, ITrailsPage
+public abstract class TrailsPage extends BasePage implements ITrailsPage
 {
 
 	public void pushCallback()
@@ -64,12 +63,9 @@ public abstract class TrailsPage extends BasePage implements PageBeginRenderList
 	@InjectObject("spring:trailsMessageSource")
 	public abstract ResourceBundleMessageSource getResourceBundleMessageSource();
 
-	public void pageBeginRender(PageEvent event)
+	public void activateTrailsPage(Object[] objects, IRequestCycle iRequestCycle)
 	{
-		if (!event.getRequestCycle().isRewinding())
-		{
-			pushCallback();
-		}
+		pushCallback();
 	}
 
 	@InjectObject(value = "service:trails.core.TrailsPagesService")

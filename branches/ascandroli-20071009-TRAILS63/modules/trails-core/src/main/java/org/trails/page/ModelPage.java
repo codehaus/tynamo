@@ -5,15 +5,7 @@ package org.trails.page;
  *
  * @author Chris Nelson
  */
-public abstract class ModelPage extends TrailsPage
+public abstract class ModelPage extends TrailsPage implements IModelPage
 {
-
-	public abstract Object getModel();
-
-	public abstract void setModel(Object model);
-
-	public abstract boolean isModelNew();
-
-	public abstract void setModelNew(boolean modelNew);
 
 }

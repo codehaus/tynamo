@@ -3,6 +3,7 @@
 <page-specification class="org.trails.page.HibernateEditPage">
 
 	<property name="model" persist="trails-form"/>
+	<property name="modelNew" persist="trails-form"/>
 	<property name="classDescriptor" persist="trails-form"/>
 
 	<property name="parent" persist="trails-entity"/>

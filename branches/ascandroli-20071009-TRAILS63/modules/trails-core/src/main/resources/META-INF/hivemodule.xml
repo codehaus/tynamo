@@ -2,6 +2,7 @@
 
 	<service-point id="DefaultDescriptorService" interface="org.trails.descriptor.DescriptorService"/>
 	<service-point id="DefaultPersistenceService" interface="org.trails.persistence.PersistenceService"/>
+	<service-point id="AddNewLinkRenderer" interface="org.apache.tapestry.link.ILinkRenderer"/>
 
 	<!--
 		====================================================================================================================

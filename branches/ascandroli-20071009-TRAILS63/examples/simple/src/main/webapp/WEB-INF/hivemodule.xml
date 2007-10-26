@@ -158,4 +158,10 @@
 		<strategy name="trails-form" object="service:FormClientPropertyPersistenceStrategy"/>
 	</contribution>-->
 
+	<implementation service-id="trails.core.AddNewLinkRenderer">
+		<invoke-factory>
+			<construct class="org.apache.tapestry.link.DefaultLinkRenderer"/>
+		</invoke-factory>
+	</implementation>
+
 </module>

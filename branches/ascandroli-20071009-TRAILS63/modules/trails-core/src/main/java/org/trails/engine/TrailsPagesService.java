@@ -154,10 +154,8 @@ public class TrailsPagesService implements IEngineService
 		cycle.setListenerParameters(parameters);
 		cycle.activate(page);
 
-		if (page instanceof IExternalPage)
-		{
-			((IExternalPage) page).activateExternalPage(parameters, cycle);
-		}
+		page.activateTrailsPage(parameters, cycle);
+
 	}
 
 	public String getName()

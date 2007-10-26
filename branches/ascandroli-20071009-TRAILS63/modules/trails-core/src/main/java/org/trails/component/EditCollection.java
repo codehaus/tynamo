@@ -20,6 +20,7 @@ import org.apache.tapestry.annotations.InjectObject;
 import org.apache.tapestry.annotations.Parameter;
 import org.apache.tapestry.contrib.palette.SortMode;
 import org.apache.tapestry.form.IPropertySelectionModel;
+import org.apache.tapestry.link.ILinkRenderer;
 import org.trails.callback.CallbackStack;
 import org.trails.descriptor.CollectionDescriptor;
 import org.trails.descriptor.DescriptorService;
@@ -106,6 +107,14 @@ public abstract class EditCollection extends TrailsComponent
 	public abstract IAsset getDownImage();
 
 	private List selected = new ArrayList();
+
+	/**
+	 * 
+	 * org.apache.tapestry.contrib.link.ButtonLinkRenderer
+	 * @return
+	 */
+	@InjectObject(value = "service:trails.core.AddNewLinkRenderer")
+	public abstract ILinkRenderer getRenderer();
 
 
 	/**

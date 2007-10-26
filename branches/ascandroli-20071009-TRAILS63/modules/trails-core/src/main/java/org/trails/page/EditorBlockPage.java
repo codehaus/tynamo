@@ -21,4 +21,11 @@ public abstract class EditorBlockPage extends ModelPage implements IEditorBlockP
 
 	public abstract void setDescriptor(IPropertyDescriptor Descriptor);
 
+	public boolean isModelNew()
+	{
+		return ((IModelPage) getRequestCycle().getPage()).isModelNew();
+	}
+
+	public void setModelNew(boolean modelNew)
+	{}
 }
