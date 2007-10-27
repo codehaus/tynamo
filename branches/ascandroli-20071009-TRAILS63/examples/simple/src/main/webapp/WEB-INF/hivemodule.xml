@@ -13,12 +13,6 @@
 		</invoke-factory>
 	</implementation>
 
-	<implementation service-id="trails.hibernate.DefaultHibernatePersistenceService">
-		<invoke-factory service-id="hivemind.lib.SpringLookupFactory">
-			<lookup-bean name="persistenceService"/>
-		</invoke-factory>
-	</implementation>
-
 	<implementation service-id="trails.hibernate.PersistenceService">
 		<invoke-factory service-id="hivemind.lib.SpringLookupFactory">
 			<lookup-bean name="persistenceService"/>

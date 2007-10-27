@@ -24,7 +24,6 @@ public abstract class LocaleLink extends BaseComponent
 	{
 		Locale locale = new Locale(getLanguage(), getCountry());
 		getPage().getEngine().setLocale(locale);
-		TrailsApplicationServlet.setCurrentLocale(locale);
 		cycle.cleanup();
 		throw new PageRedirectException(getPage());
 	}

@@ -19,15 +19,19 @@ import org.trails.descriptor.DescriptorService;
 import org.trails.descriptor.IClassDescriptor;
 import org.trails.page.PageType;
 
-/**
- * This component displays a link to the EditPage for an object
- */
-public abstract class EditLink extends ModelLink
+public abstract class ModelLink extends TrailsLink
 {
 
-	public PageType getPageType()
+	@Parameter(required = true)
+	public abstract Object getModel();
+
+	public IClassDescriptor getClassDescriptor()
 	{
-		return PageType.Edit;
+		Defense.notNull(getModel(), "model");
+		return getDescriptorService().getClassDescriptor(Utils.checkForCGLIB(getModel().getClass()));
 	}
+
+	@InjectObject("spring:descriptorService")
+	public abstract DescriptorService getDescriptorService();
 
 }
