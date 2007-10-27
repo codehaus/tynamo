@@ -20,7 +20,7 @@ import org.apache.tapestry.engine.IEngineService;
 import org.apache.tapestry.html.BasePage;
 import org.trails.callback.CallbackStack;
 import org.trails.descriptor.DescriptorService;
-import org.trails.i18n.ResourceBundleMessageSource;
+import org.trails.i18n.TrailsMessageSource;
 import org.trails.persistence.PersistenceService;
 
 public abstract class TrailsPage extends BasePage implements ITrailsPage
@@ -40,19 +40,19 @@ public abstract class TrailsPage extends BasePage implements ITrailsPage
 	public abstract CallbackStack getCallbackStack();
 
 	/**
-	 * This property is injected with the Spring persistenceService bean
+	 * This property is injected with the persistenceService bean
 	 *
 	 * @return
 	 */
-	@InjectObject("spring:persistenceService")
+	@InjectObject("service:trails.core.PersistenceService")
 	public abstract PersistenceService getPersistenceService();
 
 	/**
-	 * This property is injected with the Spring descriptorService bean
+	 * This property is injected with the descriptorService bean
 	 *
 	 * @return
 	 */
-	@InjectObject("spring:descriptorService")
+	@InjectObject("service:trails.core.DescriptorService")
 	public abstract DescriptorService getDescriptorService();
 
 	/**
@@ -60,8 +60,8 @@ public abstract class TrailsPage extends BasePage implements ITrailsPage
 	 *
 	 * @return
 	 */
-	@InjectObject("spring:trailsMessageSource")
-	public abstract ResourceBundleMessageSource getResourceBundleMessageSource();
+	@InjectObject("service:trails.core.MessageSource")
+	public abstract TrailsMessageSource getResourceBundleMessageSource();
 
 	public void activateTrailsPage(Object[] objects, IRequestCycle iRequestCycle)
 	{

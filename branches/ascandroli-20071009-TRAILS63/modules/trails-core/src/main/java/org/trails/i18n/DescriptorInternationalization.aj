@@ -3,8 +3,6 @@
   */
 package org.trails.i18n;
 
-import java.util.Locale;
-
 import org.trails.descriptor.IClassDescriptor;
 import org.trails.descriptor.IDescriptor;
 import org.trails.servlet.TrailsApplicationServlet;
@@ -16,10 +14,8 @@ import org.trails.servlet.TrailsApplicationServlet;
   */
 public aspect DescriptorInternationalization {
 
-	private ResourceBundleMessageSource messageSource;
-    
-    private LocaleHolder localeHolder;
-		
+	private TrailsMessageSource messageSource;
+
 	pointcut internationalizeDisplayName(IDescriptor descriptor) : execution(* IDescriptor.getDisplayName())
 									&& this(descriptor)
 									&& !cflowbelow(execution(* IDescriptor+.*(..)));
@@ -28,38 +24,23 @@ public aspect DescriptorInternationalization {
 									&& this(descriptor)
 									&& !cflowbelow(execution(* IClassDescriptor+.*(..)));
 
-    private Locale getLocale()
-    {
-        return getLocaleHolder() == null ? null : getLocaleHolder().getLocale();
-    }
-    
 	Object around(IDescriptor descriptor) : internationalizeDisplayName(descriptor) {
 		String displayName = (String) proceed(descriptor);
 		return (messageSource != null)
-					? messageSource.getDisplayName(descriptor, getLocale(), displayName)
+					? messageSource.getDisplayName(descriptor, displayName)
 					: displayName;
 	}
 
 	Object around(IClassDescriptor classDescriptor) : internationalizePluralDisplayName(classDescriptor) {
 		String displayName = (String) proceed(classDescriptor);
 		return (messageSource != null)
-					? messageSource.getPluralDislayName(classDescriptor, getLocale(), displayName)
+					? messageSource.getPluralDislayName(classDescriptor, displayName)
 					: displayName;
 	
 	}
 
 	/* setters for ioc attributes */
-	public void setResourceBundleMessageSource(ResourceBundleMessageSource source) {
+	public void setTrailsMessageSource(TrailsMessageSource source) {
 		this.messageSource = source;
 	}
-	
-    public void setLocaleHolder(LocaleHolder localeHolder)
-    {
-        this.localeHolder = localeHolder;
-    }
-
-    public LocaleHolder getLocaleHolder()
-    {
-        return this.localeHolder;
-    }
 }

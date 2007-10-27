@@ -13,6 +13,7 @@
 	<component-type type="EditCollection" specification-path="EditCollection.jwc"/>
 	<component-type type="EditLink" specification-path="/org/trails/link/EditLink.jwc"/>
 	<component-type type="LocaleLink" specification-path="/org/trails/link/LocaleLink.jwc"/>
+	<component-type type="ViewLink" specification-path="ViewLink.jwc"/>
 	<component-type type="Identifier" specification-path="Identifier.jwc"/>
 	<component-type type="InvokeMethod" specification-path="InvokeMethod.jwc"/>
 	<component-type type="ListAllLink" specification-path="/org/trails/link/ListAllLink.jwc"/>
@@ -30,5 +31,6 @@
 	<component-type type="InsertI18N" specification-path="InsertI18N.jwc"/>
 
 	<page name="Editors" specification-path="/org/trails/page/Editors.page"/>
+	<page name="Viewers" specification-path="/org/trails/page/Viewers.page"/>
 
 </library-specification>

@@ -24,8 +24,9 @@
 		<property name="basename" value="messages"/>
 	</bean>
 
-	<bean id="trailsMessageSource" class="org.trails.i18n.DefaultTrailsResourceBundleMessageSource">
+	<bean id="trailsMessageSource" class="org.trails.i18n.SpringMessageSource">
 		<property name="messageSource" ref="messageSource"/>
+		<property name="localeHolder" ref="localeHolder"/>
 	</bean>
 
 
@@ -109,8 +110,7 @@
 	</bean>
 
 	<bean id="descriptorInternationalizationAspect" class="org.trails.i18n.DescriptorInternationalization" factory-method="aspectOf">
-		<property name="resourceBundleMessageSource" ref="trailsMessageSource"/>
-		<property name="localeHolder" ref="localeHolder"/>
+		<property name="trailsMessageSource" ref="trailsMessageSource"/>
 	</bean>
 
 	<bean id="searchBlockFinder" class="org.trails.descriptor.BaseBlockFinder">
@@ -410,7 +410,58 @@
 		</property>
 	</bean>
 
-	<bean id="localeHolder" class="org.trails.i18n.DefaultLocaleHolder"/>
+	<bean id="viewerService" class="org.trails.descriptor.EditorBlockFinder">
+		<property name="defaultBlockAddress">
+			<bean class="org.apache.tapestry.util.ComponentAddress">
+				<constructor-arg index="0">
+					<value>trails:Viewers</value>
+				</constructor-arg>
+				<constructor-arg index="1">
+					<value>stringViewer</value>
+				</constructor-arg>
+			</bean>
+		</property>
+		<property name="editorMap">
+			<map>
+				<entry>
+					<key>
+						<value>hidden</value>
+					</key>
+					<bean class="org.apache.tapestry.util.ComponentAddress">
+						<constructor-arg index="0">
+							<value>trails:Viewers</value>
+						</constructor-arg>
+						<constructor-arg index="1">
+							<value>hidden</value>
+						</constructor-arg>
+					</bean>
+				</entry>
+				<entry>
+					<key>
+						<value>richText</value>
+					</key>
+					<bean class="org.apache.tapestry.util.ComponentAddress">
+						<constructor-arg index="0">
+							<value>trails:Viewers</value>
+						</constructor-arg>
+						<constructor-arg index="1">
+							<value>htmlTextViewer</value>
+						</constructor-arg>
+					</bean>
+				</entry>
+			</map>
+		</property>
+	</bean>
 
-	<bean id="validatorTranslatorService" class="org.trails.validation.ValidatorTranslatorService"/>
+	<bean id="hibernateValidationAspect" class="org.trails.validation.HibernateValidationAspect" factory-method="aspectOf">
+		<property name="hibernateClassValidatorFactory" ref="hibernateClassValidatorFactory"/>
+	</bean>
+
+	<bean id="hibernateClassValidatorFactory" class="org.trails.validation.HibernateClassValidatorFactory">
+		<property name="messageSource" ref="trailsMessageSource"/>
+		<property name="localeHolder" ref="localeHolder"/>
+	</bean>
+
+	<bean id="localeHolder" class="org.trails.i18n.SpringLocaleHolder"/>
+
 </beans>

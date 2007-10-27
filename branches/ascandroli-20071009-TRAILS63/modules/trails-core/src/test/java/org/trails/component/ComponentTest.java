@@ -14,23 +14,27 @@
 package org.trails.component;
 
 
+import java.util.Locale;
+
+import org.apache.hivemind.Messages;
+import org.apache.hivemind.impl.DefaultClassResolver;
+import org.apache.hivemind.impl.MessageFinderImpl;
+import org.apache.hivemind.impl.ModuleMessages;
+import org.apache.hivemind.service.ThreadLocale;
+import org.apache.hivemind.service.impl.ThreadLocaleImpl;
+import org.apache.hivemind.util.ClasspathResource;
 import org.apache.tapestry.test.Creator;
 import org.jmock.Mock;
 import org.jmock.MockObjectTestCase;
-import org.springframework.context.support.ResourceBundleMessageSource;
 import org.trails.callback.CallbackStack;
 import org.trails.descriptor.DescriptorService;
-import org.trails.i18n.DefaultTrailsResourceBundleMessageSource;
+import org.trails.i18n.DescriptorInternationalization;
+import org.trails.i18n.HiveMindMessageSource;
+import org.trails.i18n.TrailsMessageSource;
 import org.trails.page.EditPage;
 import org.trails.persistence.PersistenceService;
 import org.trails.validation.TrailsValidationDelegate;
 
-/**
- * @author fus8882
- *         <p/>
- *         TODO To change the template for this generated type comment go to
- *         Window - Preferences - Java - Code Style - Code Templates
- */
 public class ComponentTest extends MockObjectTestCase
 {
 	protected Creator creator = new Creator();
@@ -39,13 +43,18 @@ public class ComponentTest extends MockObjectTestCase
 	protected CallbackStack callbackStack = new CallbackStack();
 	protected Mock persistenceMock = new Mock(PersistenceService.class);
 	protected TrailsValidationDelegate delegate = new TrailsValidationDelegate();
+	protected ThreadLocale threadLocale = 	new ThreadLocaleImpl(Locale.ENGLISH);
 
-	public void setUp() throws Exception
+	protected void setUp() throws Exception
 	{
 		descriptorService = (DescriptorService) descriptorServiceMock.proxy();
+		threadLocale.setLocale(Locale.ENGLISH);
+
+		/** sometime the aspect weaves classes that it shouldn't weave **/
+		DescriptorInternationalization.aspectOf().setTrailsMessageSource(null);
 	}
 
-	protected <T> T buildTrailsPage(Class<T> pageClass)
+	public <T> T buildTrailsPage(Class<T> pageClass)
 	{
 		T page = (T) creator.newInstance(pageClass,
 			new Object[]{
@@ -59,10 +68,7 @@ public class ComponentTest extends MockObjectTestCase
 	protected EditPage buildEditPage()
 	{
 		DescriptorService descriptorService = (DescriptorService) descriptorServiceMock.proxy();
-		DefaultTrailsResourceBundleMessageSource messageSource = new DefaultTrailsResourceBundleMessageSource();
-		ResourceBundleMessageSource springMessageSource = new ResourceBundleMessageSource();
-		springMessageSource.setBasename("messages");
-		messageSource.setMessageSource(springMessageSource);
+		TrailsMessageSource messageSource = getNewTrailsMessageSource();
 
 		EditPage editPage = (EditPage) creator.newInstance(EditPage.class,
 			new Object[]{
@@ -75,4 +81,18 @@ public class ComponentTest extends MockObjectTestCase
 		return editPage;
 	}
 
+	public TrailsMessageSource getNewTrailsMessageSource() {
+		HiveMindMessageSource messageSource = new HiveMindMessageSource();
+		Messages hivemindMessages =
+			new ModuleMessages(new MessageFinderImpl(new ClasspathResource(new DefaultClassResolver(),"messagestest.properties")), threadLocale);
+		messageSource.setMessageSource(hivemindMessages);
+		return  messageSource;
+	}
+
+	protected void tearDown() throws Exception
+	{
+		threadLocale.setLocale(Locale.ENGLISH);
+		/** sometime the aspect weaves classes that it shouldn't weave **/
+		DescriptorInternationalization.aspectOf().setTrailsMessageSource(null);
+	}
 }

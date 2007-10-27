@@ -57,7 +57,7 @@
 					<container>
 						<containerId>tomcat5x</containerId>
 						<zipUrlInstaller>
-							<url>http://apache.org/dist/tomcat/tomcat-5/v5.5.23/bin/apache-tomcat-5.5.23.zip</url>
+							<url>http://apache.org/dist/tomcat/tomcat-5/v5.5.25/bin/apache-tomcat-5.5.25.zip</url>
 						</zipUrlInstaller>
 					</container>
 				</configuration>
@@ -82,11 +82,6 @@
 	</build>
 
 	<dependencies>
-		<dependency>
-			<groupId>commons-logging</groupId>
-			<artifactId>commons-logging</artifactId>
-			<version>1.1</version>
-		</dependency>
 		<dependency>
 			<groupId>org.trailsframework</groupId>
 			<artifactId>trails-security</artifactId>

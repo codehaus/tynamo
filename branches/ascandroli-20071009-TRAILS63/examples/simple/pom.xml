@@ -53,7 +53,8 @@
 					<container>
 						<containerId>tomcat5x</containerId>
 						<zipUrlInstaller>
-							<url>http://apache.org/dist/tomcat/tomcat-5/v5.5.23/bin/apache-tomcat-5.5.23.zip</url>
+				
+<url>http://apache.org/dist/tomcat/tomcat-5/v5.5.25/bin/apache-tomcat-5.5.25.zip</url>
 						</zipUrlInstaller>
 					</container>
 				</configuration>
@@ -82,12 +83,6 @@
 			<artifactId>trails-test</artifactId>
 			<version>1.2-SNAPSHOT</version>
 			<scope>test</scope>
-			<exclusions>
-				<exclusion>
-					<groupId>javax.servlet</groupId>
-					<artifactId>servlet-api</artifactId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 	</dependencies>
 </project>

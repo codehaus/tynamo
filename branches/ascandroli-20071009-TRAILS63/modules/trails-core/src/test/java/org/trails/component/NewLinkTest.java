@@ -14,12 +14,11 @@ package org.trails.component;
 import org.apache.tapestry.IPage;
 import org.apache.tapestry.IRequestCycle;
 import org.jmock.Mock;
-import org.springframework.context.support.ResourceBundleMessageSource;
 import org.trails.callback.TrailsCallback;
 import org.trails.descriptor.DescriptorService;
 import org.trails.descriptor.IClassDescriptor;
 import org.trails.descriptor.TrailsClassDescriptor;
-import org.trails.i18n.DefaultTrailsResourceBundleMessageSource;
+import org.trails.i18n.TrailsMessageSource;
 import org.trails.page.EditPage;
 import org.trails.page.HomePage;
 import org.trails.page.ListPage;
@@ -81,10 +80,8 @@ public class NewLinkTest extends ComponentTest
 	{
 		super.setUp();
 		DescriptorService descriptorService = (DescriptorService) descriptorServiceMock.proxy();
-		DefaultTrailsResourceBundleMessageSource messageSource = new DefaultTrailsResourceBundleMessageSource();
-		ResourceBundleMessageSource springMessageSource = new ResourceBundleMessageSource();
-		springMessageSource.setBasename("messages");
-		messageSource.setMessageSource(springMessageSource);
+		TrailsMessageSource messageSource = getNewTrailsMessageSource();
+
 		editPage = buildTrailsPage(EditPage.class);
 		pageResolverMock = new Mock(PageResolver.class);
 

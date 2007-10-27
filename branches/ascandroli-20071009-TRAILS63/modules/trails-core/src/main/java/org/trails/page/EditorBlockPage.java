@@ -14,7 +14,7 @@ import org.trails.validation.ValidatorTranslatorService;
 public abstract class EditorBlockPage extends ModelPage implements IEditorBlockPage
 {
 
-	@InjectObject("spring:validatorTranslatorService")
+	@InjectObject("service:trails.core.ValidatorTranslatorService")
 	public abstract ValidatorTranslatorService getValidatorTranslatorService();
 
 	public abstract IPropertyDescriptor getDescriptor();
