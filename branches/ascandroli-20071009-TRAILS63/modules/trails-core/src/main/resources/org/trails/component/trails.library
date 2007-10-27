@@ -13,7 +13,7 @@
 	<component-type type="EditCollection" specification-path="EditCollection.jwc"/>
 	<component-type type="EditLink" specification-path="/org/trails/link/EditLink.jwc"/>
 	<component-type type="LocaleLink" specification-path="/org/trails/link/LocaleLink.jwc"/>
-	<component-type type="ViewLink" specification-path="ViewLink.jwc"/>
+	<component-type type="ViewLink" specification-path="/org/trails/link/ViewLink.jwc"/>
 	<component-type type="Identifier" specification-path="Identifier.jwc"/>
 	<component-type type="InvokeMethod" specification-path="InvokeMethod.jwc"/>
 	<component-type type="ListAllLink" specification-path="/org/trails/link/ListAllLink.jwc"/>
