@@ -17,15 +17,4 @@ public abstract class EditorBlockPage extends ModelPage implements IEditorBlockP
 	@InjectObject("service:trails.core.ValidatorTranslatorService")
 	public abstract ValidatorTranslatorService getValidatorTranslatorService();
 
-	public abstract IPropertyDescriptor getDescriptor();
-
-	public abstract void setDescriptor(IPropertyDescriptor Descriptor);
-
-	public boolean isModelNew()
-	{
-		return ((IModelPage) getRequestCycle().getPage()).isModelNew();
-	}
-
-	public void setModelNew(boolean modelNew)
-	{}
 }
