@@ -68,26 +68,21 @@ public abstract class EditPage extends ModelPage
 			{
 				getCallbackStack().pop();
 			}
-			return getTrailsPagesService().getLink(false, new TrailsPagesServiceParameter(PageType.Edit, getClassDescriptor(), getModel(), getAssociationDescriptor(), getParent())); 
+			return getTrailsPagesService().getLink(false, new TrailsPagesServiceParameter(PageType.EDIT, getClassDescriptor(), getModel(), getAssociationDescriptor(), getParent()));
 		}
 		return null;
 	}
 
 	private ILink defaultCallback() {
-		return getTrailsPagesService().getLink(false, new TrailsPagesServiceParameter(PageType.List, getClassDescriptor()));
+		return getTrailsPagesService().getLink(false, new TrailsPagesServiceParameter(PageType.LIST, getClassDescriptor()));
 	}
 
-	/*
-		 * To avoid duplicate callbacks on the stack, we need to replace the top
-		 * callback if it has an unsaved model object. (non-Javadoc)
-		 *
-		 * @see org.trails.page.TrailsPage#pushCallback()
-		 */
 	public void pushCallback()
 	{
-		if (getCallbackStack() != null)
+		UrlCallback callback = new UrlCallback(getTrailsPagesService().getLink(false, new TrailsPagesServiceParameter(PageType.EDIT, getClassDescriptor(), getModel(), getAssociationDescriptor(), getParent())).getURL());
+		if (getCallbackStack() != null && (getCallbackStack().isEmpty() || !getCallbackStack().peek().equals(callback)))
 		{
-			getCallbackStack().push(new UrlCallback(getTrailsPagesService().getLink(false, new TrailsPagesServiceParameter(PageType.Edit, getClassDescriptor(), getModel(), getAssociationDescriptor(), getParent())).getURL()));
+			getCallbackStack().push(callback);
 		}
 	}
 

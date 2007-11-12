@@ -22,7 +22,7 @@ import java.util.List;
  *
  * @author Chris Nelson
  */
-public abstract class ListPage extends TrailsPage 
+public abstract class ListPage extends TrailsPage
 {
 
 	public abstract Object getObject();
@@ -40,6 +40,9 @@ public abstract class ListPage extends TrailsPage
 
 	public void pushCallback()
 	{
-//		getCallbackStack().push(new UrlCallback(getTrailsPagesService().getLink(false, new TrailsPagesServiceParameter(PageType.List, getClassDescriptor())).getURL()));
+		if (getCallbackStack() != null)
+		{
+			getCallbackStack().clear();
+		}
 	}
 }

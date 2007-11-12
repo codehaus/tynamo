@@ -25,7 +25,7 @@ public abstract class ListAllLink extends AbstractTypeNavigationLink
 
 	public PageType getPageType()
 	{
-		return PageType.List;
+		return PageType.LIST;
 	}
 
 	public String getBundleKey()

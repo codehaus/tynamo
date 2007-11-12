@@ -15,7 +15,7 @@ public abstract class SearchLink extends AbstractTypeNavigationLink
 
 	public PageType getPageType()
 	{
-		return PageType.Search;
+		return PageType.SEARCH;
 	}
 
 	public String getBundleKey()

@@ -2,7 +2,6 @@ package org.trails.engine;
 
 import org.apache.hivemind.ApplicationRuntimeException;
 import org.apache.hivemind.util.Defense;
-import org.apache.tapestry.IExternalPage;
 import org.apache.tapestry.IPage;
 import org.apache.tapestry.IRequestCycle;
 import org.apache.tapestry.PageNotFoundException;
@@ -48,7 +47,7 @@ public class TrailsPagesService implements IEngineService
 
 		Map parameters = new HashMap();
 
-		parameters.put(ServiceConstants.PAGE_TYPE, tpsp.getPageType().toString());
+		parameters.put(ServiceConstants.PAGE_TYPE, tpsp.getPageType().name().toLowerCase());
 		parameters.put(ServiceConstants.CLASS_DESCRIPTOR, dataSqueezer.squeeze(tpsp.getClassDescriptor()));
 
 		putIfNotNull(parameters, ServiceConstants.MODEL, tpsp.getModel());
@@ -80,7 +79,15 @@ public class TrailsPagesService implements IEngineService
 
 	public void service(IRequestCycle cycle) throws IOException
 	{
-		PageType pageType = PageType.valueOf(cycle.getParameter(ServiceConstants.PAGE_TYPE));
+		PageType pageType = null;
+		try
+		{
+			pageType = PageType.valueOf(cycle.getParameter(ServiceConstants.PAGE_TYPE).toUpperCase());
+		} catch (IllegalArgumentException e)
+		{
+			throw e;
+		}
+
 		IClassDescriptor classDescriptor = (IClassDescriptor) dataSqueezer.unsqueeze(cycle.getParameter(ServiceConstants.CLASS_DESCRIPTOR));
 		Object model = unsqueezeIfNotNull(cycle, ServiceConstants.MODEL);
 		CollectionDescriptor collectionDescriptor = (CollectionDescriptor) unsqueezeIfNotNull(cycle, ServiceConstants.ASSOC_DESCRIPTOR);
@@ -104,9 +111,9 @@ public class TrailsPagesService implements IEngineService
 
 		} catch (PageNotFoundException ae)
 		{
-			if (PageType.New.equals(pageType))
+			if (PageType.NEW.equals(pageType))
 			{
-				rawPage = pageResolver.resolvePage(cycle, classDescriptor.getType(), PageType.Edit);
+				rawPage = pageResolver.resolvePage(cycle, classDescriptor.getType(), PageType.EDIT);
 				try
 				{
 					model = classDescriptor.getType().newInstance(); //TODO: we need a POJO factory.
@@ -135,7 +142,7 @@ public class TrailsPagesService implements IEngineService
 		{
 			((ModelPage) page).setModel(model);
 
-			if (PageType.New.equals(pageType))
+			if (PageType.NEW.equals(pageType))
 			{
 				((ModelPage) page).setModelNew(true);
 			} else

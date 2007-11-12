@@ -62,7 +62,7 @@ public abstract class HibernateEditCollection extends EditCollection
 		EditPage editPage = (EditPage) getPageResolver().resolvePage(
 			getPage().getRequestCycle(),
 			Utils.checkForCGLIB(member.getClass()),
-			PageType.Edit);
+			PageType.EDIT);
 		try
 		{
 			getPersistenceService().reattach(member);

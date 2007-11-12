@@ -23,7 +23,7 @@ public abstract class NewLink extends AbstractTypeNavigationLink
 
 	public PageType getPageType()
 	{
-		return PageType.New;
+		return PageType.NEW;
 	}
 
 	public String getBundleKey()

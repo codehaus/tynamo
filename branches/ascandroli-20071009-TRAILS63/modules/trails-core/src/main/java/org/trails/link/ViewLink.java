@@ -9,6 +9,6 @@ public abstract class ViewLink extends ModelLink
 {
 	public PageType getPageType()
 	{
-		return PageType.View;
+		return PageType.VIEW;
 	}
 }

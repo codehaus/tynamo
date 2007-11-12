@@ -1,7 +1,5 @@
 package org.trails.io;
 
-import java.io.Serializable;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.hivemind.ApplicationRuntimeException;
@@ -9,38 +7,40 @@ import org.apache.tapestry.services.DataSqueezer;
 import org.apache.tapestry.util.io.SqueezeAdaptor;
 import org.trails.descriptor.DescriptorService;
 import org.trails.descriptor.IClassDescriptor;
+import org.trails.engine.encoders.abbreviator.EntityNameAbbreviator;
 import org.trails.persistence.PersistenceService;
 
+import java.io.Serializable;
+
 /**
- * This class is a Trails adaptation of Tapernate's EntitySqueezerFilter
- * Squeezes persistent entities
+ * This class is a Trails adaptation of Tapernate's EntitySqueezerFilter Squeezes persistent entities
  */
 public class EntitySqueezerStrategy implements SqueezeFilter, SqueezeAdaptor
 {
 	private static final Log LOG = LogFactory.getLog(EntitySqueezerStrategy.class);
 
-
-	String _delimiter;
-	String _prefix;
-
+	String delimiter;
+	String prefix;
 
 	private DescriptorService descriptorService;
 
 	private PersistenceService persistenceService;
 
+	private EntityNameAbbreviator entityNameAbbreviator;
+
 	public String getPrefix()
 	{
-		return _prefix;
+		return prefix;
 	}
 
 	public void setDelimiter(String delimiter)
 	{
-		this._delimiter = delimiter;
+		this.delimiter = delimiter;
 	}
 
 	public void setPrefix(String prefix)
 	{
-		this._prefix = prefix;
+		this.prefix = prefix;
 	}
 
 	public Class getDataClass()
@@ -48,20 +48,9 @@ public class EntitySqueezerStrategy implements SqueezeFilter, SqueezeAdaptor
 		return Squeezable.class;
 	}
 
-
-	public DescriptorService getDescriptorService()
-	{
-		return descriptorService;
-	}
-
 	public void setDescriptorService(DescriptorService descriptorService)
 	{
 		this.descriptorService = descriptorService;
-	}
-
-	public PersistenceService getPersistenceService()
-	{
-		return persistenceService;
 	}
 
 	public void setPersistenceService(PersistenceService persistenceService)
@@ -69,6 +58,10 @@ public class EntitySqueezerStrategy implements SqueezeFilter, SqueezeAdaptor
 		this.persistenceService = persistenceService;
 	}
 
+	public void setEntityNameAbbreviator(EntityNameAbbreviator entityNameAbbreviator)
+	{
+		this.entityNameAbbreviator = entityNameAbbreviator;
+	}
 
 	public String squeeze(DataSqueezer dataSqueezer, Object o)
 	{
@@ -85,10 +78,10 @@ public class EntitySqueezerStrategy implements SqueezeFilter, SqueezeAdaptor
 
 		if (data != null)
 		{
-			IClassDescriptor classDescriptor = getDescriptorService().getClassDescriptor(data.getClass());
+			IClassDescriptor classDescriptor = descriptorService.getClassDescriptor(data.getClass());
 			if (classDescriptor != null)
 			{
-				Serializable id = (Serializable) persistenceService.getIdentifier(data, classDescriptor);
+				Serializable id = persistenceService.getIdentifier(data, classDescriptor);
 
 				if (LOG.isDebugEnabled())
 				{
@@ -97,11 +90,11 @@ public class EntitySqueezerStrategy implements SqueezeFilter, SqueezeAdaptor
 
 				if (id == null)
 				{
-					return _prefix + next.squeeze(classDescriptor.getType()); // + _delimiter + next.squeeze(-1);
+					return prefix + entityNameAbbreviator.getAbbreviation(classDescriptor.getType());
 				}
 
 //			Serializable version = (Serializable) persistenceService.getVersion(data, classDescriptor);
-				return _prefix + next.squeeze(classDescriptor.getType()) + _delimiter + next.squeeze(id);
+				return prefix + entityNameAbbreviator.getAbbreviation(classDescriptor.getType()) + delimiter + next.squeeze(id);
 			}
 		}
 		return next.squeeze(data);
@@ -119,10 +112,10 @@ public class EntitySqueezerStrategy implements SqueezeFilter, SqueezeAdaptor
 
 	public Object unsqueeze(String string, DataSqueezer next)
 	{
-		if (string.startsWith(_prefix))
+		if (string.startsWith(prefix))
 		{
-			final String squeezed = string.substring(_prefix.length());
-			final int delimiterNdx = squeezed.indexOf(_delimiter);
+			final String squeezed = string.substring(prefix.length());
+			final int delimiterNdx = squeezed.indexOf(delimiter);
 
 			final String entityName;
 			final Serializable id;
@@ -130,14 +123,14 @@ public class EntitySqueezerStrategy implements SqueezeFilter, SqueezeAdaptor
 			if (delimiterNdx > 0)
 			{
 				entityName = squeezed.substring(0, delimiterNdx);
-				id = (Serializable) next.unsqueeze(squeezed.substring(delimiterNdx + _delimiter.length()));
+				id = (Serializable) next.unsqueeze(squeezed.substring(delimiterNdx + delimiter.length()));
 			} else
 			{
 				entityName = squeezed;
 				id = null;
 			}
 
-			final Class<?> clazz = (Class<?>) next.unsqueeze(entityName);
+			final Class<?> clazz = (Class<?>) entityNameAbbreviator.getEntityName(entityName);
 
 			if (LOG.isDebugEnabled())
 			{
@@ -146,12 +139,12 @@ public class EntitySqueezerStrategy implements SqueezeFilter, SqueezeAdaptor
 
 			if (id != null)
 			{
-				return getPersistenceService().loadInstance(clazz, id);
+				return persistenceService.loadInstance(clazz, id);
 			} else
 			{
 				try
 				{
-					return clazz.newInstance();
+					return clazz.newInstance(); //@todo we need an entity factory
 				} catch (InstantiationException e)
 				{
 					throw new ApplicationRuntimeException("decode-failure: unable to unsqueeze entity", e);

@@ -11,12 +11,6 @@
  */
 package org.trails.link;
 
-import org.apache.hivemind.util.Defense;
-import org.apache.tapestry.annotations.InjectObject;
-import org.apache.tapestry.annotations.Parameter;
-import org.trails.component.Utils;
-import org.trails.descriptor.DescriptorService;
-import org.trails.descriptor.IClassDescriptor;
 import org.trails.page.PageType;
 
 /**
@@ -27,7 +21,7 @@ public abstract class EditLink extends ModelLink
 
 	public PageType getPageType()
 	{
-		return PageType.Edit;
+		return PageType.EDIT;
 	}
 
 }
