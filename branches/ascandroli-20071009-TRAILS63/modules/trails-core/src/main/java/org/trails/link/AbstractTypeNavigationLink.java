@@ -13,19 +13,21 @@
  */
 package org.trails.link;
 
-import org.apache.tapestry.BaseComponent;
-import org.apache.tapestry.IAsset;
-import org.apache.tapestry.IComponent;
-import org.apache.tapestry.annotations.*;
+import org.apache.tapestry.IMarkupWriter;
+import org.apache.tapestry.IRequestCycle;
+import org.apache.tapestry.annotations.Component;
+import org.apache.tapestry.annotations.ComponentClass;
+import org.apache.tapestry.annotations.InjectObject;
+import org.apache.tapestry.annotations.Parameter;
+import org.trails.component.InsertI18N;
 import org.trails.descriptor.DescriptorService;
 import org.trails.descriptor.IClassDescriptor;
-import org.trails.page.PageType;
 
 /**
  * Common functionality for ListAllLink, NewLink, SearchLink
  */
 @ComponentClass
-public abstract class AbstractTypeNavigationLink extends BaseComponent
+public abstract class AbstractTypeNavigationLink extends TrailsLink
 {
 	@InjectObject("spring:descriptorService")
 	public abstract DescriptorService getDescriptorService();
@@ -44,24 +46,26 @@ public abstract class AbstractTypeNavigationLink extends BaseComponent
 		return getDescriptorService().getClassDescriptor(getType());
 	}
 
-	@Asset(value = "/org/trails/link/AbstractTypeNavigationLink.html")
-	public abstract IAsset get$template();
-
-	@Parameter(required = true)
-	public abstract PageType getPageType();
-
 	@Parameter(required = true)
 	public abstract String getBundleKey();
 
 	@Parameter(required = true)
 	public abstract String getDefaultMessage();
 
-
 	@Parameter(required = true)
 	public abstract Object getParams();
 
-	@Component(id = "trailsLink", type = "TrailsLink", inheritInformalParameters = true,
-			bindings = {"classDescriptor=ognl:classDescriptor", "pageType=ognl:pageType"})
-	public abstract IComponent getTrailsLink();
+	@Component(bindings = {"bundleKey=ognl:bundleKey", "defaultMessage=ognl:defaultMessage", "params=ognl:params"})
+	public abstract InsertI18N getInsertI18N();
 
+	public void renderBody(IMarkupWriter writer, IRequestCycle cycle)
+	{
+		if (getBodyCount() > 0)
+		{
+			super.renderBody(writer, cycle);
+		} else
+		{
+			getInsertI18N().render(writer, cycle);
+		}
+	}
 }
