@@ -14,8 +14,6 @@
 package org.trails.component;
 
 
-import java.util.Locale;
-
 import org.apache.hivemind.Messages;
 import org.apache.hivemind.impl.DefaultClassResolver;
 import org.apache.hivemind.impl.MessageFinderImpl;
@@ -24,6 +22,7 @@ import org.apache.hivemind.service.ThreadLocale;
 import org.apache.hivemind.service.impl.ThreadLocaleImpl;
 import org.apache.hivemind.util.ClasspathResource;
 import org.apache.tapestry.test.Creator;
+import org.apache.tapestry.engine.IEngineService;
 import org.jmock.Mock;
 import org.jmock.MockObjectTestCase;
 import org.trails.callback.CallbackStack;
@@ -35,6 +34,8 @@ import org.trails.page.EditPage;
 import org.trails.persistence.PersistenceService;
 import org.trails.validation.TrailsValidationDelegate;
 
+import java.util.Locale;
+
 public class ComponentTest extends MockObjectTestCase
 {
 	protected Creator creator = new Creator();
@@ -44,6 +45,7 @@ public class ComponentTest extends MockObjectTestCase
 	protected Mock persistenceMock = new Mock(PersistenceService.class);
 	protected TrailsValidationDelegate delegate = new TrailsValidationDelegate();
 	protected ThreadLocale threadLocale = 	new ThreadLocaleImpl(Locale.ENGLISH);
+	protected Mock pageServiceMock = new Mock(IEngineService.class);
 
 	protected void setUp() throws Exception
 	{
@@ -76,7 +78,8 @@ public class ComponentTest extends MockObjectTestCase
 				"descriptorService", descriptorServiceMock.proxy(),
 				"callbackStack", callbackStack,
 				"delegate", delegate,
-				"resourceBundleMessageSource", messageSource
+				"resourceBundleMessageSource", messageSource,
+				"trailsPagesService", pageServiceMock.proxy()
 			});
 		return editPage;
 	}

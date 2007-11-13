@@ -17,14 +17,14 @@ public class DefaultAbbreviator implements EntityNameAbbreviator
 	private BidiMap abbreviationMap;
 	private DescriptorService descriptorService;
 
-	public String getAbbreviation(Class entityName)
+	public String abbreviate(Class entityName)
 	{
 		return (String) abbreviationMap.get(entityName.getName());
 	}
 
-	public Class getEntityName(String abbreviation)
+	public Class unabbreviate(String abbreviation)
 	{
-		return Utils.getClassForName((String) abbreviationMap.getKey(abbreviation));
+		return Utils.classForName((String) abbreviationMap.getKey(abbreviation));
 	}
 
 	public void initializeService()

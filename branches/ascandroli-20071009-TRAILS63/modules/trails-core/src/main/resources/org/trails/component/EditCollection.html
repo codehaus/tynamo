@@ -1,6 +1,6 @@
 <span jwcid="$content$">
 	<div jwcid="cannotAddFromExisting@If" condition="ognl:!addFromExisting">
-		<table class="editCollection">
+		<table class="field editCollection">
 			<tr>
 				<td>
 					<table jwcid="any@Any">
@@ -37,7 +37,7 @@
 			   listener="listener:remove" disabled="ognl:page.modelNew"/>
 	</div>
     <div jwcid="canAddFromExisting@If" condition="ognl:addFromExisting">
-		<div jwcid="palette@contrib:Palette" model="ognl:selectionModel" selected="ognl:selectedList"
+		<div jwcid="palette@contrib:Palette" tableClass="field tapestry-palette" model="ognl:selectionModel" selected="ognl:selectedList"
 			 sort="ognl:sortMode"/>
 	</div>
 	<div jwcid="allowCreate@If" condition="ognl:allowCreate">

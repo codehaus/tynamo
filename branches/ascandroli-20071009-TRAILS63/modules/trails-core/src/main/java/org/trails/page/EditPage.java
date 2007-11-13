@@ -51,8 +51,8 @@ public abstract class EditPage extends ModelPage
 	public abstract void setParent(Object parent);
 
 	/**
-	 * This property allows components to change the page during the middle of
-	 * the rewind without causing a StaleLinkException
+	 * This property allows components to change the page during the middle of the rewind without causing a
+	 * StaleLinkException
 	 *
 	 * @return
 	 */
@@ -64,22 +64,27 @@ public abstract class EditPage extends ModelPage
 	{
 		if (save())
 		{
-			if (getCallbackStack() != null)
+			if (getCallbackStack() != null && !getCallbackStack().isEmpty())
 			{
+				// When saving objects with assigned IDs, we need to removed the last element of the stack. 
 				getCallbackStack().pop();
 			}
-			return getTrailsPagesService().getLink(false, new TrailsPagesServiceParameter(PageType.EDIT, getClassDescriptor(), getModel(), getAssociationDescriptor(), getParent()));
+			return getTrailsPagesService()
+					.getLink(false, new TrailsPagesServiceParameter(PageType.EDIT, getClassDescriptor(), getModel(), getAssociationDescriptor(), getParent()));
 		}
 		return null;
 	}
 
-	private ILink defaultCallback() {
-		return getTrailsPagesService().getLink(false, new TrailsPagesServiceParameter(PageType.LIST, getClassDescriptor()));
+	private ILink defaultCallback()
+	{
+		return getTrailsPagesService()
+				.getLink(false, new TrailsPagesServiceParameter(PageType.LIST, getClassDescriptor()));
 	}
 
 	public void pushCallback()
 	{
-		UrlCallback callback = new UrlCallback(getTrailsPagesService().getLink(false, new TrailsPagesServiceParameter(PageType.EDIT, getClassDescriptor(), getModel(), getAssociationDescriptor(), getParent())).getURL());
+		UrlCallback callback = new UrlCallback(getTrailsPagesService()
+				.getLink(false, new TrailsPagesServiceParameter(PageType.EDIT, getClassDescriptor(), getModel(), getAssociationDescriptor(), getParent())).getURL());
 		if (getCallbackStack() != null && (getCallbackStack().isEmpty() || !getCallbackStack().peek().equals(callback)))
 		{
 			getCallbackStack().push(callback);
@@ -153,11 +158,9 @@ public abstract class EditPage extends ModelPage
 
 			if (cameFromCollection())
 			{
-				executeOgnlExpression(getAssociationDescriptor().findAddExpression(), getModel(), getParent());
+				executeOgnlExpression(getAssociationDescriptor().findRemoveExpression(), getModel(), getParent());
 				getPersistenceService().save(getParent());
 			}
-
-			return goBack(cycle);
 
 		} catch (PersistenceException pe)
 		{
@@ -169,6 +172,8 @@ public abstract class EditPage extends ModelPage
 			getDelegate().record(e);
 			return null;
 		}
+
+		return goBack(cycle);
 	}
 
 	/**
@@ -180,11 +185,11 @@ public abstract class EditPage extends ModelPage
 		if (cameFromCollection() && isModelNew())
 		{
 			return getResourceBundleMessageSource()
-				.getMessageWithDefaultValue("org.trails.i18n.add", params, "[TRAILS][ORG.TRAILS.I18N.ADD]");
+					.getMessageWithDefaultValue("org.trails.i18n.add", params, "[TRAILS][ORG.TRAILS.I18N.ADD]");
 		} else
 		{
 			return getResourceBundleMessageSource()
-				.getMessageWithDefaultValue("org.trails.i18n.edit", params, "[TRAILS][ORG.TRAILS.I18N.EDIT]");
+					.getMessageWithDefaultValue("org.trails.i18n.edit", params, "[TRAILS][ORG.TRAILS.I18N.EDIT]");
 		}
 	}
 

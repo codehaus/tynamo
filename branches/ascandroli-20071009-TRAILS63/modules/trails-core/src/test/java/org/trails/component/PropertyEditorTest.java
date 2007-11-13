@@ -95,8 +95,9 @@ public class PropertyEditorTest extends MockObjectTestCase
 				atLeast(1).of(page).getNestedComponent("block"); will(returnValue(block));
 
 				atLeast(1).of(page).setModel(model);
+				atLeast(1).of(page).setModelNew(false);
 				atLeast(1).of(page).setDescriptor(descriptor);
-				atLeast(1).of(page).setEditPageName(pageName);
+//				atLeast(1).of(page).setEditPageName(pageName);
 
 				atLeast(1).of(blockFinder).findBlockAddress(descriptor); will(returnValue(componentAddress));
 			}

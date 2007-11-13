@@ -4,6 +4,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.tapestry.services.DataSqueezer;
 import org.apache.tapestry.util.io.SqueezeAdaptor;
+import org.trails.component.Utils;
 import org.trails.descriptor.DescriptorService;
 import org.trails.descriptor.IClassDescriptor;
 import org.trails.engine.encoders.abbreviator.EntityNameAbbreviator;
@@ -20,6 +21,7 @@ public class ClassDescriptorSqueezerStrategy implements SqueezeAdaptor
 	public static final String PREFIX = "Y";
 	private DescriptorService descriptorService;
 	private EntityNameAbbreviator entityNameAbbreviator;
+	private boolean shouldAbbreviate = false;
 
 	public Class getDataClass()
 	{
@@ -39,7 +41,7 @@ public class ClassDescriptorSqueezerStrategy implements SqueezeAdaptor
 	public String squeeze(DataSqueezer squeezer, Object object)
 	{
 		IClassDescriptor classDescriptor = (IClassDescriptor) object;
-		final String squeezed = entityNameAbbreviator.getAbbreviation(classDescriptor.getType());
+		final String squeezed = abbreviate(classDescriptor.getType());
 
 		if (LOG.isDebugEnabled())
 		{
@@ -57,11 +59,23 @@ public class ClassDescriptorSqueezerStrategy implements SqueezeAdaptor
 		}
 
 		final String squeezed = string.substring(PREFIX.length());
-		return descriptorService.getClassDescriptor(entityNameAbbreviator.getEntityName(squeezed));
+
+		return descriptorService.getClassDescriptor(unabbreviate(squeezed));
 	}
 
 	public void setEntityNameAbbreviator(EntityNameAbbreviator entityNameAbbreviator)
 	{
 		this.entityNameAbbreviator = entityNameAbbreviator;
+		shouldAbbreviate = entityNameAbbreviator != null;
+	}
+
+	private String abbreviate(Class clazz)
+	{
+		return shouldAbbreviate ? entityNameAbbreviator.abbreviate(clazz) : clazz.getName();
+	}
+
+	private Class unabbreviate(String abbreviation)
+	{
+		return shouldAbbreviate ? entityNameAbbreviator.unabbreviate(abbreviation) : Utils.classForName(abbreviation);
 	}
 }

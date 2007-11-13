@@ -5,6 +5,7 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.hivemind.ApplicationRuntimeException;
 import org.apache.tapestry.services.DataSqueezer;
 import org.apache.tapestry.util.io.SqueezeAdaptor;
+import org.trails.component.Utils;
 import org.trails.descriptor.DescriptorService;
 import org.trails.descriptor.IClassDescriptor;
 import org.trails.engine.encoders.abbreviator.EntityNameAbbreviator;
@@ -27,40 +28,16 @@ public class EntitySqueezerStrategy implements SqueezeFilter, SqueezeAdaptor
 	private PersistenceService persistenceService;
 
 	private EntityNameAbbreviator entityNameAbbreviator;
+	private boolean shouldAbbreviate = false;
 
 	public String getPrefix()
 	{
 		return prefix;
 	}
 
-	public void setDelimiter(String delimiter)
-	{
-		this.delimiter = delimiter;
-	}
-
-	public void setPrefix(String prefix)
-	{
-		this.prefix = prefix;
-	}
-
 	public Class getDataClass()
 	{
 		return Squeezable.class;
-	}
-
-	public void setDescriptorService(DescriptorService descriptorService)
-	{
-		this.descriptorService = descriptorService;
-	}
-
-	public void setPersistenceService(PersistenceService persistenceService)
-	{
-		this.persistenceService = persistenceService;
-	}
-
-	public void setEntityNameAbbreviator(EntityNameAbbreviator entityNameAbbreviator)
-	{
-		this.entityNameAbbreviator = entityNameAbbreviator;
 	}
 
 	public String squeeze(DataSqueezer dataSqueezer, Object o)
@@ -90,11 +67,11 @@ public class EntitySqueezerStrategy implements SqueezeFilter, SqueezeAdaptor
 
 				if (id == null)
 				{
-					return prefix + entityNameAbbreviator.getAbbreviation(classDescriptor.getType());
+					return prefix + entityNameAbbreviator.abbreviate(classDescriptor.getType());
 				}
 
 //			Serializable version = (Serializable) persistenceService.getVersion(data, classDescriptor);
-				return prefix + entityNameAbbreviator.getAbbreviation(classDescriptor.getType()) + delimiter + next.squeeze(id);
+				return prefix + abbreviate(classDescriptor.getType()) + delimiter + next.squeeze(id);
 			}
 		}
 		return next.squeeze(data);
@@ -130,7 +107,7 @@ public class EntitySqueezerStrategy implements SqueezeFilter, SqueezeAdaptor
 				id = null;
 			}
 
-			final Class<?> clazz = (Class<?>) entityNameAbbreviator.getEntityName(entityName);
+			final Class<?> clazz = (Class<?>) unabbreviate(entityName);
 
 			if (LOG.isDebugEnabled())
 			{
@@ -167,5 +144,41 @@ public class EntitySqueezerStrategy implements SqueezeFilter, SqueezeAdaptor
 			unsqueezed[i] = unsqueeze(strings[i], next);
 		}
 		return unsqueezed;
+	}
+
+	public void setDelimiter(String delimiter)
+	{
+		this.delimiter = delimiter;
+	}
+
+	public void setPrefix(String prefix)
+	{
+		this.prefix = prefix;
+	}
+
+	public void setDescriptorService(DescriptorService descriptorService)
+	{
+		this.descriptorService = descriptorService;
+	}
+
+	public void setPersistenceService(PersistenceService persistenceService)
+	{
+		this.persistenceService = persistenceService;
+	}
+
+	public void setEntityNameAbbreviator(EntityNameAbbreviator entityNameAbbreviator)
+	{
+		this.entityNameAbbreviator = entityNameAbbreviator;
+		shouldAbbreviate = entityNameAbbreviator != null;
+	}
+
+	private String abbreviate(Class clazz)
+	{
+		return shouldAbbreviate ? entityNameAbbreviator.abbreviate(clazz) : clazz.getName();
+	}
+
+	private Class unabbreviate(String abbreviation)
+	{
+		return shouldAbbreviate ? entityNameAbbreviator.unabbreviate(abbreviation) : Utils.classForName(abbreviation);
 	}
 }
