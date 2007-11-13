@@ -29,12 +29,8 @@ public abstract class PropertyEditor extends BaseComponent
 	@Parameter(defaultValue = "container.property")
 	public abstract IPropertyDescriptor getDescriptor();
 
-	public abstract void setDescriptor(IPropertyDescriptor Descriptor);
-
 	@Parameter(defaultValue = "container.model")
 	public abstract Object getModel();
-
-	public abstract void setModel(Object model);
 
 	@Parameter(defaultValue = "container.modelNew")
 	public abstract boolean isModelNew();
