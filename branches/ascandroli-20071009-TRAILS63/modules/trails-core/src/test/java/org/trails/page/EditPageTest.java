@@ -13,16 +13,13 @@ package org.trails.page;
 
 import org.apache.tapestry.IRequestCycle;
 import org.apache.tapestry.RedirectException;
-import org.apache.tapestry.valid.IValidationDelegate;
 import org.jmock.Mock;
 import org.trails.callback.UrlCallback;
 import org.trails.component.ComponentTest;
 import org.trails.descriptor.CollectionDescriptor;
 import org.trails.descriptor.IClassDescriptor;
-import org.trails.descriptor.IdentifierDescriptor;
 import org.trails.descriptor.TrailsClassDescriptor;
 import org.trails.persistence.PersistenceException;
-import org.trails.test.Bar;
 import org.trails.test.Baz;
 import org.trails.test.Foo;
 import org.trails.validation.ValidationException;
@@ -34,14 +31,12 @@ public class EditPageTest extends ComponentTest
 
 	private static final String CALLBACK_URL = "http://home";
 	Mock cycleMock = new Mock(IRequestCycle.class);
+
 	Baz baz = new Baz();
-	IClassDescriptor descriptor = new TrailsClassDescriptor(Bar.class);
-	EditPage editPage;
-	EditPage bazEditPage;
 	Foo foo = new Foo();
-	IdentifierDescriptor idDescriptor;
-	Mock validatorMock;
-	ListPage listPage;
+
+	EditPage fooEditPage;
+	EditPage bazEditPage;
 
 	final UrlCallback callback = new UrlCallback(CALLBACK_URL);
 
@@ -49,19 +44,13 @@ public class EditPageTest extends ComponentTest
 	IClassDescriptor fooDescriptor = new TrailsClassDescriptor(Foo.class, "Foo");
 	IClassDescriptor bazDescriptor = new TrailsClassDescriptor(Baz.class, "Baz");
 
-
 	public void setUp() throws Exception
 	{
 		foo.setName("foo");
-		validatorMock = new Mock(IValidationDelegate.class);
-		listPage = buildTrailsPage(ListPage.class);
 
-		editPage = buildEditPage();
-		editPage.setClassDescriptor(fooDescriptor);
-		editPage.setModel(foo);
-
-		idDescriptor = new IdentifierDescriptor(Foo.class, "id", Foo.class);
-		descriptor.getPropertyDescriptors().add(idDescriptor);
+		fooEditPage = buildEditPage();
+		fooEditPage.setClassDescriptor(fooDescriptor);
+		fooEditPage.setModel(foo);
 
 		bazzesDescriptor.setElementType(Baz.class);
 
@@ -83,7 +72,7 @@ public class EditPageTest extends ComponentTest
 		bazEditPage.setModelNew(true);
 		bazEditPage.setParent(new Foo());
 
-		assertEquals("Edit Foo", editPage.getTitle());
+		assertEquals("Edit Foo", fooEditPage.getTitle());
 		assertEquals("Add Baz", bazEditPage.getTitle());
 	}
 
@@ -93,15 +82,15 @@ public class EditPageTest extends ComponentTest
 		foo2.setName("foo2");
 		persistenceMock.expects(once()).method("save").with(same(foo)).will(returnValue(foo2));
 		pageServiceMock.expects(once()).method("getLink");
-		editPage.save((IRequestCycle) cycleMock.proxy());
-		assertEquals(foo2, editPage.getModel());
+		fooEditPage.save((IRequestCycle) cycleMock.proxy());
+		assertEquals(foo2, fooEditPage.getModel());
 	}
 
 	public void testSaveWithException()
 	{
 		persistenceMock.expects(atLeastOnce()).method("save").with(same(foo)).will(
 				throwException(new ValidationException("error")));
-		editPage.save((IRequestCycle) cycleMock.proxy());
+		fooEditPage.save((IRequestCycle) cycleMock.proxy());
 		assertTrue("delegate has errors", delegate.getHasErrors());
 
 	}
@@ -112,7 +101,7 @@ public class EditPageTest extends ComponentTest
 
 		try
 		{
-			editPage.saveAndReturn((IRequestCycle) cycleMock.proxy());
+			fooEditPage.saveAndReturn((IRequestCycle) cycleMock.proxy());
 			fail();
 
 		} catch (RedirectException e)
@@ -127,7 +116,7 @@ public class EditPageTest extends ComponentTest
 		persistenceMock.expects(never());
 		try
 		{
-			editPage.cancel((IRequestCycle) cycleMock.proxy());
+			fooEditPage.cancel((IRequestCycle) cycleMock.proxy());
 			fail();
 
 		} catch (RedirectException e)
@@ -202,7 +191,7 @@ public class EditPageTest extends ComponentTest
 
 		try
 		{
-			assertNotNull(editPage.remove((IRequestCycle) cycleMock.proxy()));
+			assertNotNull(fooEditPage.remove((IRequestCycle) cycleMock.proxy()));
 			fail();
 
 		} catch (RedirectException e)
@@ -217,7 +206,7 @@ public class EditPageTest extends ComponentTest
 	{
 		persistenceMock.expects(once()).method("remove").with(same(foo))
 				.will(throwException(new PersistenceException()));
-		editPage.remove((IRequestCycle) cycleMock.proxy());
-		assertTrue(editPage.getDelegate().getHasErrors());
+		fooEditPage.remove((IRequestCycle) cycleMock.proxy());
+		assertTrue(fooEditPage.getDelegate().getHasErrors());
 	}
 }
