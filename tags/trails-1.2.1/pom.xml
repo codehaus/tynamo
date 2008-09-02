@@ -1,0 +1,385 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<name>Trails</name>
+	<url>http://www.trailsframework.org/</url>
+
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.trailsframework</groupId>
+	<artifactId>trails</artifactId>
+	<packaging>pom</packaging>
+	<version>1.2.1</version>
+
+	<properties>
+		<!-- Plugin dependencies and extensions don't use dependencyManagement section, specify a single version here. 
+		BUT don't just abuse this section, it's a hack. -->
+		<log4j.version>1.2.14</log4j.version>
+		<hsqldb.version>1.8.0.7</hsqldb.version>
+		<tapestry.version>4.1.5</tapestry.version>
+		<ognl.version>2.7.1</ognl.version>
+		<spring.version>2.0.6</spring.version>
+	</properties>
+
+	<modules>
+		<!--
+		<module>codehaus-unity-skin</module>
+		-->
+		<module>modules</module>
+		<module>examples</module>
+		<module>archetypes</module>
+	</modules>
+
+	<description>A domain driven development framework for Java.</description>
+	<inceptionYear>2004</inceptionYear>
+	<developers>
+		<developer>
+			<id>ccnelson</id>
+			<name>Chris Nelson</name>
+			<email>ccnelson@dev.java.net</email>
+			<url>http://jroller.com/page/ccnelson</url>
+		</developer>
+		<developer>
+			<id>ascandroli</id>
+			<name>Alejandro Scandroli</name>
+			<organization>Amneris Web Solutions</organization>
+			<organizationUrl>http://www.amneris.es/</organizationUrl>
+			<email>ascandroli@N05PAM.codehaus.org</email>
+			<url>http://docs.codehaus.org/display/~ascandroli</url>
+			<timezone>+1</timezone>
+		</developer>
+		<developer>
+			<id>kaosko</id>
+			<name>Kalle Korhonen</name>
+			<email>kalle.o.korhonen@gmail.com</email>
+			<url>http://docs.codehaus.org/display/~kaosko</url>
+			<timezone>-8</timezone>
+		</developer>
+	</developers>
+	<licenses>
+		<license>
+			<name>Apache License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+	<issueManagement>
+		<system>jira</system>
+		<url>http://jira.codehaus.org/browse/TRAILS</url>
+	</issueManagement>
+	<mailingLists>
+		<mailingList>
+			<name>Trails User List</name>
+			<subscribe>http://xircles.codehaus.org/manage_email/users@trails.codehaus.org</subscribe>
+			<unsubscribe>http://xircles.codehaus.org/manage_email/users@trails.codehaus.org</unsubscribe>
+			<post>users@trails.codehaus.org</post>
+			<archive>http://archive.trails.codehaus.org/users</archive>
+			<otherArchives>
+				<otherArchive>http://www.nabble.com/Trails---Users-f27435.html</otherArchive>
+			</otherArchives>
+		</mailingList>
+		<mailingList>
+			<name>Trails Developer List</name>
+			<subscribe>http://xircles.codehaus.org/manage_email/dev@trails.codehaus.org</subscribe>
+			<unsubscribe>http://xircles.codehaus.org/manage_email/dev@trails.codehaus.org</unsubscribe>
+			<post>dev@trails.codehaus.org</post>
+			<archive>http://archive.trails.codehaus.org/dev</archive>
+		</mailingList>
+	</mailingLists>
+	<scm>
+		<connection>scm:svn:http://svn.codehaus.org/trails/tags/trails-1.2</connection>
+		<developerConnection>scm:svn:https://svn.codehaus.org/trails/tags/trails-1.2</developerConnection>
+		<url>http://svn.trails.codehaus.org/trails/tags/trails-1.2</url>
+	</scm>
+
+	<prerequisites>
+		<maven>2.0.6</maven>
+	</prerequisites>
+
+	<repositories>
+		<repository>
+			<id>trails.codehaus.org</id>
+			<name>Trails Repository</name>
+			<url>http://trails.codehaus.org/repository</url>
+		</repository>
+		<repository>
+			<id>apache.snapshots</id>
+			<url>http://people.apache.org/repo/m2-snapshot-repository</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+		<!-- Don't use snapshots unless absolutely necessary
+				<repository>
+					<id>snapshots.codehaus.org</id>
+					<name>Codehaus Snapshots</name>
+					<url>http://snapshots.repository.codehaus.org/</url>
+					<snapshots>
+						<enabled>true</enabled>
+					</snapshots>
+				</repository>
+				-->
+		<repository>
+			<id>howardlewisship.com</id>
+			<name>Howard Lewis Ship's Repository</name>
+			<url>http://howardlewisship.com/repository</url>
+		</repository>
+	</repositories>
+	<pluginRepositories>
+		<pluginRepository>
+			<id>codehaus</id>
+			<name>CodeHaus Repository</name>
+			<url>http://repository.codehaus.org/</url>
+		</pluginRepository>
+		<pluginRepository>
+			<id>snapshots.codehaus.org</id>
+			<url>http://snapshots.repository.codehaus.org/</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+		</pluginRepository>
+		<pluginRepository>
+			<id>people.apache.org</id>
+			<name>Apache's Maven2 Snapshot Repository</name>
+			<url>http://people.apache.org/maven-snapshot-repository</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+		</pluginRepository>
+	</pluginRepositories>
+
+	<ciManagement>
+		<system>bamboo</system>
+		<url>http://bamboo.ci.codehaus.org/browse/TRAILS</url>
+		<notifiers>
+			<notifier>
+				<type>mail</type>
+				<configuration>
+					<address>ci@trails.codehaus.org</address>
+				</configuration>
+			</notifier>
+			<notifier>
+				<type>irc</type>
+				<configuration>
+					<host>irc.codehaus.org</host>
+					<port>6667</port>
+					<channel>#trails</channel>
+				</configuration>
+			</notifier>
+		</notifiers>
+	</ciManagement>
+
+	<distributionManagement>
+		<site>
+			<id>trails-site</id>
+			<!-- Note the url. Only static files deployed in /constant/ can be decorated by Unity -->
+			<url>dav:https://dav.codehaus.org/trails/constant/site/</url>
+		</site>
+		<repository>
+			<id>trails-release</id>
+			<name>Trails' release repository</name>
+			<url>dav:https://dav.codehaus.org/repository/trails/</url>
+		</repository>
+		<snapshotRepository>
+			<id>trails-snapshot</id>
+			<name>Trails' snapshot repository</name>
+			<url>dav:https://dav.codehaus.org/snapshots.repository/trails/</url>
+		</snapshotRepository>
+	</distributionManagement>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>log4j</groupId>
+				<artifactId>log4j</artifactId>
+				<version>${log4j.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>hsqldb</groupId>
+				<artifactId>hsqldb</artifactId>
+				<version>${hsqldb.version}</version>
+			</dependency>
+		<dependency>
+			<groupId>ognl</groupId>
+			<artifactId>ognl</artifactId>
+			<version>${ognl.version}</version>
+		</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<artifactId>maven-assembly-plugin</artifactId>
+					<version>2.2-beta-1</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-clean-plugin</artifactId>
+					<version>2.1.1</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-checkstyle-plugin</artifactId>
+					<version>2.1</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>2.0.2</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-deploy-plugin</artifactId>
+					<version>2.3</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-eclipse-plugin</artifactId>
+					<version>2.4</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-install-plugin</artifactId>
+					<version>2.2</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-jar-plugin</artifactId>
+					<version>2.1</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-resources-plugin</artifactId>
+					<version>2.2</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-site-plugin</artifactId>
+					<version>2.0-beta-5</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<version>2.3</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-war-plugin</artifactId>
+					<version>2.0.2</version>
+				</plugin>
+				<plugin>
+					<groupId>net.sf.tacos</groupId>
+					<artifactId>tapdoc-maven-plugin</artifactId>
+					<version>0.7.0</version>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+		<plugins>
+			<plugin>
+				<artifactId>maven-idea-plugin</artifactId>
+				<version>2.0</version>
+				<configuration>
+					<downloadSources>true</downloadSources>
+					<downloadJavadocs>true</downloadJavadocs>
+					<dependenciesAsLibraries>true</dependenciesAsLibraries>
+					<useFullNames>false</useFullNames>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.5</source>
+					<target>1.5</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<configuration>
+					<descriptors>
+						<descriptor>src/main/assembly/bin.xml</descriptor>
+						<descriptor>src/main/assembly/src.xml</descriptor>
+						<descriptor>src/main/assembly/examples.xml</descriptor>
+					</descriptors>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-site-plugin</artifactId>
+				<version>2.0-beta-5</version>
+			</plugin>
+		</plugins>
+		<extensions>
+			<extension>
+				<groupId>org.apache.maven.wagon</groupId>
+				<artifactId>wagon-webdav</artifactId>
+				<version>1.0-beta-2</version>
+			</extension>
+		</extensions>
+	</build>
+
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-project-info-reports-plugin</artifactId>
+				<inherited>true</inherited>
+				<configuration>
+					<dependencyLocationsEnabled>true</dependencyLocationsEnabled>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jxr-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<configuration>
+					<source>1.5</source>
+					<linksource>true</linksource>
+					<aggregate>false</aggregate>
+				</configuration>
+			</plugin>
+		</plugins>
+	</reporting>
+
+	<profiles>
+		<profile>
+			<id>ydoc</id>
+			<activation>
+				<property>
+					<name>ydoc</name>
+				</property>
+			</activation>
+			<reporting>
+				<plugins>
+					<plugin>
+						<!--
+							Generates the documentation using the YDoc UML generation plugin.
+							Assumes you have the YDoc libraries locally, as well as a valid
+							YDoc license file. Config info:
+								http://docs.codehaus.org/display/TRAILS/Configuring+Maven2+settings.xml
+	  					-->
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-javadoc-plugin</artifactId>
+						<version>2.0</version>
+						<configuration>
+							<doclet>ydoc.doclets.YStandard</doclet>
+							<docletPath>
+								${ydoc.home}/lib/ydoc.jar${path.separator}${ydoc.home}/lib/class2svg.jar${path.separator}${ydoc.home}/resources
+							</docletPath>
+							<additionalparam>-license ${ydoc.license} -filter ydoc.filters.ExcludeFilter -filterpath
+								${ydoc.home}/lib/ydoc.jar -umlautogen
+							</additionalparam>
+							<author>true</author>
+							<bottom>true</bottom>
+							<header><![CDATA[<a href="/" target="_top">Trails Framework</a>]]></header>
+							<minmemory>128m</minmemory>
+							<maxmemory>512</maxmemory>
+							<packagenames>org.trails.*</packagenames>
+							<use>true</use>
+							<version>true</version>
+							<windowtitle>${project.name} ${project.version} API</windowtitle>
+						</configuration>
+					</plugin>
+				</plugins>
+			</reporting>
+		</profile>
+	</profiles>
+
+</project>
