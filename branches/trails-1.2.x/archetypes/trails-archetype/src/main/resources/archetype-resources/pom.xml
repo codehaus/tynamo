@@ -162,13 +162,13 @@
 		<dependency>
 			<groupId>org.trailsframework</groupId>
 			<artifactId>trails-hibernate</artifactId>
-			<version>1.2-SNAPSHOT</version>
+			<version>1.2.1</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.trailsframework</groupId>
 			<artifactId>trails-test</artifactId>
-			<version>1.2-SNAPSHOT</version>
+			<version>1.2.1</version>
 			<scope>test</scope>
 		</dependency>
 
