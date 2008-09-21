@@ -22,6 +22,7 @@ public class AnnotationDecoratorTest extends TestCase
 
 		IClassDescriptor descriptor = new TrailsClassDescriptor(Annotated.class, "Annotated");
 		IPropertyDescriptor fieldPropDescriptor = new TrailsPropertyDescriptor(Annotated.class, "notBloppity", String.class);
+		fieldPropDescriptor.setIndex(2);
 
 		descriptor.getPropertyDescriptors().add(fieldPropDescriptor);
 		IPropertyDescriptor hiddenDescriptor = new TrailsPropertyDescriptor(Annotated.class, "hidden", String.class);
@@ -37,8 +38,11 @@ public class AnnotationDecoratorTest extends TestCase
 
 		descriptor = decorator.decorate(descriptor);
 		assertEquals(Annotated.CLASS_LABEL, descriptor.getDisplayName());
-		assertEquals("right index", "notBloppity",
-			((IPropertyDescriptor) descriptor.getPropertyDescriptors().get(2)).getName());
+
+		// the order should be: hidden, notBloppity,validatedString, id, booleanProperty. Starting at index = 0
+		assertEquals("right index", "notBloppity", descriptor.getPropertyDescriptors().get(1).getName());
+		assertEquals("right index", "booleanProperty", descriptor.getPropertyDescriptors().get(descriptor.getPropertyDescriptors().size() - 1).getName());
+
 		assertTrue(descriptor.getPropertyDescriptor("hidden").isHidden());
 		assertEquals(Annotated.NOT_BLOPPITY_LABEL,
 			descriptor.getPropertyDescriptor("notBloppity").getDisplayName());

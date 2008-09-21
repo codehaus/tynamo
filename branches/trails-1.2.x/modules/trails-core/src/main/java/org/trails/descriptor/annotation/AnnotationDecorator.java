@@ -109,14 +109,7 @@ public class AnnotationDecorator implements DescriptorDecorator
 	 */
 	private void sortDescriptors(List<IPropertyDescriptor> propertyDescriptors)
 	{
-		for (IPropertyDescriptor propertyDescriptor : Collections.unmodifiableList(propertyDescriptors))
-		{
-			if (propertyDescriptor.getIndex() != IPropertyDescriptor.UNDEFINED_INDEX)
-			{
-				Collections.swap(propertyDescriptors, propertyDescriptor.getIndex(),
-						propertyDescriptors.indexOf(propertyDescriptor));
-			}
-		}
+		Collections.sort(propertyDescriptors, new PropertyDescriptorIndexComparator());
 	}
 
 	private IDescriptor decorateFromAnnotations(IDescriptor descriptor, Annotation[] annotations)
@@ -143,4 +136,13 @@ public class AnnotationDecorator implements DescriptorDecorator
 		return clonedDescriptor;
 	}
 
+}
+
+class PropertyDescriptorIndexComparator implements Comparator<IPropertyDescriptor>
+{
+	public int compare(IPropertyDescriptor pd1, IPropertyDescriptor pd2)
+	{
+		int inverter = pd1.getIndex() == IPropertyDescriptor.UNDEFINED_INDEX || pd2.getIndex() == IPropertyDescriptor.UNDEFINED_INDEX ? -1 : 1;
+		return inverter * (pd1.getIndex() < pd2.getIndex() ? -1 : (pd1.getIndex() == pd2.getIndex() ? 0 : 1));
+	}
 }
