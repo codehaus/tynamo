@@ -65,7 +65,7 @@ public class TrailsDescriptorService implements DescriptorService
 		 */
 	public IClassDescriptor getClassDescriptor(Class type)
 	{
-		if (type.getName().contains("CGLIB"))
+		if (type.getName().contains("CGLIB") || type.getName().contains("javassist"))
 		{
 			return descriptors.get(type.getSuperclass());
 		} else

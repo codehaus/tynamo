@@ -70,11 +70,7 @@ public class HibernateDescriptorDecorator implements DescriptorDecorator
 
 	private LocalSessionFactoryBean localSessionFactoryBean;
 
-	private List types;
-
 	private DescriptorFactory descriptorFactory;
-
-	private HashMap<Class, IClassDescriptor> descriptors = new HashMap<Class, IClassDescriptor>();
 
 	private int largeColumnLength = 100;
 
@@ -309,7 +305,7 @@ public class HibernateDescriptorDecorator implements DescriptorDecorator
 
 	/**
 	 * @param classMetaData
-	 * @param type
+	 * @param descriptor
 	 * @return
 	 */
 	protected boolean notAHibernateProperty(ClassMetadata classMetaData, IPropertyDescriptor descriptor)
@@ -370,7 +366,8 @@ public class HibernateDescriptorDecorator implements DescriptorDecorator
 
 	/**
 	 * @param type
-	 * @param newDescriptor
+	 * @param descriptor
+	 * @param parentClassDescriptor 
 	 */
 	private CollectionDescriptor decorateCollectionDescriptor(Class type, IPropertyDescriptor descriptor,
 			IClassDescriptor parentClassDescriptor)
@@ -557,11 +554,6 @@ public class HibernateDescriptorDecorator implements DescriptorDecorator
 		return (SessionFactory) getLocalSessionFactoryBean().getObject();
 	}
 
-	public IClassDescriptor getClassDescriptor(Class type)
-	{
-		return descriptors.get(type);
-	}
-
 	/**
 	 * @return Returns the localSessionFactoryBean.
 	 */
@@ -577,26 +569,6 @@ public class HibernateDescriptorDecorator implements DescriptorDecorator
 	public void setLocalSessionFactoryBean(LocalSessionFactoryBean localSessionFactoryBean)
 	{
 		this.localSessionFactoryBean = localSessionFactoryBean;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.trails.descriptor.TrailsDescriptorService#getAllDescriptors()
-	 */
-	public List<IClassDescriptor> getAllDescriptors()
-	{
-		return new ArrayList<IClassDescriptor>(descriptors.values());
-	}
-
-	public List getTypes()
-	{
-		return types;
-	}
-
-	public void setTypes(List types)
-	{
-		this.types = types;
 	}
 
 	public int getLargeColumnLength()

@@ -118,6 +118,10 @@
 				</repository>
 				-->
 		<repository>
+			<id>jboss</id>
+			<url>http://repository.jboss.com/maven2</url>
+		</repository>
+		<repository>
 			<id>howardlewisship.com</id>
 			<name>Howard Lewis Ship's Repository</name>
 			<url>http://howardlewisship.com/repository</url>
