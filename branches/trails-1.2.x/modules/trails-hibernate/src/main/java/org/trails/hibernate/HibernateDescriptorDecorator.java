@@ -18,7 +18,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
@@ -253,9 +252,10 @@ public class HibernateDescriptorDecorator implements DescriptorDecorator
 
 	private boolean isFormula(Property mappingProperty)
 	{
-		for (Iterator iter = mappingProperty.getColumnIterator(); iter.hasNext();)
+		Iterator iterator = mappingProperty.getColumnIterator();
+		while (iterator.hasNext())
 		{
-			Selectable selectable = (Selectable) iter.next();
+			Selectable selectable = (Selectable) iterator.next();
 			if (selectable.isFormula())
 			{
 				return true;
@@ -376,11 +376,11 @@ public class HibernateDescriptorDecorator implements DescriptorDecorator
 		{
 			CollectionDescriptor collectionDescriptor = new CollectionDescriptor(type, descriptor);
 			org.hibernate.mapping.Collection collectionMapping = findCollectionMapping(type, descriptor.getName());
-			// It is a child relationship if it has delete-orphan specified in
-			// the mapping
+
+			// It is a child relationship if it has delete-orphan specified in the mapping
 			collectionDescriptor.setChildRelationship(collectionMapping.hasOrphanDelete());
-			CollectionMetadata collectionMetaData = getSessionFactory().getCollectionMetadata(
-					collectionMapping.getRole());
+			collectionDescriptor.setDeleteElementOnCollectionRemove(collectionMapping.hasOrphanDelete());
+			CollectionMetadata collectionMetaData = getSessionFactory().getCollectionMetadata(collectionMapping.getRole());
 
 			collectionDescriptor.setElementType(collectionMetaData.getElementType().getReturnedClass());
 

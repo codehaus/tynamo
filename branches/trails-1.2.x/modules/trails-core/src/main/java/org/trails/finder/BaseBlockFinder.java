@@ -60,6 +60,18 @@ public class BaseBlockFinder implements BlockFinder
 		return null;
 	}
 
+	/** Searches for a block in the currently rendered page or, if not found,
+	 * in the block container page.
+	 *
+	 * This method searches for a block with the same name of the property in
+	 * the currently rendered page. If not found there, it searches in the
+	 * block container page. Block container page examples include the Editors,
+	 * SearchBlocks and Viewers page
+	 *
+	 * @param cycle The request cycle that contains the page being rendered.
+	 *
+	 * @param descriptor The property descriptor for the block being search.
+	 */
 	public Block findBlock(IRequestCycle cycle, IPropertyDescriptor descriptor)
 	{
 		if (cycle.getPage().getComponents().containsKey(descriptor.getName()))

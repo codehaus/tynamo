@@ -88,6 +88,9 @@ public abstract class EditCollection extends TrailsComponent
 
 	@Parameter(defaultValue = "collectionDescriptor.allowRemove")
 	public abstract boolean isAllowRemove();
+	
+	@Parameter(defaultValue = "collectionDescriptor.deleteElementOnCollectionRemove")
+	public abstract boolean isDeleteElementOnCollectionRemove();
 
 	public abstract int getIndex();
 
@@ -154,6 +157,9 @@ public abstract class EditCollection extends TrailsComponent
 		for (Object element : deleting)
 		{
 			Utils.executeOgnlExpression(getCollectionDescriptor().getRemoveExpression(), element, getModel());
+			if(isDeleteElementOnCollectionRemove()){
+				getPersistenceService().remove(element);
+			}
 		}
 	}
 

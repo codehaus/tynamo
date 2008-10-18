@@ -40,6 +40,11 @@ public class CollectionDescriptor extends TrailsPropertyDescriptor
 	private String swapExpression = null;
 
 	private boolean allowRemove = true;
+	
+	/**
+	 * If it is true elements are deleted from the db when they are removed from collection.
+	 */
+	private boolean deleteElementOnCollectionRemove = false;
 
 	public CollectionDescriptor(Class beanType, IPropertyDescriptor descriptor)
 	{
@@ -253,5 +258,17 @@ public class CollectionDescriptor extends TrailsPropertyDescriptor
 		{
 			LOG.error(e.getMessage());
 		}
+	}
+	
+	/**
+	 * Returs true if the collection element must be deleted from db after it is
+	 * removed from collection.
+	 */
+	public boolean isDeleteElementOnCollectionRemove() {
+		return deleteElementOnCollectionRemove;
+	}
+
+	public void setDeleteElementOnCollectionRemove(boolean deleteElement) {
+		this.deleteElementOnCollectionRemove = deleteElement;
 	}
 }

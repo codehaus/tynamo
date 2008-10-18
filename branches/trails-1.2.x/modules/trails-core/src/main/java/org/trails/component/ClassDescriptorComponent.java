@@ -47,7 +47,14 @@ public abstract class ClassDescriptorComponent extends TrailsComponent
 		return !descriptor.isHidden();
 	}
 
-	public boolean hasBlock(String propertyName)
+	/** Finds a block with the given name in this component page.
+	 *
+	 * @param propertyName The name of the block to search for, usually the
+	 * name of the property being edited.
+	 *
+	 * @return true if the block exists in the page.
+	 */
+ 	public boolean hasBlock(String propertyName)
 	{
 		return getPage().getComponents().containsKey(propertyName);
 	}

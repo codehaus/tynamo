@@ -6,6 +6,7 @@ import org.springframework.test.AbstractTransactionalSpringContextTests;
 import org.trails.persistence.HibernatePersistenceService;
 import org.trails.testhibernate.Baz;
 import org.trails.testhibernate.Bing;
+import org.trails.testhibernate.Bar;
 
 public class ValidateUniquenessTest extends AbstractTransactionalSpringContextTests
 {
@@ -78,11 +79,39 @@ public class ValidateUniquenessTest extends AbstractTransactionalSpringContextTe
 
 	public void testUniquenessWithNonString() throws Exception
 	{
-		Bing bing = new Bing();
-		bing.setNumber(5);
-		// should not blow up
-		bing = persistenceService.save(bing);
-		// should also still work
-		bing = persistenceService.save(bing);
+		Bar bar = new Bar();
+		bar.setNumber(5);
+
+		UniquenessException caught = null;
+		try
+		{
+			// should not blow up
+			bar = persistenceService.save(bar);
+
+			// should also still work
+			bar = persistenceService.save(bar);
+		}
+		catch (UniquenessException pe)
+		{
+			caught = pe;
+		}
+
+		assertNull(caught);
+
+
+		Bar bar2 = new Bar();
+		bar2.setNumber(5);
+		try
+		{
+			// now it should
+			bar2 = persistenceService.save(bar2);
+		}
+		catch (UniquenessException pe)
+		{
+			caught = pe;
+		}
+
+		assertEquals("right message", "Number must be unique.",caught.getMessage());
+
 	}
 }

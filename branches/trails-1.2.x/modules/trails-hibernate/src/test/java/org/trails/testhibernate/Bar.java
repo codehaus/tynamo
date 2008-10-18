@@ -12,16 +12,18 @@
 package org.trails.testhibernate;
 
 import org.trails.validation.AssertNoOrphans;
+import org.trails.validation.ValidateUniqueness;
 
 import javax.persistence.*;
 
 @Entity
 @AssertNoOrphans(Wibble.class)
+@ValidateUniqueness(property = "number")
 public class Bar implements IBar {
 
     private Integer id;
-
     private String name;
+    private Integer number;
 
     public String getName() {
         return name;
@@ -51,4 +53,14 @@ public class Bar implements IBar {
     public String getTransientProperty() {
         return "Hello World";
     }
+
+	public Integer getNumber() {
+		return number;
+	}
+
+	public void setNumber(Integer number)
+	{
+		this.number = number;
+	}
+
 }

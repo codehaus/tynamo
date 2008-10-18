@@ -13,6 +13,7 @@ package org.trails.testhibernate;
 
 import org.hibernate.annotations.Formula;
 import org.hibernate.annotations.IndexColumn;
+import org.hibernate.annotations.Cascade;
 import org.trails.validation.AssertNoOrphans;
 
 import javax.persistence.*;
@@ -101,7 +102,8 @@ public class Foo {
     }
 
     @OneToMany
-    @JoinColumn(name = "FOO_ID")
+    @JoinColumn(name = "FOO_ID", nullable = false)
+    @Cascade({org.hibernate. annotations.CascadeType.DELETE_ORPHAN, org.hibernate.annotations.CascadeType.ALL})
     @IndexColumn(name = "BING_INDEX")
     public List<Bing> getBings() {
         return bings;

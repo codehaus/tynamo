@@ -54,10 +54,8 @@ public class HibernateDescriptorDecoratorTest extends TestCase
 
 	public void setUp()
 	{
-		appContext = new ClassPathXmlApplicationContext(
-			"applicationContext-test.xml");
-		hibernateDescriptorDecorator = (DescriptorDecorator) appContext.getBean(
-			"hibernateDescriptorDecorator");
+		appContext = new ClassPathXmlApplicationContext("applicationContext-test.xml");
+		hibernateDescriptorDecorator = (DescriptorDecorator) appContext.getBean("hibernateDescriptorDecorator");
 		TrailsClassDescriptor fooDescriptor = new TrailsClassDescriptor(Foo.class);
 		fooDescriptor.getPropertyDescriptors().add(new TrailsPropertyDescriptor(Foo.class, "bazzes", Set.class));
 		fooDescriptor.getPropertyDescriptors().add(new TrailsPropertyDescriptor(Foo.class, "bings", Set.class));
@@ -101,13 +99,17 @@ public class HibernateDescriptorDecoratorTest extends TestCase
 
 		CollectionDescriptor bazzesDescriptor = (CollectionDescriptor) classDescriptor.getPropertyDescriptor("bazzes");
 		assertTrue("bazzes is a collection", bazzesDescriptor.isCollection());
-		assertEquals("right element type", Baz.class,
-			bazzesDescriptor.getElementType());
-		//TODO Fix when hibernate annotations add support for this..
-		//assertTrue("bazzes are children", bazzesDescriptor.isChildRelationship());
+		assertEquals("right element type", Baz.class, bazzesDescriptor.getElementType());
+
+//		assertTrue("bazzes are children", bazzesDescriptor.isChildRelationship());
 		assertTrue(bazzesDescriptor.isOneToMany());
 		assertEquals("bazzes are mapped by 'foo' property in Baz", "foo", bazzesDescriptor.getInverseProperty());
 		assertTrue("Foo has a cyclic relationship", classDescriptor.getHasCyclicRelationships());
+
+		assertFalse("bazzes can be orpahns", bazzesDescriptor.isDeleteElementOnCollectionRemove());
+
+		CollectionDescriptor bingsDescriptor = (CollectionDescriptor) classDescriptor.getPropertyDescriptor("bings");
+		assertTrue("shouldn't be orphan bings ", bingsDescriptor.isDeleteElementOnCollectionRemove());
 	}
 
 	public void testGetClassDescriptors() throws Exception
