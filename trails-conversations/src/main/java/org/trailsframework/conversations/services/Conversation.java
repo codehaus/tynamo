@@ -36,7 +36,6 @@ public class Conversation {
         // If positive, crudely round up so it's surely idle after this time has passed
         // Also, don't return 0, because you might cause an infinite loop
         if (i >= 0) i++;
-        System.out.println("seconds before becomes idle: " + i);
         return i;
     }
 
