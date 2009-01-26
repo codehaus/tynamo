@@ -62,7 +62,7 @@ public class ConversationModerator {
     
     @AfterRender
     public void afterRender() {
-        System.out.println("Active conversation is " + conversationManager.getActiveConversation());
+        // System.out.println("Active conversation is " + conversationManager.getActiveConversation());
             renderSupport.addScript(String.format("var conversationModerator = new ConversationModerator(null, '%s', 15, null, null);", getUpdateURI() ));
     }
     
