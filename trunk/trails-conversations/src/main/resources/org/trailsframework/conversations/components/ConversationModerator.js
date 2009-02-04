@@ -16,7 +16,7 @@ ConversationModerator.prototype = {
 		this.warnCheckId = null;
 		if (endIfIdleUrl != null) this.checkEnd(secondsBeforeBecomesIdle);
 	},
-        
+
 	endIdle: function() {
 		new Ajax.Request(this.endIfIdleUrl, {
 			method: 'get',
