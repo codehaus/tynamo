@@ -19,7 +19,7 @@ public interface ConversationManager {
 
 	public int getSecondsActiveConversationBecomesIdle();
 
-	public void activateConversation(String conversationId);
+	public boolean activateConversation(String conversationId);
 
 	public String endActiveConversationIfIdle();
 

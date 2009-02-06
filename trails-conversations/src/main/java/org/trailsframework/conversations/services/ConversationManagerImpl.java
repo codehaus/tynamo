@@ -34,8 +34,10 @@ public class ConversationManagerImpl implements ConversationManager {
 		return conversations;
 	}
 
-	public void activateConversation(String conversationId) {
-		if (exists(conversationId)) request.setAttribute(Keys._conversationId.toString(), conversationId);
+	public boolean activateConversation(String conversationId) {
+		if (!exists(conversationId)) return false;
+		request.setAttribute(Keys._conversationId.toString(), conversationId);
+		return true;
 	}
 
 	public String createConversation(String pageName, Integer maxIdleSeconds) {
