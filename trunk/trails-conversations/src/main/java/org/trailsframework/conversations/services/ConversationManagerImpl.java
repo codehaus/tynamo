@@ -104,4 +104,9 @@ public class ConversationManagerImpl implements ConversationManager {
 	public void setPagePersistentFieldStrategy(ConversationalPersistentFieldStrategy pagePersistentFieldStrategy) {
 		this.pagePersistentFieldStrategy = pagePersistentFieldStrategy;
 	}
+
+	public boolean isActiveConversation(String conversationId) {
+		if (conversationId == null) return false;
+		return conversationId.equals(getActiveConversation() );
+	}
 }

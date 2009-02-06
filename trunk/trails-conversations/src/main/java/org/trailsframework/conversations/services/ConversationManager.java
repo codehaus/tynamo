@@ -15,6 +15,8 @@ public interface ConversationManager {
 
 	public String getActiveConversation();
 
+	public boolean isActiveConversation(String conversationId);
+
 	public int getSecondsActiveConversationBecomesIdle();
 
 	public void activateConversation(String conversationId);
