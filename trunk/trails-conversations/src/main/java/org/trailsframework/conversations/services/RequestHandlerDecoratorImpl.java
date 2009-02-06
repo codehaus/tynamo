@@ -49,6 +49,7 @@ public class RequestHandlerDecoratorImpl implements RequestHandlerDecorator {
 					// If cookie isn't available, try activation context
 					else if (activationContext != null) try {
 						conversationId = activationContext.get(String.class, activationContext.getCount() - 1);
+						conversationManager.activateConversation(conversationId);
 					} catch (RuntimeException e) {
 						// Ignore
 					}
