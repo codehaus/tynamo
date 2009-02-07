@@ -1,6 +1,9 @@
 package org.trailsframework.conversations.services;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import org.apache.tapestry5.services.Cookies;
@@ -28,7 +31,7 @@ public class ConversationManagerImpl implements ConversationManager {
 	protected Map<String, Conversation> getConversations() {
 		Map<String, Conversation> conversations = (Map<String, Conversation>) request.getSession(true).getAttribute(Keys.conversations.toString());
 		if (conversations == null) {
-			conversations = new HashMap<String, Conversation>();
+			conversations = Collections.synchronizedMap(new HashMap<String, Conversation>() );
 			request.getSession(true).setAttribute(Keys.conversations.toString(), conversations);
 		}
 		return conversations;
@@ -60,18 +63,20 @@ public class ConversationManagerImpl implements ConversationManager {
 	}
 
 	public void endIdleConversations() {
-		for (Conversation conversation : getConversations().values())
-			if (conversation.isIdle(false)) endConversation(conversation.getId());
+		Iterator<Conversation> iterator = getConversations().values().iterator();
+		while (iterator.hasNext()) {
+			Conversation conversation = iterator.next();
+			if (conversation.isIdle(false)) {
+				discardConversation(conversation);
+				iterator.remove();
+			}
+		}
 	}
 
-	public String endConversation(String conversationId) {
-		Conversation conversation = getConversations().get(conversationId);
-		if (conversation == null) return null;
-		if (conversation.isUsingCookie()) cookies.removeCookieValue(String.valueOf(conversationId));
-		// TODO We are not getting any strategies here because they have not been contributed to this service
+	protected void discardConversation(Conversation conversation) {
+		if (conversation == null) return;
+		if (conversation.isUsingCookie()) cookies.removeCookieValue(String.valueOf(conversation.getId()));
 		if (pagePersistentFieldStrategy != null) pagePersistentFieldStrategy.discardChanges(conversation.getPageName());
-		getConversations().remove(conversationId);
-		return null;
 	}
 
 	public boolean exists(String conversationId) {
@@ -85,7 +90,11 @@ public class ConversationManagerImpl implements ConversationManager {
 		Conversation conversation = getConversations().get(conversationId);
 		if (conversation == null) return null;
 		boolean resetTimeout = !("false".equals(request.getParameter(Parameters.inConversation.name())));
-		if (conversation.isIdle(resetTimeout)) return endConversation(conversationId);
+		if (conversation.isIdle(resetTimeout)) {
+			discardConversation(conversation);
+			getConversations().remove(conversation.getId());
+			conversationId = null;
+		}
 		return conversationId;
 	}
 
