@@ -78,8 +78,8 @@
 	</implementation>
 
 	<implementation service-id="trails.core.BuilderDirector">
-		<invoke-factory>
-			<construct class="org.trails.builder.BuilderDirector"/>
+		<invoke-factory service-id="hivemind.lib.SpringLookupFactory">
+			<lookup-bean name="builderDirector"/>
 		</invoke-factory>
 	</implementation>
 

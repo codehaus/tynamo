@@ -435,4 +435,17 @@
 
 	<bean id="localeHolder" class="org.trails.i18n.SpringLocaleHolder"/>
 
+	<bean id="builderDirector" class="org.trails.builder.BuilderDirectorImpl">
+		<!--<property name="builders">
+			<map>
+				<entry>
+					<key>
+						<value>org.trails.demo.Recipe</value>
+					</key>
+					<bean class="org.trails.demo.RecipeBuilder"/>
+				</entry>
+			</map>
+		</property>-->
+	</bean>
+	
 </beans>
