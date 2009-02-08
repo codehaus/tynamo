@@ -23,6 +23,8 @@ public interface ConversationManager {
 
 	public String endActiveConversationIfIdle();
 
+	public String endConversation(String conversationId);
+
 	public void setPagePersistentFieldStrategy(ConversationalPersistentFieldStrategy pagePersistentFieldStrategy);
 
 }

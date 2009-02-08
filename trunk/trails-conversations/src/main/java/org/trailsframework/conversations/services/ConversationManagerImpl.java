@@ -120,4 +120,12 @@ public class ConversationManagerImpl implements ConversationManager {
 		if (conversationId == null) return false;
 		return conversationId.equals(getActiveConversation() );
 	}
+
+	public String endConversation(String conversationId) {
+		Conversation conversation = getConversations().get(conversationId);
+		if (conversation == null) return null;
+		discardConversation(conversation);
+		getConversations().remove(conversation.getId());
+		return null;
+	}
 }
