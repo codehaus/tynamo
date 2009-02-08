@@ -13,15 +13,17 @@ import org.apache.tapestry5.services.Request;
 import org.apache.tapestry5.services.RequestGlobals;
 
 public class ConversationModule {
-	private static String version = "unversioned";
+	private static final String version;
 	static {
 		Properties moduleProperties = new Properties();
+		String aVersion = "unversioned"; 
 		try {
 			moduleProperties.load(ConversationModule.class.getResourceAsStream("module.properties"));
-			version = moduleProperties.getProperty("module.version");
+			aVersion = moduleProperties.getProperty("module.version");
 		} catch (IOException e) {
 			// ignore
 		}
+		version = aVersion;
 	}
 
 	public static void bind(ServiceBinder binder) {
