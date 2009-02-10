@@ -2,7 +2,7 @@ package org.trailsframework.conversations.services;
 
 public interface ConversationManager {
 	public enum Parameters {
-		inConversation
+		keepalive
 	};
 
 	public boolean exists(String conversationId);
@@ -11,17 +11,17 @@ public interface ConversationManager {
 
 	public String createConversation(String pageName, Integer maxIdleSeconds, boolean useCookie);
 
-	public String createConversation(String id, String pageName, Integer maxIdleSeconds, boolean useCookie);
+	public String createConversation(String pageName, Integer maxIdleSeconds, Integer maxConversationLengthSeconds, boolean useCookie);
+
+	public String createConversation(String id, String pageName, Integer maxIdleSeconds, Integer maxConversationLengthSeconds, boolean useCookie);
 
 	public String getActiveConversation();
 
 	public boolean isActiveConversation(String conversationId);
 
-	public int getSecondsActiveConversationBecomesIdle();
+	public int getSecondsBeforeActiveConversationBecomesIdle();
 
 	public boolean activateConversation(String conversationId);
-
-	public String endActiveConversationIfIdle();
 
 	public String endConversation(String conversationId);
 
