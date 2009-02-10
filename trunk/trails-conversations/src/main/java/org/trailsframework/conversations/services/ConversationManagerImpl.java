@@ -1,6 +1,5 @@
 package org.trailsframework.conversations.services;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -38,25 +37,29 @@ public class ConversationManagerImpl implements ConversationManager {
 	}
 
 	public boolean activateConversation(String conversationId) {
-		if (!exists(conversationId)) return false;
+		Conversation conversation = endConversationIfIdle(conversationId);
+		if (conversation == null) return false;
 		request.setAttribute(Keys._conversationId.toString(), conversationId);
 		return true;
 	}
 
 	public String createConversation(String pageName, Integer maxIdleSeconds) {
 		return createConversation(pageName, maxIdleSeconds, false);
-
 	}
 
 	public String createConversation(String pageName, Integer maxIdleSeconds, boolean useCookie) {
-		return createConversation(String.valueOf(System.currentTimeMillis()), pageName, maxIdleSeconds, useCookie);
+		return createConversation(String.valueOf(System.currentTimeMillis()), pageName, maxIdleSeconds, 0, useCookie);
+	}
+	
+	public String createConversation(String pageName, Integer maxIdleSeconds, Integer maxConversationLengthSeconds, boolean useCookie) {
+		return createConversation(String.valueOf(System.currentTimeMillis()), pageName, maxIdleSeconds, maxConversationLengthSeconds, useCookie);
 	}
 
-	public String createConversation(String id, String pageName, Integer maxIdleSeconds, boolean useCookie) {
+	public String createConversation(String id, String pageName, Integer maxIdleSeconds, Integer maxConversationLengthSeconds, boolean useCookie) {
 		pageName = pageName == null ? "" : pageName.toLowerCase();
 		// Don't use path in a cookie, it's actually relatively difficult to find out from here
 		if (useCookie) cookies.writeCookieValue(pageName + Keys._conversationId.toString(), String.valueOf(id));
-		getConversations().put(id, new Conversation(id, pageName, maxIdleSeconds, useCookie));
+		getConversations().put(id, new Conversation(id, pageName, maxIdleSeconds, maxConversationLengthSeconds, useCookie));
 		endIdleConversations();
 		activateConversation(id);
 		return id;
@@ -85,17 +88,16 @@ public class ConversationManagerImpl implements ConversationManager {
 		else return true;
 	}
 
-	public String endActiveConversationIfIdle() {
-		String conversationId = getActiveConversation();
+	protected Conversation endConversationIfIdle(String conversationId) {
 		Conversation conversation = getConversations().get(conversationId);
 		if (conversation == null) return null;
-		boolean resetTimeout = !("false".equals(request.getParameter(Parameters.inConversation.name())));
+		boolean resetTimeout = !("false".equals(request.getParameter(Parameters.keepalive.name())));
 		if (conversation.isIdle(resetTimeout)) {
 			discardConversation(conversation);
 			getConversations().remove(conversation.getId());
 			conversationId = null;
 		}
-		return conversationId;
+		return conversation;
 	}
 
 	public String getActiveConversation() {
@@ -104,12 +106,12 @@ public class ConversationManagerImpl implements ConversationManager {
 		return exists(conversationId) ? conversationId : null;
 	}
 
-	public int getSecondsActiveConversationBecomesIdle() {
+	public int getSecondsBeforeActiveConversationBecomesIdle() {
 		String conversationId = getActiveConversation();
 		if (conversationId == null) return -1;
 		Conversation conversation = getConversations().get(conversationId);
 		if (conversation == null) return -1;
-		return conversation.getSecondsBecomesIdle();
+		return conversation.getSecondsBeforeBecomesIdle();
 	}
 
 	public void setPagePersistentFieldStrategy(ConversationalPersistentFieldStrategy pagePersistentFieldStrategy) {

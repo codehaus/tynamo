@@ -10,16 +10,19 @@ public class Conversation {
 	private final long maxIdleSeconds;
 
 	private long lastTouched;
+	
+	private long requiredEndTimestamp;
 
 	public boolean isUsingCookie() {
 		return usingCookie;
 	}
 
-	protected Conversation(String id, String pageName, int maxIdleSeconds, boolean usingCookie) {
+	protected Conversation(String id, String pageName, int maxIdleSeconds, int maxConversationLengthSeconds, boolean usingCookie) {
 		this.id = id;
 		this.pageName = pageName;
 		this.usingCookie = usingCookie;
 		this.maxIdleSeconds = maxIdleSeconds;
+		this.requiredEndTimestamp = maxConversationLengthSeconds == 0 ? 0 : System.currentTimeMillis() + maxConversationLengthSeconds * 1000L;
 		touch();
 	}
 
@@ -35,19 +38,19 @@ public class Conversation {
 		lastTouched = System.currentTimeMillis();
 	}
 
-	public Integer getSecondsBecomesIdle() {
+	public Integer getSecondsBeforeBecomesIdle() {
 		if (maxIdleSeconds <= 0) return null;
-		int i = (int) (maxIdleSeconds - (System.currentTimeMillis() - lastTouched) / 1000L);
-		// If positive, crudely round up so it's surely idle after this time has passed
-		// Also, don't return 0, because you might cause an infinite loop
-		if (i >= 0) i++;
-		return i;
+		return (int) ((maxIdleSeconds - (System.currentTimeMillis() - lastTouched) / 1000L));
 	}
 
 	/**
-	 * True if conversation has been idle for too long, otherwise resets the idletime if resetIdle is true
+	 * True if conversation has been idle for too long or past its maxConversationLength, 
+	 * otherwise resets the idletime if resetIdle is true
 	 **/
 	public boolean isIdle(boolean resetIdle) {
+		if (requiredEndTimestamp > 0) {
+			if (System.currentTimeMillis() > requiredEndTimestamp) return true;
+		}
 		if (maxIdleSeconds < 1) {
 			if (resetIdle) touch();
 			return false;
