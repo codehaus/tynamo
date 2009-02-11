@@ -25,9 +25,7 @@ public class RequestHandlerDecoratorImpl implements RequestHandlerDecorator {
 
 		MethodAdvice advice = new MethodAdvice() {
 			public void advise(Invocation invocation) {
-				if (invocation.getMethodName() == "handle") {
-					conversationManager.activateConversation(invocation.getParameter(0));
-				}
+				if ("handle".equals(invocation.getMethodName())) conversationManager.activateConversation(invocation.getParameter(0));
 				invocation.proceed();
 			}
 		};
