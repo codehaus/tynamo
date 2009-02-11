@@ -57,11 +57,12 @@ public class ConversationManagerImpl implements ConversationManager {
 		try {
 			conversationId = cookies.readCookieValue(pageName + ConversationManagerImpl.Keys._conversationId);
 			Conversation conversation = getConversations().get(conversationId);
-			if (conversation != null) if (!conversation.isUsingCookie()) conversationId = null;
+			if (conversation == null) conversationId = null;
+			else if (!conversation.isUsingCookie()) conversationId = null;
 		} catch (NumberFormatException e) {
 			// Ignore
 		}
-		// If cookie isn't available, try activation context
+		// If cookie-based conversation isn't available, try activation context
 		if (conversationId == null) if (activationContext != null) try {
 			conversationId = activationContext.get(String.class, activationContext.getCount() - 1);
 		} catch (RuntimeException e) {
