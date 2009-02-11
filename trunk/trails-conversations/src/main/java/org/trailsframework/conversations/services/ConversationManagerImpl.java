@@ -5,7 +5,10 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import org.apache.tapestry5.EventContext;
+import org.apache.tapestry5.services.ComponentEventRequestParameters;
 import org.apache.tapestry5.services.Cookies;
+import org.apache.tapestry5.services.PageRenderRequestParameters;
 import org.apache.tapestry5.services.Request;
 
 public class ConversationManagerImpl implements ConversationManager {
@@ -36,7 +39,35 @@ public class ConversationManagerImpl implements ConversationManager {
 		return conversations;
 	}
 
-	public boolean activateConversation(String conversationId) {
+	public boolean activateConversation(Object parameterObject) {
+		if (parameterObject == null) return false; 
+		EventContext activationContext = null;
+		String pageName = null;
+		if (parameterObject instanceof PageRenderRequestParameters) {
+			activationContext = ((PageRenderRequestParameters) parameterObject).getActivationContext();
+			pageName = ((PageRenderRequestParameters) parameterObject).getLogicalPageName();
+		} else if (parameterObject instanceof ComponentEventRequestParameters) {
+			activationContext = ((ComponentEventRequestParameters) parameterObject).getPageActivationContext();
+			pageName = ((ComponentEventRequestParameters) parameterObject).getActivePageName();
+		}
+
+		String conversationId = null;
+
+		// Try reading the conversation id from a cookie first
+		try {
+			conversationId = cookies.readCookieValue(pageName + ConversationManagerImpl.Keys._conversationId);
+			Conversation conversation = getConversations().get(conversationId);
+			if (conversation != null) if (!conversation.isUsingCookie()) conversationId = null;
+		} catch (NumberFormatException e) {
+			// Ignore
+		}
+		// If cookie isn't available, try activation context
+		if (conversationId == null) if (activationContext != null) try {
+			conversationId = activationContext.get(String.class, activationContext.getCount() - 1);
+		} catch (RuntimeException e) {
+			// Ignore
+		}
+		
 		Conversation conversation = endConversationIfIdle(conversationId);
 		if (conversation == null) return false;
 		request.setAttribute(Keys._conversationId.toString(), conversationId);

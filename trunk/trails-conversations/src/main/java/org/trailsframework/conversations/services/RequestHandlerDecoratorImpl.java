@@ -26,33 +26,7 @@ public class RequestHandlerDecoratorImpl implements RequestHandlerDecorator {
 		MethodAdvice advice = new MethodAdvice() {
 			public void advise(Invocation invocation) {
 				if (invocation.getMethodName() == "handle") {
-					Object parameterObject = invocation.getParameter(0);
-					EventContext activationContext = null;
-					String pageName = null;
-					if (parameterObject instanceof PageRenderRequestParameters) {
-						activationContext = ((PageRenderRequestParameters) parameterObject).getActivationContext();
-						pageName = ((PageRenderRequestParameters) parameterObject).getLogicalPageName();
-					} else if (parameterObject instanceof ComponentEventRequestParameters) {
-						activationContext = ((ComponentEventRequestParameters) parameterObject).getPageActivationContext();
-						pageName = ((ComponentEventRequestParameters) parameterObject).getActivePageName();
-					}
-
-					String conversationId = null;
-
-					// Try reading the conversation id from a cookie first
-					try {
-						conversationId = cookies.readCookieValue(pageName + ConversationManagerImpl.Keys._conversationId);
-					} catch (NumberFormatException e) {
-						// Ignore
-					}
-					if (conversationId != null) conversationManager.activateConversation(conversationId);
-					// If cookie isn't available, try activation context
-					else if (activationContext != null) try {
-						conversationId = activationContext.get(String.class, activationContext.getCount() - 1);
-						conversationManager.activateConversation(conversationId);
-					} catch (RuntimeException e) {
-						// Ignore
-					}
+					conversationManager.activateConversation(invocation.getParameter(0));
 				}
 				invocation.proceed();
 			}
