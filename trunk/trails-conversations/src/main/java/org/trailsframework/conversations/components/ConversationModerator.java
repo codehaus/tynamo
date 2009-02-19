@@ -28,11 +28,11 @@ public class ConversationModerator {
   @Parameter("30")
 	private int warnBefore;
  
-  @Parameter
-  private String warnBeforeOperationToCall;
+  @Parameter(defaultPrefix="literal")
+  private String warnBeforeHandler;
 
-  @Parameter
-  private String endedOperationToCall;
+  @Parameter(defaultPrefix="literal")
+  private String endedHandler;
 
   @Parameter("false")
 	private boolean keepAlive;
@@ -89,15 +89,15 @@ public class ConversationModerator {
 		Link link = componentResources.createEventLink(eventName);
 		String baseURI = link.toAbsoluteURI();
 		int index = baseURI.indexOf(":" + eventName);
-		String outOfConversationSuffix = baseURI.substring(index + eventName.length() + 1);
-		outOfConversationSuffix += "".equals(outOfConversationSuffix) ? "?" : "&";
-		outOfConversationSuffix += ConversationManager.Parameters.keepalive.name() + "=";
+		String defaultURIparameters = baseURI.substring(index + eventName.length() + 1);
+		defaultURIparameters += "".equals(defaultURIparameters) ? "?" : "&";
+		defaultURIparameters += ConversationManager.Parameters.keepalive.name() + "=";
 		baseURI = baseURI.substring(0, index + 1);
 
 		
 		// System.out.println("Active conversation is " + conversationManager.getActiveConversation());
 		renderSupport.addScript(String.format("var conversationModerator = new ConversationModerator('%s', '%s', %s, true, %s, %s, '%s', '%s');", 
-				baseURI, outOfConversationSuffix, keepAlive, idleCheck, warnBefore, warnBeforeOperationToCall, endedOperationToCall));
+				baseURI, defaultURIparameters, keepAlive, idleCheck, warnBefore, warnBeforeHandler, endedHandler));
 	}
 
 }
