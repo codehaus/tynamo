@@ -119,13 +119,13 @@ Usage in your Maven project as follows:
 <dependency>
     <groupId>org.trailsframework</groupId>
     <artifactId>trails-conversations</artifactId>
-    <version>{$version}</version>
+    <version>${version}</version>
 </dependency>
 
-(May require a few hours to pass before the release is synched up from codehaus release repository to repo1.maven.org)
+(May require a few hours to pass before the release is synched up from codehaus repository to repo1.maven.org)
 
-Or, for a manual installation, you can download the ${finalName} here:
-http://repository.codehaus.org/org/trailsframework/trails-conversations/{$version}/{$finalName}.jar
+Or, for a manual installation, you can download ${finalName} here:
+http://repository.codehaus.org/org/trailsframework/trails-conversations/${version}/${finalName}.jar
 
 Enjoy!
 -Kalle Korhonen & Alejandro Scandroli
