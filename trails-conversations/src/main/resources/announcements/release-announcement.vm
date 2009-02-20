@@ -16,6 +16,8 @@
 ## under the License.
 The Trails development team is pleased to announce the ${finalName} release for Tapestry 5!
 
+${introduction}
+
 Have you ever wished to have a scope longer than a request but shorter than session?
 Have you ever spent hours optimizing your pages just to avoid the use of sessions?
 Have you ever wondered why you have to elaborately describe your page flows in a lengthy XML format, when all you want to do is to make your objects survive through redirect-after-post pattern?
