@@ -6,13 +6,16 @@
 	<name>Trails Conversations</name>
 	<packaging>jar</packaging>
 	<version>0.0.1-SNAPSHOT</version>
+	<description>
+		An implementation of conversation-within-page concept for Tapestry 5
+	</description>
 
 	<parent>
 		<groupId>org.trailsframework</groupId>
 		<artifactId>trails-parent</artifactId>
-		<version>2.0.0</version>
+		<version>2.0.2</version>
 	</parent>
-
+	
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.tapestry</groupId>
@@ -21,6 +24,29 @@
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>
+	
+	<distributionManagement>
+		<site>
+			<id>trails-site</id>
+			<!-- Note the url. Only static files deployed in /constant/ can be decorated by Unity -->
+			<url>dav:https://dav.codehaus.org/trails/constant/site/conversations</url>
+		</site>
+		<repository>
+			<id>trails-release</id>
+			<name>Trails' release repository</name>
+			<url>dav:https://dav.codehaus.org/repository/trails/</url>
+		</repository>
+		<snapshotRepository>
+			<id>trails-snapshot</id>
+			<name>Trails' snapshot repository</name>
+			<url>dav:https://dav.codehaus.org/snapshots.repository/trails/</url>
+		</snapshotRepository>
+	</distributionManagement>
+	
+	<issueManagement>
+		<system>JIRA</system>
+		<url>http://jira.codehaus.org/BrowseProject.jspa?id=11342</url>
+	</issueManagement>
 	
 	<build>
 		<resources>
@@ -45,7 +71,54 @@
 				</archive>
 				</configuration>
 			</plugin>
+			
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-changes-plugin</artifactId>
+				<configuration>
+					<template>release-announcement.vm</template>
+					<!-- Unbelievable, but changes plugin requires to keep the announcement in src/main/resources directory.. It doesn't accept e.g. ../ -->
+					<templateDirectory>announcements</templateDirectory>
+					<smtpHost>localhost</smtpHost>
+					<fromDeveloperId>kaosko</fromDeveloperId>		
+					<mailSender>
+						<name>Trails Dev Team</name>
+						<email>dev@trails.codehaus.org</email>
+					</mailSender>
+					<toAddresses>
+						<toAddress>dev@trails.codehaus.org</toAddress>
+						<toAddress>user@trails.codehaus.org</toAddress>
+						<toAddress>announce@trails.codehaus.org</toAddress>
+					</toAddresses>
+				</configuration>
+			</plugin>
+			
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-release-plugin</artifactId>
+				<configuration>
+					<!-- send announcement email automatically -->
+					<goals>deploy site-deploy changes:announcement-mail -DgenerateJiraAnnouncement=true</goals>
+				</configuration>
+			</plugin>
 		</plugins>			
 	</build>
+	
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-changes-plugin</artifactId>
+				<version>2.1</version>
+				<reportSets>
+					<reportSet>
+						<reports>
+							<report>jira-report</report>
+						</reports>
+					</reportSet>
+				</reportSets>
+			</plugin>
+		</plugins>
+	</reporting>
 
 </project>
