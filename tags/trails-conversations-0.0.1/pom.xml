@@ -92,7 +92,6 @@
 					<toAddresses>
 						<toAddress>dev@trails.codehaus.org</toAddress>
 						<toAddress>user@trails.codehaus.org</toAddress>
-						<toAddress>announce@trails.codehaus.org</toAddress>
 					</toAddresses>
 				</configuration>
 			</plugin>
