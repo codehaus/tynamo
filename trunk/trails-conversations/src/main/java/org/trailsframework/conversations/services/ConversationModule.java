@@ -32,7 +32,7 @@ public class ConversationModule {
 	}
 
 	public static void contributeComponentClassResolver(Configuration<LibraryMapping> configuration) {
-		configuration.add(new LibraryMapping("conversations", "org.trailsframework.conversations"));
+		configuration.add(new LibraryMapping("conversation", "org.trailsframework.conversations"));
 	}
 
 	public static void contributeClasspathAssetAliasManager(MappedConfiguration<String, String> configuration) {
