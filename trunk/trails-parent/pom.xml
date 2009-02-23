@@ -72,9 +72,9 @@
 		</mailingList>
 	</mailingLists>
 	<scm>
-		<connection>scm:svn:http://svn.codehaus.org/trails/tags/trails-parent-2.0.0</connection>
-		<developerConnection>scm:svn:https://svn.codehaus.org/trails/tags/trails-parent-2.0.0</developerConnection>
-		<url>http://svn.trails.codehaus.org/trails/tags/trails-parent-2.0.0</url>
+		<connection>scm:svn:http://svn.codehaus.org/trails/trunk/trails-parent</connection>
+		<developerConnection>scm:svn:https://svn.codehaus.org/trails/trunk/trails-parent</developerConnection>
+		<url>http://svn.trails.codehaus.org/trails/trunk/trails-parent</url>
 	</scm>
 
 	<prerequisites>
@@ -182,11 +182,6 @@
 	</ciManagement>
 
 	<distributionManagement>
-		<site>
-			<id>trails-site</id>
-			<!-- Note the url. Only static files deployed in /constant/ can be decorated by Unity -->
-			<url>dav:https://dav.codehaus.org/trails/constant/site/</url>
-		</site>
 		<repository>
 			<id>trails-release</id>
 			<name>Trails' release repository</name>
@@ -454,11 +449,10 @@
 				<version>2.4.0</version>
 				<scope>test</scope>
 			</dependency>
-	
 			<dependency>
 				<groupId>org.mortbay.jetty</groupId>
 				<artifactId>jetty</artifactId>
-				<version>6.1.15.rc2</version>
+				<version>6.1.15.rc4</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
