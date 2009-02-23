@@ -185,12 +185,12 @@
 		<repository>
 			<id>trails-release</id>
 			<name>Trails' release repository</name>
-			<url>dav:https://dav.codehaus.org/repository/trails/</url>
+			<url>dav:https://dav.codehaus.org/repository/trails</url>
 		</repository>
 		<snapshotRepository>
 			<id>trails-snapshot</id>
 			<name>Trails' snapshot repository</name>
-			<url>dav:https://dav.codehaus.org/snapshots.repository/trails/</url>
+			<url>dav:https://dav.codehaus.org/snapshots.repository/trails</url>
 		</snapshotRepository>
 	</distributionManagement>
 	
