@@ -10,14 +10,16 @@ public class Conversation {
 	private final long maxIdleSeconds;
 
 	private long lastTouched;
-	
+
 	private long requiredEndTimestamp;
 
 	public boolean isUsingCookie() {
 		return usingCookie;
 	}
 
-	protected Conversation(String id, String pageName, int maxIdleSeconds, int maxConversationLengthSeconds, boolean usingCookie) {
+	protected Conversation(String id, String pageName, Integer maxIdleSeconds, Integer maxConversationLengthSeconds, boolean usingCookie) {
+		if (maxIdleSeconds == null) maxIdleSeconds = 0;
+		if (maxConversationLengthSeconds == null) maxConversationLengthSeconds = 0;
 		this.id = id;
 		this.pageName = pageName;
 		this.usingCookie = usingCookie;
@@ -44,8 +46,8 @@ public class Conversation {
 	}
 
 	/**
-	 * True if conversation has been idle for too long or past its maxConversationLength, 
-	 * otherwise resets the idletime if resetIdle is true
+	 * True if conversation has been idle for too long or past its maxConversationLength, otherwise resets the idletime if
+	 * resetIdle is true
 	 **/
 	public boolean isIdle(boolean resetIdle) {
 		if (requiredEndTimestamp > 0) {

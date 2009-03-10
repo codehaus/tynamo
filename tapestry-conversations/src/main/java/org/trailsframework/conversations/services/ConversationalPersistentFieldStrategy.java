@@ -34,7 +34,7 @@ public class ConversationalPersistentFieldStrategy implements PersistentFieldStr
 
 	private String buildPrefix(String pageName) {
 		// System.out.println("Conversation id is: " + conversationManager.getActiveConversation());
-		return prefix + pageName + "_" + "conversation" + conversationManager.getActiveConversation() + ":";
+		return prefix + pageName + "_conversation_" + conversationManager.getActiveConversation() + ":";
 	}
 
 	public final Collection<PersistentFieldChange> gatherFieldChanges(String pageName) {

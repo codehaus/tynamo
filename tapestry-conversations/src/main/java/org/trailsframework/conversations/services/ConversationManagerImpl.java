@@ -33,14 +33,14 @@ public class ConversationManagerImpl implements ConversationManager {
 	protected Map<String, Conversation> getConversations() {
 		Map<String, Conversation> conversations = (Map<String, Conversation>) request.getSession(true).getAttribute(Keys.conversations.toString());
 		if (conversations == null) {
-			conversations = Collections.synchronizedMap(new HashMap<String, Conversation>() );
+			conversations = Collections.synchronizedMap(new HashMap<String, Conversation>());
 			request.getSession(true).setAttribute(Keys.conversations.toString(), conversations);
 		}
 		return conversations;
 	}
 
 	public boolean activateConversation(Object parameterObject) {
-		if (parameterObject == null) return false; 
+		if (parameterObject == null) return false;
 		EventContext activationContext = null;
 		String pageName = null;
 		if (parameterObject instanceof PageRenderRequestParameters) {
@@ -68,10 +68,13 @@ public class ConversationManagerImpl implements ConversationManager {
 		} catch (RuntimeException e) {
 			// Ignore
 		}
-		
-		Conversation conversation = endConversationIfIdle(conversationId);
+
+		return activate(endConversationIfIdle(conversationId));
+	}
+
+	private boolean activate(Conversation conversation) {
 		if (conversation == null) return false;
-		request.setAttribute(Keys._conversationId.toString(), conversationId);
+		request.setAttribute(Keys._conversationId.toString(), conversation.getId());
 		return true;
 	}
 
@@ -82,7 +85,7 @@ public class ConversationManagerImpl implements ConversationManager {
 	public String createConversation(String pageName, Integer maxIdleSeconds, boolean useCookie) {
 		return createConversation(String.valueOf(System.currentTimeMillis()), pageName, maxIdleSeconds, 0, useCookie);
 	}
-	
+
 	public String createConversation(String pageName, Integer maxIdleSeconds, Integer maxConversationLengthSeconds, boolean useCookie) {
 		return createConversation(String.valueOf(System.currentTimeMillis()), pageName, maxIdleSeconds, maxConversationLengthSeconds, useCookie);
 	}
@@ -91,9 +94,10 @@ public class ConversationManagerImpl implements ConversationManager {
 		pageName = pageName == null ? "" : pageName.toLowerCase();
 		// Don't use path in a cookie, it's actually relatively difficult to find out from here
 		if (useCookie) cookies.writeCookieValue(pageName + Keys._conversationId.toString(), String.valueOf(id));
-		getConversations().put(id, new Conversation(id, pageName, maxIdleSeconds, maxConversationLengthSeconds, useCookie));
+		Conversation conversation = new Conversation(id, pageName, maxIdleSeconds, maxConversationLengthSeconds, useCookie);
 		endIdleConversations();
-		activateConversation(id);
+		getConversations().put(id, conversation);
+		activate(conversation);
 		return id;
 	}
 
@@ -152,7 +156,7 @@ public class ConversationManagerImpl implements ConversationManager {
 
 	public boolean isActiveConversation(String conversationId) {
 		if (conversationId == null) return false;
-		return conversationId.equals(getActiveConversation() );
+		return conversationId.equals(getActiveConversation());
 	}
 
 	public String endConversation(String conversationId) {
