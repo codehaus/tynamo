@@ -4,7 +4,7 @@
 	<artifactId>tapestry-conversations</artifactId>
 	<name>Trails Conversations</name>
 	<packaging>jar</packaging>
-	<version>0.0.2-SNAPSHOT</version>
+	<version>0.0.2</version>
 	<description>
 		An implementation of conversation-within-page concept for Tapestry 5
 	</description>
