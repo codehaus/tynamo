@@ -4,7 +4,7 @@
 	<artifactId>tapestry-conversations</artifactId>
 	<name>Trails Conversations</name>
 	<packaging>jar</packaging>
-	<version>0.0.2</version>
+	<version>0.0.3-SNAPSHOT</version>
 	<description>
 		An implementation of conversation-within-page concept for Tapestry 5
 	</description>
@@ -122,8 +122,8 @@
 	</profiles>
 
   <scm>
-    <connection>scm:svn:http://svn.codehaus.org/trails/tags/tapestry-conversations-0.0.2</connection>
-    <developerConnection>scm:svn:https://svn.codehaus.org/trails/tags/tapestry-conversations-0.0.2</developerConnection>
-    <url>http://svn.trails.codehaus.org/trails/tags/tapestry-conversations-0.0.2</url>
+    <connection>scm:svn:http://svn.codehaus.org/trails/trunk/tapestry-conversations</connection>
+    <developerConnection>scm:svn:https://svn.codehaus.org/trails/trunk/tapestry-conversations</developerConnection>
+    <url>http://svn.trails.codehaus.org/trails/trunk/tapestry-conversations</url>
   </scm>
 </project>
