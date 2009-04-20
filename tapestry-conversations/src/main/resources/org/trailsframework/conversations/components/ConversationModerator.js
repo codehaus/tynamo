@@ -17,10 +17,7 @@ ConversationModerator.prototype = {
 		this.endedHandler = endedHandler;
 		this.idleCheckId = null;
 		
-		//Event.observe(window, 'unload', this.end.bind(this) );
-		
 		if (idleCheckSeconds != null && idleCheckSeconds > 0) this.checkIdleNext(idleCheckSeconds);
-		
 	},
 
 	checkIdle: function() {
@@ -50,7 +47,7 @@ ConversationModerator.prototype = {
 		this.idleCheckId = setTimeout(this.checkIdle.bind(this), nextCheck * 1000);
 	},
 	
-	callHandler : function(handlerName) {
+	callHandler : function(handlerName, arg) {
 		// handlerName should be a string identifier of form "obj.property.function"
 		var pos = handlerName.lastIndexOf('.');
 		var context = null;
@@ -59,26 +56,16 @@ ConversationModerator.prototype = {
 		var operation = eval(handlerName);
 		// FIXME should log something if operation doesn't exist
 		if (typeof(operation) == 'function') {
-			if (context == null) operation();
-			else operation.bind(context)();
+			if (context == null) operation(arg);
+			else operation.bind(context)(arg);
 		}
 	},
 	
 	warnOfEnd : function(inSeconds) {
 		if (this.warnBeforeHandler != null) {
-			this.callHandler(this.warnBeforeHandler);
+			this.callHandler(this.warnBeforeHandler, inSeconds);
 		}
 		else alert('The page will become idle soon...');
-		this.refresh();
-		/*
-		Dialog.alert("The page will become idle in " + inSeconds, 
-				{width:300, 
-				height:100, 
-				okLabel: "close", 
-				ok:this.checkIdle.bind(this)
-				}
-		);
-		*/ 	
 	},
 	
 	handleIdleCheckResult: function(transport) {
