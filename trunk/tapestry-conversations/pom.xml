@@ -90,9 +90,13 @@
 						<email>dev@trails.codehaus.org</email>
 					</mailSender>
 					<toAddresses>
+						<!-- Codehaus just doesn't accept me sending email with this mailSender from local sendmail 
+						to the list, so just send to my own email for now 
 						<toAddress>dev@trails.codehaus.org</toAddress>
 						<toAddress>users@trails.codehaus.org</toAddress>
 						<toAddress>announce@trails.codehaus.org</toAddress>
+						 -->
+						<toAddress>kalle.o.korhonen@gmail.com</toAddress>
 					</toAddresses>
 				</configuration>
 			</plugin>
