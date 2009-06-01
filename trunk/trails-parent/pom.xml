@@ -105,9 +105,9 @@
 
 		<!-- Don't use snapshots unless absolutely necessary -->
 		<repository>
-			<id>snapshots.codehaus.org</id>
-			<name>Codehaus Snapshots</name>
-			<url>http://snapshots.repository.codehaus.org</url>
+			<id>trails-codehaus-ci</id>
+			<name>Official snapshot repository available from Codehaus' Bamboo server</name>
+			<url>http://ci.repository.codehaus.org</url>
 			<snapshots>
 				<enabled>true</enabled>
 			</snapshots>
