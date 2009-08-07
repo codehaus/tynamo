@@ -44,8 +44,7 @@ public class ConversationModule {
 		configuration.add("conversation", new ConversationalPersistentFieldStrategy(request, conversationManager));
 	}
 
-	@Match( { "PageRenderRequestHandler", "ComponentEventRequestHandler" })
-	public static <T> T decorateRequestHandler(Class<T> serviceInterface, T delegate, RequestHandlerDecorator decorator) {
+	public static <T> T decorateComponentRequestHandler(Class<T> serviceInterface, T delegate, RequestHandlerDecorator decorator) {
 		return decorator.build(serviceInterface, delegate);
 	}
 
