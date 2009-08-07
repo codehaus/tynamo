@@ -22,7 +22,7 @@ public class RequestHandlerDecoratorImpl implements RequestHandlerDecorator {
 
 		MethodAdvice advice = new MethodAdvice() {
 			public void advise(Invocation invocation) {
-				if ("handle".equals(invocation.getMethodName())) conversationManager.activateConversation(invocation.getParameter(0));
+				conversationManager.activateConversation(invocation.getParameter(0));
 				invocation.proceed();
 			}
 		};
