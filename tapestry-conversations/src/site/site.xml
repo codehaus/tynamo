@@ -2,7 +2,7 @@
 	<bannerLeft>
 		<name>Trails</name>
 		<src>images/trails-header94.jpg</src>
-		<href>http://www.trailsframework.org/</href>
+		<href>http://trails.codehaus.org/</href>
 	</bannerLeft>
   <skin>
     <groupId>org.trailsframework</groupId>
