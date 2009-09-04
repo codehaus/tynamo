@@ -15,7 +15,7 @@ import org.trailsframework.conversations.services.ConversationManager;
 
 @IncludeJavaScriptLibrary("ConversationModerator.js")
 public class ConversationModerator {
-	private static final String eventName = "checkIdle";
+	private static final String eventName = "checkidle";
 
 	@Inject
 	private ComponentResources componentResources;
