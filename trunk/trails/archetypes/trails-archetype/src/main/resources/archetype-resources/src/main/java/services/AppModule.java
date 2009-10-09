@@ -7,8 +7,8 @@ import org.apache.tapestry5.ioc.MappedConfiguration;
 import org.apache.tapestry5.ioc.ServiceBinder;
 import org.apache.tapestry5.ioc.annotations.SubModule;
 import org.apache.tapestry5.upload.services.UploadSymbols;
-import org.trailsframework.builder.Builder;
-import org.trailsframework.services.TrailsCoreModule;
+import org.tynamo.builder.Builder;
+import org.tynamo.services.TrailsCoreModule;
 
 /**
  * This module is automatically included as part of the Tapestry IoC Registry, it's a good place to configure and extend
@@ -73,6 +73,6 @@ public class AppModule
 	 */
 	public static void contributeBuilderDirector(MappedConfiguration<Class, Builder> configuration)
 	{
-//		configuration.add(org.trailsframework.examples.recipe.model.Recipe.class, new RecipeBuilder());
+//		configuration.add(org.tynamo.examples.recipe.model.Recipe.class, new RecipeBuilder());
 	}
 }

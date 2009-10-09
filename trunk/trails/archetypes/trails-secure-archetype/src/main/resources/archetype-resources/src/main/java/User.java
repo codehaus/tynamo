@@ -6,10 +6,10 @@ import org.acegisecurity.userdetails.UsernameNotFoundException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.validator.NotNull;
-import org.trails.descriptor.annotation.ClassDescriptor;
-import org.trails.descriptor.annotation.PropertyDescriptor;
-import org.trails.security.annotation.UpdateRequiresRole;
-import org.trails.validation.ValidateUniqueness;
+import org.tynamo.descriptor.annotation.ClassDescriptor;
+import org.tynamo.descriptor.annotation.PropertyDescriptor;
+import org.tynamo.security.annotation.UpdateRequiresRole;
+import org.tynamo.validation.ValidateUniqueness;
 
 import javax.persistence.*;
 import java.io.Serializable;

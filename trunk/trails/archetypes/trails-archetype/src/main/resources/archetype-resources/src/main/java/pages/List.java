@@ -2,7 +2,7 @@ package ${package}.pages;
 
 import org.apache.tapestry5.annotations.Component;
 import org.apache.tapestry5.corelib.components.Grid;
-import org.trailsframework.hibernate.pages.HibernateListPage;
+import org.tynamo.hibernate.pages.HibernateListPage;
 
 public class List extends HibernateListPage
 {

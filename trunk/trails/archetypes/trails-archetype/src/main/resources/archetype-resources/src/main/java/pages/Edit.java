@@ -2,14 +2,14 @@ package ${package}.pages;
 
 
 import org.apache.tapestry5.Link;
-import org.trailsframework.hibernate.pages.HibernateEditPage;
-import org.trailsframework.util.DisplayNameUtils;
+import org.tynamo.hibernate.pages.HibernateEditPage;
+import org.tynamo.util.DisplayNameUtils;
 
 public class Edit extends HibernateEditPage
 {
 	public String getTitle()
 	{
-		return getMessages().format("org.trails.i18n.edit", DisplayNameUtils.getDisplayName(getClassDescriptor(), getMessages()));
+		return getMessages().format("org.tynamo.i18n.edit", DisplayNameUtils.getDisplayName(getClassDescriptor(), getMessages()));
 	}
 
 
