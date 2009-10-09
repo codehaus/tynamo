@@ -84,8 +84,8 @@
 		</dependency>
     <dependency>
 			<groupId>org.trailsframework</groupId>
-			<artifactId>trails-conversations</artifactId>
-			<version>0.0.1</version>
+			<artifactId>tapestry-conversations</artifactId>
+			<version>0.1.0-SNAPSHOT</version>
     </dependency>
 	</dependencies>
 

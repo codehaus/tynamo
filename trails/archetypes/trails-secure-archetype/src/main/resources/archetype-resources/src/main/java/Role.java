@@ -3,10 +3,10 @@ package $packageName;
 import org.acegisecurity.GrantedAuthority;
 import org.hibernate.validator.Length;
 import org.hibernate.validator.NotNull;
-import org.trails.descriptor.annotation.ClassDescriptor;
-import org.trails.descriptor.annotation.PropertyDescriptor;
-import org.trails.security.annotation.ViewRequiresRole;
-import org.trails.validation.ValidateUniqueness;
+import org.tynamo.descriptor.annotation.ClassDescriptor;
+import org.tynamo.descriptor.annotation.PropertyDescriptor;
+import org.tynamo.security.annotation.ViewRequiresRole;
+import org.tynamo.validation.ValidateUniqueness;
 
 import javax.persistence.*;
 import java.io.Serializable;

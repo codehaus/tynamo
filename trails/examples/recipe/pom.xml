@@ -96,7 +96,7 @@
 				<artifactId>tapestry-component-report</artifactId>
 				<version>${tapestry-release-version}</version>
 				<configuration>
-					<rootPackage>org.trailsframework.examples.recipe</rootPackage>
+					<rootPackage>org.tynamo.examples.recipe</rootPackage>
 				</configuration>
 			</plugin>
 		</plugins>

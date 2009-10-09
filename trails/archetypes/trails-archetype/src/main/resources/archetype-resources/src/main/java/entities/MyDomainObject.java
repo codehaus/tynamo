@@ -1,7 +1,7 @@
 package ${package}.entities;
 
 import org.hibernate.validator.NotNull;
-import org.trailsframework.descriptor.annotation.PropertyDescriptor;
+import org.tynamo.descriptor.annotation.PropertyDescriptor;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
