@@ -101,7 +101,7 @@
 			<notifier>
 				<type>mail</type>
 				<configuration>
-					<address>ci@tynamo.codehaus.org</address>
+					<address>dev@tynamo.codehaus.org</address>
 				</configuration>
 			</notifier>
 			<notifier>
