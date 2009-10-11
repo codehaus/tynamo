@@ -2,7 +2,7 @@
 
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>tapestry-conversations</artifactId>
-	<name>Trails Conversations</name>
+	<name>Tynamo Conversations</name>
 	<packaging>jar</packaging>
 	<version>0.1.0-SNAPSHOT</version>
 	<description>
@@ -10,9 +10,9 @@
 	</description>
 
 	<parent>
-		<groupId>org.trailsframework</groupId>
-		<artifactId>trails-parent</artifactId>
-		<version>2.1.0</version>
+		<groupId>org.tynamo</groupId>
+		<artifactId>tynamo-parent</artifactId>
+		<version>0.0.1</version>
 	</parent>
 	
 	<dependencies>
@@ -26,26 +26,21 @@
 	
 	<distributionManagement>
 		<site>
-			<id>trails-site</id>
+			<id>tynamo-site</id>
 			<!-- Note the url. Only static files deployed in /constant/ can be decorated by Unity -->
-			<url>dav:https://dav.codehaus.org/trails/constant/site/conversations</url>
+			<url>dav:https://dav.codehaus.org/tynamo/constant/site/conversations</url>
 		</site>
 		<repository>
-			<id>trails-release</id>
-			<name>Trails' release repository</name>
-			<url>dav:https://dav.codehaus.org/repository/trails/</url>
+			<id>tynamo-release</id>
+			<name>Tynamo release repository</name>
+			<url>dav:https://dav.codehaus.org/repository/tynamo/</url>
 		</repository>
 		<snapshotRepository>
-			<id>trails-snapshot</id>
-			<name>Trails' snapshot repository</name>
-			<url>dav:https://dav.codehaus.org/snapshots.repository/trails/</url>
+			<id>tynamo-snapshot</id>
+			<name>Tynamo snapshot repository</name>
+			<url>dav:https://dav.codehaus.org/snapshots.repository/tynamo/</url>
 		</snapshotRepository>
 	</distributionManagement>
-	
-	<issueManagement>
-		<system>JIRA</system>
-		<url>http://jira.codehaus.org/BrowseProject.jspa?id=11342</url>
-	</issueManagement>
 	
 	<build>
 		<resources>
@@ -65,7 +60,7 @@
 				<configuration>
 				<archive>
 					<manifestEntries>
-					<Tapestry-Module-Classes>org.trailsframework.conversations.services.ConversationModule</Tapestry-Module-Classes>
+					<Tapestry-Module-Classes>org.tynamo.conversations.services.ConversationModule</Tapestry-Module-Classes>
 					</manifestEntries>
 				</archive>
 				</configuration>
@@ -86,15 +81,15 @@
 					<smtpHost>localhost</smtpHost>
 					<fromDeveloperId>kaosko</fromDeveloperId>		
 					<mailSender>
-						<name>Trails Dev Team</name>
-						<email>dev@trails.codehaus.org</email>
+						<name>Tynamo Dev Team</name>
+						<email>dev@tynamo.codehaus.org</email>
 					</mailSender>
 					<toAddresses>
 						<!-- Codehaus just doesn't accept me sending email with this mailSender from local sendmail 
 						to the list, so just send to my own email for now 
-						<toAddress>dev@trails.codehaus.org</toAddress>
-						<toAddress>users@trails.codehaus.org</toAddress>
-						<toAddress>announce@trails.codehaus.org</toAddress>
+						<toAddress>dev@tynamo.codehaus.org</toAddress>
+						<toAddress>users@tynamo.codehaus.org</toAddress>
+						<toAddress>announce@tynamo.codehaus.org</toAddress>
 						 -->
 						<toAddress>kalle.o.korhonen@gmail.com</toAddress>
 					</toAddresses>
@@ -111,23 +106,10 @@
 			</plugin>
 		</plugins>			
 	</build>
-	<profiles>
-		<profile>
-			<id>bamboo</id>
-			<distributionManagement>
-				<snapshotRepository>
-					<id>trails-codehaus-ci</id>
-					<name>Official snapshot repository available from Codehaus' Bamboo server</name>
-					<url>file:///opt/ci.repository.codehaus.org/</url>
-				</snapshotRepository>
-			</distributionManagement>
-			
-		</profile>
-	</profiles>
 
   <scm>
-    <connection>scm:svn:http://svn.codehaus.org/trails/trunk/tapestry-conversations</connection>
-    <developerConnection>scm:svn:https://svn.codehaus.org/trails/trunk/tapestry-conversations</developerConnection>
-    <url>http://svn.trails.codehaus.org/trails/trunk/tapestry-conversations</url>
+    <connection>scm:svn:http://svn.codehaus.org/tynamo/trunk/tapestry-conversations</connection>
+    <developerConnection>scm:svn:https://svn.codehaus.org/tynamo/trunk/tapestry-conversations</developerConnection>
+    <url>http://svn.tynamo.codehaus.org/tynamo/trunk/tapestry-conversations</url>
   </scm>
 </project>
