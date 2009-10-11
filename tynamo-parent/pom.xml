@@ -1,13 +1,13 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
-	<name>Trails Parent</name>
-	<url>http://trails.codehaus.org/</url>
+	<name>Tynamo Parent</name>
+	<url>http://tynamo.org/</url>
 
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>org.trailsframework</groupId>
-	<artifactId>trails-parent</artifactId>
+	<groupId>org.tynamo</groupId>
+	<artifactId>tynamo-parent</artifactId>
 	<packaging>pom</packaging>
-	<version>2.1.2-SNAPSHOT</version>
+	<version>0.0.1-SNAPSHOT</version>
 
 	<properties>
 		<tapestry-release-version>5.1.0.5</tapestry-release-version>
@@ -21,12 +21,6 @@
 	<description>A Domain Driven Development framework for Java.</description>
 	<inceptionYear>2004</inceptionYear>
 	<developers>
-		<developer>
-			<id>ccnelson</id>
-			<name>Chris Nelson</name>
-			<email>ccnelson@dev.java.net</email>
-			<url>http://jroller.com/page/ccnelson</url>
-		</developer>
 		<developer>
 			<id>ascandroli</id>
 			<name>Alejandro Scandroli</name>
@@ -54,57 +48,38 @@
 
 	<mailingLists>
 		<mailingList>
-			<name>Trails User List</name>
-			<subscribe>http://xircles.codehaus.org/manage_email/users@trails.codehaus.org</subscribe>
-			<unsubscribe>http://xircles.codehaus.org/manage_email/users@trails.codehaus.org</unsubscribe>
-			<post>users@trails.codehaus.org</post>
-			<archive>http://archive.trails.codehaus.org/users</archive>
+			<name>Tynamo User List</name>
+			<subscribe>http://xircles.codehaus.org/manage_email/users@tynamo.codehaus.org</subscribe>
+			<unsubscribe>http://xircles.codehaus.org/manage_email/users@tynamo.codehaus.org</unsubscribe>
+			<post>users@tynamo.codehaus.org</post>
+			<archive>http://archive.tynamo.codehaus.org/users</archive>
+			<!-- Not enabled yet
 			<otherArchives>
-				<otherArchive>http://www.nabble.com/Trails---Users-f27435.html</otherArchive>
+				<otherArchive>http://www.nabble.com/Tynamo---Users-f27435.html</otherArchive>
 			</otherArchives>
+			-->
 		</mailingList>
 		<mailingList>
-			<name>Trails Developer List</name>
-			<subscribe>http://xircles.codehaus.org/manage_email/dev@trails.codehaus.org</subscribe>
-			<unsubscribe>http://xircles.codehaus.org/manage_email/dev@trails.codehaus.org</unsubscribe>
-			<post>dev@trails.codehaus.org</post>
-			<archive>http://archive.trails.codehaus.org/dev</archive>
+			<name>Tynamo Developer List</name>
+			<subscribe>http://xircles.codehaus.org/manage_email/dev@tynamo.codehaus.org</subscribe>
+			<unsubscribe>http://xircles.codehaus.org/manage_email/dev@tynamo.codehaus.org</unsubscribe>
+			<post>dev@tynamo.codehaus.org</post>
+			<archive>http://archive.tynamo.codehaus.org/dev</archive>
 		</mailingList>
 	</mailingLists>
 	<scm>
-		<connection>scm:svn:http://svn.codehaus.org/trails/trunk/trails-parent</connection>
-		<developerConnection>scm:svn:https://svn.codehaus.org/trails/trunk/trails-parent</developerConnection>
-		<url>http://svn.trails.codehaus.org/trails/trunk/trails-parent</url>
+		<connection>scm:svn:http://svn.codehaus.org/tynamo/trunk/tynamo-parent</connection>
+		<developerConnection>scm:svn:https://svn.codehaus.org/tynamo/trunk/tynamo-parent</developerConnection>
+		<url>http://svn.tynamo.codehaus.org/tynamo/trunk/tynamo-parent</url>
 	</scm>
 
 	<prerequisites>
-		<maven>2.0.9</maven>
+		<maven>2.2.1</maven>
 	</prerequisites>
 
 	<repositories>
-
 		<repository>
-			<id>main</id>
-			<url>http://repo1.maven.org/maven2</url>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</repository>
-
-		<repository>
-			<id>apache-ci-snapshots</id>
-			<url>http://repository.apache.org/snapshots</url>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-			<releases>
-				<enabled>false</enabled>
-			</releases>
-		</repository>
-
-		<!-- Don't use snapshots unless absolutely necessary -->
-		<repository>
-			<id>trails-codehaus-ci</id>
+			<id>tynamo-codehaus-ci</id>
 			<name>Official snapshot repository available from Codehaus' Bamboo server</name>
 			<url>http://ci.repository.codehaus.org</url>
 			<snapshots>
@@ -114,89 +89,19 @@
 				<enabled>false</enabled>
 			</releases>
 		</repository>
-
-		<repository>
-			<id>repository.jboss.org</id>
-			<url>http://repository.jboss.org/maven2</url>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</repository>
-
-		<!--
-		  <repository>
-			  <id>tapestry</id>
-			  <url>http://people.apache.org/~hlship/tapestry-ibiblio-rsynch-repository</url>
-			  <releases>
-				  <enabled>true</enabled>
-			  </releases>
-			  <snapshots>
-				  <enabled>false</enabled>
-			  </snapshots>
-		  </repository>
-  -->
-
 	</repositories>
 
 	<pluginRepositories>
-<!--
-		<pluginRepository>
-			<id>codehaus</id>
-			<name>CodeHaus Repository</name>
-			<url>http://repository.codehaus.org</url>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</pluginRepository>
--->
-		<pluginRepository>
-			<id>snapshots.codehaus.org</id>
-			<url>http://snapshots.repository.codehaus.org/</url>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-			<releases>
-				<enabled>false</enabled>
-			</releases>
-		</pluginRepository>
-		<pluginRepository>
-			<id>people.apache.org</id>
-			<name>Apache's Maven2 Snapshot Repository</name>
-			<url>http://people.apache.org/maven-snapshot-repository</url>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-			<releases>
-				<enabled>false</enabled>
-			</releases>
-		</pluginRepository>
-		<!-- This can be commented out when access to the snapshot version of a Tapestry Maven plugin is not required.-->
-		<pluginRepository>
-			<id>tapestry-snapshots</id>
-			<url>http://tapestry.formos.com/maven-snapshot-repository/</url>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-			<releases>
-				<enabled>false</enabled>
-			</releases>
-		</pluginRepository>
 	</pluginRepositories>
 
 	<ciManagement>
 		<system>bamboo</system>
-		<url>http://bamboo.ci.codehaus.org/browse/TRAILS</url>
+		<url>http://bamboo.ci.codehaus.org/browse/TYNAMO</url>
 		<notifiers>
 			<notifier>
 				<type>mail</type>
 				<configuration>
-					<address>ci@trails.codehaus.org</address>
+					<address>ci@tynamo.codehaus.org</address>
 				</configuration>
 			</notifier>
 			<notifier>
@@ -204,7 +109,7 @@
 				<configuration>
 					<host>irc.codehaus.org</host>
 					<port>6667</port>
-					<channel>#trails</channel>
+					<channel>#tynamo</channel>
 				</configuration>
 			</notifier>
 		</notifiers>
@@ -212,20 +117,20 @@
 
 	<distributionManagement>
 		<repository>
-			<id>trails-release</id>
-			<name>Trails' release repository</name>
-			<url>dav:https://dav.codehaus.org/repository/trails</url>
+			<id>tynamo-release</id>
+			<name>Tynamo' release repository</name>
+			<url>dav:https://dav.codehaus.org/repository/tynamo</url>
 		</repository>
 		<snapshotRepository>
-			<id>trails-snapshot</id>
-			<name>Trails' snapshot repository</name>
-			<url>dav:https://dav.codehaus.org/snapshots.repository/trails</url>
+			<id>tynamo-snapshot</id>
+			<name>Tynamo' snapshot repository</name>
+			<url>dav:https://dav.codehaus.org/snapshots.repository/tynamo</url>
 		</snapshotRepository>
 	</distributionManagement>
 
 	<issueManagement>
 		<system>JIRA</system>
-		<url>http://jira.codehaus.org/secure/project/BrowseProject.jspa?id=11342</url>
+		<url>http://jira.codehaus.org/secure/project/BrowseProject.jspa?id=12041</url>
 	</issueManagement>
 
 	<build>
@@ -345,7 +250,7 @@
 			</plugin>
 			<plugin>
 				<artifactId>maven-site-plugin</artifactId>
-				<version>2.0-beta-7</version>
+				<version>2.0.1</version>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -364,7 +269,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-project-info-reports-plugin</artifactId>
-				<version>2.1</version>
+				<version>2.1.2</version>
 				<inherited>true</inherited>
 				<configuration>
 					<dependencyLocationsEnabled>true</dependencyLocationsEnabled>
@@ -391,53 +296,11 @@
 			<id>bamboo</id>
 			<distributionManagement>
 				<snapshotRepository>
-					<id>trails-codehaus-ci</id>
+					<id>tynamo-codehaus-ci</id>
 					<name>Official snapshot repository available from Codehaus' Bamboo server</name>
 					<url>file:///opt/ci.repository.codehaus.org/</url>
 				</snapshotRepository>
 			</distributionManagement>
-		</profile>
-
-		<profile>
-			<id>ydoc</id>
-			<activation>
-				<property>
-					<name>ydoc</name>
-				</property>
-			</activation>
-			<reporting>
-				<plugins>
-					<plugin>
-						<!--
-							Generates the documentation using the YDoc UML generation plugin.
-							Assumes you have the YDoc libraries locally, as well as a valid
-							YDoc license file. Config info:
-								http://docs.codehaus.org/display/TRAILS/Configuring+Maven2+settings.xml
-	  					-->
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-javadoc-plugin</artifactId>
-						<version>2.0</version>
-						<configuration>
-							<doclet>ydoc.doclets.YStandard</doclet>
-							<docletPath>
-								${ydoc.home}/lib/ydoc.jar${path.separator}${ydoc.home}/lib/class2svg.jar${path.separator}${ydoc.home}/resources
-							</docletPath>
-							<additionalparam>-license ${ydoc.license} -filter ydoc.filters.ExcludeFilter -filterpath
-								${ydoc.home}/lib/ydoc.jar -umlautogen
-							</additionalparam>
-							<author>true</author>
-							<bottom>true</bottom>
-							<header><![CDATA[<a href="/" target="_top">Trails Framework</a>]]></header>
-							<minmemory>128m</minmemory>
-							<maxmemory>512</maxmemory>
-							<packagenames>org.trails.*</packagenames>
-							<use>true</use>
-							<version>true</version>
-							<windowtitle>${project.name} ${project.version} API</windowtitle>
-						</configuration>
-					</plugin>
-				</plugins>
-			</reporting>
 		</profile>
 	</profiles>
 
@@ -485,7 +348,7 @@
 			<dependency>
 				<groupId>org.mortbay.jetty</groupId>
 				<artifactId>jetty</artifactId>
-				<version>6.1.15.rc4</version>
+				<version>6.1.19</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
