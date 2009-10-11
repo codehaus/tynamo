@@ -1,0 +1,355 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<name>Tynamo Parent</name>
+	<url>http://tynamo.org/</url>
+
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.tynamo</groupId>
+	<artifactId>tynamo-parent</artifactId>
+	<packaging>pom</packaging>
+	<version>0.0.1</version>
+
+	<properties>
+		<tapestry-release-version>5.1.0.5</tapestry-release-version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
+	<modules>
+		<!-- This is a separately releaseable super pom, don't specify any modules. Use "modules" project for sub projects that are released together -->
+	</modules>
+
+	<description>A Domain Driven Development framework for Java.</description>
+	<inceptionYear>2004</inceptionYear>
+	<developers>
+		<developer>
+			<id>ascandroli</id>
+			<name>Alejandro Scandroli</name>
+			<organization>Amneris Web Solutions</organization>
+			<organizationUrl>http://www.amneris.es/</organizationUrl>
+			<email>ascandroli@N05PAM.codehaus.org</email>
+			<url>http://docs.codehaus.org/display/~ascandroli</url>
+			<timezone>+1</timezone>
+		</developer>
+		<developer>
+			<id>kaosko</id>
+			<name>Kalle Korhonen</name>
+			<email>kalle.o.korhonen@gmail.com</email>
+			<url>http://docs.codehaus.org/display/~kaosko</url>
+			<timezone>-8</timezone>
+		</developer>
+	</developers>
+	<licenses>
+		<license>
+			<name>Apache License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+
+	<mailingLists>
+		<mailingList>
+			<name>Tynamo User List</name>
+			<subscribe>http://xircles.codehaus.org/manage_email/users@tynamo.codehaus.org</subscribe>
+			<unsubscribe>http://xircles.codehaus.org/manage_email/users@tynamo.codehaus.org</unsubscribe>
+			<post>users@tynamo.codehaus.org</post>
+			<archive>http://archive.tynamo.codehaus.org/users</archive>
+			<!-- Not enabled yet
+			<otherArchives>
+				<otherArchive>http://www.nabble.com/-Users-f27435.html</otherArchive>
+			</otherArchives>
+			-->
+		</mailingList>
+		<mailingList>
+			<name>Tynamo Developer List</name>
+			<subscribe>http://xircles.codehaus.org/manage_email/dev@tynamo.codehaus.org</subscribe>
+			<unsubscribe>http://xircles.codehaus.org/manage_email/dev@tynamo.codehaus.org</unsubscribe>
+			<post>dev@tynamo.codehaus.org</post>
+			<archive>http://archive.tynamo.codehaus.org/dev</archive>
+		</mailingList>
+	</mailingLists>
+	<scm>
+		<connection>scm:svn:http://svn.codehaus.org/tynamo/tags/tynamo-parent-0.0.1</connection>
+		<developerConnection>scm:svn:https://svn.codehaus.org/tynamo/tags/tynamo-parent-0.0.1</developerConnection>
+		<url>http://svn.tynamo.codehaus.org/tynamo/tags/tynamo-parent-0.0.1</url>
+	</scm>
+
+	<prerequisites>
+		<maven>2.2.1</maven>
+	</prerequisites>
+
+	<repositories>
+		<repository>
+			<id>tynamo-codehaus-ci</id>
+			<name>Official snapshot repository available from Codehaus' Bamboo server</name>
+			<url>http://ci.repository.codehaus.org</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+		</repository>
+	</repositories>
+
+	<pluginRepositories>
+	</pluginRepositories>
+
+	<ciManagement>
+		<system>bamboo</system>
+		<url>http://bamboo.ci.codehaus.org/browse/TYNAMO</url>
+		<notifiers>
+			<notifier>
+				<type>mail</type>
+				<configuration>
+					<address>ci@tynamo.codehaus.org</address>
+				</configuration>
+			</notifier>
+			<notifier>
+				<type>irc</type>
+				<configuration>
+					<host>irc.codehaus.org</host>
+					<port>6667</port>
+					<channel>#tynamo</channel>
+				</configuration>
+			</notifier>
+		</notifiers>
+	</ciManagement>
+
+	<distributionManagement>
+		<repository>
+			<id>tynamo-release</id>
+			<name>Tynamo' release repository</name>
+			<url>dav:https://dav.codehaus.org/repository/tynamo</url>
+		</repository>
+		<snapshotRepository>
+			<id>tynamo-snapshot</id>
+			<name>Tynamo' snapshot repository</name>
+			<url>dav:https://dav.codehaus.org/snapshots.repository/tynamo</url>
+		</snapshotRepository>
+	</distributionManagement>
+
+	<issueManagement>
+		<system>JIRA</system>
+		<url>http://jira.codehaus.org/secure/project/BrowseProject.jspa?id=12041</url>
+	</issueManagement>
+
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<artifactId>maven-assembly-plugin</artifactId>
+					<version>2.2-beta-4</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-changes-plugin</artifactId>
+					<version>2.1</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-checkstyle-plugin</artifactId>
+					<version>2.2</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-clean-plugin</artifactId>
+					<version>2.3</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>2.0.2</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-dependency-plugin</artifactId>
+					<version>2.0</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-deploy-plugin</artifactId>
+					<version>2.4</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-eclipse-plugin</artifactId>
+					<version>2.6</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-install-plugin</artifactId>
+					<version>2.3</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-jar-plugin</artifactId>
+					<version>2.2</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-javadoc-plugin</artifactId>
+					<version>2.5</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-resources-plugin</artifactId>
+					<version>2.3</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-release-plugin</artifactId>
+					<version>2.0-beta-9</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-scm-plugin</artifactId>
+					<version>1.0</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-site-plugin</artifactId>
+					<version>2.0-beta-7</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-source-plugin</artifactId>
+					<version>2.0.3</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<version>2.4.3</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-war-plugin</artifactId>
+					<version>2.1-beta-1</version>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+
+		<plugins>
+			<plugin>
+				<artifactId>maven-idea-plugin</artifactId>
+				<version>2.2</version>
+				<configuration>
+					<downloadSources>true</downloadSources>
+					<downloadJavadocs>true</downloadJavadocs>
+					<dependenciesAsLibraries>true</dependenciesAsLibraries>
+					<useFullNames>false</useFullNames>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.5</source>
+					<target>1.5</target>
+					<encoding>UTF-8</encoding>
+					<optimize>true</optimize>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<configuration>
+					<descriptors>
+						<descriptor>src/main/assembly/bin.xml</descriptor>
+						<descriptor>src/main/assembly/src.xml</descriptor>
+						<descriptor>src/main/assembly/examples.xml</descriptor>
+					</descriptors>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-resources-plugin</artifactId>
+				<configuration>
+					<encoding>UTF-8</encoding>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-site-plugin</artifactId>
+				<version>2.0.1</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-release-plugin</artifactId>
+				<configuration>
+					<!-- By default, do not deploy site, especially for the parent itself-->
+					<goals>deploy</goals>
+				</configuration>
+			</plugin>
+
+		</plugins>
+	</build>
+
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-project-info-reports-plugin</artifactId>
+				<version>2.1.2</version>
+				<inherited>true</inherited>
+				<configuration>
+					<dependencyLocationsEnabled>true</dependencyLocationsEnabled>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jxr-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<configuration>
+					<source>1.5</source>
+					<linksource>true</linksource>
+					<aggregate>false</aggregate>
+				</configuration>
+			</plugin>
+		</plugins>
+	</reporting>
+
+	<profiles>
+		<profile>
+			<id>bamboo</id>
+			<distributionManagement>
+				<snapshotRepository>
+					<id>tynamo-codehaus-ci</id>
+					<name>Official snapshot repository available from Codehaus' Bamboo server</name>
+					<url>file:///opt/ci.repository.codehaus.org/</url>
+				</snapshotRepository>
+			</distributionManagement>
+		</profile>
+	</profiles>
+
+	<dependencyManagement>
+		<dependencies>
+
+			<dependency>
+				<groupId>cglib</groupId>
+				<artifactId>cglib-nodep</artifactId>
+				<version>2.1_3</version>
+			</dependency>
+
+			<dependency>
+				<groupId>commons-beanutils</groupId>
+				<artifactId>commons-beanutils</artifactId>
+				<version>1.7.0</version>
+			</dependency>
+
+			<dependency>
+				<groupId>commons-lang</groupId>
+				<artifactId>commons-lang</artifactId>
+				<version>2.2</version>
+			</dependency>
+
+			<dependency>
+				<groupId>junit</groupId>
+				<artifactId>junit</artifactId>
+				<version>3.8.1</version>
+				<type>jar</type>
+				<scope>test</scope>
+			</dependency>
+
+			<dependency>
+				<groupId>org.jmock</groupId>
+				<artifactId>jmock</artifactId>
+				<version>2.4.0</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.jmock</groupId>
+				<artifactId>jmock-legacy</artifactId>
+				<version>2.4.0</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.mortbay.jetty</groupId>
+				<artifactId>jetty</artifactId>
+				<version>6.1.19</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+</project>
