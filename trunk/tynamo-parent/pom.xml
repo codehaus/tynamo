@@ -78,16 +78,34 @@
 	</prerequisites>
 
 	<repositories>
+		<!-- Don't use snapshots unless absolutely necessary because they are forever burned into the pom once released
+		I'd much rather use a Maven proxy (see http://jira.codehaus.org/browse/HAUS-1784) but until Codehaus sets up one,
+		we need some repositories for the ci builds to succeed. 
+		
+		Properly document why each repo is needed!
+		-->
+		
+		<!-- There is a lag time before codehaus repository is synched to repo1. If you release a new tynamo parent and
+		immediately make another Tynamo module use that version, the ci build will fail if codehaus release repository isn't
+		specified here -->
 		<repository>
-			<id>tynamo-codehaus-ci</id>
-			<name>Official snapshot repository available from Codehaus' Bamboo server</name>
+			<id>codehaus-releases</id>
+			<url>http://repository.codehaus.org</url>
+		</repository>
+		
+		<!-- If any of our modules depend on snapshots that follow independent release cycle (not part of the same reactor build)
+		they need to know where to obtain the snapshots
+		-->
+		<repository>
+			<id>codehaus-ci</id>
+			<name>Official CI snapshot repository</name>
 			<url>http://ci.repository.codehaus.org</url>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
 			<releases>
 				<enabled>false</enabled>
 			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
 		</repository>
 	</repositories>
 
