@@ -12,4 +12,10 @@
 	<version>0.0.2-SNAPSHOT</version>
 	<name>Codehaus Unity Integration Site Skin</name>
 	<description>Bare bones skin producing only divs to be decorated by Codehaus Unity</description>
+	
+	<scm>
+		<connection>scm:svn:http://svn.codehaus.org/tynamo/trunk/codehaus-unity-skin</connection>
+		<developerConnection>scm:svn:https://svn.codehaus.org/tynamo/trunk/codehaus-unity-skin</developerConnection>
+		<url>http://svn.tynamo.codehaus.org/tynamo/trunk/codehaus-unity-skin</url>
+	</scm>
 </project>
