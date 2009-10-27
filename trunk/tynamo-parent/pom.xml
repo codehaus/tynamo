@@ -18,7 +18,7 @@
 		<!-- This is a separately releaseable super pom, don't specify any modules. Use "modules" project for sub projects that are released together -->
 	</modules>
 
-	<description>A Domain Driven Development framework for Java.</description>
+	<description>Model-driven web framework based on Tapestry 5</description>
 	<inceptionYear>2004</inceptionYear>
 	<developers>
 		<developer>
@@ -144,6 +144,11 @@
 			<name>Tynamo' snapshot repository</name>
 			<url>dav:https://dav.codehaus.org/snapshots.repository/tynamo</url>
 		</snapshotRepository>
+		<site>
+			<id>tynamo-site</id>
+			<!-- Note the url. Only static files deployed in /constant/ can be decorated by Unity -->
+			<url>dav:https://dav.codehaus.org/tynamo/constant/</url>
+		</site>
 	</distributionManagement>
 
 	<issueManagement>
