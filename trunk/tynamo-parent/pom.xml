@@ -74,7 +74,7 @@
 	</scm>
 
 	<prerequisites>
-		<maven>2.2.1</maven>
+		<maven>2.2.0</maven>
 	</prerequisites>
 
 	<repositories>
