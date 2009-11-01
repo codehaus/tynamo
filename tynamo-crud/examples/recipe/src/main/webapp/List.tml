@@ -16,7 +16,7 @@
 
 	<h1>${title}</h1>
 
-		<t:grid t:id="grid" source="instances" row="model" inPlace="true" add="__id__" reorder="__id__" exclude="prop:excludelist">
+		<t:grid t:id="grid" source="instances" row="bean" inPlace="true" add="__id__" reorder="__id__" model="beanModel">
 			<p:__id__header>
 			</p:__id__header>
 			<p:__id__cell>
