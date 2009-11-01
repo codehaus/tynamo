@@ -10,9 +10,11 @@
 				<li>
 					
 				</li>
-				<li>
-					<t:actionlink class="deletelink" t:id="delete">${message:org.tynamo.i18n.remove}</t:actionlink>
-				</li>
+				<t:if test="allowRemove">
+					<li>
+						<t:actionlink class="deletelink" t:id="delete">${message:org.tynamo.i18n.remove}</t:actionlink>
+					</li>
+				</t:if>
 			</ul>
 		</ul>
 	</p:subMenuBlock>
