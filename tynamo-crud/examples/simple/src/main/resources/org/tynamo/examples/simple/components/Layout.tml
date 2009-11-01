@@ -20,7 +20,9 @@
 		</div>
 		<div id="content" class="clearfix">
 			<div id="main">
-				<t:body />
+				<div id="main_box">
+					<t:body />
+				</div>
 			</div>
 
 			<div id="sub">
