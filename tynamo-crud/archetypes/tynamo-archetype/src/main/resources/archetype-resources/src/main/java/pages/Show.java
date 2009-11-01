@@ -4,6 +4,8 @@ import org.apache.tapestry5.Link;
 import org.apache.tapestry5.beaneditor.BeanModel;
 import org.tynamo.hibernate.pages.HibernateModelPage;
 import org.tynamo.util.DisplayNameUtils;
+import org.tynamo.util.Utils;
+
 
 public class Show extends HibernateModelPage
 {
@@ -20,12 +22,12 @@ public class Show extends HibernateModelPage
 
 	public String getEditLinkMessage()
 	{
-		return getMessages().format("org.tynamo.i18n.edit", DisplayNameUtils.getDisplayName(getClassDescriptor(), getMessages()));
+		return getMessages().format(Utils.EDIT_MESSAGE, DisplayNameUtils.getDisplayName(getClassDescriptor(), getMessages()));
 	}
 
 	public String getTitle()
 	{
-		return getMessages().format("org.tynamo.i18n.show", getBean().toString(), getMessages());
+		return getMessages().format(Utils.SHOW_MESSAGE, getBean().toString(), getMessages());
 	}
 
 	public Link onActionFromDelete()
