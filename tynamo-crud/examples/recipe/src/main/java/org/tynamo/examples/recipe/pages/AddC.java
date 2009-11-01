@@ -2,6 +2,7 @@ package org.tynamo.examples.recipe.pages;
 
 
 import org.apache.tapestry5.Link;
+import org.apache.tapestry5.annotations.Log;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.beaneditor.BeanModel;
 import org.apache.tapestry5.ioc.annotations.Inject;
@@ -24,7 +25,8 @@ import org.tynamo.util.Utils;
 public class AddC extends HibernateEditPage
 {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(AddC.class);
+	@Inject
+	private Logger logger;
 
 	@Inject
 	private BuilderDirector builderDirector;
@@ -55,13 +57,12 @@ public class AddC extends HibernateEditPage
 		parentBean = contextValueEncoder.toValue(clazz, parentId);
 	}
 
-
+	@Log
+	@Override
 	protected Object onSuccess()
 	{
 		try
 		{
-
-			LOGGER.debug("saving....");
 			Utils.executeOgnlExpression(collectionDescriptor.getAddExpression(), getBean(), parentBean);
 			getPersitenceService().save(parentBean);
 			return back();
@@ -74,7 +75,7 @@ public class AddC extends HibernateEditPage
 //			missing ExceptionUtils (Lang 2.3 API)
 //			form.recordError(ExceptionUtil.getRootCause(e));
 			getForm().recordError(e.getMessage());
-			LOGGER.error(e.getMessage());
+			logger.error(e.getMessage());
 			e.printStackTrace();
 		}
 
