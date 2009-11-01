@@ -102,7 +102,7 @@ public class AddC extends HibernateEditPage
 	public String getTitle()
 	{
 		return getMessages()
-				.format("org.tynamo.i18n.edit", DisplayNameUtils.getDisplayName(getClassDescriptor(), getMessages()));
+				.format(Utils.EDIT_MESSAGE, DisplayNameUtils.getDisplayName(getClassDescriptor(), getMessages()));
 	}
 
 

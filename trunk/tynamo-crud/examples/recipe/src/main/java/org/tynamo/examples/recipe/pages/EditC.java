@@ -13,6 +13,7 @@ import org.tynamo.descriptor.TynamoClassDescriptor;
 import org.tynamo.descriptor.TynamoPropertyDescriptor;
 import org.tynamo.hibernate.pages.HibernateEditPage;
 import org.tynamo.util.DisplayNameUtils;
+import org.tynamo.util.Utils;
 
 /**
  * Edit Composition Page
@@ -66,7 +67,7 @@ public class EditC extends HibernateEditPage
 	public String getTitle()
 	{
 		return getMessages()
-				.format("org.tynamo.i18n.edit", DisplayNameUtils.getDisplayName(getClassDescriptor(), getMessages()));
+				.format(Utils.EDIT_MESSAGE, DisplayNameUtils.getDisplayName(getClassDescriptor(), getMessages()));
 	}
 
 
