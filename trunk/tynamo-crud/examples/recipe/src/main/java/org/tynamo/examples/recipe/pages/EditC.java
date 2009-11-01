@@ -6,8 +6,6 @@ import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.beaneditor.BeanModel;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.ContextValueEncoder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.tynamo.descriptor.CollectionDescriptor;
 import org.tynamo.descriptor.TynamoClassDescriptor;
 import org.tynamo.descriptor.TynamoPropertyDescriptor;
@@ -20,8 +18,6 @@ import org.tynamo.util.Utils;
  */
 public class EditC extends HibernateEditPage
 {
-
-	private static final Logger LOGGER = LoggerFactory.getLogger(EditC.class);
 
 	@Inject
 	private ContextValueEncoder contextValueEncoder;
