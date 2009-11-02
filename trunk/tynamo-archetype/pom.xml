@@ -5,11 +5,12 @@
 	<groupId>org.tynamo</groupId>
 	<artifactId>tynamo-archetype</artifactId>
 	<name>Archetype - tynamo-archetype</name>
+	<version>0.0.1-SNAPSHOT</version>
 
 	<parent>
-		<artifactId>archetypes</artifactId>
 		<groupId>org.tynamo</groupId>
-		<version>0.0.1-SNAPSHOT</version>
+		<artifactId>tynamo-parent</artifactId>
+		<version>0.0.3</version>
 	</parent>
 
 </project>
