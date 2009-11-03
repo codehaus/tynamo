@@ -18,7 +18,7 @@
 		<!-- This is a separately releaseable super pom, don't specify any modules. Use "modules" project for sub projects that are released together -->
 	</modules>
 
-	<description>Model-driven web framework based on Tapestry 5</description>
+	<description>Model-driven Java web framework based on Tapestry 5</description>
 	<inceptionYear>2004</inceptionYear>
 	<developers>
 		<developer>
