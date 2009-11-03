@@ -21,19 +21,11 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage;
 
 public class HiddenAndReadonlyTest extends AbstractContainerTest
 {
-	private HtmlPage startPage;
-
-	@BeforeMethod
-	public void setStartPage() throws Exception {
-		startPage = webClient.getPage(BASEURI);
-	}
-
 	@Test
 	public void testThing2() throws Exception
 	{
-		HtmlPage listThing2sPage = clickLink(startPage, "List Thing2s");
 		//assertNull("no hidden column", new HtmlUnitXPath("//td/a[contains(text(), 'Hidden')]").selectSingleNode(listThing2sPage));
-		HtmlPage newThing2Page = clickLink(listThing2sPage, "New Thing2");
+		HtmlPage newThing2Page = webClient.getPage(BASEURI + "add/thing2");
 		assertXPathPresent(newThing2Page, "//div[@class='t-beaneditor-row']//label[contains(text(), 'Read Only')]/following-sibling::p[contains(text(), 'foo')]");
 
 	}
