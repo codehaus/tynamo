@@ -1,6 +1,6 @@
 package org.tynamo.test.functional;
 
-import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 import org.tynamo.test.AbstractContainerTest;
 
 import com.gargoylesoftware.htmlunit.html.HtmlForm;
@@ -9,18 +9,10 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage;
 
 public class IntegerFieldTest extends AbstractContainerTest
 {
-	private HtmlPage startPage;
-
-	@BeforeMethod
-	public void setStartPage() throws Exception {
-		startPage = webClient.getPage(BASEURI);
-	}
-
-
+	@Test
 	public void testIntegerFields() throws Exception
 	{
-		HtmlPage listThingsPage = clickLink(startPage, "List Things");
-		HtmlPage newThingPage = clickLink(listThingsPage, "New Thing");
+		HtmlPage newThingPage = webClient.getPage(BASEURI + "add/things"); 
 		HtmlForm form = newThingPage.getFormByName("form");
 		form.<HtmlInput>getInputByName("id").setValueAttribute("1");
 		form.<HtmlInput>getInputByName("number").setValueAttribute("3");

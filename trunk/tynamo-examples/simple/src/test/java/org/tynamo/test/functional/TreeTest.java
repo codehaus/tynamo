@@ -25,19 +25,18 @@ public class TreeTest extends AbstractContainerTest
 	@Test
 	public void testTree() throws Exception
 	{
-		HtmlPage listTreeNodesPage = clickLink(startPage, "List Tree Nodes");
-		HtmlPage newTreeNodePage = clickLink(listTreeNodesPage, "New Tree Node");
+		HtmlPage newTreeNodePage = webClient.getPage(BASEURI + "add/treenode"); 
 		HtmlForm form = newTreeNodePage.getFormByName("form");
 		form.<HtmlInput>getInputByName("name").setValueAttribute("one");
+		// FIXME apply button doesn't work
 //		newTreeNodePage = clickButton(newTreeNodePage, "save");
 //		assertNotNull(newTreeNodePage.getElementById("Identifier") );
-		listTreeNodesPage = clickButton(newTreeNodePage, "saveAndReturnButton");
-		newTreeNodePage = clickLink(listTreeNodesPage, "New Tree Node");
+		newTreeNodePage = webClient.getPage(BASEURI + "add/treenode");
 		form = newTreeNodePage.getFormByName("form");
 		form.<HtmlInput>getInputByName("name").setValueAttribute("two");
-		listTreeNodesPage = clickButton(newTreeNodePage, "saveAndReturnButton");
-		HtmlPage editTreeNodePage = clickLink(listTreeNodesPage, "1");
-		form = newTreeNodePage.getFormByName("form");
+		clickButton(newTreeNodePage, "saveAndReturnButton");
+		HtmlPage editTreeNodePage = webClient.getPage(BASEURI + "edit/treenode/1"); 
+		form = editTreeNodePage.getFormByName("form");
 		form.getSelectByName("select").setSelectedAttribute("1", true);
 		// FIXME Save button doesn't work yet
 //		editTreeNodePage = clickButton(editTreeNodePage, "save");
