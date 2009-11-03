@@ -27,9 +27,7 @@ public class AssignedIdentifierTest extends AbstractContainerTest
 	@Test
 	public void assigningStringId() throws Exception
 	{
-		final HtmlPage startPage = webClient.getPage(BASEURI);
-		HtmlPage listThing2sPage = clickLink(startPage, "List Thing2s");
-		HtmlPage newThing2Page = clickLink(listThing2sPage, "New Thing2");
+		HtmlPage newThing2Page = webClient.getPage(BASEURI + "add/thing2");
 		HtmlForm newThing2Form = newThing2Page.getFormByName("form");
 		newThing2Form.<HtmlInput>getInputByName("identifier").setValueAttribute("blah");
 		newThing2Page = clickButton(newThing2Page, "save");
