@@ -44,6 +44,7 @@
 				<groupId>org.mortbay.jetty</groupId>
 				<artifactId>maven-jetty-plugin</artifactId>
 				<configuration>
+					<contextPath>/</contextPath>
 					<systemProperties>
 						<systemProperty>
 							<name>tapestry.compress-whitespace</name>
