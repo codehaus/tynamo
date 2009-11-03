@@ -60,7 +60,7 @@ public class CarPk implements Serializable
 
 	public String toString()
 	{
-		return getModel().toString() + ", " + getModel().getMake().toString() + ", " + name;
+		return getModel() == null ? null : getModel().toString() + ", " + getModel().getMake().toString() + ", " + name;
 	}
 
 }

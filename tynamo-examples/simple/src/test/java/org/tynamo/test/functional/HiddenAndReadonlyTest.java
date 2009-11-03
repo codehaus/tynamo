@@ -13,23 +13,27 @@
  */
 package org.tynamo.test.functional;
 
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.html.xpath.HtmlUnitXPath;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+import org.tynamo.test.AbstractContainerTest;
 
-/**
- * @author fus8882
- *         <p/>
- *         TODO To change the template for this generated type comment go to
- *         Window - Preferences - Java - Code Style - Code Templates
- */
-public class HiddenAndReadonlyTest extends FunctionalTest
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
+
+public class HiddenAndReadonlyTest extends AbstractContainerTest
 {
+	private HtmlPage startPage;
+
+	@BeforeMethod
+	public void setStartPage() throws Exception {
+		startPage = webClient.getPage(BASEURI);
+	}
+
+	@Test
 	public void testThing2() throws Exception
 	{
-		HtmlPage listThing2sPage = clickLinkOnPage(startPage, "List Thing2s");
+		HtmlPage listThing2sPage = clickLink(startPage, "List Thing2s");
 		//assertNull("no hidden column", new HtmlUnitXPath("//td/a[contains(text(), 'Hidden')]").selectSingleNode(listThing2sPage));
-		HtmlPage newThing2Page = clickLinkOnPage(listThing2sPage, "New Thing2");
-		assertNull("no hidden editor", new HtmlUnitXPath("//label[text() = 'Hidden']").selectSingleNode(newThing2Page));
+		HtmlPage newThing2Page = clickLink(listThing2sPage, "New Thing2");
 		assertXPathPresent(newThing2Page, "//div[@class='t-beaneditor-row']//label[contains(text(), 'Read Only')]/following-sibling::p[contains(text(), 'foo')]");
 
 	}
