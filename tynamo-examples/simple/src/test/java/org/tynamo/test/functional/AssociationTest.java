@@ -13,22 +13,16 @@ public class AssociationTest extends AbstractContainerTest
 	@Test
 	public void associationSelect() throws Exception
 	{
-		HtmlPage startPage = webClient.getPage(BASEURI);
-		HtmlPage listMakesPage = clickLink(startPage, "List Makes");
-		HtmlPage newMakePage = clickLink(listMakesPage, "New Make");
+		HtmlPage newMakePage = webClient.getPage(BASEURI +"add/make");
 		HtmlForm form = newMakePage.getFormByName("form");
 		form.<HtmlInput>getInputByName("name").setValueAttribute("Honda");
-		listMakesPage = clickButton(newMakePage, "saveAndReturnButton");
-		startPage = clickLink(listMakesPage, "Home");
+		HtmlPage listMakesPage = clickButton(newMakePage, "saveAndReturnButton");
 
-		HtmlPage listModelsPage = clickLink(startPage, "List Models");
-		HtmlPage newModelPage = clickLink(listModelsPage, "New Model");
+		HtmlPage newModelPage = webClient.getPage(BASEURI +"add/model");
 		HtmlForm newModelForm = newModelPage.getFormByName("form");
 		newModelForm.<HtmlInput>getInputByName("name").setValueAttribute("Civic");
-		listModelsPage = clickButton(newModelPage, "saveAndReturnButton");
-		startPage = clickLink(listModelsPage, "Home");
 
-		HtmlPage listCarsPage = clickLink(startPage, "List Cars");
+		HtmlPage listCarsPage = webClient.getPage(BASEURI +"list/car");
 		
 		// Currently results in 
 //		java.lang.NullPointerException
