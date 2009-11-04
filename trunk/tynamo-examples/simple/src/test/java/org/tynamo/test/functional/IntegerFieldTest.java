@@ -12,9 +12,9 @@ public class IntegerFieldTest extends AbstractContainerTest
 	@Test
 	public void testIntegerFields() throws Exception
 	{
-		HtmlPage newThingPage = webClient.getPage(BASEURI + "add/things"); 
+		HtmlPage newThingPage = webClient.getPage(BASEURI + "add/thing"); 
 		HtmlForm form = newThingPage.getFormByName("form");
-		form.<HtmlInput>getInputByName("id").setValueAttribute("1");
+		//form.<HtmlInput>getInputByName("identifier").setValueAttribute("1");
 		form.<HtmlInput>getInputByName("number").setValueAttribute("3");
 		newThingPage = clickButton(newThingPage, "save");
 		
