@@ -15,8 +15,11 @@ package org.tynamo.examples.recipe.model;
 
 import org.hibernate.validator.Length;
 import org.hibernate.validator.NotNull;
+import org.tynamo.blob.TynamoBlobImpl;
+import org.tynamo.descriptor.annotation.BlobDescriptor;
 import org.tynamo.descriptor.annotation.Collection;
 import org.tynamo.descriptor.annotation.PropertyDescriptor;
+import org.tynamo.descriptor.extension.BlobDescriptorExtension;
 import org.tynamo.hibernate.validation.ValidateUniqueness;
 
 import javax.persistence.*;
@@ -25,7 +28,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@ValidateUniqueness(property = "title")
 public class Recipe
 {
 	private Long id;
@@ -38,7 +40,9 @@ public class Recipe
 
 	private Date date;
 
-	@PropertyDescriptor(index = 0)
+	private TynamoBlobImpl photo = new TynamoBlobImpl();
+
+	@PropertyDescriptor(hidden = true)
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	public Long getId()
@@ -126,4 +130,16 @@ public class Recipe
 		this.ingredients = ingredients;
 	}
 
+	@Lob
+	@BlobDescriptor(renderType = BlobDescriptorExtension.RenderType.IMAGE)
+	@PropertyDescriptor(summary = false)
+	public TynamoBlobImpl getPhoto()
+	{
+		return photo;
+	}
+
+	public void setPhoto(TynamoBlobImpl photo)
+	{
+		this.photo = photo;
+	}
 }

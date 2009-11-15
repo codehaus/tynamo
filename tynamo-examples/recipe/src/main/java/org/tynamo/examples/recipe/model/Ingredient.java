@@ -1,5 +1,6 @@
 package org.tynamo.examples.recipe.model;
 
+import org.hibernate.validator.NotNull;
 import org.tynamo.descriptor.annotation.ClassDescriptor;
 import org.tynamo.descriptor.annotation.PropertyDescriptor;
 
@@ -39,9 +40,9 @@ public class Ingredient
 		this.amount = amount;
 	}
 
-	@PropertyDescriptor(index = 0)
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
+	@PropertyDescriptor(hidden = true)
 	public Long getId()
 	{
 		return id;
@@ -52,6 +53,7 @@ public class Ingredient
 		this.id = id;
 	}
 
+	@NotNull
 	public String getName()
 	{
 		return name;
