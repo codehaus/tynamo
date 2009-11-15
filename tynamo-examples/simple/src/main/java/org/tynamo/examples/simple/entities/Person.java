@@ -92,7 +92,7 @@ public class Person
 	 *
 	 * @return
 	 */
-	@BlobDescriptor(renderType = BlobDescriptorExtension.RenderType.ICON)
+	@BlobDescriptor(renderType = BlobDescriptorExtension.RenderType.LINK)
 	@Lob
 	@Column(length = 1048576)  // Use 1Mb maximum length. (MEDIUMBLOB in MySQL.)
 	public TynamoBlob getPhoto()
