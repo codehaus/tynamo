@@ -13,69 +13,67 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 import org.apache.commons.beanutils.PropertyUtils;
+import org.apache.tapestry5.hibernate.HibernateSessionManager;
+import org.apache.tapestry5.hibernate.HibernateSessionSource;
 import org.apache.tapestry5.ioc.annotations.EagerLoad;
+import org.hibernate.EntityMode;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
+import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Example;
+import org.hibernate.metadata.ClassMetadata;
 import org.slf4j.Logger;
 
 @EagerLoad
 public class SeedEntityImpl implements SeedEntity {
 	@SuppressWarnings("unchecked")
-	public SeedEntityImpl(Logger logger, Session session, List<Object> entities) {
-		Transaction tx = session.beginTransaction();
-		try {
-			for (Object entity : entities) {
-				if (entity.getClass().getAnnotation(Entity.class) == null) {
-					logger.warn("Contributed object '" + entity + "' is not an entity, cannot be used a seed");
-					continue;
-				}
-
-				// Note that using example ignore identifier - so seed entities with manually set ids will be re-seeded
-				// TynamoPropertyDescriptor identifierDescriptor = classDescriptor.getIdentifierDescriptor();
-				// Object id = null, savedObject = null;
-				// String propertyName = identifierDescriptor.getName();
-				// try {
-				// id = Ognl.getValue(propertyName, entity);
-				// } catch (OgnlException e) {
-				// LOGGER.warn("Couldn't get the id of a seed bean " + entity + " because of: ", e);
-				// }
-
-				// FIXME first use findUniqueOnClass - if @Table annotation with unique constraints is
-				// available, use that only - note that it needs to be negation - all fields but...
-
-				// First find all bean properties
-				// This is a little backwards since Example doesn't support .include() but only exclude
-				// but I wanted to get it done in as few lines as possible (since the previous implementation
-				// based on Trails descriptors and ognl accomplished this in just a few lines) and
-				// wasn't really interested in creating the criteria using only unique attributes from scratch
-				PropertyDescriptor[] descriptors = PropertyUtils.getPropertyDescriptors(entity.getClass());
-				Set<String> nonUniqueProperties = new HashSet<String>(descriptors.length);
-				for (PropertyDescriptor descriptor : descriptors)
-					nonUniqueProperties.add(descriptor.getName());
-
-				Set<String> uniqueProperties = findPossiblePropertiesWithUniqueColumnAnnotation(entity, descriptors);
-				for (String uniqueProperty : uniqueProperties) {
-					nonUniqueProperties.remove(uniqueProperty);
-				}
-
-				Example example = Example.create(entity);
-				for (String nonUniqueProperty : nonUniqueProperties)
-					example.excludeProperty(nonUniqueProperty);
-				List<Object> results = session.createCriteria(entity.getClass()).add(example).list();
-
-				if (results.size() > 0) {
-					logger.info("Existing entities with same unique properties as '" + entity + "' of type '" + entity.getClass()
-							+ "' already exist, skipping seeding this entity");
-					continue;
-				}
-				session.save(entity);
+	public SeedEntityImpl(Logger logger, HibernateSessionSource sessionSource, HibernateSessionManager sessionManager, List<Object> entities) {
+		Session session = sessionManager.getSession();
+		SessionFactory sessionFactory = sessionSource.getSessionFactory();
+		for (Object entity : entities) {
+			if (entity.getClass().getAnnotation(Entity.class) == null) {
+				logger.warn("Contributed object '" + entity + "' is not an entity, cannot be used a seed");
+				continue;
 			}
-			tx.commit();
-		} catch (RuntimeException e) {
-			tx.rollback();
-			throw e;
+
+			// Note that using example ignores identifier - so seed entities with manually set ids will be re-seeded
+
+			// First find all bean properties
+			// This is a little backwards since Example doesn't support .include() but only exclude
+			// but I wanted to get it done in as few lines as possible (since the previous implementation
+			// based on Trails descriptors and ognl accomplished this in just a few lines) and
+			// wasn't really interested in creating the criteria using only unique attributes from scratch
+			// FIXME see if you can use Hibernate ClassMetadata rather than BeanUtils for this
+			PropertyDescriptor[] descriptors = PropertyUtils.getPropertyDescriptors(entity.getClass());
+			Set<String> nonUniqueProperties = new HashSet<String>(descriptors.length);
+			for (PropertyDescriptor descriptor : descriptors)
+				nonUniqueProperties.add(descriptor.getName());
+
+			Set<String> uniqueProperties = findPossiblePropertiesWithUniqueColumnAnnotation(entity, descriptors);
+			for (String uniqueProperty : uniqueProperties) {
+				nonUniqueProperties.remove(uniqueProperty);
+			}
+
+			Example example = Example.create(entity);
+			for (String nonUniqueProperty : nonUniqueProperties)
+				example.excludeProperty(nonUniqueProperty);
+			List<Object> results = session.createCriteria(entity.getClass()).add(example).list();
+
+			if (results.size() > 0) {
+				logger.info("At least one existing entity with same unique properties as '" + entity + "' of type '"
+						+ entity.getClass().getSimpleName() + "' already exists, skipping seeding this entity");
+				// Need to set the id to the seed bean so a new seed entity with a relationship to existing seed entity can be
+				// saved.
+
+				// Results should include only one object and we don't know any better which is the right object anyway
+				// so use the first one
+				ClassMetadata metadata = sessionFactory.getClassMetadata(entity.getClass());
+				metadata.setIdentifier(entity, metadata.getIdentifier(results.get(0), EntityMode.POJO), EntityMode.POJO);
+
+				continue;
+			}
+			session.save(entity);
 		}
+		sessionManager.commit();
 	}
 
 	private Set<String> findPossiblePropertiesWithUniqueColumnAnnotation(Object entity, PropertyDescriptor[] descriptors) {
