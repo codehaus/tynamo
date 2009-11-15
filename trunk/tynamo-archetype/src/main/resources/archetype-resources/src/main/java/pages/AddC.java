@@ -1,4 +1,4 @@
-package org.tynamo.examples.recipe.pages;
+package ${package}.pages;
 
 
 import org.apache.tapestry5.Link;
