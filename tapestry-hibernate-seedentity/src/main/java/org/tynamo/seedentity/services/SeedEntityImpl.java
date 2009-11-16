@@ -22,6 +22,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Example;
 import org.hibernate.metadata.ClassMetadata;
 import org.slf4j.Logger;
+import org.tynamo.seedentity.SeedEntityIdentifier;
 
 @EagerLoad
 public class SeedEntityImpl implements SeedEntity {
@@ -29,7 +30,14 @@ public class SeedEntityImpl implements SeedEntity {
 	public SeedEntityImpl(Logger logger, HibernateSessionSource sessionSource, HibernateSessionManager sessionManager, List<Object> entities) {
 		Session session = sessionManager.getSession();
 		SessionFactory sessionFactory = sessionSource.getSessionFactory();
-		for (Object entity : entities) {
+		for (Object object : entities) {
+			String uniquelyIdentifyingProperty = null;
+			Object entity;
+			if (object instanceof SeedEntityIdentifier) {
+				uniquelyIdentifyingProperty = ((SeedEntityIdentifier) object).getUniquelyIdentifyingProperty();
+				entity = ((SeedEntityIdentifier) object).getEntity();
+			} else entity = object;
+
 			if (entity.getClass().getAnnotation(Entity.class) == null) {
 				logger.warn("Contributed object '" + entity + "' is not an entity, cannot be used a seed");
 				continue;
@@ -42,16 +50,21 @@ public class SeedEntityImpl implements SeedEntity {
 			// but I wanted to get it done in as few lines as possible (since the previous implementation
 			// based on Trails descriptors and ognl accomplished this in just a few lines) and
 			// wasn't really interested in creating the criteria using only unique attributes from scratch
+
 			// FIXME see if you can use Hibernate ClassMetadata rather than BeanUtils for this
 			PropertyDescriptor[] descriptors = PropertyUtils.getPropertyDescriptors(entity.getClass());
 			Set<String> nonUniqueProperties = new HashSet<String>(descriptors.length);
 			for (PropertyDescriptor descriptor : descriptors)
 				nonUniqueProperties.add(descriptor.getName());
 
-			Set<String> uniqueProperties = findPossiblePropertiesWithUniqueColumnAnnotation(entity, descriptors);
-			for (String uniqueProperty : uniqueProperties) {
-				nonUniqueProperties.remove(uniqueProperty);
-			}
+			// FIXME If there are no uniquely identifying properties, the implementation should always save the seed entry
+
+			if (uniquelyIdentifyingProperty == null) {
+				Set<String> uniqueProperties = findPossiblePropertiesWithUniqueColumnAnnotation(entity, descriptors);
+				for (String uniqueProperty : uniqueProperties) {
+					nonUniqueProperties.remove(uniqueProperty);
+				}
+			} else nonUniqueProperties.remove(uniquelyIdentifyingProperty);
 
 			Example example = Example.create(entity);
 			for (String nonUniqueProperty : nonUniqueProperties)
