@@ -25,7 +25,7 @@
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-validator</artifactId>
-			<version>	4.0.1.GA</version>
+			<version>4.0.1.GA</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
@@ -112,12 +112,31 @@
     <url>http://svn.tynamo.codehaus.org/tynamo/trunk/tapestry-hibernate-seedentity</url>
   </scm>
   
-	<!-- Not needed for now, see above
 	<repositories>
+		<!-- Not needed for now, see above
 		<repository>
 			<id>tapestry</id>
 			<url>http://tapestry.formos.com/maven-repository</url>
 		</repository>
+		 -->
 	</repositories>
-	 -->
+	
+	<profiles>
+		<profile>
+			<id>repositories</id>
+			<repositories>
+				<repository>
+					<id>repository.jboss.org</id>
+					<url>http://repository.jboss.org/maven2</url>
+					<releases>
+						<enabled>true</enabled>
+					</releases>
+					<snapshots>
+						<enabled>false</enabled>
+					</snapshots>
+				</repository>
+			</repositories>
+		</profile>
+	</profiles>
+	
 </project>
