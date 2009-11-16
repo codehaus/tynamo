@@ -87,11 +87,15 @@
 		
 		<!-- There is a lag time before codehaus repository is synched to repo1. If you release a new tynamo parent and
 		immediately make another Tynamo module use that version, the ci build will fail if codehaus release repository isn't
-		specified here -->
+		specified here. 
+		
+		Still, it's not good enough reason to declare the repo. Perhaps as a profile if we really need it, otherwise we'll
+		just need to wait till codehaus repo is synched to central
 		<repository>
 			<id>codehaus-releases</id>
 			<url>http://repository.codehaus.org</url>
 		</repository>
+		-->
 		
 		<!-- If any of our modules depend on snapshots that follow independent release cycle (not part of the same reactor build)
 		they need to know where to obtain the snapshots
