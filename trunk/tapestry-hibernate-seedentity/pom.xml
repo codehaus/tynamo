@@ -68,16 +68,6 @@
 			<!-- Note the url. Only static files deployed in /constant/ can be decorated by Unity -->
 			<url>dav:https://dav.codehaus.org/tynamo/constant/site/tapestry-hibernate-seedentity</url>
 		</site>
-		<repository>
-			<id>tynamo-release</id>
-			<name>Tynamo release repository</name>
-			<url>dav:https://dav.codehaus.org/repository/tynamo</url>
-		</repository>
-		<snapshotRepository>
-			<id>tynamo-snapshot</id>
-			<name>Tynamo snapshot repository</name>
-			<url>dav:https://dav.codehaus.org/snapshots.repository/tynamo</url>
-		</snapshotRepository>
 	</distributionManagement>
 	
 	<build>
