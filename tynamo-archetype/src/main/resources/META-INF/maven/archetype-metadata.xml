@@ -62,6 +62,10 @@
 			</excludes>
 		</fileSet>
 
+		<fileSet filtered="false" packaged="false">
+			<directory>src/test/webapp</directory>
+		</fileSet>
+
 		<fileSet filtered="true" packaged="false">
 			<directory>src/test/resources</directory>
 		</fileSet>
