@@ -101,7 +101,7 @@ public class SeedEntityImpl implements SeedEntity {
 			}
 		}
 
-		Class aClass = entity.getClass();
+		Class<? extends Object> aClass = entity.getClass();
 		Method[] methods = aClass.getDeclaredMethods();
 		for (Method method : methods) {
 			// if (!method.isAccessible()) continue;
@@ -123,11 +123,6 @@ public class SeedEntityImpl implements SeedEntity {
 		}
 
 		return uniqueProperties;
-
-	}
-
-	private void findUniqueOnClass(Object obj) {
-		// @Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "name", "startDate" }) })
 
 	}
 
