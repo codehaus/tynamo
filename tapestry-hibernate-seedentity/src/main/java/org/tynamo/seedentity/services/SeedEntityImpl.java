@@ -51,13 +51,12 @@ public class SeedEntityImpl implements SeedEntity {
 			// based on Trails descriptors and ognl accomplished this in just a few lines) and
 			// wasn't really interested in creating the criteria using only unique attributes from scratch
 
-			// FIXME see if you can use Hibernate ClassMetadata rather than BeanUtils for this
+			// TODO it'd be nice if we could use Hibernate ClassMetadata rather than BeanUtils for this
+			// but I don't know how to find unique properties by using Hibernate API only
 			PropertyDescriptor[] descriptors = PropertyUtils.getPropertyDescriptors(entity.getClass());
 			Set<String> nonUniqueProperties = new HashSet<String>(descriptors.length);
 			for (PropertyDescriptor descriptor : descriptors)
 				nonUniqueProperties.add(descriptor.getName());
-
-			// FIXME If there are no uniquely identifying properties, the implementation should always save the seed entry
 
 			if (uniquelyIdentifyingProperty == null) {
 				Set<String> uniqueProperties = findPossiblePropertiesWithUniqueColumnAnnotation(entity, descriptors);
