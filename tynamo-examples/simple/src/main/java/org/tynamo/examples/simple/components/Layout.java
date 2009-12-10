@@ -11,7 +11,7 @@ import org.apache.tapestry5.services.Context;
 import org.apache.tapestry5.services.Environment;
 
 
-@IncludeStylesheet({"context:styles/tapestryskin/theme.css"})
+@IncludeStylesheet({"context:themes/tapestryskin/theme.css"})
 public class Layout
 {
 
