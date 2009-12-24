@@ -92,7 +92,11 @@
 				<artifactId>maven-release-plugin</artifactId>
 				<configuration>
 					<!-- send announcement email automatically -->
+					<!-- Disable changes plugin for now since need to figure out how to integrate with Jira version numbers 
+					(conversations-0.1.0 rather than just 0.1.0)
 					<goals>deploy site-deploy changes:announcement-mail -DgenerateJiraAnnouncement=true</goals>
+					-->
+					<goals>deploy site-deploy</goals>
 				</configuration>
 			</plugin>
 		</plugins>			
