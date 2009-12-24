@@ -4,7 +4,7 @@
 	<artifactId>tapestry-conversations</artifactId>
 	<name>Tynamo Conversations</name>
 	<packaging>jar</packaging>
-	<version>0.1.0-SNAPSHOT</version>
+	<version>0.1.0</version>
 	<description>
 		An implementation of conversation-within-page concept for Tapestry 5
 	</description>
@@ -99,8 +99,8 @@
 	</build>
 
   <scm>
-    <connection>scm:svn:http://svn.codehaus.org/tynamo/trunk/tapestry-conversations</connection>
-    <developerConnection>scm:svn:https://svn.codehaus.org/tynamo/trunk/tapestry-conversations</developerConnection>
-    <url>http://svn.tynamo.codehaus.org/tynamo/trunk/tapestry-conversations</url>
+    <connection>scm:svn:http://svn.codehaus.org/tynamo/tags/tapestry-conversations-0.1.0</connection>
+    <developerConnection>scm:svn:https://svn.codehaus.org/tynamo/tags/tapestry-conversations-0.1.0</developerConnection>
+    <url>http://svn.tynamo.codehaus.org/tynamo/tags/tapestry-conversations-0.1.0</url>
   </scm>
 </project>
