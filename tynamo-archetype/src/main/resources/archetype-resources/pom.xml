@@ -13,7 +13,7 @@
 
 	<properties>
 		<tapestry-version>5.1.0.5</tapestry-version>
-		<tynamo-version>0.0.1-SNAPSHOT</tynamo-version>
+		<tynamo-version>0.0.1</tynamo-version>
 
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
