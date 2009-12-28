@@ -129,22 +129,22 @@
 			</dependency>
 			<dependency>
 				<groupId>org.tynamo</groupId>
-				<artifactId>tynamo-crud-core</artifactId>
+				<artifactId>tapestry-model-core</artifactId>
 				<version>0.0.1-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>org.tynamo</groupId>
-				<artifactId>tynamo-crud-hibernate</artifactId>
+				<artifactId>tapestry-model-hibernate</artifactId>
 				<version>0.0.1-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>org.tynamo</groupId>
-				<artifactId>tynamo-crud-test</artifactId>
+				<artifactId>tapestry-model-test</artifactId>
 				<version>0.0.1-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>org.tynamo</groupId>
-				<artifactId>tynamo-crud-web</artifactId>
+				<artifactId>tapestry-model-web</artifactId>
 				<version>0.0.1-SNAPSHOT</version>
 				<type>war</type>
 			</dependency>

@@ -170,19 +170,19 @@
 
 		<dependency>
 			<groupId>org.tynamo</groupId>
-			<artifactId>tynamo-crud-hibernate</artifactId>
+			<artifactId>tapestry-model-hibernate</artifactId>
 			<version>${D}{tynamo-version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.tynamo</groupId>
-			<artifactId>tynamo-crud-test</artifactId>
+			<artifactId>tapestry-model-test</artifactId>
 			<version>${D}{tynamo-version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.tynamo</groupId>
-			<artifactId>tynamo-crud-web</artifactId>
+			<artifactId>tapestry-model-web</artifactId>
 			<version>${D}{tynamo-version}</version>
 			<type>war</type>
 		</dependency>
