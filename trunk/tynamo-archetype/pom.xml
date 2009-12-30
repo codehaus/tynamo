@@ -12,6 +12,18 @@
 		<artifactId>tynamo-parent</artifactId>
 		<version>0.0.3</version>
 	</parent>
+  <scm>
+    <connection>scm:svn:http://svn.codehaus.org/tynamo/trunk/tynamo-archetype</connection>
+    <developerConnection>scm:svn:https://svn.codehaus.org/tynamo/trunk/tynamo-archetype</developerConnection>
+    <url>http://svn.tynamo.codehaus.org/tynamo/trunk/tynamo-archetype</url>
+  </scm>
+
+  <distributionManagement>
+    <site>
+      <id>tynamo-site</id>
+      <url>dav:https://dav.codehaus.org/tynamo/constant/tynamo-archetype</url>
+    </site>
+  </distributionManagement>
 
 	<build>
 		<extensions>
@@ -29,10 +41,5 @@
       </plugin>
     </plugins>
 	</build>
-  <distributionManagement>
-    <site>
-      <id>tynamo-site</id>
-      <url>dav:https://dav.codehaus.org/tynamo/constant/tynamo-archetype</url>
-    </site>
-  </distributionManagement>
+	
 </project>
