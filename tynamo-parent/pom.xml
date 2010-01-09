@@ -49,9 +49,9 @@
 	<mailingLists>
 		<mailingList>
 			<name>Tynamo User List</name>
-			<subscribe>http://xircles.codehaus.org/manage_email/users@tynamo.codehaus.org</subscribe>
-			<unsubscribe>http://xircles.codehaus.org/manage_email/users@tynamo.codehaus.org</unsubscribe>
-			<post>users@tynamo.codehaus.org</post>
+			<subscribe>http://xircles.codehaus.org/manage_email/user@tynamo.codehaus.org</subscribe>
+			<unsubscribe>http://xircles.codehaus.org/manage_email/user@tynamo.codehaus.org</unsubscribe>
+			<post>user@tynamo.codehaus.org</post>
 			<archive>http://archive.tynamo.codehaus.org/users</archive>
 			<!-- Not enabled yet
 			<otherArchives>
