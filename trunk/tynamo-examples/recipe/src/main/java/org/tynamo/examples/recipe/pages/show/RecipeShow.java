@@ -3,20 +3,19 @@ package org.tynamo.examples.recipe.pages.show;
 
 import org.tynamo.descriptor.CollectionDescriptor;
 import org.tynamo.examples.recipe.model.Recipe;
-import org.tynamo.examples.recipe.pages.Show;
 
-public class RecipeShow extends Show
+public class RecipeShow extends CustomShow<Recipe>
 {
+
+	@Override
+	public Class<Recipe> getType()
+	{
+		return Recipe.class;
+	}
 
 	protected void onActivate(Recipe object) throws Exception
 	{
-		activate(object, getDescriptorService().getClassDescriptor(Recipe.class), createBeanModel(Recipe.class));
-	}
-
-	@Override
-	protected Object[] onPassivate()
-	{
-		return new Object[]{getBean()};
+		activate(object);
 	}
 
 	public Recipe getRecipe()

@@ -20,7 +20,6 @@ import org.tynamo.descriptor.annotation.BlobDescriptor;
 import org.tynamo.descriptor.annotation.Collection;
 import org.tynamo.descriptor.annotation.PropertyDescriptor;
 import org.tynamo.descriptor.extension.BlobDescriptorExtension;
-import org.tynamo.hibernate.validation.ValidateUniqueness;
 
 import javax.persistence.*;
 import java.util.Date;
