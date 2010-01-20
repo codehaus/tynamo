@@ -116,9 +116,11 @@ public class Recipe
 
 	private Set<Ingredient> ingredients = new HashSet<Ingredient>();
 
-	@OneToMany(cascade = CascadeType.ALL)
-	@JoinColumn(name = "recipeId")
-	@Collection(child = true)
+	@OneToMany(mappedBy = "recipe")
+	@Collection(child = true, addExpression = "addIngredient")
+	// The standard EJB annotations don't have the delete orphan option.
+	@org.hibernate.annotations.Cascade(
+			{org.hibernate.annotations.CascadeType.ALL, org.hibernate.annotations.CascadeType.DELETE_ORPHAN})
 	public Set<Ingredient> getIngredients()
 	{
 		return ingredients;
@@ -127,6 +129,12 @@ public class Recipe
 	public void setIngredients(Set<Ingredient> ingredients)
 	{
 		this.ingredients = ingredients;
+	}
+
+	public void addIngredient(Ingredient ingredient)
+	{
+		ingredient.setRecipe(this);
+		ingredients.add(ingredient);
 	}
 
 	@Lob

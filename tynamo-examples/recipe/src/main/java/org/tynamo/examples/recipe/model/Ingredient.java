@@ -4,10 +4,7 @@ import org.hibernate.validator.NotNull;
 import org.tynamo.descriptor.annotation.ClassDescriptor;
 import org.tynamo.descriptor.annotation.PropertyDescriptor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @ClassDescriptor(hidden = true)
@@ -19,6 +16,8 @@ public class Ingredient
 	private String amount;
 
 	private String name;
+
+	private Recipe recipe;
 
 	public Ingredient()
 	{
@@ -62,6 +61,17 @@ public class Ingredient
 	public void setName(String name)
 	{
 		this.name = name;
+	}
+
+	@ManyToOne
+	public Recipe getRecipe()
+	{
+		return recipe;
+	}
+
+	public void setRecipe(Recipe recipe)
+	{
+		this.recipe = recipe;
 	}
 
 	public String toString()
