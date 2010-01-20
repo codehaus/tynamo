@@ -8,11 +8,11 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.kenai.tapestryjpa.JPAEntityManagerSource;
-import com.kenai.tapestryjpa.JPATransactionManager;
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+import org.tynamo.jpa.JPAEntityManagerSource;
+import org.tynamo.jpa.JPATransactionManager;
 import org.tynamo.seedentity.entities.AnotherThing;
 import org.tynamo.seedentity.entities.Thing;
 
