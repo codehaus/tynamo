@@ -1,9 +1,9 @@
 package org.tynamo.seedentity.services;
 
-import com.kenai.tapestryjpa.JPAEntityManagerSource;
-import com.kenai.tapestryjpa.JPATransactionManager;
 import org.apache.tapestry5.ioc.annotations.EagerLoad;
 import org.slf4j.Logger;
+import org.tynamo.jpa.JPAEntityManagerSource;
+import org.tynamo.jpa.JPATransactionManager;
 import org.tynamo.seedentity.SeedEntityIdentifier;
 import org.tynamo.seedentity.tools.BeanUtil;
 
