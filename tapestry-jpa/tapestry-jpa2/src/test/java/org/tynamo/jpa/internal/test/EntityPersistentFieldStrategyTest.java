@@ -14,38 +14,40 @@
 
 package org.tynamo.jpa.internal.test;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceException;
-
 import org.apache.tapestry5.test.TapestryTestCase;
-
+import org.testng.annotations.Test;
 import org.tynamo.jpa.internal.EntityPersistentFieldStrategy;
 
-//@Test 
-public class EntityPersistentFieldStrategyTest extends TapestryTestCase
-{
-	public void not_an_entity()
-	{
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceException;
+import javax.persistence.PersistenceUnitUtil;
+
+@Test
+public class EntityPersistentFieldStrategyTest extends TapestryTestCase {
+	public void not_an_entity() {
 		String nonEntity = "foo";
 		EntityManager entityManager = newMock(EntityManager.class);
-		EntityPersistentFieldStrategy strategy = new EntityPersistentFieldStrategy(entityManager, null);
 
-		expect(entityManager.getEntityManagerFactory().getPersistenceUnitUtil().getIdentifier(nonEntity.getClass()))
-		        .andThrow(new PersistenceException("error"));
+		EntityPersistentFieldStrategy strategy = new EntityPersistentFieldStrategy(entityManager, null);
+		EntityManagerFactory emf = newMock(EntityManagerFactory.class);
+		PersistenceUnitUtil puu = newMock(PersistenceUnitUtil.class);
+
+		expect(entityManager.getEntityManagerFactory()).andReturn(emf);
+		expect(emf.getPersistenceUnitUtil()).andReturn(puu);
+		expect(puu.getIdentifier(nonEntity)).andThrow(new PersistenceException("error"));
 
 		replay();
 
-		try
-		{
+		try {
 			strategy.postChange("pageName", "", "fieldName", nonEntity);
 
 			unreachable();
 		}
-		catch (IllegalArgumentException ex)
-		{
+		catch (Exception ex) {
 			assertEquals(
-			        ex.getMessage(),
-			        "Failed persisting an entity in the session. Only entities attached to a JPA EntityManager can be persisted. entity: foo");
+					ex.getMessage(),
+					"Failed persisting an entity in the session. Only entities attached to a JPA EntityManager can be persisted. entity: foo");
 		}
 
 		verify();

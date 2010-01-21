@@ -18,7 +18,7 @@
 <suite name="Core Tapestry JPA" parallel="false" thread-count="10" annotations="1.5" verbose="2">
     <test name="Tapestry JPA Internal APIs">
         <packages>
-            <package name="org.apache.tapestry5.internal.test"/>
+            <package name="org.tynamo.jpa.internal.test"/>
         </packages>
     </test>
 </suite>

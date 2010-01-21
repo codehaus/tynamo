@@ -16,7 +16,7 @@
 -->
 
 <suite name="Tapestry JPA" parallel="false" thread-count="10" annotations="1.5" verbose="2">
-    <parameter name="tapestry.integration-webapp" value="src/test/webapp"/>
+    <parameter name="tapestry.integration-webapp" value="tapestry-jpa2/src/test/webapp"/>
     <test name="Tapestry JPA Internal APIs">
         <packages>
             <package name="org.tynamo.jpa.internal.test"/>

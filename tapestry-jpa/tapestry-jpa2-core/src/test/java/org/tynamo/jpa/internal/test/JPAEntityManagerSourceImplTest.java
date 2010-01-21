@@ -14,26 +14,23 @@
 
 package org.tynamo.jpa.internal.test;
 
-import javax.persistence.EntityManager;
-import javax.persistence.metamodel.EntityType;
-
 import org.apache.tapestry5.ioc.test.IOCTestCase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.Assert;
 import org.testng.annotations.Test;
-
 import org.tynamo.jpa.JPAEntityManagerSource;
 import org.tynamo.jpa.example.app0.entities.User;
 import org.tynamo.jpa.internal.JPAEntityManagerSourceImpl;
 
-public class JPAEntityManagerSourceImplTest extends IOCTestCase
-{
+import javax.persistence.EntityManager;
+import javax.persistence.metamodel.EntityType;
+
+public class JPAEntityManagerSourceImplTest extends IOCTestCase {
 	private final Logger log = LoggerFactory.getLogger("tapestry.jpa.JPAEntityManagerSourceTest");
 
 	@Test
-	public void startup_without_packages()
-	{
+	public void startup_without_packages() {
 
 		replay();
 		JPAEntityManagerSource source = new JPAEntityManagerSourceImpl(log, "tapestryjpatest");
