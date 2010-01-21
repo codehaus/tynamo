@@ -14,8 +14,6 @@
 
 package org.tynamo.jpa.internal.test;
 
-import javax.persistence.EntityManager;
-
 import org.apache.tapestry5.ioc.Registry;
 import org.apache.tapestry5.ioc.services.PropertyAccess;
 import org.apache.tapestry5.ioc.services.TypeCoercer;
@@ -23,11 +21,19 @@ import org.apache.tapestry5.ioc.test.IOCTestCase;
 import org.slf4j.Logger;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
-
+import org.testng.annotations.Test;
+import org.tynamo.jpa.internal.EntityPersistentFieldStrategy;
 import org.tynamo.jpa.internal.JPAEntityValueEncoder;
 
-public class JPAEntityValueEncoderTest extends IOCTestCase
-{
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceException;
+import javax.persistence.PersistenceUnitUtil;
+import javax.persistence.metamodel.EntityType;
+import javax.persistence.metamodel.IdentifiableType;
+import javax.persistence.metamodel.Metamodel;
+
+public class JPAEntityValueEncoderTest extends IOCTestCase {
 	private Registry registry;
 
 	private PropertyAccess access;
@@ -35,8 +41,7 @@ public class JPAEntityValueEncoderTest extends IOCTestCase
 	private TypeCoercer typeCoercer;
 
 	@BeforeClass
-	public void setup()
-	{
+	public void setup() {
 		registry = buildRegistry();
 
 		access = registry.getService(PropertyAccess.class);
@@ -44,8 +49,7 @@ public class JPAEntityValueEncoderTest extends IOCTestCase
 	}
 
 	@AfterClass
-	public void cleanup()
-	{
+	public void cleanup() {
 		registry.shutdown();
 
 		registry = null;
@@ -54,8 +58,7 @@ public class JPAEntityValueEncoderTest extends IOCTestCase
 	}
 
 	//@Test
-	public void to_client_id_null()
-	{
+	public void to_client_id_null() {
 		EntityManager entityManager = mockEntityManager();
 		Logger logger = mockLogger();
 
@@ -64,27 +67,46 @@ public class JPAEntityValueEncoderTest extends IOCTestCase
 		SampleEntity entity = new SampleEntity();
 
 		JPAEntityValueEncoder<SampleEntity> encoder = new JPAEntityValueEncoder<SampleEntity>(SampleEntity.class,
-		        entityManager, access, typeCoercer, logger);
+																							  entityManager, access, typeCoercer, logger);
 
-		try
-		{
+		try {
 			encoder.toClient(entity);
 			unreachable();
 		}
-		catch (IllegalStateException ex)
-		{
+		catch (IllegalStateException ex) {
 			assertMessageContains(ex, "Entity org.apache.tapestry5.internal.hibernate.SampleEntity",
-			        "has an id property of null");
+								  "has an id property of null");
 		}
 
 		verify();
 	}
 
-	//@Test
-	public void to_value_not_found()
-	{
+	@Test
+	public void to_value_not_found() {
 		EntityManager entityManager = mockEntityManager();
 		Logger logger = mockLogger();
+
+		Metamodel metamodel = newMock(Metamodel.class);
+
+		EntityType<SampleEntity> type = newMock(EntityType.class);
+
+		EntityManagerFactory emf = newMock(EntityManagerFactory.class);
+		PersistenceUnitUtil puu = newMock(PersistenceUnitUtil.class);
+
+		IdentifiableType idType = newMock(IdentifiableType.class);
+		//Class idClass = newMock(Class.class);
+
+		expect(entityManager.getEntityManagerFactory()).andReturn(emf);
+		expect(emf.getPersistenceUnitUtil()).andReturn(puu);
+
+		expect(entityManager.getMetamodel()).andReturn(metamodel);
+
+		expect(metamodel.entity(SampleEntity.class)).andReturn(type);
+
+		expect(type.getIdType()).andReturn(idType);
+		expect(idType.getJavaType()).andReturn(Long.class);
+
+		expect(type.getJavaType()).andReturn(SampleEntity.class);
 
 		expect(entityManager.find(SampleEntity.class, new Long(12345))).andReturn(null);
 
@@ -95,7 +117,7 @@ public class JPAEntityValueEncoderTest extends IOCTestCase
 		SampleEntity entity = new SampleEntity();
 
 		JPAEntityValueEncoder<SampleEntity> encoder = new JPAEntityValueEncoder<SampleEntity>(SampleEntity.class,
-		        entityManager, access, typeCoercer, logger);
+																							  entityManager, access, typeCoercer, logger);
 
 		assertNull(encoder.toValue("12345"));
 
@@ -103,8 +125,7 @@ public class JPAEntityValueEncoderTest extends IOCTestCase
 
 	}
 
-	protected final EntityManager mockEntityManager()
-	{
+	protected final EntityManager mockEntityManager() {
 		return newMock(EntityManager.class);
 	}
 }

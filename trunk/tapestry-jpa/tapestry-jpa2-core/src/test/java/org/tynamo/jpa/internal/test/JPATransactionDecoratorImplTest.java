@@ -14,8 +14,6 @@
 
 package org.tynamo.jpa.internal.test;
 
-import java.sql.SQLException;
-
 import org.apache.tapestry5.ioc.IOCUtilities;
 import org.apache.tapestry5.ioc.Registry;
 import org.apache.tapestry5.ioc.services.AspectDecorator;
@@ -25,31 +23,29 @@ import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-
 import org.tynamo.jpa.JPATransactionDecorator;
 import org.tynamo.jpa.JPATransactionManager;
 import org.tynamo.jpa.annotations.CommitAfter;
 import org.tynamo.jpa.internal.JPATransactionAdvisorImpl;
 import org.tynamo.jpa.internal.JPATransactionDecoratorImpl;
 
-@SuppressWarnings( { "ThrowableInstanceNeverThrown" })
-public class JPATransactionDecoratorImplTest extends IOCTestCase
-{
+import java.sql.SQLException;
+
+@SuppressWarnings({"ThrowableInstanceNeverThrown"})
+public class JPATransactionDecoratorImplTest extends IOCTestCase {
 	private Registry registry;
 
 	private AspectDecorator aspectDecorator;
 
 	@BeforeClass
-	public void setup()
-	{
+	public void setup() {
 		registry = IOCUtilities.buildDefaultRegistry();
 
 		aspectDecorator = registry.getService(AspectDecorator.class);
 	}
 
 	@AfterClass
-	public void shutdown()
-	{
+	public void shutdown() {
 		registry.shutdown();
 
 		aspectDecorator = null;
@@ -57,8 +53,7 @@ public class JPATransactionDecoratorImplTest extends IOCTestCase
 	}
 
 	@Test
-	public void undecorated()
-	{
+	public void undecorated() {
 		VoidService delegate = newMock(VoidService.class);
 		JPATransactionManager manager = newMock(JPATransactionManager.class);
 		JPATransactionDecorator decorator = newJPATransactionDecorator(manager);
@@ -74,8 +69,7 @@ public class JPATransactionDecoratorImplTest extends IOCTestCase
 	}
 
 	@Test
-	public void void_method()
-	{
+	public void void_method() {
 		VoidService delegate = newMock(VoidService.class);
 		JPATransactionManager manager = newMock(JPATransactionManager.class);
 		JPATransactionDecorator decorator = newJPATransactionDecorator(manager);
@@ -92,8 +86,7 @@ public class JPATransactionDecoratorImplTest extends IOCTestCase
 	}
 
 	@Test
-	public void void_method_with_param()
-	{
+	public void void_method_with_param() {
 		VoidService delegate = newMock(VoidService.class);
 		JPATransactionManager manager = newMock(JPATransactionManager.class);
 		JPATransactionDecorator decorator = newJPATransactionDecorator(manager);
@@ -110,8 +103,7 @@ public class JPATransactionDecoratorImplTest extends IOCTestCase
 	}
 
 	@Test
-	public void runtime_exception_will_abort_transaction() throws Exception
-	{
+	public void runtime_exception_will_abort_transaction() throws Exception {
 		Performer delegate = newMock(Performer.class);
 		JPATransactionManager manager = newMock(JPATransactionManager.class);
 		JPATransactionDecorator decorator = newJPATransactionDecorator(manager);
@@ -125,13 +117,11 @@ public class JPATransactionDecoratorImplTest extends IOCTestCase
 
 		Performer interceptor = decorator.build(Performer.class, delegate, "foo.Bar");
 
-		try
-		{
+		try {
 			interceptor.perform();
 			TestBase.unreachable();
 		}
-		catch (RuntimeException ex)
-		{
+		catch (RuntimeException ex) {
 			Assert.assertSame(ex, re);
 		}
 
@@ -139,8 +129,7 @@ public class JPATransactionDecoratorImplTest extends IOCTestCase
 	}
 
 	@Test
-	public void checked_exception_will_commit_transaction() throws Exception
-	{
+	public void checked_exception_will_commit_transaction() throws Exception {
 		Performer delegate = newMock(Performer.class);
 		JPATransactionManager manager = newMock(JPATransactionManager.class);
 		JPATransactionDecorator decorator = newJPATransactionDecorator(manager);
@@ -154,13 +143,11 @@ public class JPATransactionDecoratorImplTest extends IOCTestCase
 
 		Performer interceptor = decorator.build(Performer.class, delegate, "foo.Bar");
 
-		try
-		{
+		try {
 			interceptor.perform();
 			TestBase.unreachable();
 		}
-		catch (SQLException ex)
-		{
+		catch (SQLException ex) {
 			Assert.assertSame(ex, se);
 		}
 
@@ -168,8 +155,7 @@ public class JPATransactionDecoratorImplTest extends IOCTestCase
 	}
 
 	@Test
-	public void return_type_method()
-	{
+	public void return_type_method() {
 		ReturnTypeService delegate = newTestService();
 		JPATransactionManager manager = newMock(JPATransactionManager.class);
 		JPATransactionDecorator decorator = newJPATransactionDecorator(manager);
@@ -185,8 +171,7 @@ public class JPATransactionDecoratorImplTest extends IOCTestCase
 	}
 
 	@Test
-	public void return_type_method_with_param()
-	{
+	public void return_type_method_with_param() {
 		ReturnTypeService delegate = newTestService();
 		JPATransactionManager manager = newMock(JPATransactionManager.class);
 		JPATransactionDecorator decorator = newJPATransactionDecorator(manager);
@@ -203,42 +188,34 @@ public class JPATransactionDecoratorImplTest extends IOCTestCase
 		Assert.assertEquals(interceptor.toString(), "Baz");
 	}
 
-	private JPATransactionDecorator newJPATransactionDecorator(JPATransactionManager manager)
-	{
+	private JPATransactionDecorator newJPATransactionDecorator(JPATransactionManager manager) {
 		return new JPATransactionDecoratorImpl(aspectDecorator, new JPATransactionAdvisorImpl(manager));
 	}
 
-	private void assertToString(VoidService interceptor)
-	{
+	private void assertToString(VoidService interceptor) {
 		Assert.assertEquals(interceptor.toString(), "<JPA Transaction interceptor for foo.Bar(" + getClass().getName()
-		        + "$VoidService)>");
+													+ "$VoidService)>");
 	}
 
-	private ReturnTypeService newTestService()
-	{
-		return new ReturnTypeService()
-		{
+	private ReturnTypeService newTestService() {
+		return new ReturnTypeService() {
 
-			public String returnTypeMethod()
-			{
+			public String returnTypeMethod() {
 				return "Foo";
 			}
 
-			public int returnTypeMethodWithParam(int first, int second)
-			{
+			public int returnTypeMethodWithParam(int first, int second) {
 				return first + second;
 			}
 
 			@Override
-			public String toString()
-			{
+			public String toString() {
 				return "Baz";
 			}
 		};
 	}
 
-	public interface ReturnTypeService
-	{
+	public interface ReturnTypeService {
 		@CommitAfter
 		String returnTypeMethod();
 
@@ -248,8 +225,7 @@ public class JPATransactionDecoratorImplTest extends IOCTestCase
 		String toString();
 	}
 
-	public interface VoidService
-	{
+	public interface VoidService {
 		void undecorated();
 
 		@CommitAfter
@@ -259,8 +235,7 @@ public class JPATransactionDecoratorImplTest extends IOCTestCase
 		void voidMethodWithParam(long id);
 	}
 
-	public interface Performer
-	{
+	public interface Performer {
 		@CommitAfter
 		void perform() throws SQLException;
 	}
