@@ -99,7 +99,7 @@
 					<archive>
 						<manifestEntries>
 							<Tapestry-Module-Classes>
-								org.tynamo.jpa2.JPAModule
+								org.tynamo.jpa.JPAModule
 							</Tapestry-Module-Classes>
 						</manifestEntries>
 					</archive>
