@@ -37,6 +37,13 @@
 			<url>http://docs.codehaus.org/display/~kaosko</url>
 			<timezone>-8</timezone>
 		</developer>
+		<developer>
+			<id>psartini</id>
+			<name>Piero Sartini</name>
+			<email>ps (-at-) sartini-its.com</email>
+			<url>http://www.pierosartini.eu</url>
+			<timezone>+1</timezone>
+		</developer>
 	</developers>
 	<licenses>
 		<license>
