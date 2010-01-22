@@ -19,12 +19,12 @@
     <parameter name="tapestry.integration-webapp" value="tapestry-jpa2/src/test/webapp"/>
     <test name="Tapestry JPA Internal APIs">
         <packages>
-            <package name="org.tynamo.jpa.internal.test"/>
+            <package name="org.tynamo.jpa2.internal.test"/>
         </packages>
     </test>
     <test name="Tapestry JPA Integration Tests">
         <packages>
-            <package name="org.tynamo.jpa.integration"/>
+            <package name="org.tynamo.jpa2.integration"/>
         </packages>
     </test>
 </suite>
