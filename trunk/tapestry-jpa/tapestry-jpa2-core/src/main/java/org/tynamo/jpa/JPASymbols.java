@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package org.tynamo.jpa2;
+package org.tynamo.jpa;
 
 /**
  * Configuration symbols, for use with contributions to
@@ -25,7 +25,7 @@ public class JPASymbols
 	/**
 	 * If "true", then Hibernate will be started up at application launch, rather than lazily.
 	 */
-	public static final String EARLY_START_UP = "tapestry.jpa2.early-startup";
+	public static final String EARLY_START_UP = "tapestry.jpa.early-startup";
 
 	/**
 	 * If true, then the last {@link org.apache.tapestry5.hibernate.HibernateConfigurer} will invoke
@@ -33,13 +33,13 @@ public class JPASymbols
 	 * <code>hibernate.cfg.xml</code>. This should be set to false for applications that configure
 	 * exclusively in code.
 	 */
-	public static final String DEFAULT_CONFIGURATION = "tapestry.jpa2.default-configuration";
+	public static final String DEFAULT_CONFIGURATION = "tapestry.jpa.default-configuration";
 
 	/**
 	 * If true (the default), then {@link org.apache.tapestry5.ValueEncoder}s are automatically
 	 * created for each entity. Override to "false" to handle entity value encoding explicitly.
 	 */
-	public static final String PROVIDE_ENTITY_VALUE_ENCODERS = "tapestry.jpa2.provide-entity-value-encoders";
+	public static final String PROVIDE_ENTITY_VALUE_ENCODERS = "tapestry.jpa.provide-entity-value-encoders";
 
-	public static final String PERSISTENCE_UNIT = "tapestry.jpa2.persistence-unit";
+	public static final String PERSISTENCE_UNIT = "tapestry.jpa.persistence-unit";
 }

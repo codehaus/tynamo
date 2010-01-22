@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package org.tynamo.jpa2;
+package org.tynamo.jpa;
 
 import org.apache.tapestry5.ioc.MethodAdviceReceiver;
 

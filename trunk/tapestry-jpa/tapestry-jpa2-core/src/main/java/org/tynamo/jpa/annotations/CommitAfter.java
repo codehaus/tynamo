@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package org.tynamo.jpa2.annotations;
+package org.tynamo.jpa.annotations;
 
 import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
@@ -27,8 +27,8 @@ import java.lang.annotation.Target;
  * invoking the method. Runtime exceptions will abort the transaction, checked exceptions will
  * <em>also commit</em> the transaction.
  * 
- * @see org.tynamo.jpa2.JPATransactionAdvisor
- * @see org.tynamo.jpa2.JPATransactionDecorator
+ * @see org.tynamo.jpa.JPATransactionAdvisor
+ * @see org.tynamo.jpa.JPATransactionDecorator
  */
 @Target(METHOD)
 @Retention(RUNTIME)

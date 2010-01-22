@@ -12,22 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package org.tynamo.jpa2.internal.test;
+package org.tynamo.jpa.internal.test;
 
 import org.apache.tapestry5.ioc.test.IOCTestCase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.Assert;
 import org.testng.annotations.Test;
-import org.tynamo.jpa2.JPAEntityManagerSource;
-import org.tynamo.jpa2.example.app0.entities.User;
-import org.tynamo.jpa2.internal.JPAEntityManagerSourceImpl;
+import org.tynamo.jpa.JPAEntityManagerSource;
+import org.tynamo.jpa.example.app0.entities.User;
+import org.tynamo.jpa.internal.JPAEntityManagerSourceImpl;
 
 import javax.persistence.EntityManager;
 import javax.persistence.metamodel.EntityType;
 
 public class JPAEntityManagerSourceImplTest extends IOCTestCase {
-	private final Logger log = LoggerFactory.getLogger("tapestry.jpa2.JPAEntityManagerSourceTest");
+	private final Logger log = LoggerFactory.getLogger("tapestry.jpa.JPAEntityManagerSourceTest");
 
 	@Test
 	public void startup_without_packages() {
@@ -40,7 +40,7 @@ public class JPAEntityManagerSourceImplTest extends IOCTestCase {
 
 		// make sure it found the entity in the package
 		EntityType<User> etype = entityManager.getEntityManagerFactory().getMetamodel().entity(User.class);
-		Assert.assertEquals(etype.getName(), "org.tynamo.jpa2.example.app0.entities.User");
+		Assert.assertEquals(etype.getName(), "org.tynamo.jpa.example.app0.entities.User");
 
 		verify();
 	}

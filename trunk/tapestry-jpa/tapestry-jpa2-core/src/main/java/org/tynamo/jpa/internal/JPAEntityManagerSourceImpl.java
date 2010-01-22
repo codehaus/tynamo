@@ -12,9 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package org.tynamo.jpa2.internal;
+package org.tynamo.jpa.internal;
 
-import org.tynamo.jpa2.JPAEntityManagerSource;
+import org.tynamo.jpa.JPAEntityManagerSource;
 import org.apache.tapestry5.ioc.services.RegistryShutdownListener;
 import org.slf4j.Logger;
 

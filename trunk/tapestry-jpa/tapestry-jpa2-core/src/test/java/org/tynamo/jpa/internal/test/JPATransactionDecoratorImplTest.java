@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package org.tynamo.jpa2.internal.test;
+package org.tynamo.jpa.internal.test;
 
 import org.apache.tapestry5.ioc.IOCUtilities;
 import org.apache.tapestry5.ioc.Registry;
@@ -23,11 +23,11 @@ import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-import org.tynamo.jpa2.JPATransactionDecorator;
-import org.tynamo.jpa2.JPATransactionManager;
-import org.tynamo.jpa2.annotations.CommitAfter;
-import org.tynamo.jpa2.internal.JPATransactionAdvisorImpl;
-import org.tynamo.jpa2.internal.JPATransactionDecoratorImpl;
+import org.tynamo.jpa.JPATransactionDecorator;
+import org.tynamo.jpa.JPATransactionManager;
+import org.tynamo.jpa.annotations.CommitAfter;
+import org.tynamo.jpa.internal.JPATransactionAdvisorImpl;
+import org.tynamo.jpa.internal.JPATransactionDecoratorImpl;
 
 import java.sql.SQLException;
 

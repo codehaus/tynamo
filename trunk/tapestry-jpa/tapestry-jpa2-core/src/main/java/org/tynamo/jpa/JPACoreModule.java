@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package org.tynamo.jpa2;
+package org.tynamo.jpa;
 
 import javax.persistence.EntityManager;
 
@@ -29,10 +29,10 @@ import org.apache.tapestry5.ioc.services.PropertyShadowBuilder;
 import org.apache.tapestry5.ioc.services.RegistryShutdownHub;
 import org.slf4j.Logger;
 
-import org.tynamo.jpa2.internal.JPAEntityManagerSourceImpl;
-import org.tynamo.jpa2.internal.JPATransactionAdvisorImpl;
-import org.tynamo.jpa2.internal.JPATransactionDecoratorImpl;
-import org.tynamo.jpa2.internal.JPATransactionManagerImpl;
+import org.tynamo.jpa.internal.JPAEntityManagerSourceImpl;
+import org.tynamo.jpa.internal.JPATransactionAdvisorImpl;
+import org.tynamo.jpa.internal.JPATransactionDecoratorImpl;
+import org.tynamo.jpa.internal.JPATransactionManagerImpl;
 
 /**
  * Defines core services that support initialization of Hibernate and access to the Hibernate
