@@ -4,7 +4,7 @@
 
 package org.tynamo.jpa.sample.services;
 
-import org.tynamo.jpa2.annotations.CommitAfter;
+import org.tynamo.jpa.annotations.CommitAfter;
 
 /**
  * Created by IntelliJ IDEA.
@@ -14,7 +14,6 @@ import org.tynamo.jpa2.annotations.CommitAfter;
  * To change this template use File | Settings | File Templates.
  */
 public interface TestService {
-	@CommitAfter
-	void addTestEntity();
+	@CommitAfter void addTestEntity();
 	@CommitAfter void removeTestEntity(long id);
 }

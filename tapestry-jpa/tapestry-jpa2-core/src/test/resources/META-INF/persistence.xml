@@ -6,7 +6,7 @@
              version="1.0">
   <persistence-unit name="tapestryjpatest" transaction-type="RESOURCE_LOCAL">
     <provider>org.hibernate.ejb.HibernatePersistence</provider>
-    <class>org.tynamo.jpa2.example.app0.entities.User</class>
+    <class>org.tynamo.jpa.example.app0.entities.User</class>
     <exclude-unlisted-classes>true</exclude-unlisted-classes>
     <properties>
       <property name="show_sql" value="true"/>

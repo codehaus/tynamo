@@ -12,11 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package org.tynamo.jpa2.internal;
+package org.tynamo.jpa.internal;
 
-import org.tynamo.jpa2.JPATransactionManager;
-import org.tynamo.jpa2.JPATransactionAdvisor;
-import org.tynamo.jpa2.annotations.CommitAfter;
+import org.tynamo.jpa.JPATransactionManager;
+import org.tynamo.jpa.JPATransactionAdvisor;
+import org.tynamo.jpa.annotations.CommitAfter;
 import org.apache.tapestry5.ioc.Invocation;
 import org.apache.tapestry5.ioc.MethodAdvice;
 import org.apache.tapestry5.ioc.MethodAdviceReceiver;

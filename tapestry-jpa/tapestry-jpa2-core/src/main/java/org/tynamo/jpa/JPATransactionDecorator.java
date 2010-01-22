@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package org.tynamo.jpa2;
+package org.tynamo.jpa;
 
 /**
  * Service that can create an interceptor that wraps around a service implementation. After invoking

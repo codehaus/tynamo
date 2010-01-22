@@ -1,10 +1,10 @@
 package org.tynamo.jpa.sample.pages;
 
+import org.tynamo.jpa.annotations.CommitAfter;
 import org.tynamo.jpa.sample.domain.TestEntity;
 import org.tynamo.jpa.sample.services.TestService;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
-import org.tynamo.jpa2.annotations.CommitAfter;
 
 import javax.persistence.EntityManager;
 import java.util.Date;

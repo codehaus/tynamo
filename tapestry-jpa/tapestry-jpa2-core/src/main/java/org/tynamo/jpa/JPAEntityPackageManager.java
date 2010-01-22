@@ -1,4 +1,4 @@
-// Copyright 2008 The Apache Software Foundation
+// Copyright 2007, 2008 The Apache Software Foundation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,21 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package org.tynamo.jpa2;
+package org.tynamo.jpa;
 
-import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import java.util.Collection;
+
+import org.apache.tapestry5.ioc.annotations.UsesConfiguration;
 
 /**
- * Marker annotation used to identify services defined in the
- * {@link org.tynamo.jpa2.JPACoreModule}.
+ * Contains a set of contributed package names from which to load entities.
+ * <p/>
+ * The service's configuration is the names of Java packages to search for JPA entities.
  */
-@Target( { ElementType.PARAMETER, ElementType.FIELD })
-@Retention(RetentionPolicy.RUNTIME)
-@Documented
-public @interface JPACore
+@UsesConfiguration(String.class)
+public interface JPAEntityPackageManager
 {
+	/**
+	 * Returns packages from which read entity classes
+	 */
+	Collection<String> getPackageNames();
 }

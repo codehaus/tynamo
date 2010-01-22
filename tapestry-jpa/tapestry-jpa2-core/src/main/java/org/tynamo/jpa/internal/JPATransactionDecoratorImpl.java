@@ -12,14 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package org.tynamo.jpa2.internal;
+package org.tynamo.jpa.internal;
 
 import org.apache.tapestry5.ioc.internal.util.Defense;
 import org.apache.tapestry5.ioc.services.AspectDecorator;
 import org.apache.tapestry5.ioc.services.AspectInterceptorBuilder;
 
-import org.tynamo.jpa2.JPATransactionAdvisor;
-import org.tynamo.jpa2.JPATransactionDecorator;
+import org.tynamo.jpa.JPATransactionAdvisor;
+import org.tynamo.jpa.JPATransactionDecorator;
 
 public class JPATransactionDecoratorImpl implements JPATransactionDecorator
 {

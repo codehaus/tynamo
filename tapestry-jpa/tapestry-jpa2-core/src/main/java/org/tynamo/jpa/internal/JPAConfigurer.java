@@ -1,4 +1,4 @@
-package org.tynamo.jpa2.internal;
+package org.tynamo.jpa.internal;
 
 public final class JPAConfigurer {
 

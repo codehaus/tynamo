@@ -12,15 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package org.tynamo.jpa2.internal;
+package org.tynamo.jpa.internal;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 
 import org.apache.tapestry5.ioc.services.ThreadCleanupListener;
 
-import org.tynamo.jpa2.JPAEntityManagerSource;
-import org.tynamo.jpa2.JPATransactionManager;
+import org.tynamo.jpa.JPAEntityManagerSource;
+import org.tynamo.jpa.JPATransactionManager;
 
 public class JPATransactionManagerImpl implements JPATransactionManager, ThreadCleanupListener
 {

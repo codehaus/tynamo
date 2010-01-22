@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package org.tynamo.jpa2.example.app0.entities;
+package org.tynamo.jpa.example.app0.entities;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
