@@ -1,7 +1,5 @@
 package org.tynamo.jpa.sample.services;
 
-import org.tynamo.jpa.JPASymbols;
-import org.tynamo.jpa.JPATransactionAdvisor;
 import org.apache.tapestry5.SymbolConstants;
 import org.apache.tapestry5.ioc.MappedConfiguration;
 import org.apache.tapestry5.ioc.MethodAdviceReceiver;
@@ -12,6 +10,8 @@ import org.apache.tapestry5.services.RequestFilter;
 import org.apache.tapestry5.services.RequestHandler;
 import org.apache.tapestry5.services.Response;
 import org.slf4j.Logger;
+import org.tynamo.jpa2.JPASymbols;
+import org.tynamo.jpa2.JPATransactionAdvisor;
 
 import java.io.IOException;
 
