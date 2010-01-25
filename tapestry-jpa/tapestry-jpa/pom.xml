@@ -73,7 +73,6 @@
 	</dependencies>
 
 	<build>
-		<finalName>tapestry-jpa2</finalName>
 		<resources>
 			<resource>
 				<filtering>false</filtering>
