@@ -4,7 +4,6 @@
 	<groupId>org.tynamo</groupId>
 	<artifactId>tapestry-jpa</artifactId>
 	<name>Tapestry JPA</name>
-	<version>0.5-SNAPSHOT</version>
 	<description>
 		Provides support for simple CRUD applications built on top of
 		Tapestry and JPA
@@ -15,25 +14,25 @@
 	<parent>
 		<groupId>org.tynamo</groupId>
 		<artifactId>tapestry-jpa-parent</artifactId>
-		<version>0.5-SNAPSHOT</version>
-		<relativePath>../</relativePath>
+		<version>1.0.0-SNAPSHOT</version>
 	</parent>
 
 	<dependencies>
 		<dependency>
 			<groupId>org.tynamo</groupId>
 			<artifactId>tapestry-jpa-core</artifactId>
-			<version>0.5-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.tapestry</groupId>
 			<artifactId>tapestry-core</artifactId>
 			<version>${tapestry-version}</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.tapestry</groupId>
 			<artifactId>tapestry-test</artifactId>
 			<version>${tapestry-version}</version>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 
@@ -42,7 +41,7 @@
 		<resources>
 			<resource>
 				<filtering>false</filtering>
-				<directory>${basedir}/src/main/java</directory>
+				<directory>src/main/java</directory>
 				<includes>
 					<include>**/*.tml</include>
 					<include>**/*.js</include>
