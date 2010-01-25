@@ -4,7 +4,7 @@
 	<groupId>org.tynamo</groupId>
 	<artifactId>tapestry-jpa-parent</artifactId>
 	<name>Tapestry JPA Parent</name>
-	<version>0.5-SNAPSHOT</version>
+	<version>2.0.0-SNAPSHOT</version>
 	<description>
 		Provides JPA integration for Tapestry 5.
 	</description>
@@ -16,54 +16,28 @@
 	<parent>
 		<groupId>org.tynamo</groupId>
 		<artifactId>tynamo-parent</artifactId>
-		<version>0.0.4</version>
+		<version>0.0.5</version>
 	</parent>
 
 	<modules>
 		<module>tapestry-jpa-core</module>
 		<module>tapestry-jpa</module>
-		<module>tapestry-jpa2-core</module>
-		<module>tapestry-jpa2</module>
-		<module>tapestry-jpa2-webapp</module>
+		<module>tapestry-jpa-webapp</module>
 	</modules>
-
-	<licenses>
-		<license>
-			<name>Apache Software License 2.0</name>
-			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-			<distribution>repo</distribution>
-		</license>
-	</licenses>
+	
+	<!-- Developers section inherited from the parent pom -->
+	<contributors>
+		<contributor>
+			<name>Pierce T. Wetter</name>
+			<email>pierce (-at-) twinforces.com</email>
+		</contributor>
+	</contributors>
 
 	<scm>
 		<connection>scm:svn:http://svn.codehaus.org/tynamo/trunk/tapestry-jpa</connection>
 		<developerConnection>scm:svn:https://svn.codehaus.org/tynamo/trunk/tapestry-jpa</developerConnection>
 		<url>http://svn.tynamo.codehaus.org/tynamo/trunk/tapestry-jpa</url>
 	</scm>
-
-	<developers>
-		<developer>
-			<id>ps</id>
-			<name>Piero Sartini</name>
-			<email>ps (-at-) sartini-its.com</email>
-			<organization>Sartini IT Solutions</organization>
-			<organizationUrl>http://www.sartini-its.com/</organizationUrl>
-			<url>http://www.pierosartini.eu</url>
-			<timezone>CET</timezone>
-		</developer>
-		<developer>
-			<id>ptw</id>
-			<name>Pierce T. Wetter</name>
-			<email>pierce (-at-) twinforces.com</email>
-		</developer>
-	</developers>
-
-	<properties>
-		<tapestry-version>5.1.0.5</tapestry-version>
-	</properties>
-
-	<dependencies>
-	</dependencies>
 
 	<build>
 		<plugins>
@@ -77,45 +51,51 @@
 					<showDeprecation>true</showDeprecation>
 				</configuration>
 			</plugin>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>cobertura-maven-plugin</artifactId>
-				<inherited>true</inherited>
-				<executions>
-					<execution>
-						<goals>
-							<goal>clean</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
 		</plugins>
-		<extensions>
-			<extension>
-				<groupId>org.apache.maven.wagon</groupId>
-				<artifactId>wagon-webdav</artifactId>
-				<version>1.0-beta-2</version>
-			</extension>
-		</extensions>
 	</build>
 
 	<distributionManagement>
 		<site>
 			<id>tynamo-site</id>
 			<!-- Note the url. Only static files deployed in /constant/ can be decorated by Unity -->
-			<url>dav:https://dav.codehaus.org/tynamo/constant/tapestry-jpa</url>
+			<url>dav:https://dav.codehaus.org/tynamo/constant/tapestry-jpa2</url>
 		</site>
 	</distributionManagement>
+	
+	
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.tynamo</groupId>
+				<artifactId>tapestry-jpa-core</artifactId>
+				<version>2.0.0-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.tynamo</groupId>
+				<artifactId>tapestry-jpa</artifactId>
+				<version>2.0.0-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.tynamo</groupId>
+				<artifactId>tapestry-jpa-webapp</artifactId>
+				<version>2.0.0-SNAPSHOT</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 
-	<repositories>
-		<repository>
-			<id>EclipseLink Repo</id>
-			<url>http://www.eclipse.org/downloads/download.php?r=1&amp;nf=1&amp;file=/rt/eclipselink/maven.repo</url>
-		</repository>
-		<repository>
-			<id>JBoss Repo</id>
-			<url>http://repository.jboss.org/maven2</url>
-		</repository>
-	</repositories>
-
+	<profiles>
+		<profile>
+			<id>repositories</id>
+			<repositories>
+				<repository>
+					<id>EclipseLink Repo</id>
+					<url>http://mirrors.ibiblio.org/pub/mirrors/eclipse/rt/eclipselink/maven.repo</url>
+				</repository>
+				<repository>
+					<id>JBoss Repo</id>
+					<url>http://repository.jboss.org/maven2</url>
+				</repository>
+			</repositories>
+		</profile>
+	</profiles>
 </project>

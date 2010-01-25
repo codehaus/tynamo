@@ -2,29 +2,26 @@
 		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.tynamo</groupId>
-	<artifactId>tapestry-jpa2-webapp</artifactId>
-	<version>1.0-SNAPSHOT</version>
+	<artifactId>tapestry-jpa-webapp</artifactId>
 	<packaging>war</packaging>
 	<name>Sample Tapestry 5 Application with JPA2 integration</name>
 
 	<parent>
 		<groupId>org.tynamo</groupId>
 		<artifactId>tapestry-jpa-parent</artifactId>
-		<version>0.5-SNAPSHOT</version>
-		<relativePath>../</relativePath>
+		<version>2.0.0-SNAPSHOT</version>
 	</parent>
 
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.tapestry</groupId>
 			<artifactId>tapestry-core</artifactId>
-			<version>${tapestry-version}</version>
+			<version>${tapestry-release-version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.tynamo</groupId>
-			<artifactId>tapestry-jpa2</artifactId>
-			<version>0.5-SNAPSHOT</version>
+			<artifactId>tapestry-jpa</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.persistence</groupId>
@@ -34,7 +31,6 @@
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
-			<version>1.2.126</version>
 		</dependency>
 
 		<!-- A dependency on either JUnit or TestNG is required, or the surefire plugin (which runs the tests)
@@ -93,7 +89,6 @@
 			<plugin>
 				<groupId>org.mortbay.jetty</groupId>
 				<artifactId>maven-jetty-plugin</artifactId>
-				<version>6.1.9</version>
 				<configuration>
 					<!-- Log to the console. -->
 					<requestLog implementation="org.mortbay.jetty.NCSARequestLog">
@@ -113,7 +108,7 @@
 			<plugin>
 				<groupId>org.apache.tapestry</groupId>
 				<artifactId>tapestry-component-report</artifactId>
-				<version>${tapestry-version}</version>
+				<version>${tapestry-release-version}</version>
 				<configuration>
 					<rootPackage>org.tynamo.jpa.sample</rootPackage>
 				</configuration>
@@ -121,43 +116,16 @@
 		</plugins>
 	</reporting>
 
-	<repositories>
-		<repository>
-			<id>EclipseLink Repo</id>
-			<url>http://www.eclipse.org/downloads/download.php?r=1&amp;nf=1&amp;file=/rt/eclipselink/maven.repo</url>
-		</repository>
-
-		<!-- This repository is only needed if the Tapestry released artifacts haven't made it to the central Maven repository yet. -->
-		<repository>
-			<id>tapestry</id>
-			<url>http://tapestry.formos.com/maven-repository/</url>
-		</repository>
-
-		<!-- This repository is only needed when the tapestry-release-version is a snapshot release. -->
-		<repository>
-			<id>tapestry-snapshots</id>
-			<url>http://tapestry.formos.com/maven-snapshot-repository/</url>
-		</repository>
-
-		<repository>
-			<id>codehaus.snapshots</id>
-			<url>http://snapshots.repository.codehaus.org</url>
-		</repository>
-		<repository>
-			<id>OpenQA_Release</id>
-			<name>OpenQA Release Repository</name>
-			<url>http://archiva.openqa.org/repository/releases/</url>
-		</repository>
-	</repositories>
-
-	<pluginRepositories>
-
-		<!-- As above, this can be commented out when access to the snapshot version
-		of a Tapestry Maven plugin is not required.   -->
-		<pluginRepository>
-			<id>tapestry-snapshots</id>
-			<url>http://tapestry.formos.com/maven-snapshot-repository/</url>
-		</pluginRepository>
-
-	</pluginRepositories>
+	<profiles>
+		<profile>
+			<id>repositories</id>
+			<repositories>
+				<repository>
+					<id>OpenQA_Release</id>
+					<name>OpenQA Release Repository</name>
+					<url>http://archiva.openqa.org/repository/releases/</url>
+				</repository>
+			</repositories>
+		</profile>
+	</profiles>
 </project>
