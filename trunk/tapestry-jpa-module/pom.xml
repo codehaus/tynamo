@@ -1,10 +1,9 @@
-<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"
-		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.tynamo</groupId>
 	<artifactId>tapestry-jpa-module</artifactId>
 	<name>Tapestry JPA Parent</name>
-	<version>2.0.0-SNAPSHOT</version>
+	<version>2.0.0</version>
 	<description>
 		Provides JPA integration for Tapestry 5.
 	</description>
@@ -34,9 +33,9 @@
 	</contributors>
 
 	<scm>
-		<connection>scm:svn:http://svn.codehaus.org/tynamo/trunk/tapestry-jpa-module</connection>
-		<developerConnection>scm:svn:https://svn.codehaus.org/tynamo/trunk/tapestry-jpa-module</developerConnection>
-		<url>http://svn.tynamo.codehaus.org/tynamo/trunk/tapestry-jpa-module</url>
+		<connection>scm:svn:http://svn.codehaus.org/tynamo/tags/tapestry-jpa-module-2.0.0</connection>
+		<developerConnection>scm:svn:https://svn.codehaus.org/tynamo/tags/tapestry-jpa-module-2.0.0</developerConnection>
+		<url>http://svn.tynamo.codehaus.org/tynamo/tags/tapestry-jpa-module-2.0.0</url>
 	</scm>
 
 	<build>
@@ -68,17 +67,17 @@
 			<dependency>
 				<groupId>org.tynamo</groupId>
 				<artifactId>tapestry-jpa-core</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>2.0.0</version>
 			</dependency>
 			<dependency>
 				<groupId>org.tynamo</groupId>
 				<artifactId>tapestry-jpa</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>2.0.0</version>
 			</dependency>
 			<dependency>
 				<groupId>org.tynamo</groupId>
 				<artifactId>tapestry-jpa-webapp</artifactId>
-				<version>2.0.0-SNAPSHOT</version>
+				<version>2.0.0</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
