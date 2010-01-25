@@ -1,4 +1,4 @@
-package org.tynamo.seedentity.services;
+package org.tynamo.seedentity.hibernate.services;
 
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;

@@ -1,4 +1,4 @@
-package org.tynamo.seedentity.services;
+package org.tynamo.seedentity.hibernate.services;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -15,7 +15,9 @@ import org.hibernate.cfg.AnnotationConfiguration;
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-import org.tynamo.seedentity.entities.Thing;
+import org.tynamo.seedentity.hibernate.entities.Thing;
+import org.tynamo.seedentity.hibernate.services.SeedEntity;
+import org.tynamo.seedentity.hibernate.services.SeedEntityImpl;
 
 public class SeedEntityImplTest {
 	// @Inject
