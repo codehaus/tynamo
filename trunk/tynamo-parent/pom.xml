@@ -301,6 +301,7 @@
 				<configuration>
 					<!-- By default, do not deploy site, especially for the parent itself-->
 					<goals>deploy</goals>
+					<autoVersionSubmodules>true</autoVersionSubmodules>
 				</configuration>
 			</plugin>
 
