@@ -50,6 +50,15 @@
 					<showDeprecation>true</showDeprecation>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-release-plugin</artifactId>
+				<configuration>
+					<autoVersionSubmodules>true</autoVersionSubmodules>
+					<!-- The aggregate javadoc requires all modules are installed already before deployment -->
+					<preparationGoals>clean install</preparationGoals>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 
