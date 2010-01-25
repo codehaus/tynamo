@@ -73,7 +73,6 @@
 
 	</dependencies>
 	<build>
-		<finalName>tapestry-jpa2-sample</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -96,6 +95,17 @@
 													 that prevents the requestLog from being set. -->
 						<append>true</append>
 					</requestLog>
+					<contextPath>/</contextPath>
+					<systemProperties>
+						<systemProperty>
+							<name>tapestry.compress-whitespace</name>
+							<value>false</value>
+						</systemProperty>
+						<systemProperty>
+							<name>tapestry.production-mode</name>
+							<value>false</value>
+						</systemProperty>
+					</systemProperties>
 				</configuration>
 			</plugin>
 		</plugins>
@@ -116,16 +126,4 @@
 		</plugins>
 	</reporting>
 
-	<profiles>
-		<profile>
-			<id>repositories</id>
-			<repositories>
-				<repository>
-					<id>OpenQA_Release</id>
-					<name>OpenQA Release Repository</name>
-					<url>http://archiva.openqa.org/repository/releases/</url>
-				</repository>
-			</repositories>
-		</profile>
-	</profiles>
 </project>

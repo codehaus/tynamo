@@ -55,7 +55,7 @@
 			<version>1.8.0.7</version>
 			<scope>test</scope>
 		</dependency>
-		 <dependency>
+		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-core</artifactId>
 			<version>3.5.0-Beta-2</version>
@@ -70,7 +70,6 @@
 	</dependencies>
 
 	<build>
-		<finalName>tapestry-jpa2-core</finalName>
 		<resources>
 			<resource>
 				<filtering>false</filtering>
