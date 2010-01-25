@@ -2,7 +2,7 @@
  * Copyright © Pierangelo Sartini, 2010.
  */
 
-package org.tynamo.seedentity.tools;
+package org.tynamo.seedentity.jpa.tools;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;

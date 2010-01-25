@@ -1,10 +1,9 @@
 /*
  * Copyright © Sartini IT Solutions, 2010.
  */
-package org.tynamo.seedentity.entities;
+package org.tynamo.seedentity.jpa.entities;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 public class AnotherThing {

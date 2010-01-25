@@ -1,4 +1,4 @@
-package org.tynamo.seedentity;
+package org.tynamo.seedentity.jpa;
 
 public final class SeedEntityIdentifier {
 	private Object entity;

@@ -9,7 +9,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and limitations under the License.
  */
-package org.tynamo.seedentity.entities;
+package org.tynamo.seedentity.jpa.entities;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
