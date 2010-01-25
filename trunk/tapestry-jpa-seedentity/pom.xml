@@ -72,7 +72,7 @@
 				<configuration>
 					<archive>
 						<manifestEntries>
-							<Tapestry-Module-Classes>org.tynamo.seedentity.services.SeedEntityModule
+							<Tapestry-Module-Classes>org.tynamo.seedentity.jpa.services.SeedEntityModule
 							</Tapestry-Module-Classes>
 						</manifestEntries>
 					</archive>

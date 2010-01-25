@@ -1,4 +1,4 @@
-package org.tynamo.seedentity.services;
+package org.tynamo.seedentity.jpa.services;
 
 import java.io.IOException;
 import java.util.Properties;

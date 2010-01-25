@@ -1,11 +1,11 @@
-package org.tynamo.seedentity.services;
+package org.tynamo.seedentity.jpa.services;
 
 import org.apache.tapestry5.ioc.annotations.EagerLoad;
 import org.slf4j.Logger;
 import org.tynamo.jpa.JPAEntityManagerSource;
 import org.tynamo.jpa.JPATransactionManager;
-import org.tynamo.seedentity.SeedEntityIdentifier;
-import org.tynamo.seedentity.tools.BeanUtil;
+import org.tynamo.seedentity.jpa.SeedEntityIdentifier;
+import org.tynamo.seedentity.jpa.tools.BeanUtil;
 
 import javax.persistence.Entity;
 import javax.persistence.EntityManager;

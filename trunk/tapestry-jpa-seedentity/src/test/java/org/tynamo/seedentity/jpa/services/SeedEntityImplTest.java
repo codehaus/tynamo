@@ -1,4 +1,4 @@
-package org.tynamo.seedentity.services;
+package org.tynamo.seedentity.jpa.services;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -13,8 +13,8 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import org.tynamo.jpa.JPAEntityManagerSource;
 import org.tynamo.jpa.JPATransactionManager;
-import org.tynamo.seedentity.entities.AnotherThing;
-import org.tynamo.seedentity.entities.Thing;
+import org.tynamo.seedentity.jpa.entities.AnotherThing;
+import org.tynamo.seedentity.jpa.entities.Thing;
 
 import javax.persistence.*;
 
