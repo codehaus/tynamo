@@ -34,9 +34,9 @@
 	</contributors>
 
 	<scm>
-		<connection>scm:svn:http://svn.codehaus.org/tynamo/trunk/tapestry-jpa</connection>
-		<developerConnection>scm:svn:https://svn.codehaus.org/tynamo/trunk/tapestry-jpa</developerConnection>
-		<url>http://svn.tynamo.codehaus.org/tynamo/trunk/tapestry-jpa</url>
+		<connection>scm:svn:http://svn.codehaus.org/tynamo/trunk/tapestry-jpa-module</connection>
+		<developerConnection>scm:svn:https://svn.codehaus.org/tynamo/trunk/tapestry-jpa-module</developerConnection>
+		<url>http://svn.tynamo.codehaus.org/tynamo/trunk/tapestry-jpa-module</url>
 	</scm>
 
 	<build>
