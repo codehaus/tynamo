@@ -40,7 +40,7 @@ public class JPAEntityManagerSourceImplTest extends IOCTestCase {
 
 		// make sure it found the entity in the package
 		EntityType<User> etype = entityManager.getEntityManagerFactory().getMetamodel().entity(User.class);
-		Assert.assertEquals(etype.getName(), "org.tynamo.jpa.example.app0.entities.User");
+		Assert.assertEquals(etype.getName(), "User"); // hibernate returns: org.tynamo.jpa.example.app0.entities.User
 
 		verify();
 	}
