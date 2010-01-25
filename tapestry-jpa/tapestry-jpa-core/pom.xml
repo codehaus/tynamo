@@ -1,44 +1,40 @@
 <project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"
-		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0">
-	<modelVersion>4.0.0</modelVersion>
+				 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0">
+		<modelVersion>4.0.0</modelVersion>
 	<groupId>org.tynamo</groupId>
-	<artifactId>tapestry-jpa2</artifactId>
-	<name>Tapestry JPA2</name>
-	<version>0.5-SNAPSHOT</version>
+	<artifactId>tapestry-jpa-core</artifactId>
+	<name>Tapestry JPA - Core</name>
 	<description>
-		Provides support for simple CRUD applications built on top of
-		Tapestry and JPA2
+			Basic JPA2 services for Tapestry IoC
 	</description>
-
 	<packaging>jar</packaging>
 
 	<parent>
 		<groupId>org.tynamo</groupId>
 		<artifactId>tapestry-jpa-parent</artifactId>
-		<version>0.5-SNAPSHOT</version>
-		<relativePath>../</relativePath>
+		<version>2.0.0-SNAPSHOT</version>
 	</parent>
 
 	<dependencies>
 		<dependency>
-			<groupId>org.tynamo</groupId>
-			<artifactId>tapestry-jpa2-core</artifactId>
-			<version>0.5-SNAPSHOT</version>
+			<groupId>org.apache.tapestry</groupId>
+			<artifactId>tapestry-ioc</artifactId>
+			<version>${tapestry-release-version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.tapestry</groupId>
-			<artifactId>tapestry-core</artifactId>
-			<version>${tapestry-version}</version>
+			<groupId>org.eclipse.persistence</groupId>
+			<artifactId>javax.persistence</artifactId>
+			<version>2.0.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.tapestry</groupId>
 			<artifactId>tapestry-test</artifactId>
-			<version>${tapestry-version}</version>
+			<version>${tapestry-release-version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.easymock</groupId>
 			<artifactId>easymock</artifactId>
-			<version>2.4</version>
+				<version>2.4</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -59,7 +55,7 @@
 			<version>1.8.0.7</version>
 			<scope>test</scope>
 		</dependency>
-		<dependency>
+		 <dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-core</artifactId>
 			<version>3.5.0-Beta-2</version>
@@ -74,7 +70,7 @@
 	</dependencies>
 
 	<build>
-		<finalName>tapestry-jpa2</finalName>
+		<finalName>tapestry-jpa2-core</finalName>
 		<resources>
 			<resource>
 				<filtering>false</filtering>
@@ -91,6 +87,7 @@
 				</excludes>
 			</resource>
 		</resources>
+	
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -98,24 +95,11 @@
 				<configuration>
 					<archive>
 						<manifestEntries>
-							<Tapestry-Module-Classes>
-								org.tynamo.jpa.JPAModule
-							</Tapestry-Module-Classes>
+							<Tapestry-Module-Classes>org.tynamo.jpa.JPACoreModule</Tapestry-Module-Classes>
 						</manifestEntries>
 					</archive>
 				</configuration>
 			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<configuration>
-					<source>1.5</source>
-					<target>1.5</target>
-					<optimize>true</optimize>
-					<showDeprecation>true</showDeprecation>
-				</configuration>
-			</plugin>
-		</plugins>
+	 </plugins>
 	</build>
-
 </project>
