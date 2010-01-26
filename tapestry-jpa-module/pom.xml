@@ -66,7 +66,7 @@
 		<site>
 			<id>tynamo-site</id>
 			<!-- Note the url. Only static files deployed in /constant/ can be decorated by Unity -->
-			<url>dav:https://dav.codehaus.org/tynamo/constant/tapestry-jpa2</url>
+			<url>dav:https://dav.codehaus.org/tynamo/constant/tapestry-jpa</url>
 		</site>
 	</distributionManagement>
 	
