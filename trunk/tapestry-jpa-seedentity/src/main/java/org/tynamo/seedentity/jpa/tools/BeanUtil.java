@@ -23,9 +23,10 @@ public class BeanUtil {
 		try {
 			Method m = null;
 			try {
-				m = clazz.getDeclaredMethod("get" + name);
+				m = clazz.getMethod("get" + name);
 			} catch (NoSuchMethodException ex) {
-				m = clazz.getDeclaredMethod("is" + name);
+				ex.printStackTrace();
+				m = clazz.getMethod("is" + name);
 			}
 			ret = m.invoke(bean);
 		} catch (IllegalAccessException e) {
@@ -44,7 +45,7 @@ public class BeanUtil {
 		name = name.substring(0, 1).toUpperCase().concat(name.substring(1));
 		try {
 			Method m = null;
-			m = clazz.getDeclaredMethod("set" + name, value.getClass());
+			m = clazz.getMethod("set" + name, value.getClass());
 			m.invoke(bean, value);
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
