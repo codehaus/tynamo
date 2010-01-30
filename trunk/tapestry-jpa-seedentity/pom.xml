@@ -13,14 +13,19 @@
 	<parent>
 		<groupId>org.tynamo</groupId>
 		<artifactId>tynamo-parent</artifactId>
-		<version>0.0.4</version>
+		<version>0.0.5</version>
 	</parent>
 
 	<dependencies>
 		<dependency>
+			<groupId>org.apache.tapestry</groupId>
+			<artifactId>tapestry-ioc</artifactId>
+			<version>${tapestry-release-version}</version>
+		</dependency>
+		<dependency>
 			<groupId>org.tynamo</groupId>
-			<artifactId>tapestry-jpa2</artifactId>
-			<version>0.5-SNAPSHOT</version>
+			<artifactId>tapestry-jpa-core</artifactId>
+			<version>2.0.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.persistence</groupId>
@@ -50,7 +55,7 @@
 		<site>
 			<id>tynamo-site</id>
 			<!-- Note the url. Only static files deployed in /constant/ can be decorated by Unity -->
-			<url>dav:https://dav.codehaus.org/tynamo/constant/tapestry-hibernate-seedentity</url>
+			<url>dav:https://dav.codehaus.org/tynamo/constant/tapestry-jpa-seedentity</url>
 		</site>
 	</distributionManagement>
 
@@ -87,10 +92,17 @@
 		<url>http://svn.tynamo.codehaus.org/tynamo/trunk/tapestry-jpa-seedentity</url>
 	</scm>
 
-	<repositories>
-		<repository>
-			<id>EclipseLink Repo</id>
-			<url>http://www.eclipse.org/downloads/download.php?r=1&amp;nf=1&amp;file=/rt/eclipselink/maven.repo</url>
-		</repository>
-	</repositories>
+	<profiles>
+		<profile>
+			<id>repositories</id>
+			<repositories>
+				<repository>
+					<id>EclipseLink Repo</id>
+					<url>
+						http://www.eclipse.org/downloads/download.php?r=1&amp;nf=1&amp;file=/rt/eclipselink/maven.repo
+					</url>
+				</repository>
+			</repositories>
+		</profile>
+	</profiles>
 </project>
