@@ -1,6 +1,10 @@
 package org.tynamo.conversations.services;
 
-public class Conversation {
+import java.io.Serializable;
+
+public class Conversation implements Serializable {
+	private static final long serialVersionUID = 333320784727498530L;
+
 	private final String pageName;
 
 	private final String id;
