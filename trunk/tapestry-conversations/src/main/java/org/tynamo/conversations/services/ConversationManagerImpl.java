@@ -55,7 +55,7 @@ public class ConversationManagerImpl implements ConversationManager {
 
 		// Try reading the conversation id from a cookie first
 		try {
-			conversationId = cookies.readCookieValue(pageName + ConversationManagerImpl.Keys._conversationId);
+			conversationId = cookies.readCookieValue(pageName.toLowerCase() + ConversationManagerImpl.Keys._conversationId);
 			Conversation conversation = getConversations().get(conversationId);
 			if (conversation == null) conversationId = null;
 			else if (!conversation.isUsingCookie()) conversationId = null;
@@ -91,9 +91,9 @@ public class ConversationManagerImpl implements ConversationManager {
 	}
 
 	public String createConversation(String id, String pageName, Integer maxIdleSeconds, Integer maxConversationLengthSeconds, boolean useCookie) {
-		pageName = pageName == null ? "" : pageName.toLowerCase();
+		pageName = pageName == null ? "" : pageName;
 		// Don't use path in a cookie, it's actually relatively difficult to find out from here
-		if (useCookie) cookies.writeCookieValue(pageName + Keys._conversationId.toString(), String.valueOf(id));
+		if (useCookie) cookies.writeCookieValue(pageName.toLowerCase() + Keys._conversationId.toString(), String.valueOf(id));
 		Conversation conversation = new Conversation(id, pageName, maxIdleSeconds, maxConversationLengthSeconds, useCookie);
 		endIdleConversations();
 		getConversations().put(id, conversation);
