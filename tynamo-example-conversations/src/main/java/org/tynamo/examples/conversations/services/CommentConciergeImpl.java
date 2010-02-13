@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.Map.Entry;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -22,6 +23,9 @@ public class CommentConciergeImpl implements ConversationAware, CommentConcierge
 	String[] comments = new String[COMMENTLIST_SIZE];
 	Set<Integer> openCommentSpots = Collections.synchronizedSet(new LinkedHashSet<Integer>(COMMENTLIST_SIZE));
 	Map<String, Reservation> spotReservations = Collections.synchronizedMap(new HashMap<String, Reservation>(100));
+
+	// Only needed for threadedless environments such as GAE
+	Map<Long, Reservation> scheduledReservations = Collections.synchronizedMap(new HashMap<Long, Reservation>(100));
 	HttpServletRequest request;
 	ConversationManager conversationManager;
 
@@ -60,8 +64,26 @@ public class CommentConciergeImpl implements ConversationAware, CommentConcierge
 		if (spot == null) return null;
 		Reservation reservation = new Reservation(sessionId, spot);
 		spotReservations.put(sessionId, reservation);
-		Executors.newSingleThreadScheduledExecutor().schedule(reservation, 61, TimeUnit.SECONDS);
+
+		// The try-catch is a horrible hack to make things work in environments where creating thread isn't allowed,
+		// such as GAE. Don't use this as an example of best practices
+		try {
+			Executors.newSingleThreadScheduledExecutor().schedule(reservation, 61, TimeUnit.SECONDS);
+		} catch (Exception e) {
+			scheduledReservations.put(System.currentTimeMillis() + 61 * 1000L, reservation);
+		}
 		return spot;
+	}
+
+	// A
+	public void cleanScheduledReservations() {
+		Set<Entry<Long, Reservation>> set = scheduledReservations.entrySet();
+		try {
+			// Wonder if this works or should I use an iterator
+			for (Entry<Long, Reservation> entry : set)
+				if (entry.getKey() > System.currentTimeMillis()) set.remove(entry);
+		} catch (Exception e) {
+		}
 	}
 
 	public boolean setComment(String comment) {

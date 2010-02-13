@@ -7,4 +7,6 @@ public interface CommentConcierge {
 	public boolean setComment(String comment);
 
 	public String[] getComments();
+
+	public void cleanScheduledReservations();
 }
