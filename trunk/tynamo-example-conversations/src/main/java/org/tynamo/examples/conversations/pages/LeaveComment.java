@@ -60,6 +60,11 @@ public class LeaveComment {
 		secondsLeft = conversationManager.getSecondsBeforeActiveConversationBecomesIdle();
 	}
 
+	public void onActivate() {
+		// A hack to make things work in environments where creating threads isn't allowed, such as GAE
+		commentConcierge.cleanScheduledReservations();
+	}
+
 	public Object onSuccess() {
 		if (commentConcierge.setComment(comment)) {
 			conversationManager.endConversation(conversationId);
