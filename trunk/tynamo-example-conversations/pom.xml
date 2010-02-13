@@ -116,6 +116,13 @@
 			<artifactId>tapestry-conversations</artifactId>
 			<version>0.1.1-SNAPSHOT</version>
 		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+			<version>2.5</version>
+			<type>jar</type>
+			<scope>provided</scope>
+		</dependency>
 	</dependencies>
 	
 	<profiles>

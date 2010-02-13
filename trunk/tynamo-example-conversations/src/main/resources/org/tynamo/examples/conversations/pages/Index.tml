@@ -1,3 +1,4 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns:t="http://tapestry.apache.org/schema/tapestry_5_0_0.xsd" xmlns:p="tapestry:parameter">
   <head>
     <title>Tynamo Conversations Example Start Page</title>
@@ -11,6 +12,13 @@
     <p>
       <t:actionlink>Start guessing</t:actionlink>
     </p>
+    
+    <h2 style="display:inline">10 user comments </h2> <t:pagelink page="leavecomment">What do you think?</t:pagelink>
+    <ol>
+    	<t:loop source="comments" value="comment">
+    		<li>${comment}</li>
+    	</t:loop>
+    </ol>
 
   </body>
 </html>
