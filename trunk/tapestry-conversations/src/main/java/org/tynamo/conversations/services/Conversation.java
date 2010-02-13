@@ -2,10 +2,12 @@ package org.tynamo.conversations.services;
 
 import java.io.Serializable;
 
-public class Conversation implements Serializable {
+public final class Conversation implements Serializable {
 	private static final long serialVersionUID = 333320784727498530L;
 
 	private final String pageName;
+
+	private final String sessionId;
 
 	private final String id;
 
@@ -21,14 +23,15 @@ public class Conversation implements Serializable {
 		return usingCookie;
 	}
 
-	protected Conversation(String id, String pageName, Integer maxIdleSeconds, Integer maxConversationLengthSeconds, boolean usingCookie) {
+	Conversation(String sessionId, String id, String pageName, Integer maxIdleSeconds, Integer maxConversationLengthSeconds, boolean usingCookie) {
 		if (maxIdleSeconds == null) maxIdleSeconds = 0;
 		if (maxConversationLengthSeconds == null) maxConversationLengthSeconds = 0;
+		this.sessionId = sessionId;
 		this.id = id;
 		this.pageName = pageName;
 		this.usingCookie = usingCookie;
 		this.maxIdleSeconds = maxIdleSeconds;
-		this.requiredEndTimestamp = maxConversationLengthSeconds == 0 ? 0 : System.currentTimeMillis() + maxConversationLengthSeconds * 1000L;
+		this.requiredEndTimestamp = maxConversationLengthSeconds == 0 ? 0L : System.currentTimeMillis() + maxConversationLengthSeconds * 1000L;
 		touch();
 	}
 
@@ -36,6 +39,10 @@ public class Conversation implements Serializable {
 		return id;
 	}
 
+	public String getSessionId() {
+		return sessionId;
+	}
+	
 	public String getPageName() {
 		return pageName;
 	}
@@ -46,7 +53,9 @@ public class Conversation implements Serializable {
 
 	public Integer getSecondsBeforeBecomesIdle() {
 		if (maxIdleSeconds <= 0) return null;
-		return (int) ((maxIdleSeconds - (System.currentTimeMillis() - lastTouched) / 1000L));
+		int secondsLeft = (int) ((maxIdleSeconds - (System.currentTimeMillis() - lastTouched) / 1000L));
+		if (requiredEndTimestamp > 0) secondsLeft = Math.min(secondsLeft, (int)((requiredEndTimestamp - System.currentTimeMillis())/1000L));
+		return secondsLeft < 0 ? 0 : secondsLeft;
 	}
 
 	/**

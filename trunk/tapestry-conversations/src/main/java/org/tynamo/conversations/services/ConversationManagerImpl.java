@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.tapestry5.EventContext;
 import org.apache.tapestry5.services.ComponentEventRequestParameters;
 import org.apache.tapestry5.services.Cookies;
@@ -24,9 +26,12 @@ public class ConversationManagerImpl implements ConversationManager {
 
 	private ConversationalPersistentFieldStrategy pagePersistentFieldStrategy;
 
-	public ConversationManagerImpl(Request request, Cookies cookies) {
+	private HttpServletRequest servletRequest;
+
+	public ConversationManagerImpl(Request request, HttpServletRequest servletRequest, Cookies cookies) {
 		this.request = request;
 		this.cookies = cookies;
+		this.servletRequest = servletRequest;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -94,7 +99,7 @@ public class ConversationManagerImpl implements ConversationManager {
 		pageName = pageName == null ? "" : pageName;
 		// Don't use path in a cookie, it's actually relatively difficult to find out from here
 		if (useCookie) cookies.writeCookieValue(pageName.toLowerCase() + Keys._conversationId.toString(), String.valueOf(id));
-		Conversation conversation = new Conversation(id, pageName, maxIdleSeconds, maxConversationLengthSeconds, useCookie);
+		Conversation conversation = new Conversation(servletRequest.getSession(true).getId(), id, pageName, maxIdleSeconds, maxConversationLengthSeconds, useCookie);
 		endIdleConversations();
 		getConversations().put(id, conversation);
 		activate(conversation);
