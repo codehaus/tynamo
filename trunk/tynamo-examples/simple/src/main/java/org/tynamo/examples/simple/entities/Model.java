@@ -43,7 +43,6 @@ public class Model implements Serializable
 	private Make make;
 
 	@ManyToOne
-	@NotNull
 	public Make getMake()
 	{
 		return make;

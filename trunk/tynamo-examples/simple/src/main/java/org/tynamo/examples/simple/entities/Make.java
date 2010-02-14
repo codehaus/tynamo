@@ -1,5 +1,6 @@
 package org.tynamo.examples.simple.entities;
 
+import org.tynamo.descriptor.annotation.Collection;
 import org.tynamo.descriptor.annotation.PropertyDescriptor;
 
 import javax.persistence.*;
@@ -39,10 +40,10 @@ public class Make implements Serializable
 
 	private Set<Model> models = new HashSet<Model>();
 
-	@OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "make")
-	@PropertyDescriptor(readOnly = true, index = 2, searchable = false)
-	public Set<Model> getModels()
-	{
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "make")
+	@PropertyDescriptor(index = 2, searchable = false)
+	@Collection(addExpression = "addModel", removeExpression = "removeModel")
+	public Set<Model> getModels() {
 		return models;
 	}
 
@@ -51,6 +52,15 @@ public class Make implements Serializable
 		models = theModels;
 	}
 
+	public void addModel(Model model) {
+		model.setMake(this);
+		models.add(model);
+	}
+
+	public void removeModel(Model model) {
+		models.remove(model);
+		model.setMake(null);
+	}
 
 	@Override
 	public boolean equals(Object o)
