@@ -1,12 +1,12 @@
 package org.tynamo.test.functional;
 
+import com.gargoylesoftware.htmlunit.html.*;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import org.tynamo.test.AbstractContainerTest;
 
-import com.gargoylesoftware.htmlunit.html.HtmlForm;
-import com.gargoylesoftware.htmlunit.html.HtmlInput;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import java.io.IOException;
+import java.net.MalformedURLException;
 
 public class CarTest extends AbstractContainerTest
 {
@@ -16,7 +16,7 @@ public class CarTest extends AbstractContainerTest
 	public void setStartPage() throws Exception {
 		startPage = webClient.getPage(BASEURI);
 	}
-	
+
 	@Test
 	public void testObjectTableOnEditPage() throws Exception
 	{
@@ -78,5 +78,56 @@ public class CarTest extends AbstractContainerTest
 		newMakePage = clickLink(newCarPage, "Cancel");
 		// kaosko - 2009-11-02: this won't work currently not so sure this even makes sense in tynamo
 //		assertXPathPresent(newMakePage, "//h1[text() = 'Edit Make']");
+	}
+
+	@Test
+	public void testListOnlyOrphanInstances() throws Exception {
+
+		HtmlPage newMakePage = webClient.getPage(BASEURI +"add/make");
+		HtmlForm form = newMakePage.getFormByName("form");
+		form.<HtmlInput>getInputByName("name").setValueAttribute("Honda");
+		clickButton(newMakePage, "saveAndReturnButton");
+
+		newMakePage = webClient.getPage(BASEURI +"add/make");
+		form = newMakePage.getFormByName("form");
+		form.<HtmlInput>getInputByName("name").setValueAttribute("Toyota");
+		clickButton(newMakePage, "saveAndReturnButton");
+
+		HtmlPage newModelPage = webClient.getPage(BASEURI +"add/model");
+		HtmlForm newModelForm = newModelPage.getFormByName("form");
+		newModelForm.<HtmlInput>getInputByName("name").setValueAttribute("Prius");
+		clickButton(newModelPage, "saveAndReturnButton");
+
+		newModelPage = webClient.getPage(BASEURI +"add/model");
+		newModelForm = newModelPage.getFormByName("form");
+		newModelForm.<HtmlInput>getInputByName("name").setValueAttribute("Sedan");
+		clickButton(newModelPage, "saveAndReturnButton");
+
+		HtmlPage editMakePage = webClient.getPage(BASEURI +"edit/make/1");
+
+		assertXPathPresent(editMakePage, "//input[@value='Honda']");
+		assertXPathPresent(editMakePage, "//select[@id='palette_set-avail']");
+		assertXPathNotPresent(editMakePage, "//select[@id='palette_set-avail'][not(node())]");
+		assertXPathPresent(editMakePage, "//select[@id='palette_set-avail']/option[text()='Prius']");
+		assertXPathPresent(editMakePage, "//select[@id='palette_set-avail']/option[text()='Sedan']");
+
+		HtmlPage editModel = webClient.getPage(BASEURI + "edit/model/1");
+		form = editModel.getFormByName("form");
+		form.getSelectByName("select").getOptionByValue("1").setSelected(true);
+		clickButton(editModel, "saveAndReturnButton");
+
+		editMakePage = webClient.getPage(BASEURI +"edit/make/1");
+		assertXPathNotPresent(editMakePage, "//select[@id='palette_set-avail'][not(node())]");
+		assertXPathNotPresent(editMakePage, "//select[@id='palette_set'][not(node())]");
+
+		editMakePage = webClient.getPage(BASEURI +"edit/make/2");
+
+//		assertXPathPresent(editMakePage, "//input[@value='Toyota']");
+		assertXPathPresent(editMakePage, "//select[@id='palette_set-avail']");
+		assertXPathNotPresent(editMakePage, "//select[@id='palette_set-avail'][not(node())]");
+		assertXPathPresent(editMakePage, "//select[@id='palette_set'][not(node())]");
+		assertXPathNotPresent(editMakePage, "//select[@id='palette_set-avail']/option[text()='Prius']");
+		assertXPathPresent(editMakePage, "//select[@id='palette_set-avail']/option[text()='Sedan']");
+
 	}
 }
