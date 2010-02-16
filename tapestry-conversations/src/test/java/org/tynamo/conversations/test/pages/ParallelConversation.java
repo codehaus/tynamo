@@ -21,7 +21,6 @@ public class ParallelConversation {
 	private ComponentResources componentResources;
 
 	@Persist("conversation")
-	@Property
 	private int target;
 
 	private String conversationId;
