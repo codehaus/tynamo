@@ -12,6 +12,10 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+import javax.cache.Cache;
+import javax.cache.CacheException;
+import javax.cache.CacheFactory;
+import javax.cache.CacheManager;
 import javax.servlet.http.HttpServletRequest;
 
 import org.tynamo.conversations.ConversationAware;
@@ -21,6 +25,10 @@ import org.tynamo.conversations.services.ConversationManager;
 public class CommentConciergeImpl implements ConversationAware, CommentConcierge {
 	private static final int COMMENTLIST_SIZE = 10;
 	String[] comments = new String[COMMENTLIST_SIZE];
+
+	// Cache is mostly needed for GAE but using it elsewhere doesn't hurt
+	private Cache commentCache;
+
 	Set<Integer> openCommentSpots = Collections.synchronizedSet(new LinkedHashSet<Integer>(COMMENTLIST_SIZE));
 	Map<String, Reservation> spotReservations = Collections.synchronizedMap(new HashMap<String, Reservation>(100));
 
@@ -34,9 +42,19 @@ public class CommentConciergeImpl implements ConversationAware, CommentConcierge
 		this.conversationManager = conversationManager;
 		for (int i = 0; i < COMMENTLIST_SIZE; i++)
 			openCommentSpots.add(i);
+
+		try {
+			CacheFactory cacheFactory = CacheManager.getInstance().getCacheFactory();
+			commentCache = cacheFactory.createCache(Collections.emptyMap());
+		} catch (CacheException e) {
+		} catch (Exception e) {
+		}
 	}
 
 	public String[] getComments() {
+		// It's enough to examine the first item - presumably, if it's null, they are all null
+		if (comments[0] == null && commentCache != null) for (int i = 0; i < 10; i++)
+			comments[i] = (String) commentCache.get(i);
 		return comments;
 	}
 
@@ -94,6 +112,7 @@ public class CommentConciergeImpl implements ConversationAware, CommentConcierge
 		Reservation reservation = spotReservations.get(sessionId);
 		if (reservation == null) return false;
 		comments[reservation.spot] = comment;
+		if (commentCache != null) commentCache.put(reservation.spot, comment);
 		return true;
 	}
 
