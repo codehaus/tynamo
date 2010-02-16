@@ -20,7 +20,8 @@ public class ParallelConversation {
 	@Inject
 	private ComponentResources componentResources;
 
-	@Persist
+	@Persist("conversation")
+	@Property
 	private int target;
 
 	private String conversationId;
