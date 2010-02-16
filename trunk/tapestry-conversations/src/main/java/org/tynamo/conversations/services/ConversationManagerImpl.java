@@ -1,9 +1,12 @@
 package org.tynamo.conversations.services;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -12,6 +15,7 @@ import org.apache.tapestry5.services.ComponentEventRequestParameters;
 import org.apache.tapestry5.services.Cookies;
 import org.apache.tapestry5.services.PageRenderRequestParameters;
 import org.apache.tapestry5.services.Request;
+import org.tynamo.conversations.ConversationAware;
 
 public class ConversationManagerImpl implements ConversationManager {
 	// protected so you can override toString() in case user application already uses the same keys
@@ -27,11 +31,17 @@ public class ConversationManagerImpl implements ConversationManager {
 	private ConversationalPersistentFieldStrategy pagePersistentFieldStrategy;
 
 	private HttpServletRequest servletRequest;
+	
+	private Map<String, List<ConversationAware>> conversationAwareListeners = Collections.synchronizedMap(new HashMap<String, List<ConversationAware>>());
 
-	public ConversationManagerImpl(Request request, HttpServletRequest servletRequest, Cookies cookies) {
+	public ConversationManagerImpl(Request request, HttpServletRequest servletRequest, Cookies cookies, Map<Class,ConversationAware> listeners) {
 		this.request = request;
 		this.cookies = cookies;
 		this.servletRequest = servletRequest;
+		for (Entry<Class,ConversationAware> entry : listeners.entrySet() ) {
+			String pageName = entry.getKey().getSimpleName();
+			addConversationListener(pageName, entry.getValue());
+		}
 	}
 
 	@SuppressWarnings("unchecked")
@@ -103,6 +113,10 @@ public class ConversationManagerImpl implements ConversationManager {
 		endIdleConversations();
 		getConversations().put(id, conversation);
 		activate(conversation);
+		if (conversationAwareListeners.containsKey(conversation.getPageName())) {
+			List<ConversationAware> conversationListeners = conversationAwareListeners.get(conversation.getPageName());
+			for (ConversationAware conversationAware : conversationListeners) conversationAware.onConversationCreated(conversation);
+		}
 		return id;
 	}
 
@@ -111,14 +125,20 @@ public class ConversationManagerImpl implements ConversationManager {
 		while (iterator.hasNext()) {
 			Conversation conversation = iterator.next();
 			if (conversation.isIdle(false)) {
-				discardConversation(conversation);
+				discardConversation(conversation, true);
 				iterator.remove();
 			}
 		}
 	}
 
-	protected void discardConversation(Conversation conversation) {
+	protected void discardConversation(Conversation conversation, boolean expired) {
 		if (conversation == null) return;
+		// Notify conversation ending
+		if (conversationAwareListeners.containsKey(conversation.getPageName())) {
+			List<ConversationAware> conversationListeners = conversationAwareListeners.get(conversation.getPageName());
+			for (ConversationAware conversationAware : conversationListeners) conversationAware.onConversationEnded(conversation, expired);
+		}
+		//discardConversation
 		if (conversation.isUsingCookie()) cookies.removeCookieValue(String.valueOf(conversation.getId()));
 		if (pagePersistentFieldStrategy != null) pagePersistentFieldStrategy.discardChanges(conversation.getPageName());
 	}
@@ -134,7 +154,7 @@ public class ConversationManagerImpl implements ConversationManager {
 		if (conversation == null) return null;
 		boolean resetTimeout = !("false".equals(request.getParameter(Parameters.keepalive.name())));
 		if (conversation.isIdle(resetTimeout)) {
-			discardConversation(conversation);
+			discardConversation(conversation, true);
 			getConversations().remove(conversation.getId());
 			conversationId = null;
 		}
@@ -167,8 +187,23 @@ public class ConversationManagerImpl implements ConversationManager {
 	public String endConversation(String conversationId) {
 		Conversation conversation = getConversations().get(conversationId);
 		if (conversation == null) return null;
-		discardConversation(conversation);
+		discardConversation(conversation, false);
 		getConversations().remove(conversation.getId());
 		return null;
+	}
+
+	public void addConversationListener(String pageName, ConversationAware conversationAware) {
+		List<ConversationAware> conversationListenersForPage = conversationAwareListeners.get(pageName);
+		if (conversationListenersForPage == null) {
+			conversationListenersForPage = Collections.synchronizedList(new ArrayList<ConversationAware>() );
+			conversationAwareListeners.put(pageName, conversationListenersForPage);
+		}
+		conversationListenersForPage.add(conversationAware);
+	}
+
+	public void removeConversationListener(String pageName, ConversationAware conversationAware) {
+		List<ConversationAware> conversationListenersForPage = conversationAwareListeners.get(pageName);
+		if (conversationListenersForPage == null) return;
+		conversationListenersForPage.remove(conversationAware);
 	}
 }
