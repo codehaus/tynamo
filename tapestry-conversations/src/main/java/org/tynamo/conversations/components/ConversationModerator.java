@@ -10,7 +10,7 @@ import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.json.JSONObject;
 import org.apache.tapestry5.services.Request;
-import org.tynamo.conversations.ConversationAware;
+import org.tynamo.conversations.ConversationModeratorAware;
 import org.tynamo.conversations.services.ConversationManager;
 
 @IncludeJavaScriptLibrary("ConversationModerator.js")
@@ -48,7 +48,7 @@ public class ConversationModerator {
 			nextCheckInSeconds = conversationManager.getSecondsBeforeActiveConversationBecomesIdle();
 			// Shouldn't be negative.
 			if (nextCheckInSeconds < 0) return null;
-			if (componentResources.getContainer() instanceof ConversationAware) ((ConversationAware) componentResources.getContainer()).onIdleCheck();
+			if (componentResources.getContainer() instanceof ConversationModeratorAware) ((ConversationModeratorAware) componentResources.getContainer()).onConversationIdleCheck();
 			// If keepalive is true, subtract 1 so conversation will be refreshed before end,
 			if ("true".equals(request.getParameter(ConversationManager.Parameters.keepalive.name()))) nextCheckInSeconds--;
 			else {
@@ -76,6 +76,7 @@ public class ConversationModerator {
 	}
 
 	JSONObject onEnd() {
+		if (componentResources.getContainer() instanceof ConversationModeratorAware) ((ConversationModeratorAware) componentResources.getContainer()).onConversationEnded();
 		conversationManager.endConversation(conversationManager.getActiveConversation());
 		return new JSONObject();
 	}

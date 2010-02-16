@@ -1,5 +1,7 @@
 package org.tynamo.conversations.services;
 
+import org.tynamo.conversations.ConversationAware;
+
 public interface ConversationManager {
 	public enum Parameters {
 		keepalive
@@ -21,15 +23,14 @@ public interface ConversationManager {
 
 	public int getSecondsBeforeActiveConversationBecomesIdle();
 
-	/**
-	 * Activates conversation context. Internally used by the conversation frameworks.
-	 * The interface of this operation will change in T5.1 since it has a common interface
-	 * for handling request parameters
-	 * */
 	public boolean activateConversation(Object parameterObject);
 
 	public String endConversation(String conversationId);
 
 	public void setPagePersistentFieldStrategy(ConversationalPersistentFieldStrategy pagePersistentFieldStrategy);
+	
+	public void addConversationListener(String pageName, ConversationAware conversationAware);
+
+	public void removeConversationListener(String pageName, ConversationAware conversationAware);
 
 }
