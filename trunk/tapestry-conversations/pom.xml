@@ -23,6 +23,12 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
+			<groupId>org.tynamo</groupId>
+			<artifactId>tapestry-model-test</artifactId>
+			<version>0.0.1</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>servlet-api</artifactId>
 			<version>2.5</version>
@@ -104,6 +110,26 @@
 					<goals>deploy site-deploy changes:announcement-mail -DgenerateJiraAnnouncement=true</goals>
 					-->
 					<goals>deploy site-deploy</goals>
+				</configuration>
+			</plugin>
+			<!--  needed only for testing -->
+			<plugin>
+				<groupId>org.mortbay.jetty</groupId>
+				<artifactId>maven-jetty-plugin</artifactId>
+				<configuration>
+					<contextPath>/</contextPath>
+					<useTestClasspath>true</useTestClasspath>
+					<webAppSourceDirectory>${basedir}/src/test/webapp</webAppSourceDirectory>
+					<systemProperties>
+						<systemProperty>
+							<name>tapestry.compress-whitespace</name>
+							<value>false</value>
+						</systemProperty>
+						<systemProperty>
+							<name>tapestry.production-mode</name>
+							<value>false</value>
+						</systemProperty>
+					</systemProperties>
 				</configuration>
 			</plugin>
 		</plugins>			
