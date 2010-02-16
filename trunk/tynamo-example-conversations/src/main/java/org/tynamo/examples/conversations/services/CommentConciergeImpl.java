@@ -18,11 +18,10 @@ import javax.cache.CacheFactory;
 import javax.cache.CacheManager;
 import javax.servlet.http.HttpServletRequest;
 
-import org.tynamo.conversations.ConversationAware;
 import org.tynamo.conversations.services.Conversation;
 import org.tynamo.conversations.services.ConversationManager;
 
-public class CommentConciergeImpl implements ConversationAware, CommentConcierge {
+public class CommentConciergeImpl implements CommentConcierge {
 	private static final int COMMENTLIST_SIZE = 10;
 	String[] comments = new String[COMMENTLIST_SIZE];
 
@@ -126,11 +125,6 @@ public class CommentConciergeImpl implements ConversationAware, CommentConcierge
 
 	public void onConversationEnded(Conversation conversation, boolean expired) {
 		freeExistingReservation(conversation.getSessionId());
-	}
-
-	public void onIdleCheck() {
-		// TODO Auto-generated method stub
-
 	}
 
 	@SuppressWarnings("unchecked")

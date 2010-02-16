@@ -1,6 +1,8 @@
 package org.tynamo.examples.conversations.services;
 
-public interface CommentConcierge {
+import org.tynamo.conversations.ConversationAware;
+
+public interface CommentConcierge extends ConversationAware {
 
 	public Integer reserveCommentSpot();
 
