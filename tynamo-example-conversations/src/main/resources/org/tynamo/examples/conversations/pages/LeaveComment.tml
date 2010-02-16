@@ -19,7 +19,7 @@
 			<t:textarea t:id="comment" t:validate="required,maxlength=300" rows="4" cols="80"/>
 			<br/>
 			<t:submit t:id="submit" value="That's right"/>&nbsp;
-			<t:pagelink page="index">All of a sudden, I don't have anything to say</t:pagelink>
+			<t:actionlink t:id="cancel">All of a sudden, I don't have anything to say</t:actionlink>
 		</t:form>
 			<p:else>
 				Sorry, all the comment spots are currently reserved. Wait a few seconds, then <t:pagelink page="leavecomment">try again</t:pagelink> 

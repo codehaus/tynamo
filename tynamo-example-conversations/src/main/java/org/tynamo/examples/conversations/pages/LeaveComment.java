@@ -83,4 +83,9 @@ public class LeaveComment {
 		// Should use JavascriptSupport but not ready to completely switch to T5.2 yet
 		renderSupport.addScript("initializeIdleDisplay(" + (secondsLeft - 1) + ");");
 	}
+
+	public Object onActionFromCancel() {
+		conversationManager.endConversation(conversationId);
+		return Index.class;
+	}
 }
