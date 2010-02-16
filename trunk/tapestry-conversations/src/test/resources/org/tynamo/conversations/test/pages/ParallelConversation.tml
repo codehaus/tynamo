@@ -1,9 +1,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns:t="http://tapestry.apache.org/schema/tapestry_5_0_0.xsd" xmlns:p="tapestry:parameter">
 	<head>
-		<title>test cookie-based conversations</title>
+		<title>test parallel conversations</title>
 	</head>
 	<body>
-		<span id="secondsLeft">${secondsLeft}</span>
+		<span id="target">${target}</span>
 	</body>
 </html>
