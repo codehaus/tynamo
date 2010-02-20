@@ -19,6 +19,7 @@ import org.apache.tapestry5.ioc.annotations.EagerLoad;
 import org.hibernate.EntityMode;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.annotations.NaturalId;
 import org.hibernate.criterion.Example;
 import org.hibernate.metadata.ClassMetadata;
 import org.slf4j.Logger;
@@ -104,9 +105,9 @@ public class SeedEntityImpl implements SeedEntity {
 		Method[] methods = aClass.getDeclaredMethods();
 		for (Method method : methods) {
 			// if (!method.isAccessible()) continue;
-			if (!method.isAnnotationPresent(Column.class)) continue;
-			Column annotation = method.getAnnotation(Column.class);
-			if (!annotation.unique()) continue;
+			if (!method.isAnnotationPresent(NaturalId.class) && !method.isAnnotationPresent(Column.class)) continue;
+			Column columnAnnotation = method.getAnnotation(Column.class);
+			if (columnAnnotation != null && !columnAnnotation.unique()) continue;
 			PropertyDescriptor descriptor = findPropertyForMethod(method, descriptors);
 			if (descriptor != null) uniqueProperties.add(descriptor.getName());
 		}
@@ -115,9 +116,9 @@ public class SeedEntityImpl implements SeedEntity {
 		Field[] fields = aClass.getDeclaredFields();
 		for (Field currentField : fields) {
 			currentField.setAccessible(true);
-			if (!currentField.isAnnotationPresent(Column.class)) continue;
-			Column annotation = currentField.getAnnotation(Column.class);
-			if (!annotation.unique()) continue;
+			if (!currentField.isAnnotationPresent(NaturalId.class) && !currentField.isAnnotationPresent(Column.class)) continue;
+			Column columnAnnotation = currentField.getAnnotation(Column.class);
+			if (columnAnnotation != null && !columnAnnotation.unique()) continue;
 			uniqueProperties.add(currentField.getName());
 		}
 
