@@ -4,7 +4,7 @@
 	<artifactId>tapestry-hibernate-seedentity</artifactId>
 	<name>Tynamo Hibernate Seedentity</name>
 	<packaging>jar</packaging>
-	<version>0.0.2-SNAPSHOT</version>
+	<version>0.1.0-SNAPSHOT</version>
 	<description>
 		Object oriented seed entities for your Tapestry 5 Hibernate application
 	</description>
