@@ -3,8 +3,10 @@ package org.tynamo.seedentity.hibernate.services;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -28,6 +30,9 @@ import org.tynamo.seedentity.SeedEntityIdentifier;
 @EagerLoad
 public class SeedEntityImpl implements SeedEntity {
 	@SuppressWarnings("unchecked")
+	private Map<Class, SeedEntityIdentifier> typeIdentifiers = new HashMap<Class, SeedEntityIdentifier>();
+
+	@SuppressWarnings("unchecked")
 	public SeedEntityImpl(Logger logger, HibernateSessionSource sessionSource, HibernateSessionManager sessionManager, List<Object> entities) {
 		Session session = sessionManager.getSession();
 		SessionFactory sessionFactory = sessionSource.getSessionFactory();
@@ -35,14 +40,25 @@ public class SeedEntityImpl implements SeedEntity {
 			String uniquelyIdentifyingProperty = null;
 			Object entity;
 			if (object instanceof SeedEntityIdentifier) {
-				uniquelyIdentifyingProperty = ((SeedEntityIdentifier) object).getUniquelyIdentifyingProperty();
-				entity = ((SeedEntityIdentifier) object).getEntity();
+				// SeedEntityIdentifier interface can be used for setting identifier for specific entity only
+				// or for all enties of the same type
+				SeedEntityIdentifier entityIdentifier = ((SeedEntityIdentifier) object);
+				if (entityIdentifier.getEntity() instanceof Class) {
+					typeIdentifiers.put((Class) entityIdentifier.getEntity(), entityIdentifier);
+					continue;
+				} else {
+					uniquelyIdentifyingProperty = entityIdentifier.getUniquelyIdentifyingProperty();
+					entity = entityIdentifier.getEntity();
+				}
 			} else entity = object;
 
 			if (entity.getClass().getAnnotation(Entity.class) == null) {
 				logger.warn("Contributed object '" + entity + "' is not an entity, cannot be used a seed");
 				continue;
 			}
+
+			if (typeIdentifiers.containsKey(object.getClass()))
+				uniquelyIdentifyingProperty = typeIdentifiers.get(object.getClass()).getUniquelyIdentifyingProperty();
 
 			// Note that using example ignores identifier - so seed entities with manually set ids will be re-seeded
 
