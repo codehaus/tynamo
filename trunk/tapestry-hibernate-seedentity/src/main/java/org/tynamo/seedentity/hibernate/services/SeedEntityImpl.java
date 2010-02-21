@@ -1,6 +1,7 @@
 package org.tynamo.seedentity.hibernate.services;
 
 import java.beans.PropertyDescriptor;
+import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -21,11 +22,13 @@ import org.apache.tapestry5.ioc.annotations.EagerLoad;
 import org.hibernate.EntityMode;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.hibernate.annotations.NaturalId;
 import org.hibernate.criterion.Example;
 import org.hibernate.metadata.ClassMetadata;
 import org.slf4j.Logger;
 import org.tynamo.seedentity.SeedEntityIdentifier;
+import org.tynamo.seedentity.SeedEntityUpdater;
 
 @EagerLoad
 public class SeedEntityImpl implements SeedEntity {
@@ -35,14 +38,33 @@ public class SeedEntityImpl implements SeedEntity {
 	@SuppressWarnings("unchecked")
 	public SeedEntityImpl(Logger logger, HibernateSessionSource sessionSource, HibernateSessionManager sessionManager, List<Object> entities) {
 		Session session = sessionManager.getSession();
+		Transaction tx = session.beginTransaction();
 		SessionFactory sessionFactory = sessionSource.getSessionFactory();
 		for (Object object : entities) {
-			String uniquelyIdentifyingProperty = null;
 			Object entity;
+			if (object instanceof SeedEntityUpdater) {
+				SeedEntityUpdater entityUpdater = (SeedEntityUpdater) object;
+				if (!entityUpdater.getOriginalEntity().getClass().equals(entityUpdater.getUpdatedEntity().getClass()))
+					throw new ClassCastException("The type of original entity doesn't match with the updated entity");
+				ClassMetadata metadata = sessionFactory.getClassMetadata(entityUpdater.getOriginalEntity().getClass());
+				Serializable identifier = metadata.getIdentifier(entityUpdater.getOriginalEntity(), EntityMode.POJO);
+				if (identifier == null)
+					throw new IllegalStateException("Cannot make an update to the entity '" + entityUpdater.getUpdatedEntity() + " of type "
+							+ entityUpdater.getUpdatedEntity().getClass().getSimpleName() + " because the identifier of the original entity is not set");
+				metadata.setIdentifier(entityUpdater.getUpdatedEntity(), identifier, EntityMode.POJO);
+				tx.commit();
+				session.evict(entityUpdater.getOriginalEntity());
+				tx = session.beginTransaction();
+				session.update(entityUpdater.getUpdatedEntity());
+
+				continue;
+			}
+
+			String uniquelyIdentifyingProperty = null;
 			if (object instanceof SeedEntityIdentifier) {
 				// SeedEntityIdentifier interface can be used for setting identifier for specific entity only
 				// or for all enties of the same type
-				SeedEntityIdentifier entityIdentifier = ((SeedEntityIdentifier) object);
+				SeedEntityIdentifier entityIdentifier = (SeedEntityIdentifier) object;
 				if (entityIdentifier.getEntity() instanceof Class) {
 					typeIdentifiers.put((Class) entityIdentifier.getEntity(), entityIdentifier);
 					continue;
@@ -102,7 +124,7 @@ public class SeedEntityImpl implements SeedEntity {
 			}
 			session.save(entity);
 		}
-		sessionManager.commit();
+		tx.commit();
 	}
 
 	private Set<String> findPossiblePropertiesWithUniqueColumnAnnotation(Object entity, PropertyDescriptor[] descriptors) {
@@ -120,7 +142,6 @@ public class SeedEntityImpl implements SeedEntity {
 		Class<? extends Object> aClass = entity.getClass();
 		Method[] methods = aClass.getDeclaredMethods();
 		for (Method method : methods) {
-			// if (!method.isAccessible()) continue;
 			if (!method.isAnnotationPresent(NaturalId.class) && !method.isAnnotationPresent(Column.class)) continue;
 			Column columnAnnotation = method.getAnnotation(Column.class);
 			if (columnAnnotation != null && !columnAnnotation.unique()) continue;

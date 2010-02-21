@@ -18,9 +18,12 @@ import org.slf4j.LoggerFactory;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import org.tynamo.seedentity.SeedEntityIdentifier;
+import org.tynamo.seedentity.SeedEntityUpdater;
+import org.tynamo.seedentity.hibernate.entities.ActionItem;
 import org.tynamo.seedentity.hibernate.entities.NaturalThing;
 import org.tynamo.seedentity.hibernate.entities.NonUniqueThing;
 import org.tynamo.seedentity.hibernate.entities.Thing;
+import org.tynamo.seedentity.hibernate.entities.Worker;
 
 public class SeedEntityImplTest {
 	private Session session;
@@ -32,6 +35,8 @@ public class SeedEntityImplTest {
 		configuration.addAnnotatedClass(Thing.class);
 		configuration.addAnnotatedClass(NaturalThing.class);
 		configuration.addAnnotatedClass(NonUniqueThing.class);
+		configuration.addAnnotatedClass(ActionItem.class);
+		configuration.addAnnotatedClass(Worker.class);
 		configuration.configure("/hibernate-test.cfg.xml");
 		sessionFactory = configuration.buildSessionFactory();
 		session = sessionFactory.openSession();
@@ -75,6 +80,36 @@ public class SeedEntityImplTest {
 	}
 
 	@Test
+	public void seedWorkersAndUpdateWithPartialCommits() {
+		List<Object> entities = new ArrayList<Object>();
+
+		Worker worker = new Worker();
+		worker.setName("hard worker");
+		entities.add(worker);
+		ActionItem finishedItem = new ActionItem();
+		finishedItem.setText("done work");
+		entities.add(finishedItem);
+		ActionItem unfinishedItem = new ActionItem();
+		unfinishedItem.setText("unfinished work");
+		entities.add(unfinishedItem);
+		Worker updatedWorker = new Worker();
+		updatedWorker.setName("hard worker");
+		updatedWorker.getUnfinishedActionItems().add(unfinishedItem);
+		updatedWorker.getFinishedActionItems().add(finishedItem);
+		entities.add(new SeedEntityUpdater(worker, updatedWorker));
+
+		HibernateSessionManager sessionManager = mock(HibernateSessionManager.class);
+		when(sessionManager.getSession()).thenReturn(session);
+		HibernateSessionSource sessionSource = mock(HibernateSessionSource.class);
+		when(sessionSource.getSessionFactory()).thenReturn(sessionFactory);
+
+		new SeedEntityImpl(LoggerFactory.getLogger(SeedEntity.class), sessionSource, sessionManager, entities);
+		updatedWorker = (Worker) session.createCriteria(Worker.class).uniqueResult();
+		assertEquals(updatedWorker.getUnfinishedActionItems().size(), 1);
+		assertEquals(updatedWorker.getFinishedActionItems().size(), 1);
+	}
+
+	@Test
 	public void seedNaturalThingEntities() {
 		NaturalThing thing = new NaturalThing();
 		thing.setId(0);
@@ -89,7 +124,7 @@ public class SeedEntityImplTest {
 		HibernateSessionSource sessionSource = mock(HibernateSessionSource.class);
 		when(sessionSource.getSessionFactory()).thenReturn(sessionFactory);
 
-		SeedEntity service = new SeedEntityImpl(LoggerFactory.getLogger(SeedEntity.class), sessionSource, sessionManager, entities);
+		new SeedEntityImpl(LoggerFactory.getLogger(SeedEntity.class), sessionSource, sessionManager, entities);
 		assertEquals(session.createCriteria(NaturalThing.class).list().size(), 1);
 	}
 
