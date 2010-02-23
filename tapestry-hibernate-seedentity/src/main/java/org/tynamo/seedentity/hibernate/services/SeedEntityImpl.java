@@ -4,6 +4,7 @@ import java.beans.PropertyDescriptor;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -35,6 +36,8 @@ public class SeedEntityImpl implements SeedEntity {
 	private Map<Class, SeedEntityIdentifier> typeIdentifiers = new HashMap<Class, SeedEntityIdentifier>();
 	private SessionFactory sessionFactory;
 	private Logger logger;
+	// track newly added entities so you know to update only those ones and otherwise ignore by default
+	private List<Object> newlyAddedEntities = new ArrayList<Object>();
 
 	public SeedEntityImpl(Logger logger, HibernateSessionSource sessionSource, List<Object> entities) {
 		// Create a new session for this rather than participate in the existing session (through SessionManager)
@@ -55,6 +58,13 @@ public class SeedEntityImpl implements SeedEntity {
 			Object entity;
 			if (object instanceof SeedEntityUpdater) {
 				SeedEntityUpdater entityUpdater = (SeedEntityUpdater) object;
+				if (!newlyAddedEntities.contains(entityUpdater.getOriginalEntity())) {
+					if (!entityUpdater.isForceUpdate()) {
+						logger.info("Entity '" + entityUpdater.getUpdatedEntity() + "' of type "
+								+ entityUpdater.getUpdatedEntity().getClass().getSimpleName() + " was not newly added, ignoring update");
+						continue;
+					}
+				}
 				if (!entityUpdater.getOriginalEntity().getClass().equals(entityUpdater.getUpdatedEntity().getClass()))
 					throw new ClassCastException("The type of original entity doesn't match with the updated entity");
 				ClassMetadata metadata = sessionFactory.getClassMetadata(entityUpdater.getOriginalEntity().getClass());
@@ -125,17 +135,22 @@ public class SeedEntityImpl implements SeedEntity {
 						+ entity.getClass().getSimpleName() + "' already exists, skipping seeding this entity");
 				// Need to set the id to the seed bean so a new seed entity with a relationship to existing seed entity can be
 				// saved.
+				Object existingObject = results.get(0);
+				// Always evict though it's only needed if existing objects are updated
+				session.evict(existingObject);
 
 				// Results should include only one object and we don't know any better which is the right object anyway
 				// so use the first one
 				ClassMetadata metadata = sessionFactory.getClassMetadata(entity.getClass());
-				metadata.setIdentifier(entity, metadata.getIdentifier(results.get(0), EntityMode.POJO), EntityMode.POJO);
+				metadata.setIdentifier(entity, metadata.getIdentifier(existingObject, EntityMode.POJO), EntityMode.POJO);
 
 				continue;
 			}
 			session.save(entity);
+			newlyAddedEntities.add(entity);
 		}
 		tx.commit();
+		newlyAddedEntities.clear();
 	}
 
 	private Set<String> findPossiblePropertiesWithUniqueColumnAnnotation(Object entity, PropertyDescriptor[] descriptors) {
