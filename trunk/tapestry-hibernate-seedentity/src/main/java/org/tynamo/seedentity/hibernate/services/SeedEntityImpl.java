@@ -16,7 +16,6 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 import org.apache.commons.beanutils.PropertyUtils;
-import org.apache.tapestry5.hibernate.HibernateSessionManager;
 import org.apache.tapestry5.hibernate.HibernateSessionSource;
 import org.apache.tapestry5.ioc.annotations.EagerLoad;
 import org.hibernate.EntityMode;
@@ -34,12 +33,24 @@ import org.tynamo.seedentity.SeedEntityUpdater;
 public class SeedEntityImpl implements SeedEntity {
 	@SuppressWarnings("unchecked")
 	private Map<Class, SeedEntityIdentifier> typeIdentifiers = new HashMap<Class, SeedEntityIdentifier>();
+	private SessionFactory sessionFactory;
+	private Logger logger;
+
+	public SeedEntityImpl(Logger logger, HibernateSessionSource sessionSource, List<Object> entities) {
+		// Create a new session for this rather than participate in the existing session (through SessionManager)
+		// since we need to manage transactions ourselves
+		this.logger = logger;
+		sessionFactory = sessionSource.getSessionFactory();
+		if (entities != null && entities.size() > 0) {
+			Session session = sessionSource.create();
+			seed(session, entities);
+			session.close();
+		}
+	}
 
 	@SuppressWarnings("unchecked")
-	public SeedEntityImpl(Logger logger, HibernateSessionSource sessionSource, HibernateSessionManager sessionManager, List<Object> entities) {
-		Session session = sessionManager.getSession();
+	void seed(Session session, List<Object> entities) {
 		Transaction tx = session.beginTransaction();
-		SessionFactory sessionFactory = sessionSource.getSessionFactory();
 		for (Object object : entities) {
 			Object entity;
 			if (object instanceof SeedEntityUpdater) {

@@ -8,7 +8,6 @@ import static org.testng.Assert.assertTrue;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.tapestry5.hibernate.HibernateSessionManager;
 import org.apache.tapestry5.hibernate.HibernateSessionSource;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -16,6 +15,7 @@ import org.hibernate.Transaction;
 import org.hibernate.cfg.AnnotationConfiguration;
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import org.tynamo.seedentity.SeedEntityIdentifier;
 import org.tynamo.seedentity.SeedEntityUpdater;
@@ -28,9 +28,10 @@ import org.tynamo.seedentity.hibernate.entities.Worker;
 public class SeedEntityImplTest {
 	private Session session;
 	private SessionFactory sessionFactory;
+	private SeedEntityImpl seedEntityImpl;
 
 	@BeforeClass
-	public void openSession() {
+	public void buildSessionFactory() {
 		AnnotationConfiguration configuration = new AnnotationConfiguration();
 		configuration.addAnnotatedClass(Thing.class);
 		configuration.addAnnotatedClass(NaturalThing.class);
@@ -39,7 +40,15 @@ public class SeedEntityImplTest {
 		configuration.addAnnotatedClass(Worker.class);
 		configuration.configure("/hibernate-test.cfg.xml");
 		sessionFactory = configuration.buildSessionFactory();
+	}
+
+	@BeforeMethod
+	public void openSession() {
 		session = sessionFactory.openSession();
+		HibernateSessionSource sessionSource = mock(HibernateSessionSource.class);
+		when(sessionSource.create()).thenReturn(session);
+		when(sessionSource.getSessionFactory()).thenReturn(sessionFactory);
+		seedEntityImpl = new SeedEntityImpl(LoggerFactory.getLogger(SeedEntity.class), sessionSource, null);
 	}
 
 	@Test
@@ -47,13 +56,8 @@ public class SeedEntityImplTest {
 		Thing thing = new Thing();
 		List<Object> entities = new ArrayList<Object>();
 		entities.add(thing);
-		HibernateSessionManager sessionManager = mock(HibernateSessionManager.class);
-		when(sessionManager.getSession()).thenReturn(session);
 		HibernateSessionSource sessionSource = mock(HibernateSessionSource.class);
-		// Returning null is ok, this test doesn't use sessionFactory (nor does it commit()
-		when(sessionSource.getSessionFactory()).thenReturn(null);
-
-		new SeedEntityImpl(LoggerFactory.getLogger(SeedEntity.class), sessionSource, sessionManager, entities);
+		seedEntityImpl.seed(session, entities);
 		assertTrue(session.createCriteria(Thing.class).list().size() > 0);
 	}
 
@@ -70,12 +74,7 @@ public class SeedEntityImplTest {
 		thing = new NonUniqueThing();
 		thing.setText("individualize");
 		entities.add(thing);
-		HibernateSessionManager sessionManager = mock(HibernateSessionManager.class);
-		when(sessionManager.getSession()).thenReturn(session);
-		HibernateSessionSource sessionSource = mock(HibernateSessionSource.class);
-		when(sessionSource.getSessionFactory()).thenReturn(sessionFactory);
-
-		new SeedEntityImpl(LoggerFactory.getLogger(SeedEntity.class), sessionSource, sessionManager, entities);
+		seedEntityImpl.seed(session, entities);
 		assertEquals(session.createCriteria(NonUniqueThing.class).list().size(), 1);
 	}
 
@@ -98,12 +97,7 @@ public class SeedEntityImplTest {
 		updatedWorker.getFinishedActionItems().add(finishedItem);
 		entities.add(new SeedEntityUpdater(worker, updatedWorker));
 
-		HibernateSessionManager sessionManager = mock(HibernateSessionManager.class);
-		when(sessionManager.getSession()).thenReturn(session);
-		HibernateSessionSource sessionSource = mock(HibernateSessionSource.class);
-		when(sessionSource.getSessionFactory()).thenReturn(sessionFactory);
-
-		new SeedEntityImpl(LoggerFactory.getLogger(SeedEntity.class), sessionSource, sessionManager, entities);
+		seedEntityImpl.seed(session, entities);
 		updatedWorker = (Worker) session.createCriteria(Worker.class).uniqueResult();
 		assertEquals(updatedWorker.getUnfinishedActionItems().size(), 1);
 		assertEquals(updatedWorker.getFinishedActionItems().size(), 1);
@@ -119,12 +113,7 @@ public class SeedEntityImplTest {
 		tx.commit();
 		List<Object> entities = new ArrayList<Object>();
 		entities.add(thing);
-		HibernateSessionManager sessionManager = mock(HibernateSessionManager.class);
-		when(sessionManager.getSession()).thenReturn(session);
-		HibernateSessionSource sessionSource = mock(HibernateSessionSource.class);
-		when(sessionSource.getSessionFactory()).thenReturn(sessionFactory);
-
-		new SeedEntityImpl(LoggerFactory.getLogger(SeedEntity.class), sessionSource, sessionManager, entities);
+		seedEntityImpl.seed(session, entities);
 		assertEquals(session.createCriteria(NaturalThing.class).list().size(), 1);
 	}
 
