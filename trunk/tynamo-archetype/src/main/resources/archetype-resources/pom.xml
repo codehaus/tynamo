@@ -20,15 +20,6 @@
 
 	<build>
 		<finalName>${artifactId}</finalName>
-<!--
-		<extensions>
-			<extension>
-				<groupId>hsqldb</groupId>
-				<artifactId>hsqldb</artifactId>
-				<version>${hsqldb.version}</version>
-			</extension>
-		</extensions>
--->
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -85,7 +76,7 @@
 					<includes>
 						<include>**/*UnitTest.java</include>
 					</includes>
-					<!-- Typically not needed, but configure arg line so you can run individual integration 
+					<!-- Typically not needed, but configure arg line so you can run individual integration
 					tests with -Dtest=SomeIntegrationTest -->
 					<argLine>-Dorg.mortbay.jetty.webapp.parentLoaderPriority=true -Dtapestry.production-mode=false</argLine>
 				</configuration>
