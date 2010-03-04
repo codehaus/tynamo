@@ -51,6 +51,7 @@ public class CommentConciergeImpl implements CommentConcierge {
 		}
 
 		for (int i = 0; i < COMMENTLIST_SIZE; i++) {
+			if (commentCache != null) comments[i] = (String) commentCache.get(i);
 			if (spotIndex >= COMMENTLIST_SIZE) spotIndex = 0;
 			openCommentSpots.add(spotIndex);
 			spotIndex++;
@@ -58,9 +59,6 @@ public class CommentConciergeImpl implements CommentConcierge {
 	}
 
 	public String[] getComments() {
-		// It's enough to examine the first item - presumably, if it's null, they are all null
-		if (comments[0] == null && commentCache != null) for (int i = 0; i < 10; i++)
-			comments[i] = (String) commentCache.get(i);
 		return comments;
 	}
 
