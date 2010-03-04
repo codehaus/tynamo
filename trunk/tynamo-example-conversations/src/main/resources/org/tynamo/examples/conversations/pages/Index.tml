@@ -16,7 +16,7 @@
     <h2 style="display:inline">10 user comments </h2> <t:pagelink page="leavecomment">What do you think?</t:pagelink>
     <ol>
     	<t:loop source="comments" value="comment">
-    		<li>${comment}</li>
+    		<li><t:textOutput value="comment"/></li>
     	</t:loop>
     </ol>
 
