@@ -39,14 +39,21 @@ public class CommentConciergeImpl implements CommentConcierge {
 	public CommentConciergeImpl(HttpServletRequest request, ConversationManager conversationManager) {
 		this.request = request;
 		this.conversationManager = conversationManager;
-		for (int i = 0; i < COMMENTLIST_SIZE; i++)
-			openCommentSpots.add(i);
 
+		int spotIndex = 0;
 		try {
 			CacheFactory cacheFactory = CacheManager.getInstance().getCacheFactory();
 			commentCache = cacheFactory.createCache(Collections.emptyMap());
+			// Just so you don't always start from 0 index on new GAE instance
+			spotIndex = commentCache.size();
 		} catch (CacheException e) {
 		} catch (Exception e) {
+		}
+
+		for (int i = 0; i < COMMENTLIST_SIZE; i++) {
+			if (spotIndex >= COMMENTLIST_SIZE) spotIndex = 0;
+			openCommentSpots.add(spotIndex);
+			spotIndex++;
 		}
 	}
 
