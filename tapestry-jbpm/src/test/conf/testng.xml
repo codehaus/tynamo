@@ -1,0 +1,8 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Tynamo jBPM Test Suite" annotations="1.5">
+	<test name="Tests">
+		<packages>
+			<package name="org.tynamo.jbpm"/>
+		</packages>
+	</test>
+</suite>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<process name="test" xmlns="http://jbpm.org/4.0/jpdl" xmlns:xsi="http://http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jbpm.org/4.0/jpdl file:///C:/java/jbpm-4.0.CR1/src/jpdl-4.0.xsd">
+	<start name="start order">
+		<transition to="fork"/>
+	</start>
+
+	<fork name="fork">
+		<transition to="custom1"/>
+		<transition to="custom2"/>
+	</fork>
+	
+	<custom expr="#{testService}" name="custom1">
+		<transition to="join"/>
+	</custom>
+	<custom expr="#{testService}" name="custom2">
+		<transition to="join"/>
+	</custom>
+	
+	<join name="join">
+		<transition to="end"/>
+	</join>
+	
+	<end name="end"/>
+</process>
