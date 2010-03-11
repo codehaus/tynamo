@@ -37,7 +37,7 @@ import org.apache.tapestry5.ioc.internal.util.Defense;
  * <p/>
  * Typically, an instance of this object is created fresh as needed (that is, it is not stored
  * between requests).
- * 
+ *
  * @param <E>
  */
 public class JPAGridDataSource<E> implements GridDataSource
@@ -69,7 +69,7 @@ public class JPAGridDataSource<E> implements GridDataSource
 		Root<E> all = resultQuery.from(entityType);
 		Expression<Boolean> query;
 
-		query = additionalConstraints(all);
+		query = additionalConstraints(cb, all);
 
 		if (query != null)
 		{
@@ -89,7 +89,7 @@ public class JPAGridDataSource<E> implements GridDataSource
 	/**
 	 * Prepares the results, performing a query (applying the sort results, and the provided start
 	 * and end index). The results can later be obtained from {@link #getRowValue(int)} .
-	 * 
+	 *
 	 * @param startIndex
 	 *            index, from zero, of the first item to be retrieved
 	 * @param endIndex
@@ -109,7 +109,7 @@ public class JPAGridDataSource<E> implements GridDataSource
 		Root<E> all = resultQuery.from(entityType);
 		Expression<Boolean> query;
 
-		query = additionalConstraints(all);
+		query = additionalConstraints(cb,all);
 
 		if (query != null)
 		{
@@ -157,7 +157,7 @@ public class JPAGridDataSource<E> implements GridDataSource
 	 * of results is obtained from the criteria. This implementation does nothing and may be
 	 * overridden.
 	 */
-	protected Expression<Boolean> additionalConstraints(Root<E> root)
+	protected Expression<Boolean> additionalConstraints(CriteriaBuilder cb, Root<E> root)
 	{
 		return null;
 	}
@@ -165,7 +165,7 @@ public class JPAGridDataSource<E> implements GridDataSource
 	/**
 	 * Returns a row value at the given index (which must be within the range defined by the call to
 	 * {@link #prepare(int, int, java.util.List)} ).
-	 * 
+	 *
 	 * @param index
 	 *            of object
 	 * @return object at that index
