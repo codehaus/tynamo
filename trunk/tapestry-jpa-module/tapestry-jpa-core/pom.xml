@@ -19,6 +19,7 @@
 			<groupId>org.apache.tapestry</groupId>
 			<artifactId>tapestry-ioc</artifactId>
 			<version>${tapestry-release-version}</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.persistence</groupId>
@@ -29,6 +30,7 @@
 			<groupId>org.apache.tapestry</groupId>
 			<artifactId>tapestry-test</artifactId>
 			<version>${tapestry-release-version}</version>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.easymock</groupId>
