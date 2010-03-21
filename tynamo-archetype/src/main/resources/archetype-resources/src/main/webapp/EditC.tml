@@ -8,16 +8,14 @@
 		</ul>
 	</p:subMenuBlock>
 	<p:navBlock>
-		<a style="font-weight:bolder;margin-left:10px" t:id="link" page="List" context="classDescriptor.type">${D}{listAllLinkMessage}</a>
+		<a style="font-weight:bolder;margin-left:10px" t:type="PageLink" page="List" context="classDescriptor.type">${D}{listAllLinkMessage}</a>
 	</p:navBlock>
-
-	<t:tynamo.flash t:id="flash" />
 
 	<h1>${D}{title}</h1>
 
 	<br/>
 
-	<form t:id="form" clientValidation="true">
+	<t:form clientValidation="true" validate="bean">
 		<t:errors/>
 
 		<div class="t-beaneditor">
@@ -27,9 +25,11 @@
 				<t:submit t:id="save" id="save" t:event="apply" class="button" value="${D}{message:org.tynamo.i18n.apply}"/>
 				<t:submit t:id="saveAndReturnButton" id="saveAndReturnButton" class="button" value="${D}{message:org.tynamo.i18n.applyAndReturn}"/>
 				&nbsp; or &nbsp;
-				<t:actionlink class="button" style="color:red; font-weight:bold;" t:id="cancel">${D}{message:org.tynamo.i18n.cancel}</t:actionlink>
+				<t:actionlink class="button" style="color:red; font-weight:bold;" t:id="cancel">
+					${D}{message:org.tynamo.i18n.cancel}
+				</t:actionlink>
 			</div>
 		</div>
-	</form>
+	</t:form>
 
 </t:layout>

@@ -13,8 +13,7 @@
  */
 package org.tynamo.examples.recipe.model;
 
-import org.hibernate.validator.Length;
-import org.hibernate.validator.NotNull;
+import org.hibernate.validator.constraints.Length;
 import org.tynamo.blob.TynamoBlobImpl;
 import org.tynamo.descriptor.annotation.BlobDescriptor;
 import org.tynamo.descriptor.annotation.Collection;
@@ -22,6 +21,7 @@ import org.tynamo.descriptor.annotation.PropertyDescriptor;
 import org.tynamo.descriptor.extension.BlobDescriptorExtension;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;

@@ -17,22 +17,14 @@
 		</ul>
 	</p:subMenuBlock>
 	<p:navBlock>
-		<a style="font-weight:bolder;margin-left:10px" t:id="link" page="List" context="classDescriptor.type">${listAllLinkMessage}</a>
+		<a style="font-weight:bolder;margin-left:10px" t:type="PageLink" page="List" context="classDescriptor.type">${listAllLinkMessage}</a>
 	</p:navBlock>
 
 	<h1>Custom SHOW Page</h1>
 
 	<br/>
 
-	<t:beandisplay object="bean" model="beanModel">
-		<p:ingredients>
-			<div t:type="tynamo/Composition"
-				 collection="recipe.ingredients"
-				 clientId="literal:ingredients"
-				 collectionDescriptor="collectionDescriptor"
-				 owner="recipe"
-					/>
-		</p:ingredients>
+	<t:beandisplay object="bean" model="beanModel" exclude="photo">
 	</t:beandisplay>
 
 </t:layout>

@@ -12,9 +12,9 @@
 package org.tynamo.examples.simple.entities;
 
 import org.hibernate.annotations.IndexColumn;
-import org.hibernate.validator.Length;
-import org.hibernate.validator.NotNull;
-import org.hibernate.validator.Pattern;
+import org.hibernate.validator.constraints.Length;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import org.tynamo.descriptor.annotation.Collection;
 import org.tynamo.descriptor.annotation.PropertyDescriptor;
 
@@ -47,7 +47,7 @@ public class Catalog
 
 	@NotNull
 	@Length(min = 1, max = 20)
-	@Pattern(regex = "[a-z]*")
+	@Pattern(regexp = "[a-z]*")
 	@PropertyDescriptor(index = 2)
 	public String getName()
 	{

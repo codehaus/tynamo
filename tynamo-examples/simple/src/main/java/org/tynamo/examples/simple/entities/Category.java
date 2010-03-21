@@ -22,8 +22,8 @@ import javax.persistence.OneToMany;
 
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.hibernate.annotations.IndexColumn;
-import org.hibernate.validator.Length;
-import org.hibernate.validator.NotNull;
+import org.hibernate.validator.constraints.Length;
+import javax.validation.constraints.NotNull;
 
 
 @Entity

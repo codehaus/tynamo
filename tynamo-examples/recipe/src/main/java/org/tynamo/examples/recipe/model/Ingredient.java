@@ -1,10 +1,10 @@
 package org.tynamo.examples.recipe.model;
 
-import org.hibernate.validator.NotNull;
 import org.tynamo.descriptor.annotation.ClassDescriptor;
 import org.tynamo.descriptor.annotation.PropertyDescriptor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @ClassDescriptor(hidden = true)

@@ -1,15 +1,14 @@
 package org.tynamo.examples.simple.entities;
 
-import org.hibernate.validator.NotNull;
+import org.tynamo.descriptor.annotation.InitialValue;
+import org.tynamo.descriptor.annotation.PossibleValues;
+import org.tynamo.descriptor.annotation.PropertyDescriptor;
 
 import javax.persistence.Embeddable;
 import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-
-import org.tynamo.descriptor.annotation.PropertyDescriptor;
-import org.tynamo.descriptor.annotation.InitialValue;
-import org.tynamo.descriptor.annotation.PossibleValues;
 
 @Embeddable
 public class CarPk implements Serializable

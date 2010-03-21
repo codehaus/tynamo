@@ -20,7 +20,7 @@
 		</ul>
 	</p:subMenuBlock>
 	<p:navBlock>
-		<a style="font-weight:bolder;margin-left:10px" t:id="link" page="List" context="classDescriptor.type">${D}{listAllLinkMessage}</a>
+		<a style="font-weight:bolder;margin-left:10px" t:type="PageLink" page="List" context="classDescriptor.type">${D}{listAllLinkMessage}</a>
 	</p:navBlock>
 
 	<h1>${D}{title}</h1>

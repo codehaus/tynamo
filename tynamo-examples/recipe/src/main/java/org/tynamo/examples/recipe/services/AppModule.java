@@ -42,6 +42,12 @@ public class AppModule
 		// on the command line as -Dtapestry.production-mode=false
 		configuration.add(SymbolConstants.PRODUCTION_MODE, "false");
 
+		// The application version number is incorprated into URLs for some
+		// assets. Web browsers will cache assets because of the far future expires
+		// header. If existing assets are changed, the version number should also
+		// change, to force the browser to download new versions.
+		configuration.add(SymbolConstants.APPLICATION_VERSION, "1.0-SNAPSHOT");
+
 		// Set filesize limit to 2 MB
 		configuration.add(UploadSymbols.REQUESTSIZE_MAX, "2048000");
 		configuration.add(UploadSymbols.FILESIZE_MAX, "2048000");
@@ -49,11 +55,16 @@ public class AppModule
 	}
 
 	/**
-	 * Contributes the package "org.tynamo.examples.recipe.model" to the configuration, so that it will be
+	 * By default tapestry-hibernate will scan
+	 * InternalConstants.TAPESTRY_APP_PACKAGE_PARAM + ".entities" (witch is equal to "org.tynamo.examples.recipe.recipe.entities")
+	 * for annotated entity classes.
+	 *
+	 * Contributes the package "org.tynamo.examples.recipe.recipe.model" to the configuration, so that it will be
 	 * scanned for annotated entity classes.
 	 */
 	public static void contributeHibernateEntityPackageManager(Configuration<String> configuration)
 	{
+//		If you want to scan other packages add them here:
 		configuration.add("org.tynamo.examples.recipe.model");
 	}
 

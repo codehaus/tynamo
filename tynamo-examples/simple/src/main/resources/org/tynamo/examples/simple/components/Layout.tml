@@ -16,7 +16,7 @@
 
 	<div id="page">
 		<div id="header" class="clearfix">
-			<h1 style="padding: 5px;">Tynamo Framework</h1>
+			<h1 style="padding: 5px;">Tynamo!</h1>
 		</div>
 		<div id="content" class="clearfix">
 			<div id="main">
@@ -66,7 +66,7 @@
 			</div>
 		<span class="left">Powered by Tynamo</span>
 		<span class="right" style="margin-right: 10px;">
-			© 2004-2008 <a href="http://tynamo.codehaus.org/">Tynamo Framework</a>
+			© 2009 <a href="http://tynamo.org/">Tynamo.org</a>
 		</span>
 
 		</div>
