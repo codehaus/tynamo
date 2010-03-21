@@ -1,6 +1,6 @@
 package org.tynamo.examples.simple.entities;
 
-import org.hibernate.validator.NotNull;
+import javax.validation.constraints.NotNull;
 import org.tynamo.descriptor.annotation.PropertyDescriptor;
 import org.tynamo.descriptor.annotation.ClassDescriptor;
 

@@ -1,16 +1,11 @@
 <t:layout title="title" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_0_0.xsd" xmlns:p="tapestry:parameter">
-	<p:subMenuBlock>
+		<p:subMenuBlock>
 		<ul id="local">
 			<t:if test="classDescriptor.allowSave">
 				<li>
 					<t:pagelink class="newlink" page="Add" context="classDescriptor.type">${newlinkMessage}</t:pagelink>
 				</li>
 			</t:if>
-<!--
-			<li>
-				<a class="searchlink" href="#" jwcid="@trails:SearchLink" type="ognl:type"></a>
-			</li>
--->
 		</ul>
 	</p:subMenuBlock>
 

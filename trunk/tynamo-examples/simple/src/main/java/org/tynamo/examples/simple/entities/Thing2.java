@@ -11,14 +11,15 @@
  */
 package org.tynamo.examples.simple.entities;
 
-import org.hibernate.validator.Pattern;
 import org.tynamo.descriptor.annotation.PropertyDescriptor;
-import org.tynamo.hibernate.validation.ValidateUniqueness;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.Pattern;
 
-@ValidateUniqueness(property = "name")
+@Table(name = "otherthings", uniqueConstraints = @UniqueConstraint(columnNames = "name"))
 @Entity
 public class Thing2
 {
@@ -44,7 +45,7 @@ public class Thing2
 		this.identifier = identifier;
 	}
 
-	@Pattern(regex = "[a-z]+")
+	@Pattern(regexp = "[a-z]+")
 	public String getName()
 	{
 		return name;
@@ -86,7 +87,7 @@ public class Thing2
 		this.readOnly = readOnly;
 	}
 
-	@Pattern(regex = "[a-z]+")
+	@Pattern(regexp = "[a-z]+")
 	public String getTitle()
 	{
 		return title;

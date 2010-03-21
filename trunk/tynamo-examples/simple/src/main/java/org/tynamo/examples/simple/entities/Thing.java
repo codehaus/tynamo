@@ -13,14 +13,11 @@ package org.tynamo.examples.simple.entities;
 
 import org.tynamo.descriptor.annotation.MethodDescriptor;
 import org.tynamo.descriptor.annotation.PropertyDescriptor;
-import org.tynamo.hibernate.validation.ValidateUniqueness;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
-@ValidateUniqueness(property = "name")
+@Table(name = "things", uniqueConstraints = @UniqueConstraint(columnNames = "name"))
 public class Thing
 {
 	private Integer id;

@@ -9,7 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 
-import org.hibernate.validator.NotNull;
+import javax.validation.constraints.NotNull;
 import org.tynamo.descriptor.annotation.PropertyDescriptor;
 
 @Entity

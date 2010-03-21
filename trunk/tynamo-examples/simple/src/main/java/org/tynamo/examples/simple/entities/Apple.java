@@ -1,6 +1,6 @@
 package org.tynamo.examples.simple.entities;
 
-import org.hibernate.validator.Length;
+import org.hibernate.validator.constraints.Length;
 import org.tynamo.descriptor.annotation.PropertyDescriptor;
 
 import javax.persistence.Entity;

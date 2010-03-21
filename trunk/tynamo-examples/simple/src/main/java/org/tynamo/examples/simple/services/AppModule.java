@@ -8,14 +8,15 @@ import org.apache.tapestry5.ioc.ServiceBinder;
 import org.apache.tapestry5.ioc.annotations.SubModule;
 import org.apache.tapestry5.upload.services.UploadSymbols;
 import org.tynamo.builder.Builder;
-import org.tynamo.services.TynamoCoreModule;
 import org.tynamo.hibernate.TynamoHibernateSymbols;
+import org.tynamo.hibernate.services.TynamoHibernateModule;
+import org.tynamo.services.TynamoCoreModule;
 
 /**
  * This module is automatically included as part of the Tapestry IoC Registry, it's a good place to configure and extend
  * Tynamo, or to place your own service definitions.
  */
-@SubModule(value = {TynamoCoreModule.class, HibernateModule.class})
+@SubModule(value = {TynamoCoreModule.class, TynamoHibernateModule.class, HibernateModule.class})
 public class AppModule
 {
 
@@ -41,6 +42,12 @@ public class AppModule
 		// overriding to false is a good idea. In addition, this is often overridden
 		// on the command line as -Dtapestry.production-mode=false
 		configuration.add(SymbolConstants.PRODUCTION_MODE, "false");
+
+		// The application version number is incorprated into URLs for some
+		// assets. Web browsers will cache assets because of the far future expires
+		// header. If existing assets are changed, the version number should also
+		// change, to force the browser to download new versions.
+		configuration.add(SymbolConstants.APPLICATION_VERSION, "1.0-SNAPSHOT");
 
 		// Set filesize limit to 2 MB
 		configuration.add(UploadSymbols.REQUESTSIZE_MAX, "2048000");

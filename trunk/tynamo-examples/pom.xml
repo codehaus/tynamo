@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.tynamo</groupId>
@@ -19,7 +20,7 @@
 	<parent>
 		<groupId>org.tynamo</groupId>
 		<artifactId>tynamo-parent</artifactId>
-		<version>0.0.3</version>
+		<version>0.0.5</version>
 	</parent>
 	<build>
 
@@ -102,14 +103,20 @@
 					</dependencies>
 				</configuration>
 			</plugin>
-			
+
 			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-report-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
 				<configuration>
-					<includes>
-						<include>**/*Test.java</include>
-					</includes>
-					<argLine>-Dorg.mortbay.jetty.webapp.parentLoaderPriority=true</argLine>
+					<suiteXmlFiles>
+						<suiteXmlFile>src/test/conf/testng.xml</suiteXmlFile>
+					</suiteXmlFiles>
+					<argLine>-Xmx500m</argLine>
+					<redirectTestOutputToFile>false</redirectTestOutputToFile>
 				</configuration>
 			</plugin>
 		</plugins>
