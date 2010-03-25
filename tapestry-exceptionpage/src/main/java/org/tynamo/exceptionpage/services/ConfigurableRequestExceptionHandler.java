@@ -10,6 +10,7 @@ import org.apache.tapestry5.services.ComponentClassResolver;
 import org.apache.tapestry5.services.Request;
 import org.apache.tapestry5.services.RequestExceptionHandler;
 import org.apache.tapestry5.services.Response;
+import org.tynamo.exceptionpage.ContextAwareException;
 
 public class ConfigurableRequestExceptionHandler implements RequestExceptionHandler {
 	private ExceptionHandler exceptionHandler;
@@ -30,8 +31,19 @@ public class ConfigurableRequestExceptionHandler implements RequestExceptionHand
 		this.exceptionHandler = exceptionHandler;
 	}
 
+	protected Object[] formExceptionContext(Throwable exception) {
+		if (exception instanceof ContextAwareException) return ((ContextAwareException) exception).getContext();
+		// toString() returns the class name by default - don't use that as the context
+		// endsWith() since getClass().toString() prints "class XXX"
+		if (exception.getClass().toString().endsWith(exception.toString())) return new Object[0];
+		// Only if toString is overridden, use that as the context
+		return new Object[] { exception.toString() };
+
+	}
+
 	public void handleRequestException(Throwable exception) throws IOException {
 		Throwable cause = exception;
+		// Throw away the wrapped exceptions first
 		while (cause instanceof ComponentEventException) {
 			if (cause.getCause() == null) break;
 			cause = cause.getCause();
@@ -42,7 +54,7 @@ public class ConfigurableRequestExceptionHandler implements RequestExceptionHand
 		}
 
 		Link link = linkSource.createPageRenderLink(componentClassResolver.resolvePageClassNameToPageName(exceptionHandler.getConfiguration()
-				.get(cause.getClass()).getName()), false, new Object[0]);
+				.get(cause.getClass()).getName()), false, formExceptionContext(cause));
 		try {
 			if (request.isXHR()) {
 				OutputStream os = response.getOutputStream("application/json;charset=UTF-8");
