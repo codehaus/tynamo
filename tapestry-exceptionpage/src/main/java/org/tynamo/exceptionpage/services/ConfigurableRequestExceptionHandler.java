@@ -33,12 +33,8 @@ public class ConfigurableRequestExceptionHandler implements RequestExceptionHand
 
 	protected Object[] formExceptionContext(Throwable exception) {
 		if (exception instanceof ContextAwareException) return ((ContextAwareException) exception).getContext();
-		// toString() returns the class name by default - don't use that as the context
-		// endsWith() since getClass().toString() prints "class XXX"
-		if (exception.getClass().toString().endsWith(exception.toString())) return new Object[0];
-		// Only if toString is overridden, use that as the context
-		return new Object[] { exception.toString() };
-
+		if (exception.getMessage() == null) return new Object[0];
+		return new Object[] { exception.getMessage() };
 	}
 
 	public void handleRequestException(Throwable exception) throws IOException {

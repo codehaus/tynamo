@@ -24,16 +24,16 @@ public class ConfigurableRequestExceptionHandlerTest {
 	}
 
 	@Test
-	public void noContextWhenExceptionDoesntOverrideToString() {
+	public void noContextWhenExceptionDoesntContainMessage() {
 		Object[] context = contextFormer.formExceptionContext(new RuntimeException() {
 		});
 		assertEquals(context.length, 0);
 	}
 
 	@Test
-	public void contextIsExceptionToString() {
+	public void contextIsExceptionMessage() {
 		Object[] context = contextFormer.formExceptionContext(new RuntimeException() {
-			public String toString() {
+			public String getMessage() {
 				return "hello world";
 			}
 		});
