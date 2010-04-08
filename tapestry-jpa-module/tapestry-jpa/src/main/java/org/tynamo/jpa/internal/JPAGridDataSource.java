@@ -42,7 +42,7 @@ import org.apache.tapestry5.ioc.internal.util.Defense;
  */
 public class JPAGridDataSource<E> implements GridDataSource
 {
-	private final EntityManager entityManager;
+	protected final EntityManager entityManager;
 
 	private final Class<E> entityType;
 
