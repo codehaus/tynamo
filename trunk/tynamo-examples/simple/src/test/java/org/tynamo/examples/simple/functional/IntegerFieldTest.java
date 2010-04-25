@@ -13,7 +13,7 @@ public class IntegerFieldTest extends AbstractContainerTest {
 	@Test
 	public void testIntegerFields() throws Exception {
 		HtmlPage newThingPage = webClient.getPage(BASEURI + "add/thing");
-		HtmlForm form = newThingPage.getFormByName("form");
+		HtmlForm form = newThingPage.getHtmlElementById("form");
 //		form.<HtmlInput>getInputByName("id").setValueAttribute("3678");
 		form.<HtmlInput>getInputByName("number").setValueAttribute("3");
 

@@ -14,12 +14,12 @@ public class AssociationTest extends AbstractContainerTest
 	public void associationSelect() throws Exception
 	{
 		HtmlPage newMakePage = webClient.getPage(BASEURI +"add/make");
-		HtmlForm form = newMakePage.getFormByName("form");
+		HtmlForm form = newMakePage.getHtmlElementById("form");
 		form.<HtmlInput>getInputByName("name").setValueAttribute("Honda");
 		HtmlPage listMakesPage = clickButton(newMakePage, "saveAndReturnButton");
 
 		HtmlPage newModelPage = webClient.getPage(BASEURI +"add/model");
-		HtmlForm newModelForm = newModelPage.getFormByName("form");
+		HtmlForm newModelForm = newModelPage.getHtmlElementById("form");
 		newModelForm.<HtmlInput>getInputByName("name").setValueAttribute("Civic");
 
 		HtmlPage listCarsPage = webClient.getPage(BASEURI +"list/car");
