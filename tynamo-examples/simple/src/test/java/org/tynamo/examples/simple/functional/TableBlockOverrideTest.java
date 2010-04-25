@@ -22,7 +22,7 @@ public class TableBlockOverrideTest extends AbstractContainerTest
 	{
 		HtmlPage listThingsPage = clickLink(startPage, "List Things");
 		HtmlPage newThingPage = clickLink(listThingsPage, "New Thing");
-		HtmlForm form = newThingPage.getFormByName("form");
+		HtmlForm form = newThingPage.getHtmlElementById("form");
 		form.<HtmlInput>getInputByName("name").setValueAttribute("blah"); // it shouldn't be duplicated
 		// FIXME currently Thing doesn't allow setting id, should we use Thing2?
 		// Oh - the likely issue is that this customization isn't currently implemented

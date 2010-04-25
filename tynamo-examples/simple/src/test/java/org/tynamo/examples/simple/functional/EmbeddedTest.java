@@ -15,7 +15,7 @@ public class EmbeddedTest extends AbstractContainerTest
 	public void addPerson() throws Exception
 	{
 		HtmlPage newPersonPage = webClient.getPage(BASEURI + "add/person");
-		HtmlForm form = newPersonPage.getFormByName("form");
+		HtmlForm form = newPersonPage.getHtmlElementById("form");
 		form.<HtmlInput>getInputByName("firstName").setValueAttribute("John");
 		form.<HtmlInput>getInputByName("lastName").setValueAttribute("Doe");
 		form.<HtmlInput>getInputByName("city").setValueAttribute("Sunnyville");

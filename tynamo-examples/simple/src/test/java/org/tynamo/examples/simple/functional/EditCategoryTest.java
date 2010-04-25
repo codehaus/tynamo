@@ -44,7 +44,7 @@ public class EditCategoryTest extends AbstractContainerTest
 			.getInputByValue("saveAndReturnButton");
 		newCategoryPage = (HtmlPage) saveButton.click();
 		assertErrorTextPresent(newCategoryPage);
-		newCategoryForm = newCategoryPage.getFormByName("form");
+		newCategoryForm = newCategoryPage.getHtmlElementById("form");
 		HtmlTextArea textArea = newCategoryForm.getTextAreaByName("Description");
 		textArea.setText("a description");
 		newCategoryPage = clickButton(newCategoryForm, "save");
@@ -58,7 +58,7 @@ public class EditCategoryTest extends AbstractContainerTest
 			"List Catalogs").click();
 		HtmlPage newCatalogPage = (HtmlPage) catalogListPage
 			.getFirstAnchorByText("New Catalog").click();
-		HtmlForm form = newCatalogPage.getFormByName("form");
+		HtmlForm form = newCatalogPage.getHtmlElementById("form");
 		HtmlInput nameInput = form.<HtmlInput>getInputByName("name");
 		nameInput.setValueAttribute("new catalog");
 		newCatalogPage = clickButton(newCatalogPage, "save");
@@ -82,7 +82,7 @@ public class EditCategoryTest extends AbstractContainerTest
 			"List Catalogs").click();
 		HtmlPage newCatalogPage = (HtmlPage) catalogListPage
 			.getFirstAnchorByText("New Catalog").click();
-		HtmlForm form = newCatalogPage.getFormByName("form");
+		HtmlForm form = newCatalogPage.getHtmlElementById("form");
 		form.<HtmlInput>getInputByName("name").setValueAttribute("newcatalog");
 		newCatalogPage = clickButton(newCatalogPage, "save");
 
@@ -109,7 +109,7 @@ public class EditCategoryTest extends AbstractContainerTest
 		{
 			assertNotNull(e);  // assertTrue(addButton.isDisabled());
 		}
-		newCatalogPage.getFormByName("form").getInputByName("name").setValueAttribute("newercatalog");
+		newCatalogPage.<HtmlForm>getHtmlElementById("form").getInputByName("name").setValueAttribute("newercatalog");
 		newCatalogPage = clickButton(newCatalogPage, "save");
 //		addButton = (HtmlSubmitInput) new HtmlUnitXPath("//input[@type='submit' and @value='Add New...']").selectSingleNode(newCatalogPage);
 		addLink = newCatalogPage.getFirstAnchorByText("Add New...");
@@ -124,7 +124,7 @@ public class EditCategoryTest extends AbstractContainerTest
 		textArea.setText("howdya doo");
 		HtmlPage categoryPage = clickButton(newCategoryForm, "Apply");
 		HtmlPage newProductPage = clickLink(categoryPage, "Add New...");
-		HtmlTextInput input = newProductPage.getFormByName("form").getInputByName("name");
+		HtmlTextInput input = newProductPage.<HtmlForm>getHtmlElementById("form").getInputByName("name");
 		input.setValueAttribute("a new product");
 
 		categoryPage = clickButton(newProductPage, "Ok");

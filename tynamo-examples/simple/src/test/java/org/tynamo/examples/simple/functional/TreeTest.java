@@ -26,21 +26,21 @@ public class TreeTest extends AbstractContainerTest
 	public void testTree() throws Exception
 	{
 		HtmlPage newTreeNodePage = webClient.getPage(BASEURI + "add/treenode"); 
-		HtmlForm form = newTreeNodePage.getFormByName("form");
+		HtmlForm form = newTreeNodePage.getHtmlElementById("form");
 		form.<HtmlInput>getInputByName("name").setValueAttribute("one");
 		// FIXME apply button doesn't work
 //		newTreeNodePage = clickButton(newTreeNodePage, "save");
 //		assertNotNull(newTreeNodePage.getElementById("Identifier") );
 		newTreeNodePage = webClient.getPage(BASEURI + "add/treenode");
-		form = newTreeNodePage.getFormByName("form");
+		form = newTreeNodePage.getHtmlElementById("form");
 		form.<HtmlInput>getInputByName("name").setValueAttribute("two");
 		clickButton(newTreeNodePage, "saveAndReturnButton");
 		HtmlPage editTreeNodePage = webClient.getPage(BASEURI + "edit/treenode/1"); 
-		form = editTreeNodePage.getFormByName("form");
+		form = editTreeNodePage.getHtmlElementById("form");
 		form.getSelectByName("select").setSelectedAttribute("1", true);
 		// FIXME Save button doesn't work yet
 //		editTreeNodePage = clickButton(editTreeNodePage, "save");
-//		HtmlOption option = newTreeNodePage.getFormByName("form").getSelectByName("Parent").getOptionByValue("2");
+//		HtmlOption option = newTreeNodePage.getHtmlElementById("form").getSelectByName("Parent").getOptionByValue("2");
 //		assertTrue(option.isSelected(), "2 is selected");
 //
 //		// now delete one
