@@ -1,5 +1,6 @@
 package org.tynamo.examples.recipe.model;
 
+import org.apache.tapestry5.beaneditor.NonVisual;
 import org.tynamo.descriptor.annotation.ClassDescriptor;
 import org.tynamo.descriptor.annotation.PropertyDescriptor;
 
@@ -64,6 +65,7 @@ public class Ingredient
 	}
 
 	@ManyToOne
+	@NonVisual
 	public Recipe getRecipe()
 	{
 		return recipe;
