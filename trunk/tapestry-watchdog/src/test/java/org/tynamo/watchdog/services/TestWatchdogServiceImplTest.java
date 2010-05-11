@@ -9,6 +9,7 @@ import java.net.ServerSocket;
 import java.net.URISyntaxException;
 import java.util.Iterator;
 
+import org.slf4j.LoggerFactory;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -20,7 +21,11 @@ public class TestWatchdogServiceImplTest {
 
 	private int smtpPort = 1025;
 	private static SimpleSmtpServer smtpServer;
-	WatchdogServiceImpl watchdogService = new WatchdogServiceImpl(1025, "test@test.com");
+	WatchdogServiceImpl watchdogService;
+
+	public TestWatchdogServiceImplTest() throws IOException, URISyntaxException {
+		watchdogService = new WatchdogServiceImpl(LoggerFactory.getLogger(TestWatchdogServiceImplTest.class), false, 1025, "test@test.com");
+	}
 
 	@BeforeClass
 	void startSmtpService() {
@@ -60,9 +65,9 @@ public class TestWatchdogServiceImplTest {
 	@Test
 	public void emailSentWhenProcessLost() throws InterruptedException, IOException, URISyntaxException {
 		watchdogService.startWatchdog();
-		Thread.sleep(1000);
-		watchdogService.alarmWatchdog();
 		Thread.sleep(6000);
+		watchdogService.alarmWatchdog();
+		Thread.sleep(11000);
 		assertTrue(smtpServer.getReceivedEmailSize() > 0);
 		Iterator<SmtpMessage> messages = smtpServer.getReceivedEmail();
 		SmtpMessage message = messages.next();

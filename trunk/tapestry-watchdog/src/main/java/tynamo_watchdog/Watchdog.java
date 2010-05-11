@@ -1,8 +1,10 @@
 package tynamo_watchdog;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.Properties;
 
 import javax.mail.Message;
@@ -17,6 +19,8 @@ public class Watchdog {
 	public static final String SEND_EMAIL = "watchdog.sendemail";
 	public static final String EMAIL_PATH = "watchdog.emailpath";
 	public static final String COMMAND = "watchdog.command";
+
+	public static final String STOP_MESSAGE = Watchdog.class.getSimpleName();
 
 	private String emailRecipient;
 	private Integer smtpPort;
@@ -33,16 +37,28 @@ public class Watchdog {
 	}
 
 	public static void main(String[] args) throws Exception {
-		String appName = args.length > 0 ? args[0] : "dev/exploded";
-		Thread.sleep(2000);
-		InputStreamReader isr = new InputStreamReader(System.in);
-		BufferedReader br = new BufferedReader(isr);
-		String line;
-		while ((line = br.readLine()) != null) {
-			if ("0".equals(line)) System.exit(0);
-			Thread.sleep(2000);
+		// With no arguments, print out the help and exit
+		List<String> arguments = new ArrayList<String>(Arrays.asList(args));
+
+		if (args.length <= 0 || arguments.contains("--help")) {
+			System.out.println("Tynamo watchdog. This application is designed to run as a child process ");
+			return;
 		}
 
+		String appName = args.length > 0 ? args[0] : "dev/exploded";
+		Thread.sleep(5000);
+		int available = 0;
+		byte[] bytes = new byte[STOP_MESSAGE.getBytes().length];
+		try {
+			while ((available = System.in.available()) > 0) {
+				if (available >= STOP_MESSAGE.getBytes().length) System.exit(0);
+				// skip() didn't seem to work for standard input
+				System.in.read(bytes, 0, available);
+				Thread.sleep(10000);
+			}
+		} catch (IOException e) {
+			System.err.println("Parent process stopped at " + (new Date()));
+		}
 		Watchdog watchdog = new Watchdog(appName, System.getProperty(SEND_EMAIL), System.getProperty(SMTP_PORT));
 		watchdog.sendEmail();
 	}
@@ -73,7 +89,7 @@ public class Watchdog {
 		addressTo[0] = new InternetAddress(emailRecipient);
 		msg.setRecipients(Message.RecipientType.TO, addressTo);
 
-		msg.setSubject("Application " + appName + "failed!");
+		msg.setSubject("Application " + appName + " has failed!");
 		StringBuilder sb = new StringBuilder();
 		sb.append("Master application '");
 		sb.append(appName);
