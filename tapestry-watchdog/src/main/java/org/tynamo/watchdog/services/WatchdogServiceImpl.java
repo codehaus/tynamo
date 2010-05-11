@@ -1,34 +1,41 @@
 package org.tynamo.watchdog.services;
 
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.net.JarURLConnection;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.jar.JarFile;
 
+import org.apache.tapestry5.SymbolConstants;
+import org.apache.tapestry5.ioc.annotations.EagerLoad;
 import org.apache.tapestry5.ioc.annotations.Symbol;
+import org.slf4j.Logger;
 import org.tynamo.watchdog.StreamGobbler;
 
 import tynamo_watchdog.Watchdog;
 
+@EagerLoad
 public class WatchdogServiceImpl implements WatchdogService {
 
 	private Process watchdog;
 	private WatchdogLeash watchdogLeash;
 
-	BufferedWriter bw;
+	OutputStream watchdogOutputStream;
 	private Integer smtpPort;
 	private String sendEmail;
+	private Logger logger;
 
-	public WatchdogServiceImpl(@Symbol(Watchdog.SMTP_PORT) final Integer smtpPort, @Symbol(Watchdog.SEND_EMAIL) String sendEmail) {
+	public WatchdogServiceImpl(Logger logger, @Symbol(SymbolConstants.PRODUCTION_MODE) boolean productionMode,
+			@Symbol(Watchdog.SMTP_PORT) final Integer smtpPort, @Symbol(Watchdog.SEND_EMAIL) String sendEmail) throws IOException,
+			URISyntaxException {
+		this.logger = logger;
 		this.smtpPort = smtpPort;
 		this.sendEmail = sendEmail;
+		if (productionMode) startWatchdog();
 	}
 
 	/**
@@ -100,8 +107,8 @@ public class WatchdogServiceImpl implements WatchdogService {
 		args[0] = "java";
 		args[1] = "-D" + Watchdog.SEND_EMAIL + "=" + sendEmail;
 		args[2] = "-D" + Watchdog.SMTP_PORT + "=" + smtpPort;
-		args[3] = "-Xmx16m";
-		args[4] = "-Xmx32m";
+		args[3] = "-Xms4m";
+		args[4] = "-Xmx16m";
 		args[5] = "-XX:MaxPermSize=16m";
 		args[6] = "-cp";
 		args[7] = "." + File.pathSeparator + packageName + File.separator + WatchdogModule.javamailSpec + ".jar" + File.pathSeparator
@@ -117,8 +124,7 @@ public class WatchdogServiceImpl implements WatchdogService {
 		(new StreamGobbler(watchdog.getErrorStream(), "WATCHDOG ERROR")).start();
 		(new StreamGobbler(watchdog.getInputStream(), "WATCHDOG OUTPUT")).start();
 
-		OutputStreamWriter writer = new OutputStreamWriter(watchdog.getOutputStream());
-		bw = new BufferedWriter(writer);
+		watchdogOutputStream = watchdog.getOutputStream();
 
 		watchdogLeash = new WatchdogLeash();
 		watchdogLeash.start();
@@ -130,9 +136,8 @@ public class WatchdogServiceImpl implements WatchdogService {
 	 * @see org.tynamo.watchdog.services.WatchdogService#dismissWatchdog()
 	 */
 	public void dismissWatchdog() throws IOException {
-		bw.write("0");
-		bw.newLine();
-		bw.flush();
+		watchdogOutputStream.write(Watchdog.STOP_MESSAGE.getBytes());
+		watchdogOutputStream.flush();
 	}
 
 	/*
@@ -141,7 +146,7 @@ public class WatchdogServiceImpl implements WatchdogService {
 	 * @see org.tynamo.watchdog.services.WatchdogService#alarmWatchdog()
 	 */
 	public void alarmWatchdog() throws IOException {
-		bw.close();
+		watchdogOutputStream.close();
 	}
 
 	class WatchdogLeash extends Thread {
@@ -154,10 +159,12 @@ public class WatchdogServiceImpl implements WatchdogService {
 		public void run() {
 			try {
 				while (true) {
-					bw.newLine();
-					sleep(1000);
+					watchdogOutputStream.write(0);
+					watchdogOutputStream.flush();
+					sleep(5000);
 				}
 			} catch (IOException e) {
+				logger.warn("IO exception occurred while communicating with the watchdog process. Was the watchdog killed? Releasing the leash");
 			} catch (InterruptedException e) {
 			}
 		}
