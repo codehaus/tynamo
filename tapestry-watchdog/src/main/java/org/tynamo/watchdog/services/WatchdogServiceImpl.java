@@ -25,14 +25,16 @@ public class WatchdogServiceImpl implements WatchdogService {
 	private WatchdogLeash watchdogLeash;
 
 	OutputStream watchdogOutputStream;
+	private String smtpHost;
 	private Integer smtpPort;
 	private String sendEmail;
 	private Logger logger;
 
 	public WatchdogServiceImpl(Logger logger, @Symbol(SymbolConstants.PRODUCTION_MODE) boolean productionMode,
-			@Symbol(Watchdog.SMTP_PORT) final Integer smtpPort, @Symbol(Watchdog.SEND_EMAIL) String sendEmail) throws IOException,
-			URISyntaxException {
+			@Symbol(Watchdog.SMTP_HOST) final String smtpHost, @Symbol(Watchdog.SMTP_PORT) final Integer smtpPort,
+			@Symbol(Watchdog.SEND_EMAIL) String sendEmail) throws IOException, URISyntaxException {
 		this.logger = logger;
+		this.smtpHost = smtpHost;
 		this.smtpPort = smtpPort;
 		this.sendEmail = sendEmail;
 		if (productionMode) startWatchdog();
@@ -103,18 +105,19 @@ public class WatchdogServiceImpl implements WatchdogService {
 		// String targetPath = "file://" + getClass().getClassLoader().getResource("").getFile() + "..";
 
 		final String packageName = Watchdog.class.getPackage().getName();
-		String[] args = new String[10];
+		String[] args = new String[11];
 		args[0] = "java";
 		args[1] = "-D" + Watchdog.SEND_EMAIL + "=" + sendEmail;
-		args[2] = "-D" + Watchdog.SMTP_PORT + "=" + smtpPort;
-		args[3] = "-Xms4m";
-		args[4] = "-Xmx16m";
-		args[5] = "-XX:MaxPermSize=16m";
-		args[6] = "-cp";
-		args[7] = "." + File.pathSeparator + packageName + File.separator + WatchdogModule.javamailSpec + ".jar" + File.pathSeparator
+		args[2] = "-D" + Watchdog.SMTP_HOST + "=" + smtpHost;
+		args[3] = "-D" + Watchdog.SMTP_PORT + "=" + smtpPort;
+		args[4] = "-Xms4m";
+		args[5] = "-Xmx16m";
+		args[6] = "-XX:MaxPermSize=16m";
+		args[7] = "-cp";
+		args[8] = "." + File.pathSeparator + packageName + File.separator + WatchdogModule.javamailSpec + ".jar" + File.pathSeparator
 				+ packageName + File.separator + WatchdogModule.javamailProvider + ".jar";
-		args[8] = Watchdog.class.getName();
-		args[9] = appName;
+		args[9] = Watchdog.class.getName();
+		args[10] = appName;
 
 		// You *have* to start with inherited environment or set at least some of the most critical
 		// environment variables manually (such as SystemRoot), otherwise I got
