@@ -24,7 +24,8 @@ public class TestWatchdogServiceImplTest {
 	WatchdogServiceImpl watchdogService;
 
 	public TestWatchdogServiceImplTest() throws IOException, URISyntaxException {
-		watchdogService = new WatchdogServiceImpl(LoggerFactory.getLogger(TestWatchdogServiceImplTest.class), false, 1025, "test@test.com");
+		watchdogService = new WatchdogServiceImpl(LoggerFactory.getLogger(TestWatchdogServiceImplTest.class), false, "localhost", 1025,
+				"test@test.com");
 	}
 
 	@BeforeClass

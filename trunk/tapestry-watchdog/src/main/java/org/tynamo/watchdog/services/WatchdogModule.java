@@ -30,5 +30,6 @@ public class WatchdogModule {
 	public static void bind(ServiceBinder binder) {
 		binder.bind(WatchdogService.class, WatchdogServiceImpl.class);
 	}
+	// FIXME should you contribute factory defaults for smtp.host and smtp.port?
 
 }

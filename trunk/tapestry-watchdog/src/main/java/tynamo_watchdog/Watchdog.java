@@ -15,6 +15,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 public class Watchdog {
+	public static final String SMTP_HOST = "smtp.host";
 	public static final String SMTP_PORT = "smtp.port";
 	public static final String SEND_EMAIL = "watchdog.sendemail";
 	public static final String EMAIL_PATH = "watchdog.emailpath";
@@ -23,13 +24,15 @@ public class Watchdog {
 	public static final String STOP_MESSAGE = Watchdog.class.getSimpleName();
 
 	private String emailRecipient;
+	private String smtpHost;
 	private Integer smtpPort;
 	private String appName;
 	private String hostname;
 
-	public Watchdog(String appName, String emailRecipient, String smtpPort) {
+	public Watchdog(String appName, String emailRecipient, String smtpHost, String smtpPort) {
 		this.appName = appName;
 		this.emailRecipient = emailRecipient;
+		this.smtpHost = smtpHost;
 		// FIXME catch numberFormatException
 		this.smtpPort = smtpPort == null ? null : Integer.valueOf(smtpPort);
 		hostname = System.getenv("HOSTNAME");
@@ -59,7 +62,7 @@ public class Watchdog {
 		} catch (IOException e) {
 			System.err.println("Parent process stopped at " + (new Date()));
 		}
-		Watchdog watchdog = new Watchdog(appName, System.getProperty(SEND_EMAIL), System.getProperty(SMTP_PORT));
+		Watchdog watchdog = new Watchdog(appName, System.getProperty(SEND_EMAIL), System.getProperty(SMTP_HOST), System.getProperty(SMTP_PORT));
 		watchdog.sendEmail();
 	}
 
@@ -70,7 +73,7 @@ public class Watchdog {
 
 		// Set the host smtp address
 		Properties props = new Properties();
-		props.put("mail.smtp.host", "127.0.0.1");
+		props.put("mail.smtp.host", smtpHost);
 		props.put("mail.smtp.port", String.valueOf(smtpPort));
 		props.put("mail.smtp.debug", "true");
 
