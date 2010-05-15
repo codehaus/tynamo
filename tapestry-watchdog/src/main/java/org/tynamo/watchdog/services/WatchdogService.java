@@ -5,7 +5,7 @@ import java.net.URISyntaxException;
 
 public interface WatchdogService {
 
-	public abstract void startWatchdog() throws IOException, URISyntaxException;
+	public void startWatchdog() throws IOException, URISyntaxException, InterruptedException;
 
 	public abstract void dismissWatchdog() throws IOException;
 
