@@ -23,9 +23,9 @@ public class TestWatchdogServiceImplTest {
 	private static SimpleSmtpServer smtpServer;
 	WatchdogServiceImpl watchdogService;
 
-	public TestWatchdogServiceImplTest() throws IOException, URISyntaxException {
-		watchdogService = new WatchdogServiceImpl(LoggerFactory.getLogger(TestWatchdogServiceImplTest.class), false, "localhost", 1025,
-				"test@test.com");
+	public TestWatchdogServiceImplTest() throws IOException, URISyntaxException, InterruptedException {
+		watchdogService = new WatchdogServiceImpl(LoggerFactory.getLogger(TestWatchdogServiceImplTest.class), false, "unittestapp",
+				"localhost", 1025, "test@test.com");
 	}
 
 	@BeforeClass
@@ -95,6 +95,13 @@ public class TestWatchdogServiceImplTest {
 	@Test
 	public void whoAmi() throws IOException, URISyntaxException {
 		assertNotNull(watchdogService.whoAmI());
+	}
+
+	// Comment out just so it doesn't break the automated build
+	// @Test
+	public void javaProcessExec() throws IOException, URISyntaxException, InterruptedException {
+		Process process = Runtime.getRuntime().exec("java -version");
+		assertEquals(0, process.waitFor());
 	}
 
 }

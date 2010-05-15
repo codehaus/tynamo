@@ -11,7 +11,9 @@ import java.net.URL;
 import java.util.jar.JarFile;
 
 import org.apache.tapestry5.SymbolConstants;
+import org.apache.tapestry5.internal.InternalConstants;
 import org.apache.tapestry5.ioc.annotations.EagerLoad;
+import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.slf4j.Logger;
 import org.tynamo.watchdog.StreamGobbler;
@@ -23,17 +25,21 @@ public class WatchdogServiceImpl implements WatchdogService {
 
 	private Process watchdog;
 	private WatchdogLeash watchdogLeash;
+	private volatile boolean watchdogAlarmed;
 
 	OutputStream watchdogOutputStream;
-	private String smtpHost;
-	private Integer smtpPort;
-	private String sendEmail;
-	private Logger logger;
+	private final String appPackageName;
+	private final String smtpHost;
+	private final Integer smtpPort;
+	private final String sendEmail;
+	private final Logger logger;
 
 	public WatchdogServiceImpl(Logger logger, @Symbol(SymbolConstants.PRODUCTION_MODE) boolean productionMode,
-			@Symbol(Watchdog.SMTP_HOST) final String smtpHost, @Symbol(Watchdog.SMTP_PORT) final Integer smtpPort,
-			@Symbol(Watchdog.SEND_EMAIL) String sendEmail) throws IOException, URISyntaxException {
+			@Inject @Symbol(InternalConstants.TAPESTRY_APP_PACKAGE_PARAM) final String appPackageName,
+			@Inject @Symbol(Watchdog.SMTP_HOST) final String smtpHost, @Symbol(Watchdog.SMTP_PORT) final Integer smtpPort,
+			@Inject @Symbol(Watchdog.SEND_EMAIL) String sendEmail) throws IOException, URISyntaxException, InterruptedException {
 		this.logger = logger;
+		this.appPackageName = appPackageName;
 		this.smtpHost = smtpHost;
 		this.smtpPort = smtpPort;
 		this.sendEmail = sendEmail;
@@ -96,13 +102,24 @@ public class WatchdogServiceImpl implements WatchdogService {
 	 * 
 	 * @see org.tynamo.watchdog.services.WatchdogService#startWatchdog()
 	 */
-	public synchronized void startWatchdog() throws IOException, URISyntaxException {
+	public synchronized void startWatchdog() throws IOException, URISyntaxException, InterruptedException {
 		File watchdogFolder = prepareWatchdog();
-		String appName = whoAmI();
-		// FIXME if appName is empty, assume javamail is in classpath as well
-		if (appName.isEmpty()) appName = "dev/exploded";
+		// whoamI gives us the watchdog jar when libs are loaded separately which is less than ideal
+		// So don't use this at all, use appPackageName instead
+		// String appName = whoAmI();
+		// if (appName.isEmpty()) appName = "dev/exploded";
 
-		// String targetPath = "file://" + getClass().getClassLoader().getResource("").getFile() + "..";
+		Process testJavaProcess = Runtime.getRuntime().exec("java -version");
+		// TODO You could also read the output and make sure java is at least 1.5
+
+		try {
+			if (testJavaProcess.waitFor() != 0) {
+				logger.error("Couldn't execute java in given environment - is java on PATH? Cannot start the watchdog");
+				return;
+			}
+		} catch (IllegalThreadStateException e) {
+			logger.error("Testing java execution didn't return immediately. Report this issue to Tynamo.org");
+		}
 
 		final String packageName = Watchdog.class.getPackage().getName();
 		String[] args = new String[11];
@@ -110,14 +127,25 @@ public class WatchdogServiceImpl implements WatchdogService {
 		args[1] = "-D" + Watchdog.SEND_EMAIL + "=" + sendEmail;
 		args[2] = "-D" + Watchdog.SMTP_HOST + "=" + smtpHost;
 		args[3] = "-D" + Watchdog.SMTP_PORT + "=" + smtpPort;
-		args[4] = "-Xms4m";
+		// With -Xms4m, at least 64-bit 1.6 jvm you get:
+		// Error occurred during initialization of VM
+		// Too small initial heap for new size specified
+		args[4] = "-Xms8m";
 		args[5] = "-Xmx16m";
 		args[6] = "-XX:MaxPermSize=16m";
 		args[7] = "-cp";
 		args[8] = "." + File.pathSeparator + packageName + File.separator + WatchdogModule.javamailSpec + ".jar" + File.pathSeparator
 				+ packageName + File.separator + WatchdogModule.javamailProvider + ".jar";
 		args[9] = Watchdog.class.getName();
-		args[10] = appName;
+		args[10] = appPackageName;
+
+		StringBuilder command = new StringBuilder();
+		for (String value : args) {
+			command.append(value);
+			command.append(" ");
+		}
+
+		logger.info("Starting watchdog with command: " + command.toString());
 
 		// You *have* to start with inherited environment or set at least some of the most critical
 		// environment variables manually (such as SystemRoot), otherwise I got
@@ -129,8 +157,37 @@ public class WatchdogServiceImpl implements WatchdogService {
 
 		watchdogOutputStream = watchdog.getOutputStream();
 
+		// Intentionally try to cause an exception to see if the process is still alive and kicking
+		try {
+			int exitCode = watchdog.exitValue();
+			logger.error("Watchdog failed to start: the process exited immediately with exit code " + exitCode);
+			return;
+		} catch (IllegalThreadStateException e) {
+			// Ignore, process hasn't exited
+		}
+
 		watchdogLeash = new WatchdogLeash();
 		watchdogLeash.start();
+
+		// TODO Make adding shutdownhook configurable
+		Runtime.getRuntime().addShutdownHook(new Thread() {
+			@Override
+			public void run() {
+				try {
+					logger.warn("Dismissing watchdog before controlled JVM shutdown");
+					dismissWatchdog();
+				} catch (IOException e) {
+					logger.warn("Couldn't controllably dismiss the watchdog. Is watchdog still alive?");
+				}
+				try {
+					int exitCode = watchdog.exitValue();
+					logger.error("Watchdog has already exited with exit code " + exitCode);
+				} catch (IllegalThreadStateException e) {
+					// Ignore, can't do anything about the watchdog process
+				}
+			}
+		});
+
 	}
 
 	/*
@@ -167,7 +224,14 @@ public class WatchdogServiceImpl implements WatchdogService {
 					sleep(5000);
 				}
 			} catch (IOException e) {
+				// Alarming the watchdog manually triggers the IOException
+				if (watchdogAlarmed) return;
 				logger.warn("IO exception occurred while communicating with the watchdog process. Was the watchdog killed? Releasing the leash");
+				try {
+					logger.info("Watchdog process exited with exit code " + watchdog.exitValue());
+				} catch (IllegalThreadStateException e1) {
+					// Ignore, process hasn't exited
+				}
 			} catch (InterruptedException e) {
 			}
 		}
