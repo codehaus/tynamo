@@ -102,8 +102,8 @@ public class Watchdog {
 		sb.append(new Date());
 		sb.append("\n");
 		sb.append("Action taken: email sent to '");
+		sb.append(emailRecipient);
 		sb.append("'\n");
-		sb.append(addressFrom);
 		msg.setText(sb.toString());
 		Transport.send(msg);
 		return true;
