@@ -36,7 +36,7 @@ public class ConversationModule {
 	}
 
 	public static void contributeClasspathAssetAliasManager(MappedConfiguration<String, String> configuration) {
-		configuration.add("trails-conversations-" + version, "org/tynamo/conversations");
+		configuration.add("tynamo-conversations-" + version, "org/tynamo/conversations");
 	}
 
 	public static void contributePersistentFieldManager(MappedConfiguration<String, PersistentFieldStrategy> configuration, RequestGlobals requestGlobals,
