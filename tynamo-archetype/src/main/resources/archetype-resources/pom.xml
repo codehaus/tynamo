@@ -180,6 +180,13 @@
 
 	</dependencies>
 
+	<!--
+	IMPORTANT NOTE:
+
+	Configuring repositories is against Maven best practices. If you have
+	a repository manager in use, remove this section and configure your
+	repository manager to proxy these repositories instead.
+	-->
 	<repositories>
 		<!-- Don't use snapshots unless absolutely necessary -->
 		<repository>
@@ -193,6 +200,44 @@
 				<enabled>false</enabled>
 			</releases>
 		</repository>
+
+		<repository>
+			<id>repository.jboss.org</id>
+			<url>https://repository.jboss.org/nexus/content/</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+
+
+		<!--
+			little hack to disable java.net repositories because they are not working
+			and they corrupt your local repo.
+		-->
+		<repository>
+			<id>maven-repository.dev.java.net</id>
+			<url>https://maven-repository.dev.java.net/nonav/repository</url>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+		<repository>
+			<id>java.net</id>
+			<url>https://maven-repository.dev.java.net/nonav/repository</url>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+
 	</repositories>
 
 </project>
