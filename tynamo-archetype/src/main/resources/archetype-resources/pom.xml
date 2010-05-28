@@ -162,6 +162,7 @@
 			<groupId>org.tynamo</groupId>
 			<artifactId>tapestry-model-test</artifactId>
 			<version>${D}{tynamo-version}</version>
+			<scope>test</scope>
 		</dependency>
 
 		<dependency>
