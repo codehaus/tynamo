@@ -8,9 +8,9 @@ mvn archetype:generate -DarchetypeGroupId=org.tynamo -DarchetypeArtifactId=tynam
 		<archetype>
 			<groupId>org.tynamo</groupId>
 			<artifactId>tynamo-archetype</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>0.1.0-SNAPSHOT</version>
 			<repository>http://ci.repository.codehaus.org/</repository>
-			<description>Tynamo 0.0.1-SNAPSHOT Archetype</description>
+			<description>Tynamo 0.1.0-SNAPSHOT Archetype</description>
 		</archetype>
 	</archetypes>
 </archetype-catalog>
