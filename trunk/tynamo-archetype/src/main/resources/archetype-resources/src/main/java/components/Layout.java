@@ -3,7 +3,7 @@ package ${package}.components;
 import org.apache.tapestry5.BindingConstants;
 import org.apache.tapestry5.Block;
 import org.apache.tapestry5.RenderSupport;
-import org.apache.tapestry5.annotations.IncludeStylesheet;
+import org.apache.tapestry5.annotations.Import;
 import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
@@ -11,7 +11,7 @@ import org.apache.tapestry5.services.Context;
 import org.apache.tapestry5.services.Environment;
 
 
-@IncludeStylesheet({"context:themes/tapestryskin/theme.css"})
+@Import(stylesheet = "classpath:org/tynamo/themes/tapestryskin/theme.css")
 public class Layout
 {
 

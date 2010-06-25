@@ -169,7 +169,6 @@
 			<groupId>org.tynamo</groupId>
 			<artifactId>tapestry-model-web</artifactId>
 			<version>${D}{tynamo-version}</version>
-			<type>war</type>
 		</dependency>
 
 		<dependency>
