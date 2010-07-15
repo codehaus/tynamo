@@ -21,8 +21,6 @@ import javax.persistence.PersistenceUnitUtil;
 import javax.persistence.metamodel.EntityType;
 
 import org.apache.tapestry5.ValueEncoder;
-import org.apache.tapestry5.ioc.internal.util.Defense;
-import org.apache.tapestry5.ioc.internal.util.InternalUtils;
 import org.apache.tapestry5.ioc.services.PropertyAccess;
 import org.apache.tapestry5.ioc.services.TypeCoercer;
 import org.slf4j.Logger;
@@ -75,14 +73,14 @@ public final class JPAEntityValueEncoder<E> implements ValueEncoder<E>
 	@SuppressWarnings("unchecked")
 	public E toValue(String clientValue)
 	{
-		if (InternalUtils.isBlank(clientValue))
+		if (clientValue==null || clientValue.isEmpty())
 		{
 			return null;
 		}
 
 		Object id = this.typeCoercer.coerce(clientValue, this.idClass);
 
-		Serializable ser = Defense.cast(id, Serializable.class, "id");
+		Serializable ser = (Serializable) id;
 
 		E result = this.em.find(this.entityType.getJavaType(), ser);
 

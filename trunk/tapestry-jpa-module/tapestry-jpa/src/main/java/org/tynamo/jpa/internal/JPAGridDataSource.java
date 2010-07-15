@@ -25,7 +25,6 @@ import javax.persistence.criteria.Root;
 
 import org.apache.tapestry5.grid.GridDataSource;
 import org.apache.tapestry5.grid.SortConstraint;
-import org.apache.tapestry5.ioc.internal.util.Defense;
 
 /**
  * A simple implementation of {@link org.apache.tapestry5.grid.GridDataSource} based on a Hibernate
@@ -52,8 +51,8 @@ public class JPAGridDataSource<E> implements GridDataSource
 
 	public JPAGridDataSource(EntityManager em, Class<E> entityType)
 	{
-		Defense.notNull(em, "entityManager");
-		Defense.notNull(entityType, "entityType");
+		assert em != null;
+		assert entityType != null;
 
 		this.entityManager = em;
 		this.entityType = entityType;
@@ -99,7 +98,7 @@ public class JPAGridDataSource<E> implements GridDataSource
 	 */
 	public void prepare(int startIndex, int endIndex, List<SortConstraint> sortConstraints)
 	{
-		Defense.notNull(sortConstraints, "sortConstraints");
+    assert sortConstraints != null;
 
 		// We just assume that the property names in the SortContraint match the Hibernate
 		// properties.
