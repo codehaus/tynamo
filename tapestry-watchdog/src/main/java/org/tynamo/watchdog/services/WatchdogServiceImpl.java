@@ -33,16 +33,21 @@ public class WatchdogServiceImpl implements WatchdogService {
 	private final Integer smtpPort;
 	private final String sendEmail;
 	private final Logger logger;
+	private long keepAliveInterval;
+	private long finalAlarmDelay;
 
 	public WatchdogServiceImpl(Logger logger, @Symbol(SymbolConstants.PRODUCTION_MODE) boolean productionMode,
 			@Inject @Symbol(InternalConstants.TAPESTRY_APP_PACKAGE_PARAM) final String appPackageName,
 			@Inject @Symbol(Watchdog.SMTP_HOST) final String smtpHost, @Symbol(Watchdog.SMTP_PORT) final Integer smtpPort,
-			@Inject @Symbol(Watchdog.SEND_EMAIL) String sendEmail) throws IOException, URISyntaxException, InterruptedException {
+			@Inject @Symbol(Watchdog.SEND_EMAIL) String sendEmail, @Inject @Symbol(Watchdog.KEEPALIVE_INTERVAL) long keepAliveInterval,
+			@Inject @Symbol(Watchdog.FINALALARM_DELAY) long finalAlarmDelay) throws IOException, URISyntaxException, InterruptedException {
 		this.logger = logger;
 		this.appPackageName = appPackageName;
 		this.smtpHost = smtpHost;
 		this.smtpPort = smtpPort;
 		this.sendEmail = sendEmail;
+		this.keepAliveInterval = keepAliveInterval;
+		this.finalAlarmDelay = finalAlarmDelay;
 		if (productionMode) startWatchdog();
 	}
 
@@ -122,22 +127,24 @@ public class WatchdogServiceImpl implements WatchdogService {
 		}
 
 		final String packageName = Watchdog.class.getPackage().getName();
-		String[] args = new String[11];
+		String[] args = new String[13];
 		args[0] = "java";
 		args[1] = "-D" + Watchdog.SEND_EMAIL + "=" + sendEmail;
 		args[2] = "-D" + Watchdog.SMTP_HOST + "=" + smtpHost;
 		args[3] = "-D" + Watchdog.SMTP_PORT + "=" + smtpPort;
+		args[4] = "-D" + Watchdog.KEEPALIVE_INTERVAL + "=" + keepAliveInterval;
+		args[5] = "-D" + Watchdog.FINALALARM_DELAY + "=" + finalAlarmDelay;
 		// With -Xms4m, at least 64-bit 1.6 jvm you get:
 		// Error occurred during initialization of VM
 		// Too small initial heap for new size specified
-		args[4] = "-Xms8m";
-		args[5] = "-Xmx16m";
-		args[6] = "-XX:MaxPermSize=16m";
-		args[7] = "-cp";
-		args[8] = "." + File.pathSeparator + packageName + File.separator + WatchdogModule.javamailSpec + ".jar" + File.pathSeparator
+		args[6] = "-Xms8m";
+		args[7] = "-Xmx16m";
+		args[8] = "-XX:MaxPermSize=16m";
+		args[9] = "-cp";
+		args[10] = "." + File.pathSeparator + packageName + File.separator + WatchdogModule.javamailSpec + ".jar" + File.pathSeparator
 				+ packageName + File.separator + WatchdogModule.javamailProvider + ".jar";
-		args[9] = Watchdog.class.getName();
-		args[10] = appPackageName;
+		args[11] = Watchdog.class.getName();
+		args[12] = appPackageName;
 
 		StringBuilder command = new StringBuilder();
 		for (String value : args) {
@@ -221,7 +228,7 @@ public class WatchdogServiceImpl implements WatchdogService {
 				while (true) {
 					watchdogOutputStream.write(0);
 					watchdogOutputStream.flush();
-					sleep(5000);
+					sleep(keepAliveInterval);
 				}
 			} catch (IOException e) {
 				// Alarming the watchdog manually triggers the IOException

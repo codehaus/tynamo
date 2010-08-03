@@ -3,7 +3,10 @@ package org.tynamo.watchdog.services;
 import java.io.IOException;
 import java.util.Properties;
 
+import org.apache.tapestry5.ioc.MappedConfiguration;
 import org.apache.tapestry5.ioc.ServiceBinder;
+
+import tynamo_watchdog.Watchdog;
 
 public class WatchdogModule {
 	private static final String version;
@@ -30,6 +33,10 @@ public class WatchdogModule {
 	public static void bind(ServiceBinder binder) {
 		binder.bind(WatchdogService.class, WatchdogServiceImpl.class);
 	}
-	// FIXME should you contribute factory defaults for smtp.host and smtp.port?
 
+	// FIXME should you contribute factory defaults for smtp.host and smtp.port?
+	public static void contributeFactoryDefaults(MappedConfiguration<String, String> configuration) {
+		configuration.add(Watchdog.KEEPALIVE_INTERVAL, "5000");
+		configuration.add(Watchdog.FINALALARM_DELAY, "30000");
+	}
 }
