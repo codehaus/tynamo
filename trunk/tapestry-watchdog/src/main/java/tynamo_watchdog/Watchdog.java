@@ -33,7 +33,7 @@ public class Watchdog {
 
 	private long lastOk;
 	private long keepAliveInterval = 5000L;
-	private long finalAlarmDelay = 30000L;
+	private long finalAlarmDelay = 60000L;
 	private boolean warningSent;
 
 	public Watchdog(String appName, String emailRecipient, String smtpHost, String smtpPort, Long keepAliveInterval, Long finalAlarmDelay) {
