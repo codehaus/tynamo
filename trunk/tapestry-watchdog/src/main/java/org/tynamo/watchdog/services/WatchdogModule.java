@@ -37,6 +37,6 @@ public class WatchdogModule {
 	// FIXME should you contribute factory defaults for smtp.host and smtp.port?
 	public static void contributeFactoryDefaults(MappedConfiguration<String, String> configuration) {
 		configuration.add(Watchdog.KEEPALIVE_INTERVAL, "5000");
-		configuration.add(Watchdog.FINALALARM_DELAY, "30000");
+		configuration.add(Watchdog.FINALALARM_DELAY, "60000");
 	}
 }
