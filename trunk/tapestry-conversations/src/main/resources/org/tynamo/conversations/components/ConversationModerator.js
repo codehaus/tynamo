@@ -21,7 +21,8 @@ ConversationModerator.prototype = {
 	},
 
 	checkIdle: function() {
-		new Ajax.Request(this.baseURI + "checkidle" + this.defaultURIparameters + this.keepAlive + '&warn=' + this.warnBeforeSeconds, {
+		new Ajax.Request(this.baseURI + "checkidle" + this.defaultURIparameters + this.keepAlive + '&warn=' + this.warnBeforeSeconds
+			+'&timestamp='+(new Date()).getTime(), {
 			method: 'get',
 			evalJSON:true,
 			onSuccess: this.handleIdleCheckResult.bind(this)
