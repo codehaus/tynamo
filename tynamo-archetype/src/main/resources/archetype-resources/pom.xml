@@ -70,34 +70,15 @@
 			</plugin>
 
 			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
 				<configuration>
-					<includes>
-						<include>**/*UnitTest.java</include>
-					</includes>
-					<!-- Typically not needed, but configure arg line so you can run individual integration
-					tests with -Dtest=SomeIntegrationTest -->
-					<argLine>-Dorg.mortbay.jetty.webapp.parentLoaderPriority=true -Dtapestry.production-mode=false</argLine>
+					<suiteXmlFiles>
+						<suiteXmlFile>src/test/conf/testng.xml</suiteXmlFile>
+					</suiteXmlFiles>
+					<argLine>-Xmx500m</argLine>
+					<redirectTestOutputToFile>false</redirectTestOutputToFile>
 				</configuration>
-				<!-- Different configurations for unit and integration tests created mostly so you don't need
-				to deal with cleaning up the database after each test (because
-				running persistence tests between/after integrations tests might easily collide with existing data) -->
-				<executions>
-					<execution>
-					<id>surefire-it</id>
-					<phase>integration-test</phase>
-					<configuration>
-						<includes>
-							<include>**/*IntegrationTest.java</include>
-						</includes>
-						<forkMode>once</forkMode>
-						<argLine>-Dorg.mortbay.jetty.webapp.parentLoaderPriority=true -Dtapestry.production-mode=false</argLine>
-					</configuration>
-					<goals>
-						<goal>test</goal>
-					</goals>
-					</execution>
-				</executions>
 			</plugin>
 
 			<!-- This gets the plugin to clean up the cobertura.ser file left
