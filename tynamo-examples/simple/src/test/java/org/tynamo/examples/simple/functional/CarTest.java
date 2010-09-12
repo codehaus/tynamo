@@ -95,7 +95,7 @@ public class CarTest extends AbstractContainerTest
 
 		HtmlPage editModel = webClient.getPage(BASEURI + "edit/model/1");
 		form = editModel.getHtmlElementById("form");
-		form.getSelectByName("select").getOptionByValue("1").setSelected(true);
+		form.getSelectByName("make").getOptionByValue("1").setSelected(true);
 		clickButton(editModel, "saveAndReturnButton");
 
 		editMakePage = webClient.getPage(BASEURI +"edit/make/1");
