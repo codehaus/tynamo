@@ -37,7 +37,7 @@ public class TreeTest extends AbstractContainerTest
 		clickButton(newTreeNodePage, "saveAndReturnButton");
 		HtmlPage editTreeNodePage = webClient.getPage(BASEURI + "edit/treenode/1"); 
 		form = editTreeNodePage.getHtmlElementById("form");
-		form.getSelectByName("select").setSelectedAttribute("1", true);
+		form.getSelectByName("parent").setSelectedAttribute("1", true);
 		// FIXME Save button doesn't work yet
 //		editTreeNodePage = clickButton(editTreeNodePage, "save");
 //		HtmlOption option = newTreeNodePage.getHtmlElementById("form").getSelectByName("Parent").getOptionByValue("2");
