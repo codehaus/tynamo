@@ -17,6 +17,7 @@ import org.hibernate.validator.constraints.Length;
 import org.tynamo.blob.TynamoBlobImpl;
 import org.tynamo.descriptor.annotation.BlobDescriptor;
 import org.tynamo.descriptor.annotation.Collection;
+import org.tynamo.descriptor.annotation.beaneditor.ListPageBeanModel;
 import org.tynamo.descriptor.annotation.PropertyDescriptor;
 import org.tynamo.descriptor.extension.BlobDescriptorExtension;
 
@@ -27,6 +28,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
+//@ListPageBeanModel(include = "title, description, instructions, date")
 public class Recipe
 {
 	private Long id;
@@ -41,7 +43,7 @@ public class Recipe
 
 	private TynamoBlobImpl photo = new TynamoBlobImpl();
 
-	@PropertyDescriptor(hidden = true)
+	@PropertyDescriptor(nonVisual = true)
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	public Long getId()
@@ -54,7 +56,7 @@ public class Recipe
 		this.id = id;
 	}
 
-	@PropertyDescriptor(index = 1)
+
 	@NotNull(message = "{error.emptyMessage}")
 	public String getTitle()
 	{
@@ -66,7 +68,6 @@ public class Recipe
 		this.title = title;
 	}
 
-	@PropertyDescriptor(index = 2)
 	public String getDescription()
 	{
 		return description;
@@ -77,7 +78,7 @@ public class Recipe
 		this.description = description;
 	}
 
-	@PropertyDescriptor(index = 3, format = "MM/dd/yyyy")//, displayName = "Created On")
+	@PropertyDescriptor(format = "MM/dd/yyyy")
 	public Date getDate()
 	{
 		return date;
@@ -91,7 +92,6 @@ public class Recipe
 	private Category category;
 
 	@ManyToOne
-	@PropertyDescriptor(index = 4)
 	public Category getCategory()
 	{
 		return category;
@@ -102,7 +102,6 @@ public class Recipe
 		this.category = category;
 	}
 
-	@PropertyDescriptor(index = 6)
 	@Length(max = 500)
 	public String getInstructions()
 	{
@@ -131,6 +130,21 @@ public class Recipe
 		this.ingredients = ingredients;
 	}
 
+	private Set<Category> categories = new HashSet<Category>();
+
+	@OneToMany
+	@org.hibernate.annotations.Cascade(
+			{org.hibernate.annotations.CascadeType.ALL, org.hibernate.annotations.CascadeType.DELETE_ORPHAN})
+	public Set<Category> getCategories()
+	{
+		return categories;
+	}
+
+	public void setCategories(Set<Category> categories)
+	{
+		this.categories = categories;
+	}
+
 	public void addIngredient(Ingredient ingredient)
 	{
 		ingredient.setRecipe(this);
@@ -145,7 +159,6 @@ public class Recipe
 
 	@Lob
 	@BlobDescriptor(renderType = BlobDescriptorExtension.RenderType.IMAGE)
-	@PropertyDescriptor(summary = false)
 	public TynamoBlobImpl getPhoto()
 	{
 		return photo;

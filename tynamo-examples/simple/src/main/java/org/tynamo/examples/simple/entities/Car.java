@@ -1,7 +1,7 @@
 package org.tynamo.examples.simple.entities;
 
 import org.hibernate.validator.constraints.Length;
-import org.tynamo.descriptor.annotation.PropertyDescriptor;
+import org.tynamo.descriptor.annotation.beaneditor.ListPageBeanModel;
 
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -9,6 +9,7 @@ import javax.persistence.OneToOne;
 import java.io.Serializable;
 
 @Entity
+@ListPageBeanModel
 public class Car implements Serializable
 {
 
@@ -19,7 +20,6 @@ public class Car implements Serializable
 	private String notes;
 
 	@EmbeddedId
-	@PropertyDescriptor(index = 0)
 	public CarPk getId()
 	{
 		return id;
@@ -30,7 +30,6 @@ public class Car implements Serializable
 		this.id = id;
 	}
 
-	@PropertyDescriptor(index = 1)
 	@Length(max = 350)
 	public String getNotes()
 	{

@@ -16,7 +16,7 @@ import org.hibernate.validator.constraints.Length;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import org.tynamo.descriptor.annotation.Collection;
-import org.tynamo.descriptor.annotation.PropertyDescriptor;
+import org.tynamo.descriptor.annotation.beaneditor.ListPageBeanModel;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -24,6 +24,7 @@ import java.util.List;
 
 
 @Entity
+@ListPageBeanModel()
 public class Catalog
 {
 	private Integer id;
@@ -48,7 +49,6 @@ public class Catalog
 	@NotNull
 	@Length(min = 1, max = 20)
 	@Pattern(regexp = "[a-z]*")
-	@PropertyDescriptor(index = 2)
 	public String getName()
 	{
 		return name;
@@ -70,7 +70,6 @@ public class Catalog
 	@OneToMany(cascade = javax.persistence.CascadeType.ALL)
 	@JoinColumn(name = "CATALOG_ID")
 	@IndexColumn(name = "CATEGORY_INDEX")
-	@PropertyDescriptor(index = 1)
 	@Collection(child = true)
 	public List<Category> getCategories()
 	{

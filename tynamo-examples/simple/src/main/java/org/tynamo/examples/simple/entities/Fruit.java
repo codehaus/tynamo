@@ -27,7 +27,6 @@ public class Fruit
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@PropertyDescriptor(index = 0)
 	public Integer getId()
 	{
 		return id;
