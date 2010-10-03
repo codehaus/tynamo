@@ -41,7 +41,7 @@ public class Make implements Serializable
 	private Set<Model> models = new HashSet<Model>();
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "make")
-	@PropertyDescriptor(index = 2, searchable = false)
+	@PropertyDescriptor(searchable = false)
 	@Collection(addExpression = "addModel", removeExpression = "removeModel")
 	public Set<Model> getModels() {
 		return models;

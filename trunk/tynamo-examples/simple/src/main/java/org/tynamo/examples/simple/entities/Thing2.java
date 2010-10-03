@@ -59,7 +59,7 @@ public class Thing2
 		this.name = name;
 	}
 
-	@PropertyDescriptor(hidden = true)
+	@PropertyDescriptor(nonVisual = true)
 	public String getHidden()
 	{
 		return hidden;

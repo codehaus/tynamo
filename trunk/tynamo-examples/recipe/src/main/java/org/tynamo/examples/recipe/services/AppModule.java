@@ -9,6 +9,7 @@ import org.apache.tapestry5.ioc.annotations.SubModule;
 import org.apache.tapestry5.upload.services.UploadSymbols;
 import org.tynamo.builder.Builder;
 import org.tynamo.examples.recipe.RecipeBuilder;
+import org.tynamo.hibernate.TynamoHibernateSymbols;
 import org.tynamo.hibernate.services.TynamoHibernateModule;
 import org.tynamo.services.TynamoCoreModule;
 
@@ -53,6 +54,7 @@ public class AppModule
 		configuration.add(UploadSymbols.REQUESTSIZE_MAX, "2048000");
 		configuration.add(UploadSymbols.FILESIZE_MAX, "2048000");
 
+		configuration.add(TynamoHibernateSymbols.IGNORE_NON_HIBERNATE_TYPES, "true");
 	}
 
 	/**

@@ -1,8 +1,8 @@
 package org.tynamo.examples.simple.entities;
 
 import org.tynamo.descriptor.annotation.InitialValue;
+import org.tynamo.descriptor.annotation.beaneditor.ListPageBeanModel;
 import org.tynamo.descriptor.annotation.PossibleValues;
-import org.tynamo.descriptor.annotation.PropertyDescriptor;
 
 import javax.persistence.Embeddable;
 import javax.persistence.ManyToOne;
@@ -11,6 +11,7 @@ import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 @Embeddable
+@ListPageBeanModel(exclude = "make")
 public class CarPk implements Serializable
 {
 
@@ -32,7 +33,6 @@ public class CarPk implements Serializable
 	private Model model;
 
 	@Transient
-	@PropertyDescriptor(summary = false)
 	@InitialValue("model.make")
 	public Make getMake()
 	{

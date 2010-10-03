@@ -11,13 +11,14 @@
  */
 package org.tynamo.examples.simple.entities;
 
+import org.tynamo.descriptor.annotation.beaneditor.ListPageBeanModel;
 import org.tynamo.descriptor.annotation.MethodDescriptor;
-import org.tynamo.descriptor.annotation.PropertyDescriptor;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "things", uniqueConstraints = @UniqueConstraint(columnNames = "name"))
+@ListPageBeanModel(exclude = "id, text")
 public class Thing
 {
 	private Integer id;
@@ -33,7 +34,6 @@ public class Thing
 	private boolean flag;
 
 	@Id
-	@PropertyDescriptor(summary = false)
 	public Integer getId()
 	{
 		return id;
@@ -80,7 +80,6 @@ public class Thing
 	}
 
 	@Column(length = 300)
-	@PropertyDescriptor(summary = false)
 	public String getText()
 	{
 		return text;

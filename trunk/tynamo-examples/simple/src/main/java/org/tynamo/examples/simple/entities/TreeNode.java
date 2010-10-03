@@ -1,7 +1,8 @@
 package org.tynamo.examples.simple.entities;
 
 import javax.validation.constraints.NotNull;
-import org.tynamo.descriptor.annotation.PropertyDescriptor;
+
+import org.tynamo.descriptor.annotation.beaneditor.ListPageBeanModel;
 import org.tynamo.descriptor.annotation.ClassDescriptor;
 
 import javax.persistence.*;
@@ -10,6 +11,7 @@ import java.util.Set;
 
 @Entity
 @ClassDescriptor(hasCyclicRelationships = true)
+@ListPageBeanModel()
 public class TreeNode
 {
 	private Integer id;
@@ -21,7 +23,6 @@ public class TreeNode
 	private Set<TreeNode> children = new HashSet<TreeNode>();
 
 	@OneToMany(mappedBy = "parent")
-	@PropertyDescriptor(readOnly = true, summary = true, index = 3)
 	public Set<TreeNode> getChildren()
 	{
 		return children;
@@ -34,7 +35,6 @@ public class TreeNode
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@PropertyDescriptor(index = 0)
 	public Integer getId()
 	{
 		return id;
@@ -46,7 +46,6 @@ public class TreeNode
 	}
 
 	@NotNull
-	@PropertyDescriptor(index = 1)
 	public String getName()
 	{
 		return name;
@@ -58,7 +57,6 @@ public class TreeNode
 	}
 
 	@ManyToOne
-	@PropertyDescriptor(index = 2)
 	public TreeNode getParent()
 	{
 		return parent;

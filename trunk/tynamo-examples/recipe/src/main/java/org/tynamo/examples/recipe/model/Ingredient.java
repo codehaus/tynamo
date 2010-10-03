@@ -8,7 +8,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @Entity
-@ClassDescriptor(hidden = true)
+@ClassDescriptor(nonVisual = true)
 public class Ingredient
 {
 
@@ -42,7 +42,7 @@ public class Ingredient
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@PropertyDescriptor(hidden = true)
+	@PropertyDescriptor(nonVisual = true)
 	public Long getId()
 	{
 		return id;
