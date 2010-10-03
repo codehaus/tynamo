@@ -16,12 +16,12 @@ package org.tynamo.jpa.example.app0.services;
 
 import org.apache.tapestry5.SymbolConstants;
 import org.apache.tapestry5.ioc.MappedConfiguration;
+import org.apache.tapestry5.ioc.MethodAdviceReceiver;
 import org.apache.tapestry5.ioc.ServiceBinder;
 import org.apache.tapestry5.ioc.annotations.Match;
 import org.apache.tapestry5.ioc.annotations.SubModule;
-
 import org.tynamo.jpa.JPAModule;
-import org.tynamo.jpa.JPATransactionDecorator;
+import org.tynamo.jpa.JPATransactionAdvisor;
 
 @SubModule(JPAModule.class)
 public class AppModule
@@ -37,9 +37,8 @@ public class AppModule
 	}
 
 	@Match("*DAO")
-	public static <T> T decorateTransactionally(JPATransactionDecorator decorator, Class<T> serviceInterface,
-	        T delegate, String serviceId)
+	public static void adviseTransactions(JPATransactionAdvisor advisor, MethodAdviceReceiver receiver)
 	{
-		return decorator.build(serviceInterface, delegate, serviceId);
+		advisor.addTransactionCommitAdvice(receiver);
 	}
 }
