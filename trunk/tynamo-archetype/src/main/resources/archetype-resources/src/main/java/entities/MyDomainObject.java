@@ -1,7 +1,7 @@
 package ${package}.entities;
 
 import javax.validation.constraints.NotNull;
-import org.tynamo.descriptor.annotation.PropertyDescriptor;
+import org.tynamo.descriptor.annotation.beaneditor.DefaultBeanModel;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
+@DefaultBeanModel(reorder = "id")
 public class MyDomainObject
 {
 	private Long id;
@@ -17,7 +18,6 @@ public class MyDomainObject
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@PropertyDescriptor(index = 0)
 	public Long getId()
 	{
 		return id;
