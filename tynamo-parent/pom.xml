@@ -1,5 +1,4 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
 	<name>Tynamo Parent</name>
 	<url>http://tynamo.org/</url>
@@ -8,7 +7,7 @@
 	<groupId>org.tynamo</groupId>
 	<artifactId>tynamo-parent</artifactId>
 	<packaging>pom</packaging>
-	<version>0.0.6-SNAPSHOT</version>
+	<version>0.0.6</version>
   <parent>
     <groupId>org.codehaus</groupId>
     <artifactId>codehaus-parent</artifactId>
@@ -81,9 +80,9 @@
 		</mailingList>
 	</mailingLists>
 	<scm>
-		<connection>scm:svn:http://svn.codehaus.org/tynamo/trunk/tynamo-parent</connection>
-		<developerConnection>scm:svn:https://svn.codehaus.org/tynamo/trunk/tynamo-parent</developerConnection>
-		<url>http://svn.tynamo.codehaus.org/tynamo/trunk/tynamo-parent</url>
+		<connection>scm:svn:http://svn.codehaus.org/tynamo/tags/tynamo-parent-0.0.6</connection>
+		<developerConnection>scm:svn:https://svn.codehaus.org/tynamo/tags/tynamo-parent-0.0.6</developerConnection>
+		<url>http://svn.tynamo.codehaus.org/tynamo/tags/tynamo-parent-0.0.6</url>
 	</scm>
 
 	<prerequisites>
