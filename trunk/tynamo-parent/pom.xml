@@ -9,6 +9,11 @@
 	<artifactId>tynamo-parent</artifactId>
 	<packaging>pom</packaging>
 	<version>0.0.6-SNAPSHOT</version>
+  <parent>
+    <groupId>org.codehaus</groupId>
+    <artifactId>codehaus-parent</artifactId>
+    <version>3</version>
+  </parent>
 
 	<properties>
 		<tapestry-release-version>5.2.2</tapestry-release-version>
@@ -146,16 +151,6 @@
 	</ciManagement>
 
 	<distributionManagement>
-		<repository>
-			<id>tynamo-release</id>
-			<name>Tynamo' release repository</name>
-			<url>dav:https://dav.codehaus.org/repository/tynamo</url>
-		</repository>
-		<snapshotRepository>
-			<id>tynamo-snapshot</id>
-			<name>Tynamo' snapshot repository</name>
-			<url>dav:https://dav.codehaus.org/snapshots.repository/tynamo</url>
-		</snapshotRepository>
 		<site>
 			<id>tynamo-site</id>
 			<!-- Note the url. Only static files deployed in /constant/ can be decorated by Unity -->
