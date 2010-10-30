@@ -1,7 +1,6 @@
 package org.tynamo.conversations.services;
 
 import static org.apache.tapestry5.ioc.internal.util.CollectionFactory.newList;
-import static org.apache.tapestry5.ioc.internal.util.Defense.notBlank;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -97,10 +96,16 @@ public class ConversationalPersistentFieldStrategy implements PersistentFieldStr
 
 		return new PersistentFieldChangeImpl(componentId, fieldName, newValue);
 	}
+	
+	// Same as org.apache.tapestry5.ioc.internal.util.InternalUtils.isBlank,
+	// copied here so the same library would work for T5.1 and T5.2
+	public static boolean isBlank(String input) {
+		return input == null || input.length() == 0 || input.trim().length() == 0;
+	}
 
 	public final void postChange(String pageName, String componentId, String fieldName, Object newValue) {
-		notBlank(pageName, "pageName");
-		notBlank(fieldName, "fieldName");
+		assert !isBlank(pageName); 
+		assert !isBlank(fieldName); 
 
 		// If no active conversation, no changes to post
 		if (conversationManager.getActiveConversation() == null) return;

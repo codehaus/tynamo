@@ -12,8 +12,11 @@
 	<parent>
 		<groupId>org.tynamo</groupId>
 		<artifactId>tynamo-parent</artifactId>
-		<version>0.0.5</version>
+		<version>0.0.6</version>
 	</parent>
+	<properties>
+		<tapestry-release-version>5.2.2</tapestry-release-version>
+	</properties>
 	
 	<dependencies>
 		<dependency>
@@ -25,7 +28,7 @@
 		<dependency>
 			<groupId>org.tynamo</groupId>
 			<artifactId>tapestry-model-test</artifactId>
-			<version>0.0.1</version>
+			<version>0.1.0-SNAPSHOT</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -110,6 +113,17 @@
 					<goals>deploy site-deploy changes:announcement-mail -DgenerateJiraAnnouncement=true</goals>
 					-->
 					<goals>deploy site-deploy</goals>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<!-- Reloading needs to be disabled because the constructor of Conversation is package-private 
+					but I don't want to use .preventReloading() since that would make the module T5.2 specific
+					-->
+					<argLine>-Dtapestry.service-reloading-enabled=false</argLine>
+					<redirectTestOutputToFile>false</redirectTestOutputToFile>
 				</configuration>
 			</plugin>
 			<!--  needed only for testing -->
