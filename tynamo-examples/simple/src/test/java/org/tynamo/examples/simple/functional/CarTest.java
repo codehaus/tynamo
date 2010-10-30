@@ -1,6 +1,8 @@
 package org.tynamo.examples.simple.functional;
 
 import com.gargoylesoftware.htmlunit.html.*;
+import com.gargoylesoftware.htmlunit.javascript.host.html.HTMLSpanElement;
+
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import org.tynamo.test.AbstractContainerTest;
@@ -68,24 +70,30 @@ public class CarTest extends AbstractContainerTest
 		HtmlPage newMakePage = webClient.getPage(BASEURI +"add/make");
 		HtmlForm form = newMakePage.getHtmlElementById("form");
 		form.<HtmlInput>getInputByName("name").setValueAttribute("Honda");
-		clickButton(newMakePage, "saveAndReturnButton");
+		newMakePage = clickButton(newMakePage, "saveAndReturnButton");
+		HtmlDefinitionDescription ddElement = (HtmlDefinitionDescription)newMakePage.getByXPath("//dt[contains(text(),'Id')]/following-sibling::dd").get(0);
+		int hondaId = Integer.parseInt(ddElement.getTextContent());
 
 		newMakePage = webClient.getPage(BASEURI +"add/make");
 		form = newMakePage.getHtmlElementById("form");
 		form.<HtmlInput>getInputByName("name").setValueAttribute("Toyota");
-		clickButton(newMakePage, "saveAndReturnButton");
+		newMakePage = clickButton(newMakePage, "saveAndReturnButton");
+		ddElement = (HtmlDefinitionDescription)newMakePage.getByXPath("//dt[contains(text(),'Id')]/following-sibling::dd").get(0);
+		int toyotaId = Integer.parseInt(ddElement.getTextContent());
 
 		HtmlPage newModelPage = webClient.getPage(BASEURI +"add/model");
 		HtmlForm newModelForm = newModelPage.getHtmlElementById("form");
 		newModelForm.<HtmlInput>getInputByName("name").setValueAttribute("Prius");
-		clickButton(newModelPage, "saveAndReturnButton");
+		newModelPage = clickButton(newModelPage, "saveAndReturnButton");
+		ddElement = (HtmlDefinitionDescription)newModelPage.getByXPath("//dt[contains(text(),'Id')]/following-sibling::dd").get(0);
+		int priusId = Integer.parseInt(ddElement.getTextContent());
 
 		newModelPage = webClient.getPage(BASEURI +"add/model");
 		newModelForm = newModelPage.getHtmlElementById("form");
 		newModelForm.<HtmlInput>getInputByName("name").setValueAttribute("Sedan");
 		clickButton(newModelPage, "saveAndReturnButton");
 
-		HtmlPage editMakePage = webClient.getPage(BASEURI +"edit/make/1");
+		HtmlPage editMakePage = webClient.getPage(BASEURI +"edit/make/" + hondaId);
 
 		assertXPathPresent(editMakePage, "//input[@value='Honda']");
 		assertXPathPresent(editMakePage, "//select[@id='palette_set-avail']");
@@ -93,18 +101,17 @@ public class CarTest extends AbstractContainerTest
 		assertXPathPresent(editMakePage, "//select[@id='palette_set-avail']/option[text()='Prius']");
 		assertXPathPresent(editMakePage, "//select[@id='palette_set-avail']/option[text()='Sedan']");
 
-		HtmlPage editModel = webClient.getPage(BASEURI + "edit/model/1");
+		HtmlPage editModel = webClient.getPage(BASEURI + "edit/model/" + priusId);
 		form = editModel.getHtmlElementById("form");
-		form.getSelectByName("make").getOptionByValue("1").setSelected(true);
+		form.getSelectByName("make").getOptionByText("Toyota").setSelected(true);
 		clickButton(editModel, "saveAndReturnButton");
 
-		editMakePage = webClient.getPage(BASEURI +"edit/make/1");
+		editMakePage = webClient.getPage(BASEURI +"edit/make/" + toyotaId);
 		assertXPathNotPresent(editMakePage, "//select[@id='palette_set-avail'][not(node())]");
 		assertXPathNotPresent(editMakePage, "//select[@id='palette_set'][not(node())]");
 
-		editMakePage = webClient.getPage(BASEURI +"edit/make/2");
+		editMakePage = webClient.getPage(BASEURI +"edit/make/" + hondaId);
 
-//		assertXPathPresent(editMakePage, "//input[@value='Toyota']");
 		assertXPathPresent(editMakePage, "//select[@id='palette_set-avail']");
 		assertXPathNotPresent(editMakePage, "//select[@id='palette_set-avail'][not(node())]");
 		assertXPathPresent(editMakePage, "//select[@id='palette_set'][not(node())]");
