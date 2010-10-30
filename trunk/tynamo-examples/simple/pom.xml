@@ -17,6 +17,14 @@
 		<finalName>simple</finalName>
 
 		<plugins>
+			<plugin>
+				<groupId>org.apache.tapestry</groupId>
+				<artifactId>tapestry-component-report</artifactId>
+				<version>${tapestry-release-version}</version>
+				<configuration>
+					<rootPackage>org.tynamo.examples.simple</rootPackage>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 
@@ -44,33 +52,4 @@
 		</dependency>
 
 	</dependencies>
-	
-	<profiles>
-		<!-- Do not generate the tapestry-component-report on windows because it will fail with "javadoc: error - cannot find doclet class"
-		see https://issues.apache.org/jira/browse/TAP5-871
-		if you replace backslashes with forward slashes in component-report-javadoc-arguments.txt and run the javadoc manually, it'll work
-		-->
-		<profile>
-			<id>site</id>
-			<activation>
-				<os>
-					<family>!windows</family>
-				</os>
-			</activation>
-			<reporting>
-		
-				<!-- Adds a report detailing the components, mixins and base classes defined by this module. -->
-				<plugins>
-					<plugin>
-						<groupId>org.apache.tapestry</groupId>
-						<artifactId>tapestry-component-report</artifactId>
-						<version>${tapestry-release-version}</version>
-						<configuration>
-							<rootPackage>org.tynamo.examples.simple</rootPackage>
-						</configuration>
-					</plugin>
-				</plugins>
-			</reporting>
-		</profile>
-	</profiles>	
 </project>
