@@ -14,10 +14,8 @@
 
 package org.tynamo.jpa.internal;
 
-import org.apache.tapestry5.ioc.internal.util.Defense;
 import org.apache.tapestry5.ioc.services.AspectDecorator;
 import org.apache.tapestry5.ioc.services.AspectInterceptorBuilder;
-
 import org.tynamo.jpa.JPATransactionAdvisor;
 import org.tynamo.jpa.JPATransactionDecorator;
 
@@ -35,9 +33,9 @@ public class JPATransactionDecoratorImpl implements JPATransactionDecorator
 
 	public <T> T build(Class<T> serviceInterface, T delegate, String serviceId)
 	{
-		Defense.notNull(serviceInterface, "serviceInterface");
-		Defense.notNull(delegate, "delegate");
-		Defense.notBlank(serviceId, "serviceId");
+		assert serviceInterface != null;
+		assert delegate != null;
+		assert serviceId != null && !serviceId.isEmpty();
 
 		String description = String.format("<JPA Transaction interceptor for %s(%s)>", serviceId, serviceInterface
 		        .getName());
