@@ -19,7 +19,9 @@ import org.apache.catalina.Globals;
 import org.apache.catalina.LifecycleException;
 
 /**
- * @author Martin Kahr
+ * @author Martin Kahr, Kalle Korhonen
+ *
+ * Kalle Korhonen / kaosko@apache.org: modified to work for Tomcat 7.x
  *
  */
 public class DevLoader extends WebappLoader {
