@@ -4,7 +4,7 @@
 	<artifactId>tapestry-watchdog</artifactId>
 	<name>Tynamo Watchdog Service</name>
 	<packaging>jar</packaging>
-	<version>0.0.2</version>
+	<version>0.0.3-SNAPSHOT</version>
 	<description>
 		An embedded watchdog process for Tapestry 5 applications
 	</description>
@@ -140,8 +140,8 @@
 	</build>
 
   <scm>
-    <connection>scm:svn:http://svn.codehaus.org/tynamo/tags/tapestry-watchdog-0.0.2</connection>
-    <developerConnection>scm:svn:https://svn.codehaus.org/tynamo/tags/tapestry-watchdog-0.0.2</developerConnection>
-    <url>http://svn.tynamo.codehaus.org/tynamo/tags/tapestry-watchdog-0.0.2</url>
+    <connection>scm:svn:http://svn.codehaus.org/tynamo/trunk/tapestry-watchdog</connection>
+    <developerConnection>scm:svn:https://svn.codehaus.org/tynamo/trunk/tapestry-watchdog</developerConnection>
+    <url>http://svn.tynamo.codehaus.org/tynamo/trunk/tapestry-watchdog</url>
   </scm>
 </project>
