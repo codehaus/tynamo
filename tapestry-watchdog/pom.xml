@@ -12,7 +12,7 @@
 	<parent>
 		<groupId>org.tynamo</groupId>
 		<artifactId>tynamo-parent</artifactId>
-		<version>0.0.5</version>
+		<version>0.0.6</version>
 	</parent>
 	
 	<properties>
@@ -77,6 +77,12 @@
 		</dependency>
 	</dependencies>
 	
+  <scm>
+    <connection>scm:svn:http://svn.codehaus.org/tynamo/trunk/tapestry-watchdog</connection>
+    <developerConnection>scm:svn:https://svn.codehaus.org/tynamo/trunk/tapestry-watchdog</developerConnection>
+    <url>http://svn.tynamo.codehaus.org/tynamo/trunk/tapestry-watchdog</url>
+  </scm>
+
 	<distributionManagement>
 		<site>
 			<id>tynamo-site</id>
@@ -138,10 +144,4 @@
 			</plugin>
 		</plugins>			
 	</build>
-
-  <scm>
-    <connection>scm:svn:http://svn.codehaus.org/tynamo/trunk/tapestry-watchdog</connection>
-    <developerConnection>scm:svn:https://svn.codehaus.org/tynamo/trunk/tapestry-watchdog</developerConnection>
-    <url>http://svn.tynamo.codehaus.org/tynamo/trunk/tapestry-watchdog</url>
-  </scm>
 </project>
