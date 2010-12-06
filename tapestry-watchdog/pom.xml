@@ -4,7 +4,7 @@
 	<artifactId>tapestry-watchdog</artifactId>
 	<name>Tynamo Watchdog Service</name>
 	<packaging>jar</packaging>
-	<version>0.0.3-SNAPSHOT</version>
+	<version>0.0.2-SNAPSHOT</version>
 	<description>
 		An embedded watchdog process for Tapestry 5 applications
 	</description>
