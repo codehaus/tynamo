@@ -22,7 +22,7 @@
 	<distributionManagement>
 		<site>
 			<id>tynamo-site</id>
-			<url>dav:https://dav.codehaus.org/tynamo/constant/tynamo-archetype</url>
+			<url>dav:https://dav.codehaus.org/tynamo/constant/sites/tynamo-archetype</url>
 		</site>
 	</distributionManagement>
 
