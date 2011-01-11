@@ -13,7 +13,7 @@
 	<parent>
 		<groupId>org.tynamo</groupId>
 		<artifactId>tynamo-parent</artifactId>
-		<version>0.0.5</version>
+		<version>0.0.6</version>
 	</parent>
 
 	<dependencies>
@@ -55,7 +55,7 @@
 		<site>
 			<id>tynamo-site</id>
 			<!-- Note the url. Only static files deployed in /constant/ can be decorated by Unity -->
-			<url>dav:https://dav.codehaus.org/tynamo/constant/tapestry-jpa-seedentity</url>
+			<url>dav:https://dav.codehaus.org/tynamo/constant/sites/tapestry-jpa-seedentity</url>
 		</site>
 	</distributionManagement>
 
