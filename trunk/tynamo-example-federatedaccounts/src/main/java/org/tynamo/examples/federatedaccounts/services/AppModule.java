@@ -1,5 +1,7 @@
 package org.tynamo.examples.federatedaccounts.services;
 
+import org.apache.shiro.realm.Realm;
+import org.apache.tapestry5.ioc.Configuration;
 import org.apache.tapestry5.ioc.MappedConfiguration;
 import org.apache.tapestry5.ioc.ServiceBinder;
 import org.apache.tapestry5.ioc.annotations.SubModule;
@@ -12,6 +14,7 @@ import org.tynamo.security.federatedaccounts.HostSymbols;
 import org.tynamo.security.federatedaccounts.services.FederatedAccountService;
 import org.tynamo.security.federatedaccounts.services.FederatedAccountsModule;
 import org.tynamo.security.services.SecurityModule;
+import org.tynamo.shiro.extension.realm.text.ExtendedPropertiesRealm;
 
 @SubModule(value = { SecurityModule.class, FederatedAccountsModule.class })
 public class AppModule {
@@ -38,5 +41,10 @@ public class AppModule {
 		configuration.add(HostSymbols.HOSTNAME, "tynamo-federatedaccounts.tynamo.org");
 		configuration.add(HostSymbols.COMMITAFTER_OAUTH, "false");
 		configuration.add(HostSymbols.HTTPCLIENT_ON_GAE, "true");
+	}
+
+	public static void contributeWebSecurityManager(Configuration<Realm> configuration) {
+		ExtendedPropertiesRealm realm = new ExtendedPropertiesRealm("classpath:shiro-users.properties");
+		configuration.add(realm);
 	}
 }

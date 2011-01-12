@@ -2,12 +2,63 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd">
 
 	<head>
-		<title>Secure page</title>
+		<title>Login page</title>
+		<style type="text/css">
+			#tynamoLoginFormContainer {
+				background: url(${asset:classpath:org/tynamo/examples/federatedaccounts/img/login-bg.png}) no-repeat;
+				width:778px;
+				height:600px;
+				margin:0 auto;
+			}
+			
+			#tynamoLoginForm {
+				padding: 90px 110px;
+			}
+			
+			#tynamoLoginMessage {
+				color:red;
+				margin-bottom: 10px;	
+			}
+			
+			input {
+				font-size: 220%;
+			}
+			
+			input[type="text"], input[type="password"] {
+				font-size: 220%; width: 400px;
+			}
+			
+			#tynamoLoginContainer {
+				margin-bottom: 50px;
+			}
+			
+			#tynamoPasswordContainer {
+				margin-bottom: 50px;
+			}
+			
+			#tynamoRememberMeContainer {
+				margin-bottom: 40px;
+			}
+			
+			.tynamoMessage {
+				margin:0 auto;
+			}
+		</style>	
 	</head>
 
 	<body style="text-align:center;font-family:'lucida grande','lucida sans unicode','bitstream vera sans', 'trebuchet ms',arial,sans-serif;">
-		<h1>
-		Welcome ${currentUser.displayableName}! 
-		</h1>
+		<div class="tynamoMessage">
+			${message}
+		</div>
+		<t:security.notauthenticated>
+			<div>
+				Sign in as a Facebook user instead <t:federated.facebookSignIn/>
+			</div>
+			<t:security.loginform />
+			(You can use a localuser:local as credentials for a local account)
+		</t:security.notauthenticated>
+		<t:security.authenticated>
+			Welcome ${currentUser.displayableName}! 
+		</t:security.authenticated>
 	</body>
 </html>
