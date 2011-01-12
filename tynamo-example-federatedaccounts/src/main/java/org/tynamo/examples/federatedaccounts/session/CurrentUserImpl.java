@@ -34,8 +34,9 @@ public class CurrentUserImpl implements Serializable, CurrentUser {
 		lastName = facebookUser.getLastName();
 	}
 
-	public void merge(Object remoteAccount) {
-		if (remoteAccount instanceof com.restfb.types.User) merge((com.restfb.types.User) remoteAccount);
+	public void merge(Object account) {
+		if (account instanceof com.restfb.types.User) merge((com.restfb.types.User) account);
+		else username = account.toString();
 	}
 
 }
