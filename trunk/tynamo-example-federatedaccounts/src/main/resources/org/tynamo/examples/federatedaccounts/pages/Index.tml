@@ -58,7 +58,7 @@
 			(You can use a localuser:local as credentials for a local account)
 		</t:security.notauthenticated>
 		<t:security.authenticated>
-			Welcome ${currentUser.displayableName}! 
+			Welcome ${currentUser.displayableName}! <t:actionlink t:id="logout">Logout</t:actionlink>
 		</t:security.authenticated>
 	</body>
 </html>
