@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.tynamo.gae</groupId>
 	<artifactId>esxx-httpclient-gae</artifactId>
-	<name>Tynamo packaged ESSX httpclient support for GAE</name>
+	<name>Tynamo packaged ESXX httpclient support for GAE</name>
 	<packaging>jar</packaging>
 	<version>0.0.1-SNAPSHOT</version>
 	<description>Tynamo packaged httpclient support for Google App Engine from esxx.org</description>
