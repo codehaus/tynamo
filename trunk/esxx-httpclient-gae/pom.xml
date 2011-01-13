@@ -36,7 +36,22 @@
 			<scope>compile</scope>
 		</dependency>		
 	</dependencies>
-	
+
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<!-- Skip javadoc execution because it fails on: http://jira.codehaus.org/browse/MJAVADOC-274. There's package-private class, is that reason?
+					Anyway, javadoc is not needed -->
+					<artifactId>maven-javadoc-plugin</artifactId>
+					<configuration>
+						<skip>true</skip>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+
 	<distributionManagement>
 		<site>
 			<id>tynamo-site</id>
