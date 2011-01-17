@@ -130,21 +130,6 @@ public class Recipe
 		this.ingredients = ingredients;
 	}
 
-	private Set<Category> categories = new HashSet<Category>();
-
-	@OneToMany
-	@org.hibernate.annotations.Cascade(
-			{org.hibernate.annotations.CascadeType.ALL, org.hibernate.annotations.CascadeType.DELETE_ORPHAN})
-	public Set<Category> getCategories()
-	{
-		return categories;
-	}
-
-	public void setCategories(Set<Category> categories)
-	{
-		this.categories = categories;
-	}
-
 	public void addIngredient(Ingredient ingredient)
 	{
 		ingredient.setRecipe(this);
