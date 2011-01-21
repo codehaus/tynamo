@@ -22,34 +22,61 @@ import org.slf4j.Logger;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-import org.tynamo.jpa.internal.EntityPersistentFieldStrategy;
 import org.tynamo.jpa.internal.JPAEntityValueEncoder;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.PersistenceException;
-import javax.persistence.PersistenceUnitUtil;
 import javax.persistence.metamodel.EntityType;
 import javax.persistence.metamodel.IdentifiableType;
 import javax.persistence.metamodel.Metamodel;
+import javax.persistence.metamodel.SingularAttribute;
 
-public class JPAEntityValueEncoderTest extends IOCTestCase {
+
+/**
+ * Testing for the JPA entity value encoder. Based on tests from tapestry-hibernate
+ *
+ * @author Piero Sartini, Pierce T. Wetter, but mostly cribbed from tapestry-hibernate
+ */
+public class JPAEntityValueEncoderTest extends IOCTestCase
+{
+
+	//~ Instance fields ----------------------------------------------------------------------------
+
+	/**
+	 * Registry
+	 */
 	private Registry registry;
 
+	/**
+	 * PropertyAccess from tapestry
+	 */
 	private PropertyAccess access;
 
+	/**
+	 * TypeCoercer from tapestry
+	 */
 	private TypeCoercer typeCoercer;
 
+	//~ Methods ------------------------------------------------------------------------------------
+
+	/**
+	 * Run before any test in the class
+	 */
 	@BeforeClass
-	public void setup() {
+	public void setup()
+	{
 		registry = buildRegistry();
 
 		access = registry.getService(PropertyAccess.class);
 		typeCoercer = registry.getService(TypeCoercer.class);
 	}
 
+	/**
+	 * Run after all tests in the class
+	 */
 	@AfterClass
-	public void cleanup() {
+	public void cleanup()
+	{
 		registry.shutdown();
 
 		registry = null;
@@ -57,8 +84,13 @@ public class JPAEntityValueEncoderTest extends IOCTestCase {
 		typeCoercer = null;
 	}
 
-	//@Test
-	public void to_client_id_null() {
+	/**
+	 * Check for null primary key
+	 *
+	 * @Test
+	 */
+	public void to_client_id_null()
+	{
 		EntityManager entityManager = mockEntityManager();
 		Logger logger = mockLogger();
 
@@ -66,23 +98,33 @@ public class JPAEntityValueEncoderTest extends IOCTestCase {
 
 		SampleEntity entity = new SampleEntity();
 
-		JPAEntityValueEncoder<SampleEntity> encoder = new JPAEntityValueEncoder<SampleEntity>(SampleEntity.class,
-																							  entityManager, access, typeCoercer, logger);
+		JPAEntityValueEncoder<SampleEntity> encoder = new JPAEntityValueEncoder<SampleEntity>(
+				SampleEntity.class,
+				entityManager, access, typeCoercer, logger
+		);
 
-		try {
+		try
+		{
 			encoder.toClient(entity);
 			unreachable();
 		}
-		catch (IllegalStateException ex) {
-			assertMessageContains(ex, "Entity org.apache.tapestry5.internal.hibernate.SampleEntity",
-								  "has an id property of null");
+		catch (IllegalStateException ex)
+		{
+			assertMessageContains(
+					ex, "Entity org.apache.tapestry5.internal.hibernate.SampleEntity",
+					"has an id property of null"
+			);
 		}
 
 		verify();
 	}
 
+	/**
+	 * Check for not-found value
+	 */
 	@Test
-	public void to_value_not_found() {
+	public void to_value_not_found()
+	{
 		EntityManager entityManager = mockEntityManager();
 		Logger logger = mockLogger();
 
@@ -91,17 +133,21 @@ public class JPAEntityValueEncoderTest extends IOCTestCase {
 		EntityType<SampleEntity> type = newMock(EntityType.class);
 
 		EntityManagerFactory emf = newMock(EntityManagerFactory.class);
-		PersistenceUnitUtil puu = newMock(PersistenceUnitUtil.class);
 
 		IdentifiableType idType = newMock(IdentifiableType.class);
+
+		SingularAttribute idAttribute = newMock(SingularAttribute.class);
 		//Class idClass = newMock(Class.class);
 
-		expect(entityManager.getEntityManagerFactory()).andReturn(emf);
-		expect(emf.getPersistenceUnitUtil()).andReturn(puu);
+		// expect(entityManager.getEntityManagerFactory()).andReturn(emf);
 
 		expect(entityManager.getMetamodel()).andReturn(metamodel);
 
 		expect(metamodel.entity(SampleEntity.class)).andReturn(type);
+
+		expect(type.getId(Long.class)).andReturn(idAttribute);
+
+		expect(idAttribute.getName()).andReturn("id");
 
 		expect(type.getIdType()).andReturn(idType);
 		expect(idType.getJavaType()).andReturn(Long.class);
@@ -116,8 +162,10 @@ public class JPAEntityValueEncoderTest extends IOCTestCase {
 
 		SampleEntity entity = new SampleEntity();
 
-		JPAEntityValueEncoder<SampleEntity> encoder = new JPAEntityValueEncoder<SampleEntity>(SampleEntity.class,
-																							  entityManager, access, typeCoercer, logger);
+		JPAEntityValueEncoder<SampleEntity> encoder = new JPAEntityValueEncoder<SampleEntity>(
+				SampleEntity.class,
+				entityManager, access, typeCoercer, logger
+		);
 
 		assertNull(encoder.toValue("12345"));
 
@@ -125,7 +173,13 @@ public class JPAEntityValueEncoderTest extends IOCTestCase {
 
 	}
 
-	protected final EntityManager mockEntityManager() {
+	/**
+	 * Return a mock entity manager
+	 *
+	 * @return mock entity manager
+	 */
+	protected final EntityManager mockEntityManager()
+	{
 		return newMock(EntityManager.class);
 	}
-}
+} // end class JPAEntityValueEncoderTest
