@@ -1,6 +1,10 @@
 package org.tynamo.examples.federatedaccounts.services;
 
+import java.io.IOException;
+import java.util.Properties;
+
 import org.apache.shiro.realm.Realm;
+import org.apache.tapestry5.SymbolConstants;
 import org.apache.tapestry5.ioc.Configuration;
 import org.apache.tapestry5.ioc.MappedConfiguration;
 import org.apache.tapestry5.ioc.ServiceBinder;
@@ -18,6 +22,19 @@ import org.tynamo.shiro.extension.realm.text.ExtendedPropertiesRealm;
 
 @SubModule(value = { SecurityModule.class, FederatedAccountsModule.class })
 public class AppModule {
+	private static final String version;
+	static {
+		Properties moduleProperties = new Properties();
+		String aVersion = "unversioned-" + System.currentTimeMillis();
+		try {
+			moduleProperties.load(AppModule.class.getResourceAsStream("module.properties"));
+			aVersion = moduleProperties.getProperty("module.version");
+		} catch (IOException e) {
+			// ignore
+		}
+		version = aVersion;
+	}
+
 	public static void bind(ServiceBinder binder) {
 		binder.bind(FederatedAccountService.class, FederatedAccountServiceExample.class);
 	}
@@ -36,6 +53,7 @@ public class AppModule {
 	}
 
 	public static void contributeApplicationDefaults(MappedConfiguration<String, String> configuration) {
+		configuration.add(SymbolConstants.APPLICATION_VERSION, version);
 		configuration.add(SecuritySymbols.SHOULD_LOAD_INI_FROM_CONFIG_PATH, "true");
 
 		configuration.add(HostSymbols.HOSTNAME, "tynamo-federatedaccounts.tynamo.org");
