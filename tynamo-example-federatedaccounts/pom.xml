@@ -69,14 +69,6 @@
 							<name>tapestry.production-mode</name>
 							<value>false</value>
 						</systemProperty>
-						<systemProperty>
-							<name>facebook.clientid</name>
-							<value>needtohavesomevalue</value>
-						</systemProperty>
-						<systemProperty>
-							<name>facebook.clientsecret</name>
-							<value>needtohavesomevalue</value>
-						</systemProperty>
 					</systemProperties>
 				</configuration>
 			</plugin>
