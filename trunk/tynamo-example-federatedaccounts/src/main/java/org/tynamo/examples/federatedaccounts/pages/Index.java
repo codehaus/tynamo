@@ -18,15 +18,27 @@
  */
 package org.tynamo.examples.federatedaccounts.pages;
 
+import java.util.List;
+
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.apache.tapestry5.Block;
+import org.apache.tapestry5.annotations.InjectComponent;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.SessionState;
+import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.ApplicationStateManager;
 import org.apache.tapestry5.services.ExceptionReporter;
 import org.apache.tapestry5.services.Request;
 import org.tynamo.examples.federatedaccounts.session.CurrentUser;
+import org.tynamo.security.federatedaccounts.oauth.FacebookAccessToken;
+import org.tynamo.security.federatedaccounts.oauth.OauthAccessToken;
 import org.tynamo.security.services.SecurityService;
+
+import com.restfb.DefaultFacebookClient;
+import com.restfb.FacebookClient;
+import com.restfb.types.User;
 
 public class Index implements ExceptionReporter {
 
@@ -84,5 +96,25 @@ public class Index implements ExceptionReporter {
 		}
 
 		return this;
+	}
+
+	@InjectComponent
+	private Zone friendResults;
+
+	@Property
+	private List<User> friends;
+
+	@Property
+	private User friend;
+
+	@RequiresPermissions("facebook")
+	Block onActionFromListFriends() {
+		OauthAccessToken accessToken = securityService.getSubject().getPrincipals().oneByType(FacebookAccessToken.class);
+		// could check for expiration
+		FacebookClient facebookClient = new DefaultFacebookClient(accessToken.getToken());
+
+		friends = facebookClient.fetchConnection("me/friends", User.class).getData();
+		return friendResults.getBody();
+
 	}
 }
