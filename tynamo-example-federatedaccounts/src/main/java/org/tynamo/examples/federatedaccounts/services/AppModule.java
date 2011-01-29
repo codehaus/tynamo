@@ -3,16 +3,19 @@ package org.tynamo.examples.federatedaccounts.services;
 import java.io.IOException;
 import java.util.Properties;
 
+import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.realm.Realm;
 import org.apache.tapestry5.SymbolConstants;
 import org.apache.tapestry5.ioc.Configuration;
 import org.apache.tapestry5.ioc.MappedConfiguration;
 import org.apache.tapestry5.ioc.ServiceBinder;
+import org.apache.tapestry5.ioc.annotations.InjectService;
 import org.apache.tapestry5.ioc.annotations.SubModule;
 import org.apache.tapestry5.services.ApplicationStateContribution;
 import org.apache.tapestry5.services.ApplicationStateCreator;
 import org.tynamo.examples.federatedaccounts.session.CurrentUser;
 import org.tynamo.examples.federatedaccounts.session.CurrentUserImpl;
+import org.tynamo.examples.federatedaccounts.session.FederatedAccountsAuthorizingRealm;
 import org.tynamo.security.SecuritySymbols;
 import org.tynamo.security.federatedaccounts.HostSymbols;
 import org.tynamo.security.federatedaccounts.services.FederatedAccountService;
@@ -37,6 +40,8 @@ public class AppModule {
 
 	public static void bind(ServiceBinder binder) {
 		binder.bind(FederatedAccountService.class, FederatedAccountServiceExample.class);
+		binder.bind(AuthorizingRealm.class, FederatedAccountsAuthorizingRealm.class).withId(
+				FederatedAccountsAuthorizingRealm.class.getSimpleName());
 	}
 
 	@SuppressWarnings("rawtypes")
@@ -61,8 +66,9 @@ public class AppModule {
 		configuration.add(HostSymbols.HTTPCLIENT_ON_GAE, "true");
 	}
 
-	public static void contributeWebSecurityManager(Configuration<Realm> configuration) {
-		ExtendedPropertiesRealm realm = new ExtendedPropertiesRealm("classpath:shiro-users.properties");
-		configuration.add(realm);
+	public static void contributeWebSecurityManager(Configuration<Realm> configuration,
+			@InjectService("FederatedAccountsAuthorizingRealm") AuthorizingRealm authorizingRealm) {
+		configuration.add(new ExtendedPropertiesRealm("classpath:shiro-users.properties"));
+		configuration.add(authorizingRealm);
 	}
 }

@@ -59,6 +59,26 @@
 		</t:security.notauthenticated>
 		<t:security.authenticated>
 			Welcome ${currentUser.displayableName}! <t:actionlink t:id="logout">Logout</t:actionlink>
+			<div>
+				<t:security.haspermission permission="facebook">
+				<t:actionlink zone="friendResults" t:id="listFriends">Check who's my friend</t:actionlink>
+				<t:zone t:id="friendResults">
+					<t:if test="friends">
+						<h1>My Friends</h1>
+						<ul>
+						<t:loop source="friends" value="friend">
+							<li>${friend.name}</li>			
+						</t:loop>
+						</ul>
+					</t:if>
+				</t:zone>				
+				</t:security.haspermission>
+				<t:security.lackspermission permission="facebook">
+				Sorry, as a local user you have no friends. Sign in as a facebook user?
+				</t:security.lackspermission>
+			</div>
 		</t:security.authenticated>
+		<t:block t:id="friendsBlock">
+		</t:block>
 	</body>
 </html>
