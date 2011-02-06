@@ -7,7 +7,7 @@
 	<groupId>org.tynamo</groupId>
 	<artifactId>tynamo-parent</artifactId>
 	<packaging>pom</packaging>
-	<version>0.0.7</version>
+	<version>0.0.8-SNAPSHOT</version>
   <parent>
     <groupId>org.codehaus</groupId>
     <artifactId>codehaus-parent</artifactId>
@@ -85,9 +85,9 @@
 		</mailingList>
 	</mailingLists>
 	<scm>
-		<connection>scm:svn:http://svn.codehaus.org/tynamo/tags/tynamo-parent-0.0.7</connection>
-		<developerConnection>scm:svn:https://svn.codehaus.org/tynamo/tags/tynamo-parent-0.0.7</developerConnection>
-		<url>http://svn.tynamo.codehaus.org/tynamo/tags/tynamo-parent-0.0.7</url>
+		<connection>scm:svn:http://svn.codehaus.org/tynamo/trunk/tynamo-parent</connection>
+		<developerConnection>scm:svn:https://svn.codehaus.org/tynamo/trunk/tynamo-parent</developerConnection>
+		<url>http://svn.tynamo.codehaus.org/tynamo/trunk/tynamo-parent</url>
 	</scm>
 
 	<prerequisites>
