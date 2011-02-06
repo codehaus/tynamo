@@ -38,7 +38,7 @@
 		<developer>
 			<id>kaosko</id>
 			<name>Kalle Korhonen</name>
-			<email>kalle.o.korhonen@gmail.com</email>
+			<email>kaosko@apache.org</email>
 			<url>http://docs.codehaus.org/display/~kaosko</url>
 			<timezone>-8</timezone>
 		</developer>
@@ -48,6 +48,11 @@
 			<email>ps (-at-) sartini-its.com</email>
 			<url>http://www.pierosartini.eu</url>
 			<timezone>+1</timezone>
+		</developer>
+		<developer>
+			<id>piercew</id>
+			<name>Pierce T. Wetter</name>
+			<email>pierce (-at-) twinforces.com</email>
 		</developer>
 	</developers>
 	<licenses>
@@ -269,7 +274,7 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
 					<source>1.6</source>
-					<target>1.6</target>
+					<target>1.5</target>
 					<encoding>UTF-8</encoding>
 					<optimize>true</optimize>
 				</configuration>
