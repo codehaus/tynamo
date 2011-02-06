@@ -15,7 +15,7 @@
 	<parent>
 		<groupId>org.tynamo</groupId>
 		<artifactId>tynamo-parent</artifactId>
-		<version>0.0.6</version>
+		<version>0.0.7</version>
 	</parent>
 
 	<modules>
@@ -24,14 +24,6 @@
 		<module>tapestry-jpa-webapp</module>
 	</modules>
 	
-	<!-- Developers section inherited from the parent pom -->
-	<contributors>
-		<contributor>
-			<name>Pierce T. Wetter</name>
-			<email>pierce (-at-) twinforces.com</email>
-		</contributor>
-	</contributors>
-
 	<scm>
 		<connection>scm:svn:http://svn.codehaus.org/tynamo/trunk/tapestry-jpa-module</connection>
 		<developerConnection>scm:svn:https://svn.codehaus.org/tynamo/trunk/tapestry-jpa-module</developerConnection>
