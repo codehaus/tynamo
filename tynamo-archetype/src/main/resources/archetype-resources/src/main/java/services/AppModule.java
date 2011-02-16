@@ -31,7 +31,7 @@ public class AppModule
 		// locales to just "en" (English). As you add localised message catalogs and other assets,
 		// you can extend this list of locales (it's a comma seperated series of locale names;
 		// the first locale name is the default when there's no reasonable match).
-		configuration.add(SymbolConstants.SUPPORTED_LOCALES, "en, es_AR, pt");
+		configuration.add(SymbolConstants.SUPPORTED_LOCALES, "en, es");
 
 		// The factory default is true but during the early stages of an application
 		// overriding to false is a good idea. In addition, this is often overridden
