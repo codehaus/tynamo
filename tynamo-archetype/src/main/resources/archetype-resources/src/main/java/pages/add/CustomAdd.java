@@ -5,7 +5,7 @@ package ${package}.pages.add;
  *
  * @param <T>
  */
-public abstract class CustomAdd<T> extends org.tynamo.pages.Add {
+public abstract class CustomAdd<T> extends ${package}.pages.Add {
 
 	public abstract Class<T> getType();
 
