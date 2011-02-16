@@ -5,7 +5,7 @@ package ${package}.pages.edit;
  *
  * @param <T>
  */
-public abstract class CustomEdit<T> extends org.tynamo.pages.Edit {
+public abstract class CustomEdit<T> extends ${package}.pages.Edit {
 
 	public abstract Class<T> getType();
 

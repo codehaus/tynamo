@@ -5,7 +5,7 @@ package ${package}.pages.show;
  *
  * @param <T>
  */
-public abstract class CustomShow<T> extends org.tynamo.pages.Show {
+public abstract class CustomShow<T> extends ${package}.pages.Show {
 
 	public abstract Class<T> getType();
 
