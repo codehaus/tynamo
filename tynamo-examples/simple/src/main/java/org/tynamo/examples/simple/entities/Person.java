@@ -1,9 +1,8 @@
 package org.tynamo.examples.simple.entities;
 
+import org.tynamo.blob.RenderType;
 import org.tynamo.blob.TynamoBlobImpl;
 import org.tynamo.descriptor.annotation.BlobDescriptor;
-import org.tynamo.descriptor.annotation.PropertyDescriptor;
-import org.tynamo.descriptor.extension.BlobDescriptorExtension;
 import org.tynamo.descriptor.extension.TynamoBlob;
 
 import javax.persistence.*;
@@ -91,7 +90,7 @@ public class Person
 	 *
 	 * @return
 	 */
-	@BlobDescriptor(renderType = BlobDescriptorExtension.RenderType.LINK)
+	@BlobDescriptor(renderType = RenderType.LINK)
 	@Lob
 	@Column(length = 1048576)  // Use 1Mb maximum length. (MEDIUMBLOB in MySQL.)
 	public TynamoBlob getPhoto()
