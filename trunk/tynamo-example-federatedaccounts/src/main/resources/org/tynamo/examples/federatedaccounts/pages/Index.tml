@@ -52,7 +52,20 @@
 		</div>
 		<t:security.notauthenticated>
 			<div>
-				Sign in as a Facebook user instead <t:federated.facebookSignIn/>
+				<h3>Sign in as a Facebook user instead</h3>
+				<div>
+					<div style="float:left">demonstrating different windowmodes,&nbsp;</div> 		
+					<div style="float:left"> 
+						blank: <t:federated.facebookSignIn/>
+					</div>
+					<div style="float:left"> 
+						inline: <t:federated.facebookSignIn windowMode="inline"/>
+					</div>
+					<div style="float:left"> 
+						self: <t:federated.facebookSignIn windowMode="self"/>
+					</div>
+				</div>
+				<t:federated.oauthInlineFrame/>
 			</div>
 			<t:security.loginform />
 			(You can use localuser:local as credentials for a local account)

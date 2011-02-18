@@ -13,11 +13,12 @@ import org.apache.tapestry5.ioc.annotations.InjectService;
 import org.apache.tapestry5.ioc.annotations.SubModule;
 import org.apache.tapestry5.services.ApplicationStateContribution;
 import org.apache.tapestry5.services.ApplicationStateCreator;
+import org.apache.tapestry5.services.BaseURLSource;
 import org.tynamo.examples.federatedaccounts.session.CurrentUser;
 import org.tynamo.examples.federatedaccounts.session.CurrentUserImpl;
 import org.tynamo.examples.federatedaccounts.session.FederatedAccountsAuthorizingRealm;
 import org.tynamo.security.SecuritySymbols;
-import org.tynamo.security.federatedaccounts.HostSymbols;
+import org.tynamo.security.federatedaccounts.FederatedAccountSymbols;
 import org.tynamo.security.federatedaccounts.services.FederatedAccountService;
 import org.tynamo.security.federatedaccounts.services.FederatedAccountsModule;
 import org.tynamo.security.services.SecurityModule;
@@ -61,14 +62,24 @@ public class AppModule {
 		configuration.add(SymbolConstants.APPLICATION_VERSION, version);
 		configuration.add(SecuritySymbols.SHOULD_LOAD_INI_FROM_CONFIG_PATH, "true");
 
-		configuration.add(HostSymbols.HOSTNAME, "tynamo-federatedaccounts.tynamo.org");
-		configuration.add(HostSymbols.COMMITAFTER_OAUTH, "false");
-		configuration.add(HostSymbols.HTTPCLIENT_ON_GAE, "true");
+		configuration.add(FederatedAccountSymbols.COMMITAFTER_OAUTH, "false");
+		configuration.add(FederatedAccountSymbols.HTTPCLIENT_ON_GAE, "true");
 	}
 
 	public static void contributeWebSecurityManager(Configuration<Realm> configuration,
 			@InjectService("FederatedAccountsAuthorizingRealm") AuthorizingRealm authorizingRealm) {
 		configuration.add(new ExtendedPropertiesRealm("classpath:shiro-users.properties"));
 		configuration.add(authorizingRealm);
+	}
+
+	public static void contributeServiceOverride(MappedConfiguration<Class<?>, Object> configuration) {
+		// In T5.3, you can simply contribute symbols instead
+		BaseURLSource source = new BaseURLSource() {
+			@Override
+			public String getBaseURL(boolean secure) {
+				return String.format("%s://%s", secure ? "https" : "http", "tynamo-federatedaccounts.tynamo.org");
+			}
+		};
+		configuration.add(BaseURLSource.class, source);
 	}
 }
