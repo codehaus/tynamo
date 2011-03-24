@@ -8,11 +8,12 @@
 	<artifactId>tynamo-parent</artifactId>
 	<packaging>pom</packaging>
 	<version>0.0.9-SNAPSHOT</version>
-  <parent>
-    <groupId>org.codehaus</groupId>
-    <artifactId>codehaus-parent</artifactId>
-    <version>3</version>
-  </parent>
+
+	<parent>
+		<groupId>org.codehaus</groupId>
+		<artifactId>codehaus-parent</artifactId>
+		<version>3</version>
+	</parent>
 
 	<properties>
 		<tapestry-release-version>5.2.2</tapestry-release-version>
@@ -164,7 +165,7 @@
 
 	<issueManagement>
 		<system>JIRA</system>
-		<url>http://jira.codehaus.org/secure/project/BrowseProject.jspa?id=12041</url>
+		<url>http://jira.codehaus.org/browse/TYNAMO</url>
 	</issueManagement>
 
 	<build>
