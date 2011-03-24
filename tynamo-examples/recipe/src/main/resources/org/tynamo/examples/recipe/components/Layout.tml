@@ -40,7 +40,7 @@
 					<h2 class="accessibility">${message:navigationMenu}</h2>
 					<ul id="primary-nav" class="menuList">
 						<li class="selected">
-							<t:pagelink page="Index">${message:org.tynamo.i18n.home}</t:pagelink>
+							<t:pagelink page="Home">${message:org.tynamo.i18n.home}</t:pagelink>
 						</li>
 						<t:delegate to="navBlock" />
 				  </ul>

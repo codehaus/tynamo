@@ -2,7 +2,9 @@ package org.tynamo.examples.recipe.pages;
 
 import org.apache.tapestry5.annotations.Component;
 import org.apache.tapestry5.corelib.components.Grid;
+import org.tynamo.routing.annotations.At;
 
+@At("/{0}")
 public class List extends org.tynamo.pages.List {
 
 	@Component
