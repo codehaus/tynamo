@@ -1,8 +1,12 @@
 package org.tynamo.examples.recipe.pages;
 
+import org.tynamo.routing.annotations.At;
+
 /**
  * Start page of application recipe.
  */
-public class Index {
+@At("/")
+public class Home
+{
 
 }
