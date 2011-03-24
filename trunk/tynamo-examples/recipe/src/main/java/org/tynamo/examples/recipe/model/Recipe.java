@@ -14,6 +14,7 @@
 package org.tynamo.examples.recipe.model;
 
 import org.hibernate.validator.constraints.Length;
+import org.tynamo.blob.RenderType;
 import org.tynamo.blob.TynamoBlobImpl;
 import org.tynamo.descriptor.annotation.BlobDescriptor;
 import org.tynamo.descriptor.annotation.Collection;
@@ -28,7 +29,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-//@ListPageBeanModel(include = "title, description, instructions, date")
+@ListPageBeanModel(include = "title, description, instructions, date")
 public class Recipe
 {
 	private Long id;
@@ -143,7 +144,7 @@ public class Recipe
 	}
 
 	@Lob
-	@BlobDescriptor(renderType = BlobDescriptorExtension.RenderType.IMAGE)
+	@BlobDescriptor(renderType = RenderType.IMAGE)
 	public TynamoBlobImpl getPhoto()
 	{
 		return photo;
