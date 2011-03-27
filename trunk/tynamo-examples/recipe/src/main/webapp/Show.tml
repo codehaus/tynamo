@@ -26,6 +26,6 @@
 
 	<br/>
 
-	<t:beandisplay object="bean" model="beanModel" lean="true" t:mixins="tynamo/BeanContextPusher" property="object"/>
+	<t:beandisplay object="bean" lean="true" t:mixins="tynamo/Advisor"/>
 
 </t:layout>

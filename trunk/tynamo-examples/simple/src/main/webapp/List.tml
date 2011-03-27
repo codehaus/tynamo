@@ -11,7 +11,7 @@
 
 	<h1>${title}</h1>
 
-	<t:grid t:id="grid" source="source" row="bean" inPlace="true" add="__id__" reorder="__id__" model="beanModel">
+	<t:grid t:id="grid" source="source" row="bean" inPlace="true" add="__id__" reorder="__id__" t:mixins="tynamo/Advisor">
 		<p:__id__header>
 		</p:__id__header>
 		<p:__id__cell>
