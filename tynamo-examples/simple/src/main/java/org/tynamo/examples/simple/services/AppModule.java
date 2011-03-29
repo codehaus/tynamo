@@ -8,10 +8,10 @@ import org.apache.tapestry5.ioc.ServiceBinder;
 import org.apache.tapestry5.ioc.annotations.Contribute;
 import org.apache.tapestry5.ioc.annotations.SubModule;
 import org.apache.tapestry5.upload.services.UploadSymbols;
+import org.tynamo.PageType;
 import org.tynamo.builder.Builder;
 import org.tynamo.hibernate.TynamoHibernateSymbols;
 import org.tynamo.hibernate.services.TynamoHibernateModule;
-import org.tynamo.pages.PageType;
 import org.tynamo.services.TynamoCoreModule;
 import org.tynamo.services.TynamoPageRenderLinkSource;
 
