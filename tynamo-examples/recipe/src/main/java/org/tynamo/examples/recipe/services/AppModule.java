@@ -5,13 +5,16 @@ import org.apache.tapestry5.hibernate.HibernateModule;
 import org.apache.tapestry5.ioc.Configuration;
 import org.apache.tapestry5.ioc.MappedConfiguration;
 import org.apache.tapestry5.ioc.ServiceBinder;
+import org.apache.tapestry5.ioc.annotations.Contribute;
 import org.apache.tapestry5.ioc.annotations.SubModule;
 import org.apache.tapestry5.upload.services.UploadSymbols;
 import org.tynamo.builder.Builder;
 import org.tynamo.examples.recipe.RecipeBuilder;
 import org.tynamo.hibernate.TynamoHibernateSymbols;
 import org.tynamo.hibernate.services.TynamoHibernateModule;
+import org.tynamo.pages.PageType;
 import org.tynamo.services.TynamoCoreModule;
+import org.tynamo.services.TynamoPageRenderLinkSource;
 
 /**
  * This module is automatically included as part of the Tapestry IoC Registry, it's a good place to configure and extend
@@ -79,4 +82,14 @@ public class AppModule
 	{
 		configuration.add(org.tynamo.examples.recipe.model.Recipe.class, new RecipeBuilder());
 	}
+
+	@Contribute(TynamoPageRenderLinkSource.class)
+	public void contributeTynamoPageRenderLinkSource(MappedConfiguration<PageType, Class> configuration)
+	{
+		configuration.add(PageType.LIST, org.tynamo.examples.recipe.pages.List.class);
+		configuration.add(PageType.SHOW, org.tynamo.examples.recipe.pages.Show.class);
+		configuration.add(PageType.ADD, org.tynamo.examples.recipe.pages.Add.class);
+		configuration.add(PageType.EDIT, org.tynamo.examples.recipe.pages.Edit.class);
+	}
+
 }
