@@ -8,7 +8,7 @@ import org.apache.tapestry5.ioc.annotations.Contribute;
 import org.apache.tapestry5.ioc.annotations.SubModule;
 import org.apache.tapestry5.upload.services.UploadSymbols;
 import org.tynamo.builder.Builder;
-import org.tynamo.pages.PageType;
+import org.tynamo.PageType;
 import org.tynamo.services.TynamoPageRenderLinkSource;
 
 /**
