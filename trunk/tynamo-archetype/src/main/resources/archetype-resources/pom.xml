@@ -12,7 +12,7 @@
 <!-- #set( $D = '$' ) -->
 
 	<properties>
-		<tynamo-version>0.1.1-SNAPSHOT</tynamo-version>
+		<tynamo-version>0.2.0-SNAPSHOT</tynamo-version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
@@ -170,6 +170,17 @@
 			<releases>
 				<enabled>false</enabled>
 			</releases>
+		</repository>
+
+		<repository>
+			<id>howardlewisship</id>
+			<url>http://howardlewisship.com/snapshot-repository/</url>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
 		</repository>
 
 		<repository>
