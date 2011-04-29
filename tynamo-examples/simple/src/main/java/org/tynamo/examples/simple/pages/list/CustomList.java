@@ -12,4 +12,9 @@ public abstract class CustomList<T> extends org.tynamo.pages.List {
 	final protected void onActivate() throws Exception {
 		super.onActivate(getType());
 	}
+
+	@Override
+	final protected Object[] onPassivate() {
+		return new Object[0];
+	}
 }
