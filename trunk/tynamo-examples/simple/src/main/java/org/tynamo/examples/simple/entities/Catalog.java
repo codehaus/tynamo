@@ -15,8 +15,9 @@ import org.hibernate.annotations.IndexColumn;
 import org.hibernate.validator.constraints.Length;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
-import org.tynamo.descriptor.annotation.Collection;
-import org.tynamo.descriptor.annotation.beaneditor.ListPageBeanModel;
+import org.tynamo.descriptor.annotation.CollectionDescriptor;
+import org.tynamo.descriptor.annotation.beaneditor.BeanModel;
+import org.tynamo.descriptor.annotation.beaneditor.BeanModels;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -24,7 +25,9 @@ import java.util.List;
 
 
 @Entity
-@ListPageBeanModel()
+@BeanModels({
+		@BeanModel(reorder = "categories, name") // == @ReorderProperties("categories, name")
+})
 public class Catalog
 {
 	private Integer id;
@@ -70,7 +73,7 @@ public class Catalog
 	@OneToMany(cascade = javax.persistence.CascadeType.ALL)
 	@JoinColumn(name = "CATALOG_ID")
 	@IndexColumn(name = "CATEGORY_INDEX")
-	@Collection(child = true)
+	@CollectionDescriptor(child = true)
 	public List<Category> getCategories()
 	{
 		return categories;

@@ -11,14 +11,19 @@
  */
 package org.tynamo.examples.simple.entities;
 
-import org.tynamo.descriptor.annotation.beaneditor.ListPageBeanModel;
+import org.tynamo.PageType;
 import org.tynamo.descriptor.annotation.MethodDescriptor;
+import org.tynamo.descriptor.annotation.beaneditor.BeanModel;
+import org.tynamo.descriptor.annotation.beaneditor.BeanModels;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "things", uniqueConstraints = @UniqueConstraint(columnNames = "name"))
-@ListPageBeanModel(exclude = "id, text")
+@BeanModels({
+		@BeanModel(pageType = PageType.LIST, exclude = "id, text")
+})
+
 public class Thing
 {
 	private Integer id;

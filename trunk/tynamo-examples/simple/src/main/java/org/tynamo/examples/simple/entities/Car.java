@@ -1,7 +1,6 @@
 package org.tynamo.examples.simple.entities;
 
 import org.hibernate.validator.constraints.Length;
-import org.tynamo.descriptor.annotation.beaneditor.ListPageBeanModel;
 
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -9,7 +8,6 @@ import javax.persistence.OneToOne;
 import java.io.Serializable;
 
 @Entity
-@ListPageBeanModel
 public class Car implements Serializable
 {
 
