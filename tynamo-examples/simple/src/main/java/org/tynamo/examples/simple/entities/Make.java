@@ -1,6 +1,6 @@
 package org.tynamo.examples.simple.entities;
 
-import org.tynamo.descriptor.annotation.Collection;
+import org.tynamo.descriptor.annotation.CollectionDescriptor;
 import org.tynamo.descriptor.annotation.PropertyDescriptor;
 
 import javax.persistence.*;
@@ -42,7 +42,7 @@ public class Make implements Serializable
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "make")
 	@PropertyDescriptor(searchable = false)
-	@Collection(addExpression = "addModel", removeExpression = "removeModel")
+	@CollectionDescriptor(addExpression = "addModel", removeExpression = "removeModel")
 	public Set<Model> getModels() {
 		return models;
 	}

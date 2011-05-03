@@ -1,17 +1,20 @@
 package org.tynamo.examples.simple.entities;
 
-import javax.validation.constraints.NotNull;
-
-import org.tynamo.descriptor.annotation.beaneditor.ListPageBeanModel;
+import org.apache.tapestry5.beaneditor.ReorderProperties;
 import org.tynamo.descriptor.annotation.ClassDescriptor;
+import org.tynamo.descriptor.annotation.beaneditor.BeanModel;
+import org.tynamo.descriptor.annotation.beaneditor.BeanModels;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @ClassDescriptor(hasCyclicRelationships = true)
-@ListPageBeanModel()
+@BeanModels({
+		@BeanModel(reorder = "id, name, parent, children") // == @ReorderProperties("id, name, parent, children")
+})
 public class TreeNode
 {
 	private Integer id;

@@ -14,13 +14,14 @@
 package org.tynamo.examples.recipe.model;
 
 import org.hibernate.validator.constraints.Length;
+import org.tynamo.PageType;
 import org.tynamo.blob.RenderType;
 import org.tynamo.blob.TynamoBlobImpl;
 import org.tynamo.descriptor.annotation.BlobDescriptor;
-import org.tynamo.descriptor.annotation.Collection;
-import org.tynamo.descriptor.annotation.beaneditor.ListPageBeanModel;
+import org.tynamo.descriptor.annotation.CollectionDescriptor;
 import org.tynamo.descriptor.annotation.PropertyDescriptor;
-import org.tynamo.descriptor.extension.BlobDescriptorExtension;
+import org.tynamo.descriptor.annotation.beaneditor.BeanModel;
+import org.tynamo.descriptor.annotation.beaneditor.BeanModels;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -29,7 +30,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@ListPageBeanModel(include = "title, description, instructions, date")
+@BeanModels({
+		@BeanModel(pageType = PageType.LIST, include = "title, description, instructions, date")
+})
 public class Recipe
 {
 	private Long id;
@@ -117,7 +120,7 @@ public class Recipe
 	private Set<Ingredient> ingredients = new HashSet<Ingredient>();
 
 	@OneToMany(mappedBy = "recipe")
-	@Collection(addExpression = "addIngredient", removeExpression = "removeIngredient")
+	@CollectionDescriptor(addExpression = "addIngredient", removeExpression = "removeIngredient")
 	// The standard EJB annotations don't have the delete orphan option.
 	@org.hibernate.annotations.Cascade(
 			{org.hibernate.annotations.CascadeType.ALL, org.hibernate.annotations.CascadeType.DELETE_ORPHAN})
