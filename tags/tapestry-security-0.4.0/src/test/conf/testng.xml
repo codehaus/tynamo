@@ -1,0 +1,14 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Tapestry Security Integration Tests">
+
+	<test verbose="2" name="Integration" annotations="JDK">
+		<groups>
+			<define name="notLoggedIn"/>
+			<define name="loggedIn"/>
+		</groups>
+		<classes>
+			<class name="org.tynamo.security.TapestrySecurityIntegrationTest"/>
+		</classes>
+	</test>
+
+</suite>
