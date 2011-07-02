@@ -33,7 +33,7 @@ public class Thing {
 
 	private Integer number2;
 
-	private boolean flag;
+	// private boolean flag;
 
 	public Integer getId() {
 		return id;
@@ -62,20 +62,20 @@ public class Thing {
 		this.name = name;
 	}
 
-	/**
-	 * @return Returns the on.
-	 */
-	public boolean isFlag() {
-		return flag;
-	}
-
-	/**
-	 * @param on
-	 *          The on to set.
-	 */
-	public void setFlag(boolean on) {
-		this.flag = on;
-	}
+//	/**
+//	 * @return Returns the on.
+//	 */
+//	public boolean isFlag() {
+//		return flag;
+//	}
+//
+//	/**
+//	 * @param on
+//	 *          The on to set.
+//	 */
+//	public void setFlag(boolean on) {
+//		this.flag = on;
+//	}
 
 
 	public String getText() {
