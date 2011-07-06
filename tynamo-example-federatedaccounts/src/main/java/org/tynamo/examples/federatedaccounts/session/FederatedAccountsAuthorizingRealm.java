@@ -11,7 +11,7 @@ import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.slf4j.Logger;
 import org.tynamo.security.federatedaccounts.FederatedAccount;
-import org.tynamo.security.federatedaccounts.oauth.OauthAccessToken;
+import org.tynamo.security.federatedaccounts.oauth.tokens.FacebookAuthenticationToken;
 
 public class FederatedAccountsAuthorizingRealm extends AuthorizingRealm {
 	private Logger logger;
@@ -20,7 +20,7 @@ public class FederatedAccountsAuthorizingRealm extends AuthorizingRealm {
 		super(new MemoryConstrainedCacheManager());
 		this.logger = logger;
 		setName("oauthauthorizer");
-		setAuthenticationTokenClass(OauthAccessToken.class);
+		setAuthenticationTokenClass(FacebookAuthenticationToken.class);
 		setPermissionResolver(new WildcardPermissionResolver());
 	}
 

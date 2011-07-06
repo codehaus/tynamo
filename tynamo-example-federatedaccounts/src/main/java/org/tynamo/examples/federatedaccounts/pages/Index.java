@@ -32,8 +32,8 @@ import org.apache.tapestry5.services.ApplicationStateManager;
 import org.apache.tapestry5.services.ExceptionReporter;
 import org.apache.tapestry5.services.Request;
 import org.tynamo.examples.federatedaccounts.session.CurrentUser;
-import org.tynamo.security.federatedaccounts.oauth.FacebookAccessToken;
-import org.tynamo.security.federatedaccounts.oauth.OauthAccessToken;
+import org.tynamo.security.federatedaccounts.oauth.tokens.FacebookAuthenticationToken;
+import org.tynamo.security.federatedaccounts.oauth.tokens.OauthAuthenticationToken;
 import org.tynamo.security.services.SecurityService;
 
 import com.restfb.DefaultFacebookClient;
@@ -109,9 +109,9 @@ public class Index implements ExceptionReporter {
 
 	@RequiresPermissions("facebook")
 	Block onActionFromListFriends() {
-		OauthAccessToken accessToken = securityService.getSubject().getPrincipals().oneByType(FacebookAccessToken.class);
+		OauthAuthenticationToken accessToken = securityService.getSubject().getPrincipals().oneByType(FacebookAuthenticationToken.class);
 		// could check for expiration
-		FacebookClient facebookClient = new DefaultFacebookClient(accessToken.getToken());
+		FacebookClient facebookClient = new DefaultFacebookClient(accessToken.getToken().getToken());
 
 		friends = facebookClient.fetchConnection("me/friends", User.class).getData();
 		return friendResults.getBody();

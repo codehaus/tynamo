@@ -17,7 +17,6 @@ import org.apache.tapestry5.services.BaseURLSource;
 import org.tynamo.examples.federatedaccounts.session.CurrentUser;
 import org.tynamo.examples.federatedaccounts.session.CurrentUserImpl;
 import org.tynamo.examples.federatedaccounts.session.FederatedAccountsAuthorizingRealm;
-import org.tynamo.security.SecuritySymbols;
 import org.tynamo.security.federatedaccounts.FederatedAccountSymbols;
 import org.tynamo.security.federatedaccounts.services.FederatedAccountService;
 import org.tynamo.security.federatedaccounts.services.FederatedAccountsModule;
@@ -60,12 +59,11 @@ public class AppModule {
 
 	public static void contributeApplicationDefaults(MappedConfiguration<String, String> configuration) {
 		configuration.add(SymbolConstants.APPLICATION_VERSION, version);
-		configuration.add(SecuritySymbols.SHOULD_LOAD_INI_FROM_CONFIG_PATH, "true");
 
 		configuration.add(FederatedAccountSymbols.COMMITAFTER_OAUTH, "false");
 		configuration.add(FederatedAccountSymbols.HTTPCLIENT_ON_GAE, "true");
 	}
-
+	
 	public static void contributeWebSecurityManager(Configuration<Realm> configuration,
 			@InjectService("FederatedAccountsAuthorizingRealm") AuthorizingRealm authorizingRealm) {
 		configuration.add(new ExtendedPropertiesRealm("classpath:shiro-users.properties"));
