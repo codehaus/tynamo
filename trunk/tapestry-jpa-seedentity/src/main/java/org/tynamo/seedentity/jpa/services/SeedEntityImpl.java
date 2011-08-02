@@ -28,6 +28,9 @@ public class SeedEntityImpl implements SeedEntity {
 	@SuppressWarnings("unchecked")
 	public SeedEntityImpl(Logger logger, JPAEntityManagerSource entityManagerSource, JPATransactionManager transactionManager, List<Object> entities) throws InvocationTargetException, NoSuchMethodException {
 		EntityManager em = transactionManager.getEntityManager();
+		// FIXME do we need to handle transactions properly
+//		EntityTransaction tx = em.getTransaction();
+//		tx.begin();
 		EntityManagerFactory sessionFactory = entityManagerSource.getEntityManagerFactory();
 		for (Object object : entities) {
 			String uniquelyIdentifyingProperty = null;
@@ -51,6 +54,9 @@ public class SeedEntityImpl implements SeedEntity {
 			Root<?> root = query.from(entityType);
 			query.select((Selection)root);
 
+			// FIXME this is wrong - we should only add the singular attributes that are marked as unique
+			// see how Hibernate seedentity does this
+			// and absolutely filter out id attribute
 			for (SingularAttribute a : singularAttributes) {
 				query.where(cb.equal(root.get(a), BeanUtil.getProperty(object, a.getName())));
 			}
@@ -72,6 +78,8 @@ public class SeedEntityImpl implements SeedEntity {
 				continue;
 			}
 			em.persist(entity);
+			// FIXME need to flush for latter persist() to "see" the previous calls  
+			//em.flush();
 		}
 		transactionManager.commit();
 	}
