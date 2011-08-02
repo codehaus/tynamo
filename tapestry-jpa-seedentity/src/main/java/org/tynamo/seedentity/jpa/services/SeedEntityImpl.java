@@ -1,8 +1,11 @@
 package org.tynamo.seedentity.jpa.services;
 
-import java.lang.reflect.InvocationTargetException;
-import java.util.List;
-import java.util.Set;
+import org.apache.tapestry5.ioc.annotations.EagerLoad;
+import org.slf4j.Logger;
+import org.tynamo.jpa.JPAEntityManagerSource;
+import org.tynamo.jpa.JPATransactionManager;
+import org.tynamo.seedentity.jpa.SeedEntityIdentifier;
+import org.tynamo.seedentity.jpa.tools.BeanUtil;
 
 import javax.persistence.Entity;
 import javax.persistence.EntityManager;
@@ -10,18 +13,13 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import javax.persistence.criteria.Selection;
 import javax.persistence.metamodel.EntityType;
 import javax.persistence.metamodel.Metamodel;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.Type;
-
-import org.apache.tapestry5.ioc.annotations.EagerLoad;
-import org.slf4j.Logger;
-import org.tynamo.jpa.JPAEntityManagerSource;
-import org.tynamo.jpa.JPATransactionManager;
-import org.tynamo.seedentity.jpa.SeedEntityIdentifier;
-import org.tynamo.seedentity.jpa.tools.BeanUtil;
+import java.lang.reflect.InvocationTargetException;
+import java.util.List;
+import java.util.Set;
 
 @EagerLoad
 public class SeedEntityImpl implements SeedEntity {
@@ -52,7 +50,6 @@ public class SeedEntityImpl implements SeedEntity {
 			CriteriaBuilder cb = em.getCriteriaBuilder();
 			CriteriaQuery<?> query = cb.createQuery(entity.getClass());
 			Root<?> root = query.from(entityType);
-			query.select((Selection)root);
 
 			// FIXME this is wrong - we should only add the singular attributes that are marked as unique
 			// see how Hibernate seedentity does this
