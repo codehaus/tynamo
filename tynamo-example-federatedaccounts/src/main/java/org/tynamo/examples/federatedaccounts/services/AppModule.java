@@ -1,8 +1,5 @@
 package org.tynamo.examples.federatedaccounts.services;
 
-import java.io.IOException;
-import java.util.Properties;
-
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.realm.Realm;
 import org.apache.tapestry5.SymbolConstants;
@@ -14,29 +11,22 @@ import org.apache.tapestry5.ioc.annotations.SubModule;
 import org.apache.tapestry5.services.ApplicationStateContribution;
 import org.apache.tapestry5.services.ApplicationStateCreator;
 import org.apache.tapestry5.services.BaseURLSource;
+import org.tynamo.common.ModuleProperties;
 import org.tynamo.examples.federatedaccounts.session.CurrentUser;
 import org.tynamo.examples.federatedaccounts.session.CurrentUserImpl;
 import org.tynamo.examples.federatedaccounts.session.FederatedAccountsAuthorizingRealm;
 import org.tynamo.security.federatedaccounts.FederatedAccountSymbols;
+import org.tynamo.security.federatedaccounts.facebook.services.FacebookFederatedAccountsModule;
 import org.tynamo.security.federatedaccounts.services.FederatedAccountService;
 import org.tynamo.security.federatedaccounts.services.FederatedAccountsModule;
+import org.tynamo.security.federatedaccounts.twitter.services.TwitterFederatedAccountsModule;
 import org.tynamo.security.services.SecurityModule;
 import org.tynamo.shiro.extension.realm.text.ExtendedPropertiesRealm;
 
-@SubModule(value = { SecurityModule.class, FederatedAccountsModule.class })
+// all specified just because I'm often running the within IDE, not packaged in jars 
+@SubModule(value = { SecurityModule.class, FederatedAccountsModule.class, FacebookFederatedAccountsModule.class, TwitterFederatedAccountsModule.class  })
 public class AppModule {
-	private static final String version;
-	static {
-		Properties moduleProperties = new Properties();
-		String aVersion = "unversioned-" + System.currentTimeMillis();
-		try {
-			moduleProperties.load(AppModule.class.getResourceAsStream("module.properties"));
-			aVersion = moduleProperties.getProperty("module.version");
-		} catch (IOException e) {
-			// ignore
-		}
-		version = aVersion;
-	}
+	private static String version = ModuleProperties.getVersion(AppModule.class);
 
 	public static void bind(ServiceBinder binder) {
 		binder.bind(FederatedAccountService.class, FederatedAccountServiceExample.class);
