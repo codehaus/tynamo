@@ -119,8 +119,13 @@
 		</dependency>
 		<dependency>
 			<groupId>org.tynamo.security</groupId>
-			<artifactId>tynamo-federatedaccounts</artifactId>
-			<version>0.0.2-SNAPSHOT</version>
+			<artifactId>tynamo-federatedaccounts-facebook</artifactId>
+			<version>0.1.0-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>org.tynamo.security</groupId>
+			<artifactId>tynamo-federatedaccounts-twitter</artifactId>
+			<version>0.1.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>org.tynamo.gae</groupId>
