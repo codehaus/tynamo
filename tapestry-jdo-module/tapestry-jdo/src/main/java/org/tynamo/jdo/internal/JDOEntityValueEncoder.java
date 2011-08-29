@@ -35,7 +35,6 @@ import javax.jdo.metadata.TypeMetadata;
  * Value encoder for going to/from entities via their primary key. Currently only works if the
  * primary key is single valued.
  *
- * @author Pierce T. Wetter III, but really just cribbed from the tapestry-hibernate version
  */
 public final class JDOEntityValueEncoder<E> implements ValueEncoder<E>
 {

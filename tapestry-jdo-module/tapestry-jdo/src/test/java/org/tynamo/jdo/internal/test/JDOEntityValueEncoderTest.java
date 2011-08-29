@@ -30,7 +30,6 @@ import org.tynamo.jdo.internal.JDOEntityValueEncoder;
 /**
  * Testing for the JDO entity value encoder. Based on tests from tapestry-hibernate
  *
- * @author Piero Sartini, Pierce T. Wetter, but mostly cribbed from tapestry-hibernate
  */
 public class JDOEntityValueEncoderTest extends IOCTestCase
 {
