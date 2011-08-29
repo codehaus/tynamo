@@ -28,6 +28,10 @@
 	<inceptionYear>2004</inceptionYear>
 	<developers>
 		<developer>
+			<name>Alex Kotchnev</name>
+			<email>akochnev (-at-) troymaxventures.com</email>
+		</developer>
+		<developer>
 			<id>ascandroli</id>
 			<name>Alejandro Scandroli</name>
 			<organization>Amneris Web Solutions</organization>
