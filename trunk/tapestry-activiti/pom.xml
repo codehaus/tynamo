@@ -48,8 +48,7 @@
 		<dependency>
 			<groupId>org.apache.tapestry</groupId>
 			<artifactId>tapestry-core</artifactId>
-			<version>${tapestry-release-version}</version>
-			<scope>provided</scope>
+			<version>5.2.5</version>
 		</dependency>
 
 		<dependency>
@@ -70,4 +69,12 @@
 			<version>2.0.2-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
+
+	<repositories>
+		<repository>
+			<id>Activiti Repo</id>
+			<url>http://maven.alfresco.com/nexus/content/repositories/activiti</url>
+		</repository>
+	</repositories>
+
 </project>
