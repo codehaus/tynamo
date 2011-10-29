@@ -1,30 +1,38 @@
 package org.tynamo.activiti.services;
 
-import org.activiti.engine.RepositoryService;
-import org.activiti.engine.repository.DeploymentBuilder;
+import org.activiti.engine.ProcessEngine;
+import org.apache.tapestry5.ioc.Configuration;
 import org.apache.tapestry5.ioc.MappedConfiguration;
-import org.apache.tapestry5.ioc.annotations.Startup;
+import org.apache.tapestry5.ioc.Resource;
+import org.apache.tapestry5.ioc.ServiceBinder;
+import org.apache.tapestry5.ioc.annotations.Contribute;
+import org.apache.tapestry5.ioc.internal.util.ClasspathResource;
+import org.apache.tapestry5.ioc.services.ApplicationDefaults;
+import org.apache.tapestry5.ioc.services.SymbolProvider;
 import org.tynamo.activiti.ActivitiSymbols;
 import org.tynamo.jpa.JPASymbols;
 
 public class TestModule {
 
-	public static void contributeApplicationDefaults(MappedConfiguration<String, String> configuration) {
-		configuration.add(ActivitiSymbols.JOB_EXECUTOR_ACTIVATE, "false");
-		configuration.add(JPASymbols.PERSISTENCE_UNIT, "tapestry-activiti");
+	public static void bind(ServiceBinder binder) {
+		binder.bind(ServiceA.class).withId("customServiceName");
 	}
 
-	@Startup
-	public void autoDeployResources(RepositoryService repositoryService) {
+	@Contribute(SymbolProvider.class)
+	@ApplicationDefaults
+	public static void applicationSymbols(MappedConfiguration<String, String> symbols) {
+		symbols.add(ActivitiSymbols.JOB_EXECUTOR_ACTIVATE, "false");
+		symbols.add(JPASymbols.PERSISTENCE_UNIT, "tapestry-activiti");
+	}
 
-		DeploymentBuilder deploymentBuilder = repositoryService
-				.createDeployment()
-				.enableDuplicateFiltering()
-				.name("TapestryActivitiAutoDeployment");
-
-		deploymentBuilder.addClasspathResource("SimpleTest.bpmn20.xml");
-
-		deploymentBuilder.deploy();
+	@Contribute(ProcessEngine.class)
+	public void deployResources(Configuration<Resource> deploymentResources) {
+		/**
+		 * Remember: the name of the resource must end with "bpmn20.xml".
+		 * @see: BpmnDeployer.BPMN_RESOURCE_SUFFIX
+		 */
+		deploymentResources.add(new ClasspathResource("SimpleTest.bpmn20.xml"));
+		deploymentResources.add(new ClasspathResource("TapestryTest.bpmn20.xml"));
 	}
 
 }
