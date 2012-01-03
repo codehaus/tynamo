@@ -41,7 +41,6 @@ public class PersistedEntity implements Serializable
 		try
 		{            
 			return pm.getObjectById(this.persistentClass, id);
-			// return session.get(entityName, id);
 		}
 		catch (Exception ex)
 		{

@@ -19,8 +19,7 @@ import org.testng.annotations.Test;
 
 @Test(sequential = true, groups = "integration")
 public class TapestryJDOIntegrationTest extends SeleniumTestCase {
-	public TapestryJDOIntegrationTest() {
-		
+	public TapestryJDOIntegrationTest() {  
 	}
 	
 

@@ -23,7 +23,7 @@ import org.apache.tapestry5.internal.services.AbstractSessionPersistentFieldStra
 import org.apache.tapestry5.services.Request;
 
 /**
- * Persists Hibernate entities by storing their id in the session.
+ * Persists JDO entities by storing their id in the session.
  * 
  * @see PersistedEntity
  */

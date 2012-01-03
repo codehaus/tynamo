@@ -22,8 +22,6 @@ import org.apache.tapestry5.ioc.services.TypeCoercer;
 import org.slf4j.Logger;
 
 
-//import javax.persistence.metamodel.EntityType;
-
 import javax.jdo.PersistenceManager;
 
 import java.io.Serializable;
@@ -40,11 +38,6 @@ public final class JDOEntityValueEncoder<E> implements ValueEncoder<E>
 {
 
 	//~ Instance fields ----------------------------------------------------------------------------
-
-	/**
-	 * JPA MetaModel entityType
-	 */
-//	private final Class<E> entityType;
 
 	/**
 	 * JDO PersistenceManager to use
