@@ -31,8 +31,6 @@ import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
 import javax.jdo.spi.JDOImplHelper;
 
-//import javax.persistence.metamodel.EntityType;
-//import javax.persistence.metamodel.Metamodel;
 /**
  * Supplements the services defined by {@link eu.cuetech.tapestry.jdo.JDOCoreModule} with additional
  * services and configuration specific to Tapestry web application.
@@ -97,7 +95,9 @@ public class JDOModule {
 
 
 		for (Class<?> pcClz : pcClasses) {
+
 			final Class pcClass = pcClz;
+
 			ValueEncoderFactory factory = new ValueEncoderFactory() {
 
 				public ValueEncoder create(Class type) {

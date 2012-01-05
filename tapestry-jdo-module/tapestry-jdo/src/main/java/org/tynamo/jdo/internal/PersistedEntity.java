@@ -36,7 +36,7 @@ public class PersistedEntity implements Serializable
 		this.id = id;
 	}
 
-	Object restore(PersistenceManager pm)
+	public Object restore(PersistenceManager pm)
 	{
 		try
 		{            
