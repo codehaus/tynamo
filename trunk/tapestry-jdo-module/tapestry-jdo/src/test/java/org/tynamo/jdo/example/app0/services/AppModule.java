@@ -24,7 +24,7 @@ import org.tynamo.jdo.JDOModule;
 import org.tynamo.jdo.JDOSymbols;
 import org.tynamo.jdo.JDOTransactionAdvisor;
 
-//@SubModule(JDOModule.class)
+@SubModule(JDOModule.class)
 public class AppModule
 {
 	public static void bind(ServiceBinder binder)
