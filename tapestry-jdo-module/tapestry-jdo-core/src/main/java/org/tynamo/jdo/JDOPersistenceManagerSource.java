@@ -26,17 +26,16 @@ import javax.jdo.PersistenceManagerFactory;
  * The service's configuration is a {@linkplain org.apache.tapestry5.ioc.services.ChainBuilder chain
  * of command} of configurator objects.
  */
-// @UsesOrderedConfiguration(org.apache.tapestry5.hibernate.HibernateConfigurer.class)
 public interface JDOPersistenceManagerSource
 {
 	/**
-	 * Creates a new session using the {@link #getEntityManagerFactory() EntityManagerFactory}
+	 * Creates a new persistence manager using the {@link #getPersistenceManagerFactory() 
 	 * created at service startup.
 	 */
 	PersistenceManager create();
 
 	/**
-	 * Returns the EntityManagerFactory from which JPA entity managers are created.
+	 * Returns the PersistenceManagerFactory from which JDO entity managers are created.
 	 */
 	PersistenceManagerFactory getPersistenceManagerFactory();
 }

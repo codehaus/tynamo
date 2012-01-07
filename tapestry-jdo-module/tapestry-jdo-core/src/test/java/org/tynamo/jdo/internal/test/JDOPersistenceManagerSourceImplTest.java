@@ -26,8 +26,6 @@ import org.tynamo.jdo.internal.JDOPersistenceManagerSourceImpl;
 import javax.jdo.PersistenceManager;
 import javax.jdo.metadata.TypeMetadata;
 
-//import javax.persistence.metamodel.EntityType;
-
 public class JDOPersistenceManagerSourceImplTest extends IOCTestCase {
 	private final Logger log = LoggerFactory.getLogger("tapestry.jdo.JDOPersistenceManagerSourceTest");
 

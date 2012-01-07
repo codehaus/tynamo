@@ -14,11 +14,10 @@
 
 package org.tynamo.jdo.internal;
 
+import java.util.Collection;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.internal.util.InternalUtils;
 import org.apache.tapestry5.ioc.internal.util.MessagesImpl;
-
-import java.util.Collection;
 
 public class JDOCoreMessages {
     private static final Messages MESSAGES = MessagesImpl.forClass(JDOCoreMessages.class);
