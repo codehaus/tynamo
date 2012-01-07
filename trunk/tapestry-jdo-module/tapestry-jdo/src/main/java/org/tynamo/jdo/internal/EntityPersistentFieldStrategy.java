@@ -15,10 +15,7 @@
 package org.tynamo.jdo.internal;
 
 import java.io.Serializable;
-import javax.jdo.JDOHelper;
 import javax.jdo.PersistenceManager;
-
-
 import org.apache.tapestry5.internal.services.AbstractSessionPersistentFieldStrategy;
 import org.apache.tapestry5.services.Request;
 
@@ -42,9 +39,11 @@ public class EntityPersistentFieldStrategy extends AbstractSessionPersistentFiel
 	protected Object convertApplicationValueToPersisted(Object newValue)
 	{
 			Class entityName = newValue.getClass();
-			Serializable id = (Serializable) JDOHelper.getObjectId(newValue);
+			Serializable id = (Serializable) persistenceManager.getObjectId(newValue);
+                        if (id==null) {
+                            throw new IllegalArgumentException(JDOMessages.entityNotAttached(newValue));
+                        }
 			return new PersistedEntity(entityName, id);
-
 	}
 
 	@Override

@@ -8,74 +8,58 @@ import org.tynamo.jdo.example.app0.entities.User;
 /**
  * Demos the CommitAfter annotation on component methods.
  */
-public class CommitAfterDemo
-{
-	private User user;
+public class CommitAfterDemo {
 
-	void onActivate(User user)
-	{
-		this.user = user;
-	}
+    private User user;
 
-	Object onPassivate()
-	{
-		return user;
-	}
+    void onActivate(User user) {
+        this.user = user;
+    }
 
-	public User getUser()
-	{
-		return user;
-	}
+    Object onPassivate() {
+        return user;
+    }
 
-	public void setUser(User user)
-	{
-		this.user = user;
-	}
+    public User getUser() {
+        return user;
+    }
 
-	@CommitAfter
-	void onChangeName()
-	{
-		user.setFirstName("Frank");
-	}
+    public void setUser(User user) {
+        this.user = user;
+    }
 
-	@CommitAfter
-	void doChangeNameWithRuntimeException()
-	{
-		user.setFirstName("Bill");
+    @CommitAfter
+    void onChangeName() {
+        user.setFirstName("Frank");
+    }
 
-		throw new RuntimeException("To avoid commit.");
-	}
+    @CommitAfter
+    void doChangeNameWithRuntimeException() {
+        user.setFirstName("Bill");
 
-	void onChangeNameWithRuntimeException()
-	{
-		try
-		{
-			doChangeNameWithRuntimeException();
-		}
-		catch (Exception ex)
-		{
-			// Ignore
-		}
-	}
+        throw new RuntimeException("To avoid commit.");
+    }
 
-	@CommitAfter
-	void doChangeNameWithCheckedException() throws SQLException
+    void onChangeNameWithRuntimeException() {
+        try {
+            doChangeNameWithRuntimeException();
+        } catch (Exception ex) {
+            // Ignore
+        }
+    }
 
-	{
-		user.setFirstName("Troy");
+    @CommitAfter
+    void doChangeNameWithCheckedException() throws SQLException {
+        user.setFirstName("Troy");
 
-		throw new SQLException("Doesn't matter.");
-	}
+        throw new SQLException("Doesn't matter.");
+    }
 
-	void onChangeNameWithCheckedException()
-	{
-		try
-		{
-			doChangeNameWithCheckedException();
-		}
-		catch (Exception ex)
-		{
-			// Ignore
-		}
-	}
+    void onChangeNameWithCheckedException() {
+        try {
+            doChangeNameWithCheckedException();
+        } catch (Exception ex) {
+            // Ignore
+        }
+    }
 }
