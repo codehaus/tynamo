@@ -15,29 +15,26 @@
 package org.tynamo.jdo.internal;
 
 
-import org.tynamo.jdo.JDOPersistenceManagerSource;
-import org.apache.tapestry5.ioc.services.RegistryShutdownListener;
-import org.slf4j.Logger;
-
+import javax.jdo.JDOHelper;
 import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
-import javax.jdo.JDOHelper;
+import org.apache.tapestry5.ioc.services.RegistryShutdownListener;
+import org.slf4j.Logger;
+import org.tynamo.jdo.JDOPersistenceManagerSource;
 
 public class JDOPersistenceManagerSourceImpl implements JDOPersistenceManagerSource, RegistryShutdownListener {
 	private final PersistenceManagerFactory persistenceManagerFactory;
 
-	public JDOPersistenceManagerSourceImpl(Logger logger, String persistenceUnit) {
+	public JDOPersistenceManagerSourceImpl(Logger logger, String pmfName) {
 		long startTime = System.currentTimeMillis();
 
 		long configurationComplete = System.currentTimeMillis();
 
-		persistenceManagerFactory = JDOHelper.getPersistenceManagerFactory(persistenceUnit);				
+		persistenceManagerFactory = JDOHelper.getPersistenceManagerFactory(pmfName);				
 
 		long factoryCreated = System.currentTimeMillis();
 
 		logger.info(JDOCoreMessages.startupTiming(configurationComplete - startTime, factoryCreated - startTime));
-
-		// logger.info(JDOCoreMessages.entityCatalog(sessionFactory.getAllClassMetadata().keySet()));
 	}
 
 	public PersistenceManager create() {

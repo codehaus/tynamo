@@ -15,7 +15,6 @@
 package org.tynamo.jdo;
 
 import javax.jdo.PersistenceManager;
-
 import org.apache.tapestry5.ioc.MappedConfiguration;
 import org.apache.tapestry5.ioc.OrderedConfiguration;
 import org.apache.tapestry5.ioc.ScopeConstants;
@@ -28,14 +27,13 @@ import org.apache.tapestry5.ioc.services.PerthreadManager;
 import org.apache.tapestry5.ioc.services.PropertyShadowBuilder;
 import org.apache.tapestry5.ioc.services.RegistryShutdownHub;
 import org.slf4j.Logger;
-
 import org.tynamo.jdo.internal.JDOPersistenceManagerSourceImpl;
 import org.tynamo.jdo.internal.JDOTransactionAdvisorImpl;
 import org.tynamo.jdo.internal.JDOTransactionManagerImpl;
 
 /**
- * Defines core services that support initialization of Hibernate and access to the Hibernate
- * {@link javax.persistence.EntityManager}.
+ * Defines core services that support initialization of JDO and access to the JDO 
+ * {@link javax.jdo.PersistenceManager}.
  */
 @SuppressWarnings( { "JavaDoc" })
 @Marker(JDOCore.class)
@@ -87,12 +85,12 @@ public class JDOCoreModule
 	public static PersistenceManager buildPersistenceManager(JDOTransactionManager transactionManager,
 	        PropertyShadowBuilder propertyShadowBuilder)
 	{
-		// Here's the thing: the tapestry.hibernate.Session class doesn't have to be per-thread,
+		// Here's the thing: the javax.jdo.PersistenceManager class doesn't have to be per-thread,
 		// since
-		// it will invoke getSession() on the JDOSessionManager service (which is per-thread).
+		// it will invoke getPersistenceManager() on the JDO Persistence manager service (which is per-thread).
 		// On
 		// first invocation per request,
-		// this forces the HSM into existence (which creates the session and begins the
+		// this forces the JDO Persistence manager into existence (which creates the session and begins the
 		// transaction).
 		// Thus we don't actually create
 		// a session until we first try to access it, then the session continues to exist for the
@@ -103,9 +101,9 @@ public class JDOCoreModule
 	}
 
 	public static JDOPersistenceManagerSource buildJDOEntityManagerSource(Logger logger,
-	        @Inject @Symbol(JDOSymbols.PERSISTENCE_UNIT) String persistenceUnit, RegistryShutdownHub hub)
+	        @Inject @Symbol(JDOSymbols.PMF_NAME) String pmfName, RegistryShutdownHub hub)
 	{
-		JDOPersistenceManagerSourceImpl hss = new JDOPersistenceManagerSourceImpl(logger, persistenceUnit);
+		JDOPersistenceManagerSourceImpl hss = new JDOPersistenceManagerSourceImpl(logger, pmfName);
 
 		hub.addRegistryShutdownListener(hss);
 

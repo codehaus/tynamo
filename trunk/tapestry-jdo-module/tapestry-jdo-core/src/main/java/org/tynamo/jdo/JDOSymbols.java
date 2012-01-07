@@ -11,28 +11,30 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package org.tynamo.jdo;
 
 /**
  * Configuration symbols, for use with contributions to
  * {@link org.apache.tapestry5.ioc.services.ApplicationDefaults}.
- * 
+ *
  * @since 5.1.0.0
  */
-public class JDOSymbols
-{
-	/**
-	 * If "true", then Hibernate will be started up at application launch, rather than lazily.
-	 */
-	public static final String EARLY_START_UP = "tapestry.jdo.early-startup";
+public class JDOSymbols {
 
-
-	/**
-	 * If true (the default), then {@link org.apache.tapestry5.ValueEncoder}s are automatically
-	 * created for each entity. Override to "false" to handle entity value encoding explicitly.
-	 */
-	public static final String PROVIDE_ENTITY_VALUE_ENCODERS = "tapestry.jdo.provide-entity-value-encoders";
-    
-    public static final String PERSISTENCE_UNIT = "tapestry.jdo.persistence-unit";
+    /**
+     * If "true", then JDO will be started up at application launch,
+     * rather than lazily.
+     */
+    public static final String EARLY_START_UP = "tapestry.jdo.early-startup";
+    /**
+     * If true (the default), then {@link org.apache.tapestry5.ValueEncoder}s
+     * are automatically created for each entity. Override to "false" to handle
+     * entity value encoding explicitly.
+     */
+    public static final String PROVIDE_ENTITY_VALUE_ENCODERS = "tapestry.jdo.provide-entity-value-encoders";
+    /**
+     * The name of the persistence manager factory as defined in jdoconfig.xml
+     * or other JDO configuration
+     */
+    public static final String PMF_NAME = "tapestry.jdo.pmf-name";
 }

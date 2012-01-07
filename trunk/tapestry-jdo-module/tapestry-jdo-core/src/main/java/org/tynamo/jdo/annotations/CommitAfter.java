@@ -23,12 +23,11 @@ import java.lang.annotation.Target;
 
 /**
  * Marks a method of a service (or a component method) as transactional: the active transaction
- * should {@linkplain org.apache.tapestry5.hibernate.HibernateSessionManager#commit() commit} after
+ * should {@linkplain javax.jdo.PersistenceManager#commit() commit} after
  * invoking the method. Runtime exceptions will abort the transaction, checked exceptions will
  * <em>also commit</em> the transaction.
  * 
- * @see org.tynamo.jpa.JPATransactionAdvisor
- * @see org.tynamo.jpa.JPATransactionDecorator
+ * @see org.tynamo.jdo.JDOTransactionAdvisor
  */
 @Target(METHOD)
 @Retention(RUNTIME)

@@ -16,10 +16,7 @@ package org.tynamo.jdo.internal;
 
 import javax.jdo.PersistenceManager;
 import javax.jdo.Transaction;
-
-
 import org.apache.tapestry5.ioc.services.ThreadCleanupListener;
-
 import org.tynamo.jdo.JDOPersistenceManagerSource;
 import org.tynamo.jdo.JDOTransactionManager;
 
@@ -38,7 +35,6 @@ public class JDOTransactionManagerImpl implements JDOTransactionManager, ThreadC
 
 	private void startNewTransaction()
 	{
-		// transaction = session.beginTransaction();
 		transaction = persistenceManager.currentTransaction();
 		transaction.begin();
 	}
@@ -62,7 +58,7 @@ public class JDOTransactionManagerImpl implements JDOTransactionManager, ThreadC
 
 	/**
 	 * Rollsback the transaction at the end of the request, then closes the session. This means that
-	 * any uncommitted changes are lost; code should inject the HSM and invoke {@link #commit()}
+	 * any uncommitted changes are lost; code should inject the JDO Persistence Manager and invoke {@link #commit()}
 	 * after making any changes, if they should persist.
 	 */
 	public void threadDidCleanup()

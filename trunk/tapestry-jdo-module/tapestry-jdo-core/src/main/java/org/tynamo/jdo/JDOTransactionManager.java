@@ -31,8 +31,8 @@ import javax.jdo.PersistenceManager;
 public interface JDOTransactionManager
 {
 	/**
-	 * Gets the active session for this request, creating it as necessary. When the session is first
-	 * created, a transaction is started.
+	 * Gets the active persistent manager for this request, creating it as necessary. 
+         * When the session is first created, a transaction is started.
 	 * 
 	 * @return the request's persistenceManager
 	 * @see JDOEntityManagerSource

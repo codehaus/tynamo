@@ -14,14 +14,13 @@
 
 package org.tynamo.jdo.internal;
 
-import org.tynamo.jdo.JDOTransactionManager;
-import org.tynamo.jdo.JDOTransactionAdvisor;
-import org.tynamo.jdo.annotations.CommitAfter;
+import java.lang.reflect.Method;
 import org.apache.tapestry5.ioc.Invocation;
 import org.apache.tapestry5.ioc.MethodAdvice;
 import org.apache.tapestry5.ioc.MethodAdviceReceiver;
-
-import java.lang.reflect.Method;
+import org.tynamo.jdo.JDOTransactionAdvisor;
+import org.tynamo.jdo.JDOTransactionManager;
+import org.tynamo.jdo.annotations.CommitAfter;
 
 public class JDOTransactionAdvisorImpl implements JDOTransactionAdvisor {
     private final JDOTransactionManager manager;
@@ -42,7 +41,6 @@ public class JDOTransactionAdvisorImpl implements JDOTransactionAdvisor {
             }
 
             // For success or checked exception, commit the transaction.
-
             manager.commit();
         }
     };
