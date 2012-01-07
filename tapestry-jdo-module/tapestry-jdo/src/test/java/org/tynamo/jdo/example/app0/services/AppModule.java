@@ -35,7 +35,7 @@ public class AppModule
 	public static void contributeApplicationDefaults(MappedConfiguration<String, String> configuration)
 	{
 		configuration.add(SymbolConstants.PRODUCTION_MODE, "false");
-		configuration.add(JDOSymbols.PERSISTENCE_UNIT, "tapestryjdotest");
+		configuration.add(JDOSymbols.PMF_NAME, "tapestryjdotest");
 	}
 
 	@Match("*DAO")

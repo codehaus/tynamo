@@ -11,59 +11,44 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package org.tynamo.jdo.internal;
 
 import org.apache.tapestry5.model.MutableComponentModel;
-import org.apache.tapestry5.services.ClassTransformation;
-import org.apache.tapestry5.services.ComponentClassTransformWorker;
-import org.apache.tapestry5.services.ComponentMethodAdvice;
-import org.apache.tapestry5.services.ComponentMethodInvocation;
-import org.apache.tapestry5.services.TransformMethod;
-import org.apache.tapestry5.services.TransformMethodSignature;
-
+import org.apache.tapestry5.services.*;
 import org.tynamo.jdo.JDOTransactionManager;
 import org.tynamo.jdo.annotations.CommitAfter;
 
 /**
- * Searches for methods that have the {@link CommitAfter} annotation and adds logic around the
- * method to commit or abort the transaction.
+ * Searches for methods that have the {@link CommitAfter} annotation and adds
+ * logic around the method to commit or abort the transaction.
  */
-public class CommitAfterWorker implements ComponentClassTransformWorker
-{
-	private final JDOTransactionManager manager;
+public class CommitAfterWorker implements ComponentClassTransformWorker {
 
-	private final ComponentMethodAdvice advice = new ComponentMethodAdvice()
-	{
-		public void advise(ComponentMethodInvocation invocation)
-		{
-			try
-			{
-				invocation.proceed();
+    private final JDOTransactionManager manager;
+    private final ComponentMethodAdvice advice = new ComponentMethodAdvice() {
 
-				// Success or checked exception:
+        public void advise(ComponentMethodInvocation invocation) {
+            try {
+                invocation.proceed();
 
-				manager.commit();
-			}
-			catch (RuntimeException ex)
-			{
-				manager.abort();
+                // Success or checked exception:
 
-				throw ex;
-			}
-		}
-	};
+                manager.commit();
+            } catch (RuntimeException ex) {
+                manager.abort();
 
-	public CommitAfterWorker(JDOTransactionManager manager)
-	{
-		this.manager = manager;
-	}
+                throw ex;
+            }
+        }
+    };
 
-	public void transform(ClassTransformation transformation, MutableComponentModel model)
-	{
-		for (TransformMethod sig : transformation.matchMethodsWithAnnotation(CommitAfter.class))
-		{
-            sig.addAdvice(advice);			
-		}
-	}
+    public CommitAfterWorker(JDOTransactionManager manager) {
+        this.manager = manager;
+    }
+
+    public void transform(ClassTransformation transformation, MutableComponentModel model) {
+        for (TransformMethod sig : transformation.matchMethodsWithAnnotation(CommitAfter.class)) {
+            sig.addAdvice(advice);
+        }
+    }
 }

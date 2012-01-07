@@ -25,135 +25,137 @@ import org.slf4j.Logger;
 import javax.jdo.PersistenceManager;
 
 import java.io.Serializable;
+import javax.jdo.JDOObjectNotFoundException;
 import javax.jdo.metadata.MemberMetadata;
 
 /**
- * Value encoder for going to/from entities via their primary key. Currently only works if the
- * primary key is single valued.
+ * Value encoder for going to/from entities via their primary key. Currently
+ * only works if the primary key is single valued.
  *
  */
 public final class JDOEntityValueEncoder<E> implements ValueEncoder<E> {
 
-	//~ Instance fields ----------------------------------------------------------------------------
-	/**
-	 * JDO PersistenceManager to use
-	 */
-	private final PersistenceManager pm;
-	/**
-	 * Tapestry TypeCoercer
-	 */
-	private final TypeCoercer typeCoercer;
-	/**
-	 * A logger
-	 */
-	private final Logger logger;
-	/**
-	 * Class of the entity
-	 */
-	private final Class persistenceCapableClass;
-	/**
-	 * The Object ID class 
-	 */
-	private final Class objectIdClass;
-	private final String idPropertyName;
-	private final PropertyAdapter propertyAdapter;
+    //~ Instance fields ----------------------------------------------------------------------------
+    /**
+     * JDO PersistenceManager to use
+     */
+    private final PersistenceManager pm;
+    /**
+     * Tapestry TypeCoercer
+     */
+    private final TypeCoercer typeCoercer;
+    /**
+     * A logger
+     */
+    private final Logger logger;
+    /**
+     * Class of the entity
+     */
+    private final Class persistenceCapableClass;
+    /**
+     * The Object ID class
+     */
+    private final Class objectIdClass;
+    private final String idPropertyName;
+    private final PropertyAdapter propertyAdapter;
 
-	//~ Constructors -------------------------------------------------------------------------------
-	/**
-	 * Creates a new JDOEntityValueEncoder object.
-	 *
-	 * @param pcClass    Class for entity
-	 * @param pm             EntityManager to use
-	 * @param propertyAccess PropertyAccess from tapestry
-	 * @param typeCoercer    typeCoercer from tapestry
-	 * @param logger         Logger to use
-	 */
-	public JDOEntityValueEncoder(
-			Class<E> pcClass, PersistenceManager pm, PropertyAccess propertyAccess,
-			TypeCoercer typeCoercer, Logger logger) {
-		this.pm = pm;
+    //~ Constructors -------------------------------------------------------------------------------
+    /**
+     * Creates a new JDOEntityValueEncoder object.
+     *
+     * @param pcClass Class for entity
+     * @param pm EntityManager to use
+     * @param propertyAccess PropertyAccess from tapestry
+     * @param typeCoercer typeCoercer from tapestry
+     * @param logger Logger to use
+     */
+    public JDOEntityValueEncoder(
+            Class<E> pcClass, PersistenceManager pm, PropertyAccess propertyAccess,
+            TypeCoercer typeCoercer, Logger logger) {
+        this.pm = pm;
 
-		this.typeCoercer = typeCoercer;
-		this.logger = logger;
-		this.persistenceCapableClass = pcClass;
-		this.objectIdClass = pm.getObjectIdClass(pcClass);
+        this.typeCoercer = typeCoercer;
+        this.logger = logger;
+        this.persistenceCapableClass = pcClass;
+        this.objectIdClass = pm.getObjectIdClass(pcClass);
 
-		this.idPropertyName = findIdPropertyName(pm, pcClass);
+        this.idPropertyName = findIdPropertyName(pm, pcClass);
 
-		this.propertyAdapter = propertyAccess.getAdapter(pcClass).getPropertyAdapter(idPropertyName);
-	}
+        this.propertyAdapter = propertyAccess.getAdapter(pcClass).getPropertyAdapter(idPropertyName);
+    }
 
-	//~ Methods ------------------------------------------------------------------------------------
-	@Override
-	public String toClient(E value) {
+    //~ Methods ------------------------------------------------------------------------------------
+    @Override
+    public String toClient(E value) {
 
-		if (value == null) {
-			return null;
-		}
+        if (value == null) {
+            return null;
+        }
 
-		Object id = propertyAdapter.get(value);
+        Object id = propertyAdapter.get(value);
 
 
-		if (id == null) {
-			throw new IllegalStateException(
-					String.format(
-					"PersistenceCapable %s has an id of null; this probably means that it has not been persisted yet.",
-					value));
-		}
+        if (id == null) {
+            throw new IllegalStateException(
+                    String.format(
+                    "PersistenceCapable %s has an id of null; this probably means that it has not been persisted yet.",
+                    value));
+        }
 
-		return this.typeCoercer.coerce(id, String.class);
-	}
+        return this.typeCoercer.coerce(id, String.class);
+    }
 
-	@Override
-	@SuppressWarnings("unchecked")
-	public E toValue(String clientValue) {
+    @Override
+    @SuppressWarnings("unchecked")
+    public E toValue(String clientValue) {
 
-		if (InternalUtils.isBlank(clientValue)) {
-			return null;
-		}
+        if (InternalUtils.isBlank(clientValue)) {
+            return null;
+        }
 
-		Object id = null;
+        Object id = null;
 
-		try {
-			id = typeCoercer.coerce(clientValue, propertyAdapter.getType());
-		} catch (Exception ex) {
-			throw new RuntimeException(
-					String.format(
-					"Exception converting '%s' to instance of %s (id type for entity %s): %s",
-					clientValue,
-					objectIdClass.getName(), persistenceCapableClass.getName(),
-					InternalUtils.toMessage(ex)), ex);
-		}
+        try {
+            id = typeCoercer.coerce(clientValue, propertyAdapter.getType());
+        } catch (Exception ex) {
+            throw new RuntimeException(
+                    String.format(
+                    "Exception converting '%s' to instance of %s (id type for entity %s): %s",
+                    clientValue,
+                    objectIdClass.getName(), persistenceCapableClass.getName(),
+                    InternalUtils.toMessage(ex)), ex);
+        }
 
-		Serializable ser = (Serializable) id;
+        Serializable ser = (Serializable) id;
 
-		E result = (E) this.pm.getObjectById(this.persistenceCapableClass, ser);
+        E result = null;
 
-		if (result == null) {
-			// We don't identify the entity type in the message because the logger is based on the
-			// entity type.
-			this.logger.error(
-					String.format(
-					"Unable to convert client value '%s' into an entity instance.", clientValue));
-		}
+        try {
+            result = (E) this.pm.getObjectById(this.persistenceCapableClass, ser);
+        } catch (JDOObjectNotFoundException e) {
+            this.logger.error(
+                    String.format(
+                    "Unable to convert client value '%s' into an entity instance.", clientValue));
+            
+        }
 
-		return result;
-	}
+        return result;
+    }
 
-	private String findIdPropertyName(PersistenceManager pm, Class<E> pcClass) {
-		String idPropName = null;
-		TypeMetadata metadata = pm.getPersistenceManagerFactory().getMetadata(pcClass.getName());
-		for(MemberMetadata elementMetadata: metadata.getMembers())	{
-			if (elementMetadata.getPrimaryKey()) {
-				idPropName = elementMetadata.getName();
-			}	
-		}
+    private String findIdPropertyName(PersistenceManager pm, Class<E> pcClass) {
+        String idPropName = null;
+        TypeMetadata metadata = pm.getPersistenceManagerFactory().getMetadata(pcClass.getName());
+        for (MemberMetadata elementMetadata : metadata.getMembers()) {
+            if (elementMetadata.getPrimaryKey()) {
+                idPropName = elementMetadata.getName();
+            }
+        }
 
-		if (idPropName!=null) {
-			return idPropName;
-		} else {
-			throw new RuntimeException("No primary key property found for class : " + pcClass);
-		}
+        if (idPropName != null) {
+            return idPropName;
+        } else {
+            throw new RuntimeException("No primary key property found for class : " + pcClass);
+        }
 
-	}
+    }
 } // end class JDOEntityValueEncoder

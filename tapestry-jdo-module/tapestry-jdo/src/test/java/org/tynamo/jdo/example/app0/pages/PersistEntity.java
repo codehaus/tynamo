@@ -23,6 +23,7 @@ import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
 import org.tynamo.jdo.JDOTransactionManager;
+import org.tynamo.jdo.annotations.CommitAfter;
 import org.tynamo.jdo.example.app0.entities.User;
 import org.tynamo.jdo.example.app0.services.UserDAO;
 
@@ -41,6 +42,7 @@ public class PersistEntity
 	@Inject
 	private JDOTransactionManager manager;
 
+
 	void onCreateEntity()
 	{
 		User user = new User();
@@ -50,6 +52,7 @@ public class PersistEntity
 
 		this.user = user;
 	}
+
 
 	void onChangeName()
 	{
@@ -63,10 +66,12 @@ public class PersistEntity
 		user = new User();
 	}
 
+
 	void onSetToNull()
 	{
 		user = null;
 	}
+
 
 	void onDelete()
 	{
