@@ -11,7 +11,6 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package org.tynamo.jdo;
 
 import java.lang.annotation.Documented;
@@ -24,9 +23,8 @@ import java.lang.annotation.Target;
  * Marker annotation used to identify services defined in the
  * {@link org.tynamo.jdo.JDOCoreModule}.
  */
-@Target( { ElementType.PARAMETER, ElementType.FIELD })
+@Target({ElementType.PARAMETER, ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-public @interface JDOCore
-{
+public @interface JDOCore {
 }

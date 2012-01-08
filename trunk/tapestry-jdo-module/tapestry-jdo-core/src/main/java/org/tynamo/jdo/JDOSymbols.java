@@ -22,14 +22,15 @@ package org.tynamo.jdo;
 public class JDOSymbols {
 
     /**
-     * If "true", then JDO will be started up at application launch,
-     * rather than lazily.
+     * If "true", then JDO will be started up at application launch, rather than
+     * lazily.
      */
     public static final String EARLY_START_UP = "tapestry.jdo.early-startup";
     /**
      * If true (the default), then {@link org.apache.tapestry5.ValueEncoder}s
      * are automatically created for each entity. Override to "false" to handle
-     * entity value encoding explicitly.
+     * entity value encoding explicitly - particularly in the case if you have
+     * persistence classes that use complext primary keys
      */
     public static final String PROVIDE_ENTITY_VALUE_ENCODERS = "tapestry.jdo.provide-entity-value-encoders";
     /**
