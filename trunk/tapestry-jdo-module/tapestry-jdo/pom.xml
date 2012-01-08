@@ -221,7 +221,7 @@
 		<profile>
 			<id>bamboo</id>
                         <properties>
-                            <testngSuite>testng-ci</testngSuite>
+                            <testngSuite>testng-ci.xml</testngSuite>
                         </properties>
 		</profile>
 	</profiles>
@@ -262,6 +262,6 @@
 	<properties>
 		<!-- this sets up datanuclenus to enahnce the test dirs -->
 		<datanucleus.classDir>${basedir}/target/test-classes</datanucleus.classDir>
-                <testngSuite>testng</testngSuite>
+                <testngSuite>testng.xml</testngSuite>
 	</properties>
 </project>
