@@ -216,6 +216,15 @@
 			</plugin>
 		</plugins>
 	</build>
+        
+        <profiles>
+		<profile>
+			<id>bamboo</id>
+                        <properties>
+                            <testngSuite>testng-ci.xml</testngSuite>
+                        </properties>
+		</profile>
+	</profiles>
     
 	<repositories>
 
