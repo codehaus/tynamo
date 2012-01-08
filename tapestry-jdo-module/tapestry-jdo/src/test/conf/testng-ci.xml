@@ -9,9 +9,7 @@
 		</packages>
 	</test>
 	<test name="Tapestry JDO Integration Tests" enabled="true">
-		<parameter name="tapestry.web-app-folder" value="src/test/webapp"/>
-		<!-- specify an alternative browser to run the tests with -->
-                <!--parameter name="tapestry.browser-start-command" value="*googlechrome /usr/bin/chromium-browser"/ -->
+		<parameter name="tapestry.web-app-folder" value="src/test/webapp"/>		
                 <parameter name="tapestry.browser-start-command" value="htmlunit" />
 		<packages>
 			<package name="org.tynamo.jdo.integration"/>
