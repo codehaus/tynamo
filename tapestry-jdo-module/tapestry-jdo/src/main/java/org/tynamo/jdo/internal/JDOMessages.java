@@ -17,6 +17,9 @@ package org.tynamo.jdo.internal;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.internal.util.MessagesImpl;
 
+/*
+ * Messages used by the module
+ */
 class JDOMessages {
     private static final Messages MESSAGES = MessagesImpl.forClass(JDOMessages.class);
 
