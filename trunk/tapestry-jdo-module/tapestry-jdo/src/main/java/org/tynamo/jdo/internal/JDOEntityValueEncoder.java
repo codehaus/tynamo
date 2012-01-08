@@ -29,8 +29,13 @@ import javax.jdo.JDOObjectNotFoundException;
 import javax.jdo.metadata.MemberMetadata;
 
 /**
- * Value encoder for going to/from entities via their primary key. Currently
- * only works if the primary key is single valued.
+ * A simple implementation of an {@link ValueEncoder} for JDO objects with a
+ * simple primary key.
+ *
+ * <p> This implementation is registered by default for all JDO persistent
+ * objects; however, if the JDOs in the application use complex primary keys or
+ * custom object IDs then they will likely need to use a different value encoder
+ * </p>
  *
  */
 public final class JDOEntityValueEncoder<E> implements ValueEncoder<E> {
@@ -56,6 +61,9 @@ public final class JDOEntityValueEncoder<E> implements ValueEncoder<E> {
      * The Object ID class
      */
     private final Class objectIdClass;
+    /**
+     * The name of the primary key property
+     */
     private final String idPropertyName;
     private final PropertyAdapter propertyAdapter;
 
@@ -64,7 +72,7 @@ public final class JDOEntityValueEncoder<E> implements ValueEncoder<E> {
      * Creates a new JDOEntityValueEncoder object.
      *
      * @param pcClass Class for entity
-     * @param pm EntityManager to use
+     * @param pm PersistenceManager to use
      * @param propertyAccess PropertyAccess from tapestry
      * @param typeCoercer typeCoercer from tapestry
      * @param logger Logger to use
@@ -84,7 +92,13 @@ public final class JDOEntityValueEncoder<E> implements ValueEncoder<E> {
         this.propertyAdapter = propertyAccess.getAdapter(pcClass).getPropertyAdapter(idPropertyName);
     }
 
-    //~ Methods ------------------------------------------------------------------------------------
+    /**
+     * Encodes the ID of the field marked with {@link javax.jdo.annotations.PrimaryKey}
+     * as a string.
+     *
+     * @param the string value of the ID
+     * @return
+     */
     @Override
     public String toClient(E value) {
 
@@ -105,6 +119,12 @@ public final class JDOEntityValueEncoder<E> implements ValueEncoder<E> {
         return this.typeCoercer.coerce(id, String.class);
     }
 
+    /**
+     * Decodes the primary key value to an actual JDO object
+     *
+     * @param the value coming from the client
+     * @return the full blown JDO object
+     */
     @Override
     @SuppressWarnings("unchecked")
     public E toValue(String clientValue) {
@@ -136,12 +156,18 @@ public final class JDOEntityValueEncoder<E> implements ValueEncoder<E> {
             this.logger.error(
                     String.format(
                     "Unable to convert client value '%s' into an entity instance.", clientValue));
-            
+
         }
 
         return result;
     }
 
+    /**
+     * Finds the property name marked as a primary key in JDO metadata
+     * @param pm persistence manager
+     * @param pcClass the persistent class
+     * @return 
+     */
     private String findIdPropertyName(PersistenceManager pm, Class<E> pcClass) {
         String idPropName = null;
         TypeMetadata metadata = pm.getPersistenceManagerFactory().getMetadata(pcClass.getName());
@@ -158,4 +184,4 @@ public final class JDOEntityValueEncoder<E> implements ValueEncoder<E> {
         }
 
     }
-} // end class JDOEntityValueEncoder
+} 

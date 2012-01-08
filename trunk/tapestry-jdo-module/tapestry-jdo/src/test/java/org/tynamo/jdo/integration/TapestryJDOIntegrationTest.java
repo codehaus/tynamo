@@ -17,7 +17,7 @@ import org.apache.tapestry5.test.SeleniumTestCase;
 import org.testng.annotations.Test;
 
 @Test(sequential = true, groups = "integration")
-public class TapestryJDOIntegrationTest extends SeleniumTestCase {
+public class TapestryJDOIntegrationTest extends WebdriverSeleniumTestCase {
 
     public TapestryJDOIntegrationTest() {
     }

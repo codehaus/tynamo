@@ -14,6 +14,7 @@
 package org.tynamo.jdo.internal;
 
 import java.io.Serializable;
+import javax.jdo.JDOHelper;
 import javax.jdo.PersistenceManager;
 import org.apache.tapestry5.annotations.ImmutableSessionPersistedObject;
 import org.slf4j.Logger;
@@ -21,19 +22,41 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Encapsulates a JDO entity class with an entity id.
+ *
  */
 @ImmutableSessionPersistedObject
 public class PersistedEntity implements Serializable {
-    private final static Logger logger  = LoggerFactory.getLogger(PersistedEntity.class);
 
+    private final static Logger logger = LoggerFactory.getLogger(PersistedEntity.class);
+    /**
+     * The JDO class that this stands for
+     */
     private final Class persistentClass;
+    /**
+     * The JDO object ID
+     */
     private final Serializable id;
 
+    /**
+     * Creates a new persisted entity
+     *
+     * @param pcClass the JDO persistent type
+     * @param id the JDO Object ID of the persistent class. Note that this value
+     * is not just the value of the "primary key" property, but the actual
+     * Object ID retrieved by {@link JDOHelper#getObjectId(java.lang.Object) }
+     * or {@link PersistenceManager#getObjectId}
+     */
     public PersistedEntity(Class pcClass, Serializable id) {
         this.persistentClass = pcClass;
         this.id = id;
     }
 
+    /**
+     * Recreates the persistent JDO object from the given persistence manager
+     *
+     * @param pm
+     * @return
+     */
     public Object restore(PersistenceManager pm) {
         Object result = null;
         try {

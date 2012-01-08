@@ -12,7 +12,7 @@
 		<parameter name="tapestry.web-app-folder" value="src/test/webapp"/>
 		<!-- specify an alternative browser to run the tests with -->
                 <!--parameter name="tapestry.browser-start-command" value="*googlechrome /usr/bin/chromium-browser"/ -->
-<!--                <parameter name="tapestry.browser-start-command" value="htmlunit" />-->
+                <parameter name="tapestry.browser-start-command" value="htmlunit" />
 		<packages>
 			<package name="org.tynamo.jdo.integration"/>
 		</packages>

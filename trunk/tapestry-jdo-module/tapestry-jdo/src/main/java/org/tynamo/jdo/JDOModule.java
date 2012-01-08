@@ -32,80 +32,71 @@ import javax.jdo.PersistenceManagerFactory;
 import javax.jdo.spi.JDOImplHelper;
 
 /**
- * Supplements the services defined by {@link eu.cuetech.tapestry.jdo.JDOCoreModule} with additional
- * services and configuration specific to Tapestry web application.
+ * Supplements the services defined by {@link eu.cuetech.tapestry.jdo.JDOCoreModule}
+ * with additional services and configuration specific to Tapestry web
+ * application.
  */
 @SuppressWarnings({"JavaDoc"})
 public class JDOModule {
 
-	public static void contributeFactoryDefaults(MappedConfiguration<String, String> configuration) {
-		configuration.add(JDOSymbols.PROVIDE_ENTITY_VALUE_ENCODERS, "true");
-	}
+    public static void contributeFactoryDefaults(MappedConfiguration<String, String> configuration) {
+        configuration.add(JDOSymbols.PROVIDE_ENTITY_VALUE_ENCODERS, "true");
+    }
 
-	/**
-	 * Contributes the following:
-	 * <dl>
-	 * <dt>entity</dt>
-	 * <dd>Stores the id of the entity and reloads from the {@link EntityManager}</dd>
-	 * </dl>
-	 */
-	public static void contributePersistentFieldManager(
-			MappedConfiguration<String, PersistentFieldStrategy> configuration) {
-		configuration.addInstance("entity", EntityPersistentFieldStrategy.class);
-	}
+    /**
+     * Contributes the following: <dl> <dt>entity</dt> <dd>Stores the id of the
+     * entity and reloads from the {@link PersistenceManager}</dd> </dl>
+     */
+    public static void contributePersistentFieldManager(
+            MappedConfiguration<String, PersistentFieldStrategy> configuration) {
+        configuration.addInstance("entity", EntityPersistentFieldStrategy.class);
+    }
 
-	/**
-	 * Adds the CommitAfter annotation work, to process the
-	 * {@link eu.cuetech.tapestry.jdo.annotations.CommitAfter} annotation.
-	 */
-	public static void contributeComponentClassTransformWorker(
-			OrderedConfiguration<ComponentClassTransformWorker> configuration) {
-		// If logging is enabled, we want logging to be the first advice, wrapping around the commit
-		// advice.
+    /**
+     * Adds the CommitAfter annotation work, to process the
+     * {@link org.tynamo.jdo.annotations.CommitAfter} annotation.
+     */
+    public static void contributeComponentClassTransformWorker(
+            OrderedConfiguration<ComponentClassTransformWorker> configuration) {
+        // If logging is enabled, we want logging to be the first advice, wrapping around the commit
+        // advice.
 
-		configuration.addInstance("CommitAfter", CommitAfterWorker.class, "after:Log");
-	}
+        configuration.addInstance("CommitAfter", CommitAfterWorker.class, "after:Log");
+    }
 
-	/**
-	 * Contribution to the {@link org.apache.tapestry5.services.ComponentClassResolver} service
-	 * configuration.
-	 */
-	public static void contributeComponentClassResolver(Configuration<LibraryMapping> configuration) {
-		configuration.add(new LibraryMapping("jdo", "org.tynamo.jdo"));
-	}
+    /**
+     * Contributes {@link ValueEncoderFactory}s for all JDO entity classes.
+     * Encoding and decoding are based on the id property value of the entity
+     * using type coercion. Hence, if the id can be coerced to a String and back
+     * then the entity can be coerced.
+     */
+    @SuppressWarnings("unchecked")
+    public static void contributeValueEncoderSource(MappedConfiguration<Class, ValueEncoderFactory> configuration,
+            @Symbol(JDOSymbols.PROVIDE_ENTITY_VALUE_ENCODERS) boolean provideEncoders,
+            final JDOPersistenceManagerSource pms, final PersistenceManager pm, final TypeCoercer typeCoercer,
+            final PropertyAccess propertyAccess, final LoggerSource loggerSource) {
+        if (!provideEncoders) {
+            return;
+        }
 
-	/**
-	 * Contributes {@link ValueEncoderFactory}s for all registered JDO entity classes. Encoding and
-	 * decoding are based on the id property value of the entity using type coercion. Hence, if the
-	 * id can be coerced to a String and back then the entity can be coerced.
-	 */
-	@SuppressWarnings("unchecked")
-	public static void contributeValueEncoderSource(MappedConfiguration<Class, ValueEncoderFactory> configuration,
-			@Symbol(JDOSymbols.PROVIDE_ENTITY_VALUE_ENCODERS) boolean provideEncoders,
-			final JDOPersistenceManagerSource pms, final PersistenceManager pm, final TypeCoercer typeCoercer,
-			final PropertyAccess propertyAccess, final LoggerSource loggerSource) {
-		if (!provideEncoders) {
-			return;
-		}
+        pms.create();
+        PersistenceManagerFactory pmf = pms.getPersistenceManagerFactory();
 
-		pms.create(); // create
-		PersistenceManagerFactory pmf = pms.getPersistenceManagerFactory();
-
-		Collection<Class> pcClasses = JDOImplHelper.getInstance().getRegisteredClasses();
+        Collection<Class> pcClasses = JDOImplHelper.getInstance().getRegisteredClasses();
 
 
-		for (Class<?> pcClz : pcClasses) {
+        for (Class<?> pcClz : pcClasses) {
 
-			final Class pcClass = pcClz;
+            final Class pcClass = pcClz;
 
-			ValueEncoderFactory factory = new ValueEncoderFactory() {
+            ValueEncoderFactory factory = new ValueEncoderFactory() {
 
-				public ValueEncoder create(Class type) {
-					return new JDOEntityValueEncoder(pcClass, pm, propertyAccess, typeCoercer, loggerSource.getLogger(pcClass));
-				}
-			};
-			configuration.add(pcClass, factory);
-		}
+                public ValueEncoder create(Class type) {
+                    return new JDOEntityValueEncoder(pcClass, pm, propertyAccess, typeCoercer, loggerSource.getLogger(pcClass));
+                }
+            };
+            configuration.add(pcClass, factory);
+        }
 
-	}
+    }
 }
