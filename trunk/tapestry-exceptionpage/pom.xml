@@ -4,7 +4,7 @@
 	<artifactId>tapestry-exceptionpage</artifactId>
 	<name>Tynamo Exception Page</name>
 	<packaging>jar</packaging>
-	<version>0.0.2-SNAPSHOT</version>
+	<version>0.1.0-SNAPSHOT</version>
 	<description>
 		Tapestry 5 implementation for a standard servlet exception-type -&gt; error-page configuration
 	</description>

@@ -5,6 +5,7 @@ import java.util.Properties;
 
 import org.apache.tapestry5.internal.services.LinkSource;
 import org.apache.tapestry5.ioc.ServiceBinder;
+import org.apache.tapestry5.ioc.ServiceResources;
 import org.apache.tapestry5.services.ComponentClassResolver;
 import org.apache.tapestry5.services.Request;
 import org.apache.tapestry5.services.RequestExceptionHandler;
@@ -28,10 +29,10 @@ public class ExceptionPageModule {
 		binder.bind(ExceptionHandler.class, ExceptionHandlerImpl.class);
 	}
 
-	public RequestExceptionHandler decorateRequestExceptionHandler(ComponentClassResolver componentClassResolver, LinkSource linkSource,
-			Request request, Response response, ExceptionHandler exceptionHandler, Object service) {
-		return new ConfigurableRequestExceptionHandler((RequestExceptionHandler) service, componentClassResolver, linkSource, request,
-				response, exceptionHandler);
+	public RequestExceptionHandler decorateRequestExceptionHandler(ServiceResources serviceResources,
+			ComponentClassResolver componentClassResolver, LinkSource linkSource, Request request, Response response,
+			ExceptionHandler exceptionHandler, Object service) {
+		return new ConfigurableRequestExceptionHandler((RequestExceptionHandler) service, serviceResources, componentClassResolver, linkSource,
+				request, response, exceptionHandler);
 	}
-
 }

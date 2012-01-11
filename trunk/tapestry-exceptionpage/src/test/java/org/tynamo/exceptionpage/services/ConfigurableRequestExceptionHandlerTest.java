@@ -8,7 +8,8 @@ import org.tynamo.exceptionpage.ContextAwareException;
 
 @SuppressWarnings("serial")
 public class ConfigurableRequestExceptionHandlerTest {
-	private ConfigurableRequestExceptionHandler contextFormer = new ConfigurableRequestExceptionHandler(null, null, null, null, null, null);
+	private ConfigurableRequestExceptionHandler contextFormer = new ConfigurableRequestExceptionHandler(null, null, null, null, null, null,
+			null);
 
 	private static class MyContextAwareException extends Throwable implements ContextAwareException {
 		private Object[] context;
