@@ -4,10 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.apache.tapestry5.services.ExceptionReporter;
-
 public class ExceptionHandlerImpl implements ExceptionHandler {
-	private Map<Class<? extends RuntimeException>, Class<? extends ExceptionReporter>> configuration = new HashMap<Class<? extends RuntimeException>, Class<? extends ExceptionReporter>>();
+	private Map<Class<? extends Throwable>, Class<?>> configuration = new HashMap<Class<? extends Throwable>, Class<?>>();
 
 	@SuppressWarnings("unchecked")
 	public ExceptionHandlerImpl(Map<Class, Class> configuration) {
@@ -15,7 +13,7 @@ public class ExceptionHandlerImpl implements ExceptionHandler {
 			this.configuration.put(entry.getKey(), entry.getValue());
 	}
 
-	public Map<Class<? extends RuntimeException>, Class<? extends ExceptionReporter>> getConfiguration() {
+	public Map<Class<? extends Throwable>, Class<?>> getConfiguration() {
 		return configuration;
 	}
 
