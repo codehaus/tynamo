@@ -2,28 +2,38 @@ package org.tynamo.exceptionpage.services;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.tapestry5.Link;
 import org.apache.tapestry5.internal.services.LinkSource;
+import org.apache.tapestry5.ioc.ServiceResources;
 import org.apache.tapestry5.runtime.ComponentEventException;
 import org.apache.tapestry5.services.ComponentClassResolver;
 import org.apache.tapestry5.services.Request;
 import org.apache.tapestry5.services.RequestExceptionHandler;
 import org.apache.tapestry5.services.Response;
 import org.tynamo.exceptionpage.ContextAwareException;
+import org.tynamo.exceptionpage.ExceptionHandlerAssistant;
 
 public class ConfigurableRequestExceptionHandler implements RequestExceptionHandler {
-	private ExceptionHandler exceptionHandler;
-	private RequestExceptionHandler defaultRequestExceptionHandler;
-	private LinkSource linkSource;
-	private Response response;
-	private ComponentClassResolver componentClassResolver;
-	private Request request;
+	private final ExceptionHandler exceptionHandler;
+	private final RequestExceptionHandler defaultRequestExceptionHandler;
+	private final LinkSource linkSource;
+	private final Response response;
+	private final ComponentClassResolver componentClassResolver;
+	private final Request request;
+	private final Map<Class<ExceptionHandlerAssistant>, ExceptionHandlerAssistant> handlerAssistants = Collections
+			.synchronizedMap(new HashMap<Class<ExceptionHandlerAssistant>, ExceptionHandlerAssistant>());
+	private final ServiceResources serviceResources;
 
-	public ConfigurableRequestExceptionHandler(RequestExceptionHandler requestExceptionHandler,
+	public ConfigurableRequestExceptionHandler(RequestExceptionHandler requestExceptionHandler, ServiceResources serviceResources,
 			ComponentClassResolver componentClassResolver, LinkSource linkSource, Request request, Response response,
 			ExceptionHandler exceptionHandler) {
 		defaultRequestExceptionHandler = requestExceptionHandler;
+		this.serviceResources = serviceResources;
 		this.componentClassResolver = componentClassResolver;
 		this.linkSource = linkSource;
 		this.request = request;
@@ -44,13 +54,37 @@ public class ConfigurableRequestExceptionHandler implements RequestExceptionHand
 			if (cause.getCause() == null) break;
 			cause = cause.getCause();
 		}
-		if (!exceptionHandler.getConfiguration().containsKey(cause.getClass())) {
-			defaultRequestExceptionHandler.handleRequestException(exception);
-			return;
+
+		Class<?> causeClass = cause.getClass();
+		if (!exceptionHandler.getConfiguration().containsKey(causeClass)) {
+			// try a superclass before delegating back to the default exception handler
+			causeClass = causeClass.getSuperclass();
+			if (causeClass == null || !exceptionHandler.getConfiguration().containsKey(causeClass)) {
+				defaultRequestExceptionHandler.handleRequestException(exception);
+				return;
+			}
 		}
 
-		Link link = linkSource.createPageRenderLink(componentClassResolver.resolvePageClassNameToPageName(exceptionHandler.getConfiguration()
-				.get(cause.getClass()).getName()), false, formExceptionContext(cause));
+		Class<?> pageClass = exceptionHandler.getConfiguration().get(cause.getClass());
+
+		Object[] exceptionContext = formExceptionContext(cause);
+
+		if (ExceptionHandlerAssistant.class.isAssignableFrom(pageClass)) {
+			@SuppressWarnings("unchecked")
+			Class<ExceptionHandlerAssistant> handlerType = (Class<ExceptionHandlerAssistant>) pageClass;
+			ExceptionHandlerAssistant assistant = handlerAssistants.get(handlerType);
+			if (assistant == null) {
+				assistant = (ExceptionHandlerAssistant) serviceResources.autobuild(handlerType);
+				handlerAssistants.put(handlerType, assistant);
+			}
+			// the assistant may handle the exception directly or return a page class
+			pageClass = assistant.handleRequestException(exception, Arrays.asList(exceptionContext));
+			if (pageClass == null) return;
+		}
+
+		// TODO properly handle page class name not resolved
+		Link link = linkSource.createPageRenderLink(componentClassResolver.resolvePageClassNameToPageName(pageClass.getName()), false,
+				exceptionContext);
 		try {
 			if (request.isXHR()) {
 				OutputStream os = response.getOutputStream("application/json;charset=UTF-8");
