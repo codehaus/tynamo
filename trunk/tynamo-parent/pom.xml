@@ -348,19 +348,6 @@
 		</plugins>
 	</reporting>
 
-	<profiles>
-		<profile>
-			<id>bamboo</id>
-			<distributionManagement>
-				<snapshotRepository>
-					<id>tynamo-codehaus-ci</id>
-					<name>Official snapshot repository available from Codehaus' Bamboo server</name>
-					<url>file:///opt/ci.repository.codehaus.org/</url>
-				</snapshotRepository>
-			</distributionManagement>
-		</profile>
-	</profiles>
-
 	<dependencyManagement>
 		<dependencies>
 
