@@ -9,7 +9,7 @@
 	<h1>Entities in the database:</h1>
     <p>
 	<t:loop source="entities" value="testentity">
-		${testentity.id} ${testentity.value} <t:actionlink t:id="delEntity" context="testentity.id">remove</t:actionlink><br/>
+		${testentity.id} ${testentity.value} <t:actionlink t:id="delEntity" context="testentity">remove</t:actionlink><br/>
 	</t:loop>
 		      </p>
     <p:sidebar>
