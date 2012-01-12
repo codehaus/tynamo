@@ -21,7 +21,7 @@
 	<modules>
 		<module>tapestry-jdo-core</module>
 		<module>tapestry-jdo</module>
-		<!--module>tapestry-jdo-webapp</module-->
+		<module>tapestry-jdo-webapp</module>
 	</modules>
 	
 	<!-- Developers section inherited from the parent pom -->

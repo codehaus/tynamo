@@ -28,8 +28,8 @@ public class Index {
 		pm.makePersistent(te);
 	}
 
-	public void onActionFromDelEntity(long id) {
-		testService.removeTestEntity(id);
+	public void onActionFromDelEntity(TestEntity testEntity) {
+		testService.removeTestEntity(testEntity.getId());
 	}
 
 	public List<TestEntity> getEntities() {
