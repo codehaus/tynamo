@@ -28,8 +28,9 @@
 	<inceptionYear>2004</inceptionYear>
 	<developers>
 		<developer>
+                        <id>akochnev</id>
 			<name>Alex Kotchnev</name>
-			<email>akochnev (-at-) troymaxventures.com</email>
+			<email>akochnev (-at-) gmail.com</email>
 		</developer>
 		<developer>
 			<id>ascandroli</id>
