@@ -5,11 +5,13 @@ import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.tapestry5.Link;
 import org.apache.tapestry5.internal.services.LinkSource;
 import org.apache.tapestry5.ioc.ServiceResources;
+import org.apache.tapestry5.ioc.internal.OperationException;
 import org.apache.tapestry5.runtime.ComponentEventException;
 import org.apache.tapestry5.services.ComponentClassResolver;
 import org.apache.tapestry5.services.Request;
@@ -49,42 +51,64 @@ public class ConfigurableRequestExceptionHandler implements RequestExceptionHand
 
 	public void handleRequestException(Throwable exception) throws IOException {
 		Throwable cause = exception;
+
+		// Depending on where the error was thrown, there could be several levels of wrappers..
+		// For exceptions in component operations, it's OperationException -> ComponentEventException -> <Target>Exception
+
 		// Throw away the wrapped exceptions first
-		while (cause instanceof ComponentEventException) {
+		while (cause instanceof OperationException || cause instanceof ComponentEventException) {
 			if (cause.getCause() == null) break;
 			cause = cause.getCause();
 		}
 
 		Class<?> causeClass = cause.getClass();
 		if (!exceptionHandler.getConfiguration().containsKey(causeClass)) {
-			// try a superclass before delegating back to the default exception handler
+			// try at most two level of superclasses before delegating back to the default exception handler
 			causeClass = causeClass.getSuperclass();
 			if (causeClass == null || !exceptionHandler.getConfiguration().containsKey(causeClass)) {
-				defaultRequestExceptionHandler.handleRequestException(exception);
-				return;
+				causeClass = causeClass.getSuperclass();
+				if (causeClass == null || !exceptionHandler.getConfiguration().containsKey(causeClass)) {
+					defaultRequestExceptionHandler.handleRequestException(exception);
+					return;
+				}
 			}
 		}
 
-		Class<?> pageClass = exceptionHandler.getConfiguration().get(cause.getClass());
-
 		Object[] exceptionContext = formExceptionContext(cause);
-
-		if (ExceptionHandlerAssistant.class.isAssignableFrom(pageClass)) {
+		Object value = exceptionHandler.getConfiguration().get(causeClass);
+		Object page = null;
+		ExceptionHandlerAssistant assistant = null;
+		if (value instanceof ExceptionHandlerAssistant) assistant = (ExceptionHandlerAssistant) value;
+		else if (!(value instanceof Class)) {
+			defaultRequestExceptionHandler.handleRequestException(exception);
+			return;
+		} else if (ExceptionHandlerAssistant.class.isAssignableFrom((Class) value)) {
 			@SuppressWarnings("unchecked")
-			Class<ExceptionHandlerAssistant> handlerType = (Class<ExceptionHandlerAssistant>) pageClass;
-			ExceptionHandlerAssistant assistant = handlerAssistants.get(handlerType);
+			Class<ExceptionHandlerAssistant> handlerType = (Class<ExceptionHandlerAssistant>) value;
+			assistant = handlerAssistants.get(handlerType);
 			if (assistant == null) {
 				assistant = (ExceptionHandlerAssistant) serviceResources.autobuild(handlerType);
 				handlerAssistants.put(handlerType, assistant);
 			}
-			// the assistant may handle the exception directly or return a page class
-			pageClass = assistant.handleRequestException(exception, Arrays.asList(exceptionContext));
-			if (pageClass == null) return;
 		}
 
+		// the assistant may handle the exception directly or return a page
+		if (assistant != null) {
+			// in case assistant changes the context
+			List context = Arrays.asList(exceptionContext);
+			page = assistant.handleRequestException(exception, context);
+			exceptionContext = context.toArray();
+		}
+		if (page == null) return;
+
+		exceptionContext = new Object[0];
+
 		// TODO properly handle page class name not resolved
-		Link link = linkSource.createPageRenderLink(componentClassResolver.resolvePageClassNameToPageName(pageClass.getName()), false,
-				exceptionContext);
+		// Link link =
+		// linkSource.createPageRenderLink(componentClassResolver.resolvePageClassNameToPageName(pageClass.getName()),
+		// false,
+		if (page instanceof Class) page = componentClassResolver.resolvePageClassNameToPageName(((Class) page).getName());
+		Link link = linkSource.createPageRenderLink(page.toString(), false, exceptionContext);
 		try {
 			if (request.isXHR()) {
 				OutputStream os = response.getOutputStream("application/json;charset=UTF-8");
