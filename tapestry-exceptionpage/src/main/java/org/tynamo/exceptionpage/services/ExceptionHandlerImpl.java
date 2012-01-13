@@ -5,15 +5,15 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 public class ExceptionHandlerImpl implements ExceptionHandler {
-	private Map<Class<? extends Throwable>, Class<?>> configuration = new HashMap<Class<? extends Throwable>, Class<?>>();
+	private Map<Class<? extends Throwable>, Object> configuration = new HashMap<Class<? extends Throwable>, Object>();
 
 	@SuppressWarnings("unchecked")
-	public ExceptionHandlerImpl(Map<Class, Class> configuration) {
-		for (Entry<Class, Class> entry : configuration.entrySet())
+	public ExceptionHandlerImpl(Map<Class, Object> configuration) {
+		for (Entry<Class, Object> entry : configuration.entrySet())
 			this.configuration.put(entry.getKey(), entry.getValue());
 	}
 
-	public Map<Class<? extends Throwable>, Class<?>> getConfiguration() {
+	public Map<Class<? extends Throwable>, Object> getConfiguration() {
 		return configuration;
 	}
 
