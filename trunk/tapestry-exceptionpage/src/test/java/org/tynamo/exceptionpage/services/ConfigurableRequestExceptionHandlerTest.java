@@ -35,11 +35,19 @@ public class ConfigurableRequestExceptionHandlerTest {
 	public void contextIsExceptionMessage() {
 		Object[] context = contextFormer.formExceptionContext(new RuntimeException() {
 			public String getMessage() {
-				return "hello world";
+				return "helloworld";
 			}
 		});
 		assertEquals(context.length, 1);
+		assertTrue("helloworld".equals(context[0]));
+	}
+
+	@Test
+	public void contextIsExceptionType() {
+		Object[] context = contextFormer.formExceptionContext(new IllegalArgumentException("Value not allowed"));
+		assertEquals(context.length, 1);
 		assertTrue(context[0] instanceof String);
+		assertTrue("IllegalArgument".equals(context[0]));
 	}
 
 	@Test
