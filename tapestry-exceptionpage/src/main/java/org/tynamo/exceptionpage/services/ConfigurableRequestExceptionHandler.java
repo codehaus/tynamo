@@ -112,7 +112,7 @@ public class ConfigurableRequestExceptionHandler implements RequestExceptionHand
 		try {
 			if (request.isXHR()) {
 				OutputStream os = response.getOutputStream("application/json;charset=UTF-8");
-				os.write(("{\"script\":\"window.location.replace('" + link.toAbsoluteURI() + "');\"}").getBytes());
+				os.write(("{\"redirectURL\":\"" + link.toAbsoluteURI() + "\"}").getBytes());
 				os.close();
 			} else response.sendRedirect(link);
 		}
