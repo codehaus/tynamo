@@ -116,13 +116,9 @@ public class ConfigurableRequestExceptionHandler implements RequestExceptionHand
 
 		exceptionContext = new Object[0];
 
-		// TODO properly handle page class name not resolved
-		// Link link =
-		// linkSource.createPageRenderLink(componentClassResolver.resolvePageClassNameToPageName(pageClass.getName()),
-		// false,
-		if (page instanceof Class) page = componentClassResolver.resolvePageClassNameToPageName(((Class) page).getName());
-		Link link = linkSource.createPageRenderLink(page.toString(), false, exceptionContext);
 		try {
+			if (page instanceof Class) page = componentClassResolver.resolvePageClassNameToPageName(((Class) page).getName());
+			Link link = page instanceof Link ? (Link) page : linkSource.createPageRenderLink(page.toString(), false, exceptionContext);
 			if (request.isXHR()) {
 				OutputStream os = response.getOutputStream("application/json;charset=UTF-8");
 				os.write(("{\"redirectURL\":\"" + link.toAbsoluteURI() + "\"}").getBytes());
