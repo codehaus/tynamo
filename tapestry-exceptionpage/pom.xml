@@ -4,7 +4,7 @@
 	<artifactId>tapestry-exceptionpage</artifactId>
 	<name>Tynamo Exception Page</name>
 	<packaging>jar</packaging>
-	<version>0.1.1</version>
+	<version>0.1.2-SNAPSHOT</version>
 	<description>
 		Tapestry 5 implementation for a standard servlet exception-type -&gt; error-page configuration
 	</description>
@@ -77,8 +77,8 @@
 	</build>
 
   <scm>
-    <connection>scm:svn:http://svn.codehaus.org/tynamo/tags/tapestry-exceptionpage-0.1.1</connection>
-    <developerConnection>scm:svn:https://svn.codehaus.org/tynamo/tags/tapestry-exceptionpage-0.1.1</developerConnection>
-    <url>http://svn.tynamo.codehaus.org/tynamo/tags/tapestry-exceptionpage-0.1.1</url>
+    <connection>scm:svn:http://svn.codehaus.org/tynamo/trunk/tapestry-exceptionpage</connection>
+    <developerConnection>scm:svn:https://svn.codehaus.org/tynamo/trunk/tapestry-exceptionpage</developerConnection>
+    <url>http://svn.tynamo.codehaus.org/tynamo/trunk/tapestry-exceptionpage</url>
   </scm>
 </project>
