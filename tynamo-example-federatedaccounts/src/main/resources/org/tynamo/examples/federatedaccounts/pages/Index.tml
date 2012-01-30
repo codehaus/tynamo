@@ -78,21 +78,34 @@
 			Welcome ${currentUser.displayableName}! <t:actionlink t:id="logout">Logout</t:actionlink>
 			<div>
 				<t:security.haspermission permission="facebook">
-				<t:actionlink zone="friendResults" t:id="listFriends">Check who's my friend</t:actionlink>
-				<t:zone t:id="friendResults">
-					<t:if test="friends">
-						<h1>My Friends</h1>
-						<ul>
-						<t:loop source="friends" value="friend">
-							<li>${friend.name}</li>			
-						</t:loop>
-						</ul>
-					</t:if>
-				</t:zone>				
+					<t:actionlink zone="friendResults" t:id="listFriends">Check who's my friend</t:actionlink>
+					<t:zone t:id="friendResults">
+						<t:if test="friends">
+							<h1>My Friends</h1>
+							<ul>
+							<t:loop source="friends" value="friend">
+								<li>${friend.name}</li>			
+							</t:loop>
+							</ul>
+						</t:if>
+					</t:zone>				
 				</t:security.haspermission>
-				<t:security.lackspermission permission="facebook">
-				Sorry, as a local user you have no friends. Sign in as a facebook user?
-				</t:security.lackspermission>
+				<t:security.haspermission permission="twitter">
+					<t:actionlink zone="tweetResults" t:id="listTweets">Check my tweets</t:actionlink>
+					<t:zone t:id="tweetResults">
+						<t:if test="tweets">
+							<h1>My tweets</h1>
+							<ul>
+							<t:loop source="tweets" value="tweet">
+								<li>${tweet.text}</li>			
+							</t:loop>
+							</ul>
+						</t:if>
+					</t:zone>				
+				</t:security.haspermission>
+				<t:security.haspermission permission="local">
+				Sorry, as a local user you have neither friends nor tweets. Sign in as a facebook or twitter user?
+				</t:security.haspermission>
 			</div>
 		</t:security.authenticated>
 		<t:block t:id="friendsBlock">

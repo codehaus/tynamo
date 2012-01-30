@@ -56,7 +56,9 @@ public class AppModule {
 	
 	public static void contributeWebSecurityManager(Configuration<Realm> configuration,
 			@InjectService("FederatedAccountsAuthorizingRealm") AuthorizingRealm authorizingRealm) {
-		configuration.add(new ExtendedPropertiesRealm("classpath:shiro-users.properties"));
+		AuthorizingRealm realm = new ExtendedPropertiesRealm("classpath:shiro-users.properties");
+		realm.setName("local");
+		configuration.add(realm);
 		configuration.add(authorizingRealm);
 	}
 

@@ -28,13 +28,22 @@ import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.SessionState;
 import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.apache.tapestry5.services.ApplicationStateManager;
 import org.apache.tapestry5.services.ExceptionReporter;
 import org.apache.tapestry5.services.Request;
 import org.tynamo.examples.federatedaccounts.session.CurrentUser;
 import org.tynamo.security.federatedaccounts.facebook.FacebookAccessToken;
 import org.tynamo.security.federatedaccounts.oauth.tokens.OauthAccessToken;
+import org.tynamo.security.federatedaccounts.twitter.TwitterAuthenticationToken;
+import org.tynamo.security.federatedaccounts.twitter.services.TwitterRealm;
 import org.tynamo.security.services.SecurityService;
+
+import twitter4j.Status;
+import twitter4j.Twitter;
+import twitter4j.TwitterException;
+import twitter4j.TwitterFactory;
+import twitter4j.auth.AccessToken;
 
 import com.restfb.DefaultFacebookClient;
 import com.restfb.FacebookClient;
@@ -115,6 +124,38 @@ public class Index implements ExceptionReporter {
 
 		friends = facebookClient.fetchConnection("me/friends", User.class).getData();
 		return friendResults.getBody();
+	}
+	
+	@Inject
+	private TwitterFactory twitterFactory;
+	
+	@Inject
+	@Symbol(TwitterRealm.TWITTER_CLIENTID)
+	private String oauthClientId;
+
+	@Inject
+	@Symbol(TwitterRealm.TWITTER_CLIENTSECRET)
+	private String oauthClientSecret;
+	
+	
+	@InjectComponent
+	private Zone tweetResults;
+
+	@Property
+	private List<Status> tweets;
+
+	@Property
+	private Status tweet;
+
+	@RequiresPermissions("twitter")
+	Block onActionFromListTweets() throws TwitterException {
+		OauthAccessToken accessToken = securityService.getSubject().getPrincipals().oneByType(TwitterAuthenticationToken.class);
+		Twitter twitter = twitterFactory.getInstance();
+		twitter.setOAuthConsumer(oauthClientId, oauthClientSecret);
+		twitter.setOAuthAccessToken((AccessToken)accessToken.getPrincipal());
+		tweets = twitter.getHomeTimeline();
+		return tweetResults.getBody();
 
 	}
+	
 }
