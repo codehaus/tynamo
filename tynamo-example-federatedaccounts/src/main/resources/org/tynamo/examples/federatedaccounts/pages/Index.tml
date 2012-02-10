@@ -56,20 +56,20 @@
 				<div>
 					<div style="float:left">demonstrating different windowmodes,&nbsp;</div> 		
 					<div style="float:left"> 
-						blank: <t:facebook.facebookSignIn/>
+						blank: <t:facebook.facebookOauthSignIn/>
 					</div>
 					<div style="float:left"> 
-						inline: <t:facebook.facebookSignIn windowMode="inline"/>
+						inline: <t:facebook.facebookOauthSignIn windowMode="inline"/>
 					</div>
 					<div style="float:left"> 
-						self: <t:facebook.facebookSignIn windowMode="self"/>
+						self: <t:facebook.facebookOauthSignIn windowMode="self"/>
 					</div>
 				</div>
 				<t:federated.oauthInlineFrame/>
 			</div>
 			<div style="clear:both;margin-top:60px">
 				<h3>or sign in as a Twitter user</h3>
-				<t:twitter.twitterSignIn/>
+				<t:twitter.twitterOauthSignIn/>
 			</div>
 			<t:security.loginform />
 			(You can use localuser:local as credentials for a local account)
