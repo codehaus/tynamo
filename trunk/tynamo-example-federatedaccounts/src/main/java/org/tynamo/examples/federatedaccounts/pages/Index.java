@@ -35,7 +35,7 @@ import org.apache.tapestry5.services.Request;
 import org.tynamo.examples.federatedaccounts.session.CurrentUser;
 import org.tynamo.security.federatedaccounts.facebook.FacebookAccessToken;
 import org.tynamo.security.federatedaccounts.oauth.tokens.OauthAccessToken;
-import org.tynamo.security.federatedaccounts.twitter.TwitterAuthenticationToken;
+import org.tynamo.security.federatedaccounts.twitter.TwitterAccessToken;
 import org.tynamo.security.federatedaccounts.twitter.services.TwitterRealm;
 import org.tynamo.security.services.SecurityService;
 
@@ -120,7 +120,7 @@ public class Index implements ExceptionReporter {
 	Block onActionFromListFriends() {
 		OauthAccessToken accessToken = securityService.getSubject().getPrincipals().oneByType(FacebookAccessToken.class);
 		// could check for expiration
-		FacebookClient facebookClient = new DefaultFacebookClient(accessToken.getToken());
+		FacebookClient facebookClient = new DefaultFacebookClient(accessToken.toString());
 
 		friends = facebookClient.fetchConnection("me/friends", User.class).getData();
 		return friendResults.getBody();
@@ -149,10 +149,10 @@ public class Index implements ExceptionReporter {
 
 	@RequiresPermissions("twitter")
 	Block onActionFromListTweets() throws TwitterException {
-		OauthAccessToken accessToken = securityService.getSubject().getPrincipals().oneByType(TwitterAuthenticationToken.class);
+		OauthAccessToken accessToken = securityService.getSubject().getPrincipals().oneByType(TwitterAccessToken.class);
 		Twitter twitter = twitterFactory.getInstance();
 		twitter.setOAuthConsumer(oauthClientId, oauthClientSecret);
-		twitter.setOAuthAccessToken((AccessToken)accessToken.getPrincipal());
+		twitter.setOAuthAccessToken((AccessToken)accessToken.getCredentials());
 		tweets = twitter.getHomeTimeline();
 		return tweetResults.getBody();
 
