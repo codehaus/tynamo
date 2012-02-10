@@ -26,16 +26,16 @@ public class FederatedAccountsAuthorizingRealm extends AuthorizingRealm {
 
 	@Override
 	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
-		if (principals.fromRealm(FederatedAccount.Type.facebook.name()).isEmpty() && principals.fromRealm(FederatedAccount.Type.twitter.name()).isEmpty()) return null;
+		if (principals.fromRealm(FederatedAccount.FederatedAccountType.facebook.name()).isEmpty() && principals.fromRealm(FederatedAccount.FederatedAccountType.twitter.name()).isEmpty()) return null;
 
 		// We are overcomplicating things for the purposes of this example
 		// If you really only wanted to know if user was authenticated against Facebook or Twitter,
 		// you do the above check in any page or service by obtaining Subject from SecurityService
 		// However, we wanted to demonstrate local authorization with remote authentication
 		SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
-		if (!principals.fromRealm(FederatedAccount.Type.facebook.name()).isEmpty()) authorizationInfo.addStringPermission(FederatedAccount.Type.facebook.name());
+		if (!principals.fromRealm(FederatedAccount.FederatedAccountType.facebook.name()).isEmpty()) authorizationInfo.addStringPermission(FederatedAccount.FederatedAccountType.facebook.name());
 		// Might be odd if these were both true at the same time but we don't care
-		if (!principals.fromRealm(FederatedAccount.Type.twitter.name()).isEmpty()) authorizationInfo.addStringPermission(FederatedAccount.Type.twitter.name());
+		if (!principals.fromRealm(FederatedAccount.FederatedAccountType.twitter.name()).isEmpty()) authorizationInfo.addStringPermission(FederatedAccount.FederatedAccountType.twitter.name());
 		return authorizationInfo;
 	}
 
