@@ -51,26 +51,31 @@
 			${message}
 		</div>
 		<t:security.notauthenticated>
-			<div>
-				<h3>Sign in as a Facebook user instead</h3>
-				<div>
-					<div style="float:left">demonstrating different windowmodes,&nbsp;</div> 		
-					<div style="float:left"> 
-						blank: <t:facebook.facebookOauthSignIn/>
-					</div>
-					<div style="float:left"> 
-						inline: <t:facebook.facebookOauthSignIn windowMode="inline"/>
-					</div>
-					<div style="float:left"> 
-						self: <t:facebook.facebookOauthSignIn windowMode="self"/>
+			<div style="margin:0 auto;width:600px;overflow:auto">
+				<div style="float:left;margin-right:80px">
+					<span style="font-weight:bold">Sign in as a Facebook user</span>
+					<div>with different windowmodes:</div>
+					<ul style="list-style:none">
+						<li style="text-align:right"> 
+							blank: <t:facebook.facebookOauthSignIn/>
+						</li>
+						<li style="text-align:right"> 
+							inline: <t:facebook.facebookOauthSignIn windowMode="inline"/>
+						</li>
+						<li style="text-align:right"> 
+							self: <t:facebook.facebookOauthSignIn windowMode="self"/>
+						</li>
+					</ul> 		
+				</div>
+				<div style="float:left">
+					<span style="font-weight:bold">Sign in as a Twitter user</span>
+					<div style="margin-top:40px">
+						<t:twitter.twitterOauthSignIn/>
 					</div>
 				</div>
-				<t:federated.oauthInlineFrame/>
 			</div>
-			<div style="clear:both;margin-top:60px">
-				<h3>or sign in as a Twitter user</h3>
-				<t:twitter.twitterOauthSignIn/>
-			</div>
+			<t:federated.oauthInlineFrame/>
+			<div style="font-weight:bold;margin-bottom:-80px">Sign in as a local user</div>
 			<t:security.loginform />
 			(You can use localuser:local as credentials for a local account)
 		</t:security.notauthenticated>
