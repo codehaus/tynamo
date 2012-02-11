@@ -24,14 +24,15 @@ import org.tynamo.security.services.SecurityModule;
 import org.tynamo.shiro.extension.realm.text.ExtendedPropertiesRealm;
 
 // all specified just because I'm often running the within IDE, not packaged in jars 
-@SubModule(value = { SecurityModule.class, FederatedAccountsModule.class, FacebookFederatedAccountsModule.class, TwitterFederatedAccountsModule.class  })
+@SubModule(value = { SecurityModule.class, FederatedAccountsModule.class, FacebookFederatedAccountsModule.class,
+		TwitterFederatedAccountsModule.class })
 public class AppModule {
 	private static String version = ModuleProperties.getVersion(AppModule.class);
 
 	public static void bind(ServiceBinder binder) {
 		binder.bind(FederatedAccountService.class, FederatedAccountServiceExample.class);
 		binder.bind(AuthorizingRealm.class, FederatedAccountsAuthorizingRealm.class).withId(
-				FederatedAccountsAuthorizingRealm.class.getSimpleName());
+			FederatedAccountsAuthorizingRealm.class.getSimpleName());
 	}
 
 	@SuppressWarnings("rawtypes")
@@ -53,11 +54,23 @@ public class AppModule {
 		configuration.add(FederatedAccountSymbols.COMMITAFTER_OAUTH, "false");
 		configuration.add(FederatedAccountSymbols.HTTPCLIENT_ON_GAE, "true");
 	}
-	
+
 	public static void contributeWebSecurityManager(Configuration<Realm> configuration,
-			@InjectService("FederatedAccountsAuthorizingRealm") AuthorizingRealm authorizingRealm) {
-		AuthorizingRealm realm = new ExtendedPropertiesRealm("classpath:shiro-users.properties");
-		realm.setName("local");
+		@InjectService("FederatedAccountsAuthorizingRealm") AuthorizingRealm authorizingRealm) {
+
+		// There are annoying two little bugs.. 1) TextConfigurationRealm creates simpleaccountinfo map at start-up but
+		// doesn't refresh the realm name when it's changed and 2) ExtendedPropertiesRealm doesn't take name as a constructor
+		// parameter. So need to do some trickery to set the name before the configuration is loaded
+		// ExtendedPropertiesRealm realm = new ExtendedPropertiesRealm("classpath:shiro-users.properties");
+		// realm.setName("local");
+		ExtendedPropertiesRealm realm = new ExtendedPropertiesRealm("classpath:shiro-users.properties") {
+			@Override
+			public void setResourcePath(String resourcePath) {
+				setName("local");
+				super.setResourcePath(resourcePath);
+			}
+		};
+
 		configuration.add(realm);
 		configuration.add(authorizingRealm);
 	}
