@@ -20,7 +20,7 @@
 	<parent>
 		<groupId>org.tynamo</groupId>
 		<artifactId>tynamo-parent</artifactId>
-		<version>0.0.6</version>
+		<version>0.0.8</version>
 	</parent>
 	<build>
 
@@ -99,17 +99,6 @@
 				<artifactId>maven-surefire-report-plugin</artifactId>
 				<version>2.6</version>
 			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<configuration>
-					<suiteXmlFiles>
-						<suiteXmlFile>src/test/conf/testng.xml</suiteXmlFile>
-					</suiteXmlFiles>
-					<argLine>-Xmx500m</argLine>
-					<redirectTestOutputToFile>false</redirectTestOutputToFile>
-				</configuration>
-			</plugin>
 		</plugins>
 	</build>
 
@@ -123,22 +112,22 @@
 			<dependency>
 				<groupId>org.tynamo</groupId>
 				<artifactId>tapestry-model-core</artifactId>
-				<version>0.2.0-SNAPSHOT</version>
+				<version>0.3.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>org.tynamo</groupId>
 				<artifactId>tapestry-model-hibernate</artifactId>
-				<version>0.2.0-SNAPSHOT</version>
+				<version>0.3.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>org.tynamo</groupId>
 				<artifactId>tapestry-model-test</artifactId>
-				<version>0.2.0-SNAPSHOT</version>
+				<version>0.3.0-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>org.tynamo</groupId>
 				<artifactId>tapestry-model-web</artifactId>
-				<version>0.2.0-SNAPSHOT</version>
+				<version>0.3.0-SNAPSHOT</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
