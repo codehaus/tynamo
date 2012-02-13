@@ -1,13 +1,14 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<t:layout title="title" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_0_0.xsd" xmlns:p="tapestry:parameter">
+<t:layout title="title" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd" xmlns:p="tapestry:parameter">
 		<p:subMenuBlock>
 		<ul>
 			<ul id="local">
 			</ul>
 		</ul>
 	</p:subMenuBlock>
+
 	<p:navBlock>
-		<a style="font-weight:bolder;margin-left:10px" t:type="PageLink" page="List" context="classDescriptor.beanType">${listAllLinkMessage}</a>
+
 	</p:navBlock>
 
 	<h1>${title}</h1>
@@ -23,9 +24,9 @@
 			<div class="t-beaneditor-row">
 				<t:submit t:id="saveAndReturnButton" id="saveAndReturnButton" class="button" value="${message:org.tynamo.i18n.applyAndReturn}"/>
 				&nbsp; or &nbsp;
-				<t:actionlink class="button" style="color:red; font-weight:bold;" t:id="cancel">
+				<t:eventlink class="button" style="color:red; font-weight:bold;" t:id="cancel">
 					${message:org.tynamo.i18n.cancel}
-				</t:actionlink>
+				</t:eventlink>
 			</div>
 		</div>
 	</t:form>

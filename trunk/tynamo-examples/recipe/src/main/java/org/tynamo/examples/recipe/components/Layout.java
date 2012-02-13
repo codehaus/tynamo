@@ -2,27 +2,14 @@ package org.tynamo.examples.recipe.components;
 
 import org.apache.tapestry5.BindingConstants;
 import org.apache.tapestry5.Block;
-import org.apache.tapestry5.RenderSupport;
 import org.apache.tapestry5.annotations.Import;
 import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.annotations.Property;
-import org.apache.tapestry5.ioc.annotations.Inject;
-import org.apache.tapestry5.services.Context;
-import org.apache.tapestry5.services.Environment;
 
 
 @Import(stylesheet = "classpath:org/tynamo/themes/tapestryskin/theme.css")
 public class Layout
 {
-
-	@Inject
-	private Environment environment;
-
-	@Inject
-	private Context context;
-
-	@Inject
-	private RenderSupport renderSupport;
 
 	@Property
 	@Parameter(required = true)
