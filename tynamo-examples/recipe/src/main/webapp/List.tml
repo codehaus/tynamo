@@ -1,11 +1,9 @@
-<t:layout title="title" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_0_0.xsd" xmlns:p="tapestry:parameter">
+<t:layout title="title" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd" xmlns:p="tapestry:parameter">
 		<p:subMenuBlock>
 		<ul id="local">
-			<t:if test="classDescriptor.allowSave">
-				<li>
-					<t:pagelink class="newlink" page="Add" context="classDescriptor.beanType">${newlinkMessage}</t:pagelink>
-				</li>
-			</t:if>
+			<li>
+				<t:pagelink class="newlink" page="Add" context="beanType">${newlinkMessage}</t:pagelink>
+			</li>
 		</ul>
 	</p:subMenuBlock>
 
@@ -15,7 +13,7 @@
 	<p:__id__header>
 		</p:__id__header>
 		<p:__id__cell>
-			<t:pagelink t:page="Show" context="editPageContext">${modelId}</t:pagelink>
+			<t:pagelink t:page="Show" context="showPageContext"><t:tynamo.identifier object="bean"/></t:pagelink>
 		</p:__id__cell>
 	</t:grid>
 
