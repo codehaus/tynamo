@@ -28,6 +28,6 @@
 
 	<br/>
 
-	<t:beandisplay object="bean" lean="true" t:mixins="tynamo/Advisor"/>
+	<t:beandisplay object="bean" lean="true" t:mixins="tynamo/BeanModelAdvisor"/>
 
 </t:layout>
