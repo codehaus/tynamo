@@ -1,17 +1,23 @@
-package org.tynamo.examples.recipe.pages;
+package org.tynamo.examples.recipe.pages.collections;
 
+import org.apache.tapestry5.EventConstants;
 import org.apache.tapestry5.Link;
+import org.apache.tapestry5.annotations.CleanupRender;
 import org.apache.tapestry5.annotations.Log;
+import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.beaneditor.BeanModel;
+import org.apache.tapestry5.hibernate.annotations.CommitAfter;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.BeanModelSource;
 import org.apache.tapestry5.services.ContextValueEncoder;
 import org.apache.tapestry5.services.HttpError;
+import org.apache.tapestry5.services.PageRenderLinkSource;
 import org.tynamo.descriptor.CollectionDescriptor;
 import org.tynamo.descriptor.TynamoClassDescriptor;
 import org.tynamo.descriptor.TynamoPropertyDescriptor;
+import org.tynamo.routing.annotations.At;
 import org.tynamo.services.DescriptorService;
 import org.tynamo.services.PersistenceService;
 import org.tynamo.util.DisplayNameUtils;
@@ -20,6 +26,7 @@ import org.tynamo.util.Utils;
 /**
  * Edit Composition Page
  */
+@At("/{0}/{1}/{2}/{3}/edit")
 public class EditC
 {
 
@@ -38,6 +45,9 @@ public class EditC
 	@Inject
 	private DescriptorService descriptorService;
 
+	@Inject
+	private PageRenderLinkSource pageRenderLinkSource;
+
 	@Property(write = false)
 	private CollectionDescriptor collectionDescriptor;
 
@@ -54,7 +64,8 @@ public class EditC
 	private BeanModel beanModel;
 
 
-	protected Object onActivate(Class clazz, String parentId, String property, String id)
+	@OnEvent(EventConstants.ACTIVATE)
+	Object activate(Class clazz, String parentId, String property, String id)
 	{
 
 		if (clazz != null)
@@ -82,17 +93,14 @@ public class EditC
 
 	}
 
-	/**
-	 * This tells Tapestry to put type & id into the URL, making it bookmarkable.
-	 *
-	 * @return
-	 */
-	protected Object[] onPassivate()
+	@OnEvent(EventConstants.PASSIVATE)
+	Object[] passivate()
 	{
 		return new Object[]{collectionDescriptor.getBeanType(), parentBean, collectionDescriptor.getName(), bean};
 	}
 
-	protected void cleanupRender()
+	@CleanupRender
+	void cleanup()
 	{
 		bean = null;
 		classDescriptor = null;
@@ -101,16 +109,12 @@ public class EditC
 		collectionDescriptor = null;
 	}
 
-	//	@CommitAfter
 	@Log
-	protected Object onSuccess()
+	@CommitAfter
+	@OnEvent(EventConstants.SUCCESS)
+	Link success()
 	{
 		persitenceService.save(bean);
-		return back();
-	}
-
-	public Link onActionFromCancel()
-	{
 		return back();
 	}
 
@@ -119,9 +123,10 @@ public class EditC
 		return messages.format(Utils.EDIT_MESSAGE, DisplayNameUtils.getDisplayName(classDescriptor, messages));
 	}
 
-	public Link back()
+	@OnEvent("cancel")
+	Link back()
 	{
-		return null;
+		return pageRenderLinkSource.createPageRenderLinkWithContext(ListC.class, parentBean.getClass(), parentBean, collectionDescriptor.getName());
 	}
 
 	public String getListAllLinkMessage()

@@ -1,20 +1,25 @@
 package org.tynamo.examples.recipe.services;
 
 import org.apache.tapestry5.SymbolConstants;
+import org.apache.tapestry5.hibernate.HibernateEntityPackageManager;
 import org.apache.tapestry5.hibernate.HibernateModule;
 import org.apache.tapestry5.ioc.Configuration;
 import org.apache.tapestry5.ioc.MappedConfiguration;
 import org.apache.tapestry5.ioc.ServiceBinder;
 import org.apache.tapestry5.ioc.annotations.Contribute;
 import org.apache.tapestry5.ioc.annotations.SubModule;
+import org.apache.tapestry5.ioc.services.ApplicationDefaults;
+import org.apache.tapestry5.ioc.services.SymbolProvider;
+import org.apache.tapestry5.services.BeanBlockContribution;
+import org.apache.tapestry5.services.BeanBlockSource;
+import org.apache.tapestry5.services.DisplayBlockContribution;
 import org.apache.tapestry5.upload.services.UploadSymbols;
-import org.tynamo.PageType;
 import org.tynamo.builder.Builder;
+import org.tynamo.builder.BuilderDirector;
 import org.tynamo.examples.recipe.RecipeBuilder;
 import org.tynamo.hibernate.TynamoHibernateSymbols;
 import org.tynamo.hibernate.services.TynamoHibernateModule;
 import org.tynamo.services.TynamoCoreModule;
-import org.tynamo.services.TynamoPageRenderLinkSource;
 
 /**
  * This module is automatically included as part of the Tapestry IoC Registry, it's a good place to configure and extend
@@ -33,7 +38,9 @@ public class AppModule
 
 	}
 
-	public static void contributeApplicationDefaults(MappedConfiguration<String, String> configuration)
+	@Contribute(SymbolProvider.class)
+	@ApplicationDefaults
+	public static void provideSymbols(MappedConfiguration<String, String> configuration)
 	{
 		// Contributions to ApplicationDefaults will override any contributions to
 		// FactoryDefaults (with the same key). Here we're restricting the supported
@@ -61,6 +68,15 @@ public class AppModule
 	}
 
 	/**
+	 * Contribution to the BeanBlockSource service to tell the BeanEditForm component about the editors.
+	 */
+	@Contribute(BeanBlockSource.class)
+	public static void addCustomBlocks(Configuration<BeanBlockContribution> configuration)
+	{
+		configuration.add(new DisplayBlockContribution("single-valued-association", "blocks/DisplayBlocks", "showPageLink"));
+		configuration.add(new DisplayBlockContribution("many-valued-association", "blocks/DisplayBlocks", "showPageLinks"));
+	}
+	/**
 	 * By default tapestry-hibernate will scan
 	 * InternalConstants.TAPESTRY_APP_PACKAGE_PARAM + ".entities" (witch is equal to "org.tynamo.examples.recipe.recipe.entities")
 	 * for annotated entity classes.
@@ -68,7 +84,8 @@ public class AppModule
 	 * Contributes the package "org.tynamo.examples.recipe.recipe.model" to the configuration, so that it will be
 	 * scanned for annotated entity classes.
 	 */
-	public static void contributeHibernateEntityPackageManager(Configuration<String> configuration)
+	@Contribute(HibernateEntityPackageManager.class)
+	public static void addPackages(Configuration<String> configuration)
 	{
 //		If you want to scan other packages add them here:
 		configuration.add("org.tynamo.examples.recipe.model");
@@ -78,18 +95,10 @@ public class AppModule
 	 * Contributes Builders to the BuilderDirector's builders map.
 	 * Check GOF's <a href="http://en.wikipedia.org/wiki/Builder_pattern">Builder pattern</a>
 	 */
-	public static void contributeBuilderDirector(MappedConfiguration<Class, Builder> configuration)
+	@Contribute(BuilderDirector.class)
+	public static void addBuilders(MappedConfiguration<Class, Builder> configuration)
 	{
 		configuration.add(org.tynamo.examples.recipe.model.Recipe.class, new RecipeBuilder());
-	}
-
-	@Contribute(TynamoPageRenderLinkSource.class)
-	public void contributeTynamoPageRenderLinkSource(MappedConfiguration<PageType, Class> configuration)
-	{
-		configuration.add(PageType.LIST, org.tynamo.examples.recipe.pages.List.class);
-		configuration.add(PageType.SHOW, org.tynamo.examples.recipe.pages.Show.class);
-		configuration.add(PageType.ADD, org.tynamo.examples.recipe.pages.Add.class);
-		configuration.add(PageType.EDIT, org.tynamo.examples.recipe.pages.Edit.class);
 	}
 
 }
