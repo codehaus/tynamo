@@ -1,4 +1,4 @@
-package org.tynamo.examples.recipe.pages;
+package org.tynamo.examples.recipe.pages.collections;
 
 
 import org.apache.tapestry5.EventConstants;
@@ -18,6 +18,10 @@ import org.tynamo.builder.BuilderDirector;
 import org.tynamo.descriptor.CollectionDescriptor;
 import org.tynamo.descriptor.TynamoClassDescriptor;
 import org.tynamo.descriptor.TynamoPropertyDescriptor;
+import org.tynamo.examples.recipe.model.Ingredient;
+import org.tynamo.examples.recipe.model.Recipe;
+import org.tynamo.examples.recipe.pages.Edit;
+import org.tynamo.routing.annotations.At;
 import org.tynamo.util.TynamoMessages;
 import org.tynamo.services.DescriptorService;
 import org.tynamo.services.PersistenceService;
@@ -26,7 +30,7 @@ import org.tynamo.util.Utils;
 /**
  * Add Composition Page
  */
-
+@At("/{0}/{1}/{2}/new")
 public class AddC
 {
 
@@ -110,6 +114,10 @@ public class AddC
 	@OnEvent(EventConstants.SUCCESS)
 	Link success()
 	{
+		// @ascandroli #todo #fixthis
+		Recipe recipe = (Recipe) parentBean;
+		recipe.getIngredients().add((Ingredient) bean);
+
 //		persitenceService.addToCollection(collectionDescriptor, bean, parentBean);
 //		persitenceService.save(parentBean);
 		return back();
@@ -128,7 +136,7 @@ public class AddC
 	@OnEvent("cancel")
 	Link back()
 	{
-		return pageRenderLinkSource.createPageRenderLinkWithContext(Edit.class, collectionDescriptor.getBeanType(), parentBean);
+		return pageRenderLinkSource.createPageRenderLinkWithContext(ListC.class, parentBean.getClass(), parentBean, collectionDescriptor.getName());
 	}
 
 	public String getTitle()
