@@ -20,7 +20,7 @@
 		<t:errors/>
 
 		<div class="t-beaneditor">
-			<t:beaneditor object="mb:bean" t:mixins="tynamo/Advisor" advisor.key="add"/>
+			<t:beaneditor object="mb:bean" t:mixins="tynamo/BeanModelAdvisor" beanmodeladvisor.key="add"/>
 			<br/>
 			<div class="t-beaneditor-row">
 				<t:submit event="continue" class="button" value="${message:org.tynamo.i18n.apply}"/>
