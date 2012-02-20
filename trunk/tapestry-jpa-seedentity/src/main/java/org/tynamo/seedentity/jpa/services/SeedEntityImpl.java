@@ -1,11 +1,8 @@
 package org.tynamo.seedentity.jpa.services;
 
-import org.apache.tapestry5.ioc.annotations.EagerLoad;
-import org.slf4j.Logger;
-import org.tynamo.jpa.JPAEntityManagerSource;
-import org.tynamo.jpa.JPATransactionManager;
-import org.tynamo.seedentity.jpa.SeedEntityIdentifier;
-import org.tynamo.seedentity.jpa.tools.BeanUtil;
+import java.lang.reflect.InvocationTargetException;
+import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.EntityManager;
@@ -17,9 +14,13 @@ import javax.persistence.metamodel.EntityType;
 import javax.persistence.metamodel.Metamodel;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.Type;
-import java.lang.reflect.InvocationTargetException;
-import java.util.List;
-import java.util.Set;
+
+import org.apache.tapestry5.ioc.annotations.EagerLoad;
+import org.slf4j.Logger;
+import org.tynamo.jpa.JPAEntityManagerSource;
+import org.tynamo.jpa.JPATransactionManager;
+import org.tynamo.seedentity.jpa.SeedEntityIdentifier;
+import org.tynamo.seedentity.jpa.tools.BeanUtil;
 
 @EagerLoad
 public class SeedEntityImpl implements SeedEntity {
@@ -54,6 +55,9 @@ public class SeedEntityImpl implements SeedEntity {
 			// FIXME this is wrong - we should only add the singular attributes that are marked as unique
 			// see how Hibernate seedentity does this
 			// and absolutely filter out id attribute
+			
+			// TODO see http://stackoverflow.com/questions/7077464/how-to-get-singularattribute-mapped-value-of-a-persistent-object
+			// how to use the metamodel api to do this without beanutil 
 			for (SingularAttribute a : singularAttributes) {
 				query.where(cb.equal(root.get(a), BeanUtil.getProperty(object, a.getName())));
 			}
