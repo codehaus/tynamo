@@ -14,24 +14,17 @@
 		</fileSet>
 
 		<fileSet filtered="true">
-			<directory>src/main/webapp</directory>
-			<excludes>
-				<exclude>*.ico</exclude>
-				<exclude>**/*.jpg</exclude>
-				<exclude>**/*.png</exclude>
-				<exclude>**/*.gif</exclude>
-			</excludes>
+			<directory>src/main/webapp/WEB-INF/</directory>
+			<includes>
+				<include>web.xml</include>
+			</includes>
 		</fileSet>
 
-		<!-- Don't want to filter binary files nor .tml templates -->
 		<fileSet filtered="false">
 			<directory>src/main/webapp</directory>
-			<includes>
-				<include>*.ico</include>
-				<include>**/*.jpg</include>
-				<include>**/*.png</include>
-				<include>**/*.gif</include>
-			</includes>
+			<excludes>
+				<exclude>WEB-INF/web.xml</exclude>
+			</excludes>
 		</fileSet>
 
 		<!-- log4j is filtered ant it needs to stay at the root. -->
@@ -41,9 +34,6 @@
 				<include>log4j.properties</include>
 				<include>hibernate.cfg.xml</include>
 			</includes>
-			<excludes>
-				<exclude>**/*.tml</exclude>
-			</excludes>
 		</fileSet>
 
 		<!-- This needs to stay at the root (and not filtered). -->
@@ -80,9 +70,22 @@
 			<directory>src/site</directory>
 		</fileSet>
 
+<!--     NOT YET!
 		<fileSet filtered="true" packaged="false">
-			<directory>src/test/selenium</directory>
+			<directory/>
+			<includes>
+				<include>build.gradle</include>
+			</includes>
 		</fileSet>
+
+		<fileSet filtered="false" packaged="false">
+			<directory/>
+			<includes>
+				<include>gradlew*</include>
+				<include>gradle/wrapper/*</include>
+			</includes>
+		</fileSet>
+-->
 
 	</fileSets>
 

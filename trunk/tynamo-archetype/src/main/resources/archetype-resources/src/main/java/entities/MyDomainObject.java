@@ -11,7 +11,7 @@ import javax.persistence.Id;
 
 @Entity
 @BeanModels({
-		@BeanModel(reorder = "id") // == @ReorderProperties("id")
+		@BeanModel(reorder = "id")
 })
 public class MyDomainObject
 {
