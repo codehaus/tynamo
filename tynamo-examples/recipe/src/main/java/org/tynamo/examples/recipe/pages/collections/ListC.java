@@ -102,6 +102,12 @@ public class ListC
 		return new Object[]{beanType, bean};
 	}
 
+	public Object[] getParentShowPageContext()
+	{
+		return new Object[]{parentBean.getClass(), parentBean};
+	}
+
+
 	public Object[] getAddElementPageContext()
 	{
 		return new Object[]{parentBean.getClass(), parentBean, propertyName};
