@@ -20,7 +20,7 @@ public class List
 {
 
 	@Inject
-	private PersistenceService persitenceService;
+	private PersistenceService persistenceService;
 
 	@Inject
 	private Messages messages;
@@ -66,7 +66,7 @@ public class List
 	 */
 	public GridDataSource getSource()
 	{
-		return new TynamoGridDataSource(persitenceService, beanType);
+		return new TynamoGridDataSource(persistenceService, beanType);
 	}
 
 	public Object[] getShowPageContext()

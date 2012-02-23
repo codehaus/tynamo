@@ -6,6 +6,10 @@
 			</li>
 		</ul>
 	</p:subMenuBlock>
+	<p:navBlock>
+		<a style="font-weight:bolder;margin-left:10px" t:type="PageLink" page="Show" context="parentShowPageContext">${parentBean}</a>
+	</p:navBlock>
+
 
 	<h1>${title}</h1>
 

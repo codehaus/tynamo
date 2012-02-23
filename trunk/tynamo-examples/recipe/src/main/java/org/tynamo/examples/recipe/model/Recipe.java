@@ -13,6 +13,7 @@
  */
 package org.tynamo.examples.recipe.model;
 
+import org.hibernate.annotations.Cascade;
 import org.hibernate.validator.constraints.Length;
 import org.tynamo.PageType;
 import org.tynamo.blob.RenderType;
@@ -119,11 +120,8 @@ public class Recipe
 
 	private Set<Ingredient> ingredients = new HashSet<Ingredient>();
 
-	@OneToMany(mappedBy = "recipe")
+	@OneToMany(orphanRemoval = true, mappedBy = "recipe", cascade = CascadeType.ALL)
 	@CollectionDescriptor(addExpression = "addIngredient", removeExpression = "removeIngredient")
-	// The standard EJB annotations don't have the delete orphan option.
-	@org.hibernate.annotations.Cascade(
-			{org.hibernate.annotations.CascadeType.ALL, org.hibernate.annotations.CascadeType.DELETE_ORPHAN})
 	public Set<Ingredient> getIngredients()
 	{
 		return ingredients;

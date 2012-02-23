@@ -114,12 +114,7 @@ public class AddC
 	@OnEvent(EventConstants.SUCCESS)
 	Link success()
 	{
-		// @ascandroli #todo #fixthis
-		Recipe recipe = (Recipe) parentBean;
-		recipe.getIngredients().add((Ingredient) bean);
-
-//		persitenceService.addToCollection(collectionDescriptor, bean, parentBean);
-//		persitenceService.save(parentBean);
+		persitenceService.addToCollection(collectionDescriptor, bean, parentBean);
 		return back();
 	}
 
@@ -141,7 +136,7 @@ public class AddC
 
 	public String getTitle()
 	{
-		return TynamoMessages.edit(messages, collectionDescriptor.getElementType());
+		return TynamoMessages.add(messages, collectionDescriptor.getElementType());
 	}
 
 	public String getListAllLinkMessage()
