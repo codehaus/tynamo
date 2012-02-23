@@ -2,10 +2,14 @@
 		<p:subMenuBlock>
 		<ul id="local">
 			<li>
-				<t:pagelink class="newlink" page="Add" context="beanType">${newlinkMessage}</t:pagelink>
+				<t:pagelink class="newlink" page="collections/AddC" context="addElementPageContext">${newlinkMessage}</t:pagelink>
 			</li>
 		</ul>
 	</p:subMenuBlock>
+	<p:navBlock>
+		<a style="font-weight:bolder;margin-left:10px" t:type="PageLink" page="Show" context="parentShowPageContext">${parentBean}</a>
+	</p:navBlock>
+
 
 	<h1>${title}</h1>
 

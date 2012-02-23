@@ -1,32 +1,32 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
 		"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <t:layout title="title" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd" xmlns:p="tapestry:parameter">
-	#set( $D = '$' )
-	<p:subMenuBlock>
+		<p:subMenuBlock>
 		<ul>
 			<ul id="local">
 				<li>
-					<t:pagelink class="editlink" t:page="Edit" context="editPageContext">${D}{editlinkMessage}</t:pagelink>
+					<t:pagelink class="editlink" t:page="Edit" context="editPageContext">${editlinkMessage}</t:pagelink>
 				</li>
 				<li>
 					
 				</li>
-				<t:if test="allowRemove">
+				<t:if test="deleteAllowed">
 					<li>
-						<t:actionlink class="deletelink" t:id="delete">${D}{message:org.tynamo.i18n.remove}</t:actionlink>
+						<t:eventlink class="deletelink" t:id="delete">${message:org.tynamo.i18n.remove}</t:eventlink>
 					</li>
 				</t:if>
 			</ul>
 		</ul>
 	</p:subMenuBlock>
 	<p:navBlock>
-		<a style="font-weight:bolder;margin-left:10px" t:type="PageLink" page="List" context="classDescriptor.beanType">${D}{listAllLinkMessage}</a>
+		<a style="font-weight:bolder;margin-left:10px" t:type="PageLink" page="List" context="beanType">${listAllLinkMessage}</a>
 	</p:navBlock>
 
-	<h1>${D}{title}</h1>
+	<h1>${title}</h1>
+
+	<t:alerts/>
 
 	<br/>
-
 
 	<t:beandisplay object="bean" lean="true" t:mixins="tynamo/BeanModelAdvisor"/>
 
