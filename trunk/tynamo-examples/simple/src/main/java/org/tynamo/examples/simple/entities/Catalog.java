@@ -26,7 +26,7 @@ import java.util.List;
 
 @Entity
 @BeanModels({
-		@BeanModel(reorder = "categories, name") // == @ReorderProperties("categories, name")
+		@BeanModel(reorder = "categories, name")
 })
 public class Catalog
 {

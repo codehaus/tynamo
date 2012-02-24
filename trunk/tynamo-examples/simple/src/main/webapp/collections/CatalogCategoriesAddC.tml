@@ -6,8 +6,9 @@
 			</ul>
 		</ul>
 	</p:subMenuBlock>
+
 	<p:navBlock>
-		<a style="font-weight:bolder;margin-left:10px" t:type="PageLink" page="List" context="beanType">${listAllLinkMessage}</a>
+
 	</p:navBlock>
 
 	<h1>${title}</h1>
@@ -18,10 +19,14 @@
 		<t:errors/>
 
 		<div class="t-beaneditor">
-			<t:beaneditor object="mb:bean" t:mixins="tynamo/BeanModelAdvisor"/>
+			<t:beaneditor object="bean" model="beanModel">
+				<p:description>
+					<label class="desc">The Description</label>
+					<t:textfield value="bean.description"></t:textfield>
+				</p:description>
+			</t:beaneditor>
 			<br/>
 			<div class="t-beaneditor-row">
-				<t:submit t:id="saveAndStay" class="button" value="${message:org.tynamo.i18n.apply}"/>
 				<t:submit t:id="return" class="button" value="${message:org.tynamo.i18n.applyAndReturn}"/>
 				&nbsp; or &nbsp;
 				<t:eventlink class="button" style="color:red; font-weight:bold;" t:id="cancel">

@@ -22,12 +22,17 @@
 		<a style="font-weight:bolder;margin-left:10px" t:type="PageLink" page="List" context="beanType">${listAllLinkMessage}</a>
 	</p:navBlock>
 
-	<h1>${title}</h1>
+	<h1>My Custom ${title}</h1>
 
 	<t:alerts/>
 
 	<br/>
 
-	<t:beandisplay object="bean" lean="true" t:mixins="tynamo/BeanModelAdvisor"/>
+	<t:beandisplay object="bean" lean="true">
+		<p:categories>
+			<t:pagelink page="collections/AddC" context="[beanType,bean,'categories']">Add Category</t:pagelink>
+			<t:tynamo.composition owner="bean" collection="bean.categories" collectionDescriptor="categoriesDescriptor"/>
+		</p:categories>
+	</t:beandisplay>
 
 </t:layout>

@@ -1,10 +1,12 @@
 package org.tynamo.examples.simple.pages;
 
+import org.tynamo.routing.annotations.At;
+
 /**
  * Start page of application simple.
  */
-public class Index
+@At("/")
+public class Home
 {
-
 
 }
