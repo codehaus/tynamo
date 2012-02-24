@@ -114,8 +114,6 @@ public class ConfigurableRequestExceptionHandler implements RequestExceptionHand
 		}
 		if (page == null) return;
 
-		exceptionContext = new Object[0];
-
 		try {
 			if (page instanceof Class) page = componentClassResolver.resolvePageClassNameToPageName(((Class) page).getName());
 			Link link = page instanceof Link ? (Link) page : linkSource.createPageRenderLink(page.toString(), false, exceptionContext);
