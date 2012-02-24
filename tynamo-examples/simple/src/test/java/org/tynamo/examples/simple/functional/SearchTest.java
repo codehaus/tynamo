@@ -27,7 +27,7 @@ public class SearchTest extends AbstractContainerTest
 		form.getInputByName("color").setValueAttribute("Blue");
 		form.getSelectByName("origin").setSelectedAttribute("AMERICA", true);
 
-		listApplesPage = clickButton(newApplePage, "saveAndReturnButton");
+		listApplesPage = clickButton(newApplePage, "saveAndReturn");
 		// FIXME Search page not implemented yet
 //		HtmlPage searchApplesPage = clickLink(listApplesPage, "Search Apples");
 //		newApplePage.getHtmlElementById("form").getInputByName("color").setValueAttribute("Blue");

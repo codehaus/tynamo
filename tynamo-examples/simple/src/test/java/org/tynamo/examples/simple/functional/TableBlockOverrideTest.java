@@ -27,7 +27,7 @@ public class TableBlockOverrideTest extends AbstractContainerTest
 		// FIXME currently Thing doesn't allow setting id, should we use Thing2?
 		// Oh - the likely issue is that this customization isn't currently implemented
 //		form.<HtmlInput>getInputByName("identifier").setValueAttribute("2");  // it shouldn't be duplicated either
-//		listThingsPage = clickButton(newThingPage, "saveAndReturnButton");
+//		listThingsPage = clickButton(newThingPage, "saveAndReturn");
 //		assertXPathPresent(listThingsPage, "//p[text()='This is where the name should go.blah']");
 
 	}

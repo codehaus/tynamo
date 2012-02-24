@@ -30,7 +30,7 @@ public class AssignedIdentifierTest extends AbstractContainerTest
 		HtmlPage newThing2Page = webClient.getPage(BASEURI + "add/thing2");
 		HtmlForm newThing2Form = (HtmlForm) newThing2Page.getElementById("form");
 		newThing2Form.<HtmlInput>getInputByName("identifier").setValueAttribute("blah");
-		newThing2Page = clickButton(newThing2Page, "saveAndReturnButton");
+		newThing2Page = clickButton(newThing2Page, "saveAndReturn");
 		assertErrorTextNotPresent(newThing2Page);
 		assertTextPresent(newThing2Page, "blah");
 	}

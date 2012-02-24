@@ -34,7 +34,7 @@ public class TreeTest extends AbstractContainerTest
 		newTreeNodePage = webClient.getPage(BASEURI + "add/treenode");
 		form = newTreeNodePage.getHtmlElementById("form");
 		form.<HtmlInput>getInputByName("name").setValueAttribute("two");
-		clickButton(newTreeNodePage, "saveAndReturnButton");
+		clickButton(newTreeNodePage, "saveAndReturn");
 		HtmlPage editTreeNodePage = webClient.getPage(BASEURI + "edit/treenode/1"); 
 		form = editTreeNodePage.getHtmlElementById("form");
 		form.getSelectByName("parent").setSelectedAttribute("1", true);

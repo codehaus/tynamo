@@ -24,8 +24,6 @@ import java.io.IOException;
 import static com.gargoylesoftware.htmlunit.WebAssert.*;
 import static org.testng.Assert.*;
 
-// FIXME these tests don't work because apply button doesn't work currently
-// see goToNew... methods
 public class EditCategoryTest extends AbstractContainerTest
 {
 	private HtmlPage startPage;
@@ -35,67 +33,68 @@ public class EditCategoryTest extends AbstractContainerTest
 		startPage = webClient.getPage(BASEURI);
 	}
 	
-	// @Test
+//	@Test I don't understand what this test is trying to test
 	public void testRequiredValidation() throws Exception
 	{
 		HtmlPage newCategoryPage;
 		HtmlForm newCategoryForm = goToNewCategoryForm();
-		HtmlSubmitInput saveButton = (HtmlSubmitInput) newCategoryForm
-			.getInputByValue("saveAndReturnButton");
+		HtmlSubmitInput saveButton = (HtmlSubmitInput) newCategoryForm.getInputByValue("saveAndReturn");
 		newCategoryPage = (HtmlPage) saveButton.click();
 		assertErrorTextPresent(newCategoryPage);
 		newCategoryForm = newCategoryPage.getHtmlElementById("form");
 		HtmlTextArea textArea = newCategoryForm.getTextAreaByName("Description");
 		textArea.setText("a description");
-		newCategoryPage = clickButton(newCategoryForm, "save");
+		newCategoryPage = clickButton(newCategoryForm, "saveAndStay");
 		assertErrorTextNotPresent(newCategoryPage);
 		assertElementPresent(newCategoryPage, "Id");
 	}
 
+	@Test
 	public void testRegexValidation() throws Exception
 	{
-		HtmlPage catalogListPage = (HtmlPage) startPage.getFirstAnchorByText(
-			"List Catalogs").click();
-		HtmlPage newCatalogPage = (HtmlPage) catalogListPage
-			.getFirstAnchorByText("New Catalog").click();
+		HtmlPage catalogListPage = (HtmlPage) startPage.getAnchorByText("List Catalogs").click();
+		HtmlPage newCatalogPage = (HtmlPage) catalogListPage.getAnchorByText("New Catalog").click();
+
 		HtmlForm form = newCatalogPage.getHtmlElementById("form");
 		HtmlInput nameInput = form.<HtmlInput>getInputByName("name");
 		nameInput.setValueAttribute("new catalog");
-		newCatalogPage = clickButton(newCatalogPage, "save");
+
+		newCatalogPage = clickButton(newCatalogPage, "saveAndStay");
 		assertErrorTextPresent(newCatalogPage);
-		assertTextPresent(newCatalogPage, "NameLabel is Required");
+		assertTextPresent(newCatalogPage, "NameLabel must match \"[a-z]*\"");
+
+		form = newCatalogPage.getHtmlElementById("form");
+		nameInput = form.<HtmlInput>getInputByName("name");
 		nameInput.setValueAttribute("newspacecatalog");
-		newCatalogPage = clickButton(newCatalogPage, "saveAndReturnButton");
+
+		newCatalogPage = clickButton(newCatalogPage, "saveAndStay");
 		assertErrorTextNotPresent(newCatalogPage);
 	}
 
 	private HtmlForm goToNewCategoryForm() throws Exception
 	{
 		HtmlPage newCategoryPage = goToNewCategoryPage();
-
-		return (HtmlForm) newCategoryPage.getForms().get(0);
+		return newCategoryPage.getForms().get(0);
 	}
 
 	private HtmlPage goToNewCategoryPage() throws IOException
 	{
-		HtmlPage catalogListPage = (HtmlPage) startPage.getFirstAnchorByText(
-			"List Catalogs").click();
-		HtmlPage newCatalogPage = (HtmlPage) catalogListPage
-			.getFirstAnchorByText("New Catalog").click();
+		HtmlPage catalogListPage = (HtmlPage) startPage.getAnchorByText("List Catalogs").click();
+		HtmlPage newCatalogPage = (HtmlPage) catalogListPage.getAnchorByText("New Catalog").click();
 		HtmlForm form = newCatalogPage.getHtmlElementById("form");
 		form.<HtmlInput>getInputByName("name").setValueAttribute("newcatalog");
-		newCatalogPage = clickButton(newCatalogPage, "save");
+		newCatalogPage = clickButton(newCatalogPage, "saveAndReturn");
 
-		return clickLink(newCatalogPage,"Add New...");
+		return clickLink(newCatalogPage,"Add Category");
 	}
 
+	@Test
 	public void testOverrideOnAddToCollectionPage() throws Exception
 	{
-
-		assertXPathPresent(goToNewCategoryPage(),
-			"//label[text() = 'The Description']");
+		assertXPathPresent(goToNewCategoryPage(), "//label[text() = 'The Description']");
 	}
 
+//	@Test //not supported, the palette component doesn't have a "Add New..." link anymore.
 	public void testAddNewDisabled() throws Exception
 	{
 		HtmlPage listCatalogsPage = clickLink(startPage, "List Catalogs");
@@ -104,18 +103,19 @@ public class EditCategoryTest extends AbstractContainerTest
 		HtmlAnchor addLink = null;
 		try
 		{
-			addLink = newCatalogPage.getFirstAnchorByText("Add New...");
+			addLink = newCatalogPage.getAnchorByText("Add New...");
 		} catch (ElementNotFoundException e)
 		{
 			assertNotNull(e);  // assertTrue(addButton.isDisabled());
 		}
 		newCatalogPage.<HtmlForm>getHtmlElementById("form").getInputByName("name").setValueAttribute("newercatalog");
-		newCatalogPage = clickButton(newCatalogPage, "save");
+		newCatalogPage = clickButton(newCatalogPage, "saveAndStay");
 //		addButton = (HtmlSubmitInput) new HtmlUnitXPath("//input[@type='submit' and @value='Add New...']").selectSingleNode(newCatalogPage);
-		addLink = newCatalogPage.getFirstAnchorByText("Add New...");
+		addLink = newCatalogPage.getAnchorByText("Add New...");
 		assertNotNull(addLink); // assertFalse(addButton.isDisabled());
 	}
 
+//	@Test @ascandroli: this would be super nice, but right now is too much ot handle
 	public void testAddProductToCategory() throws Exception
 	{
 		webClient.setJavaScriptEnabled(false);
@@ -128,8 +128,7 @@ public class EditCategoryTest extends AbstractContainerTest
 		input.setValueAttribute("a new product");
 
 		categoryPage = clickButton(newProductPage, "Ok");
-		assertXPathPresent(categoryPage,
-			"//td[@class='selected-cell']/select/option['a new product']");
+		assertXPathPresent(categoryPage, "//td[@class='selected-cell']/select/option['a new product']");
 		HtmlPage catalogPage = clickButton(categoryPage, "Ok");
 		assertXPathPresent(catalogPage, "//td/a['howdya doo']");
 		HtmlPage listPage = clickButton(catalogPage, "Ok");
