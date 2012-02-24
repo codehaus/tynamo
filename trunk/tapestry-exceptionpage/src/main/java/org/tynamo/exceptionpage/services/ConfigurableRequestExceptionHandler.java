@@ -103,7 +103,7 @@ public class ConfigurableRequestExceptionHandler implements RequestExceptionHand
 				assistant = (ExceptionHandlerAssistant) serviceResources.autobuild(handlerType);
 				handlerAssistants.put(handlerType, assistant);
 			}
-		}
+		} else page = value;
 
 		// the assistant may handle the exception directly or return a page
 		if (assistant != null) {
