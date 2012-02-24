@@ -22,7 +22,7 @@ public class EmbeddedTest extends AbstractContainerTest
 		newPersonPage = clickButton(newPersonPage, "save");
 		assertEquals("Sunnyville", form.<HtmlInput>getInputByName("city").getAttribute("value"));
 		// FIXME currently apply and ok execute the same action
-//		listPersonsPage = clickButton(newPersonPage, "saveAndReturnButton");
+//		listPersonsPage = clickButton(newPersonPage, "saveAndReturn");
 //		assertXPathPresent(listPersonsPage, "//td['John doe']");
 	}
 }

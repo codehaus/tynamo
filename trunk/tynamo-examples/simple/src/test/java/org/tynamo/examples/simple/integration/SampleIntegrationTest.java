@@ -1,10 +1,9 @@
 package org.tynamo.examples.simple.integration;
 
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import org.testng.Assert;
 import org.testng.annotations.Test;
 import org.tynamo.test.AbstractContainerTest;
-
-import static org.testng.Assert.assertEquals;
 
 public class SampleIntegrationTest extends AbstractContainerTest
 {
@@ -12,6 +11,6 @@ public class SampleIntegrationTest extends AbstractContainerTest
 	public void assertCorrectTitle() throws Exception
 	{
 		final HtmlPage homePage = webClient.getPage(BASEURI);
-		assertEquals("Tynamo!", homePage.getTitleText());
+		Assert.assertEquals(homePage.getTitleText(), "Tynamo!");
 	}
 }
