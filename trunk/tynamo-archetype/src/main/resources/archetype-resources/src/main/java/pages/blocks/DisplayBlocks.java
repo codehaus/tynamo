@@ -1,4 +1,4 @@
-package org.tynamo.examples.recipe.pages.blocks;
+package ${package}.pages.blocks;
 
 import org.apache.tapestry5.annotations.Environmental;
 import org.apache.tapestry5.annotations.Property;
