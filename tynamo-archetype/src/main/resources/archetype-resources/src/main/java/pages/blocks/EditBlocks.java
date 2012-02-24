@@ -1,4 +1,4 @@
-package org.tynamo.examples.recipe.pages.blocks;
+package ${package}.pages.blocks;
 
 public class EditBlocks
 {

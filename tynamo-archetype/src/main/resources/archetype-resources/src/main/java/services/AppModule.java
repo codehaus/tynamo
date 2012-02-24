@@ -1,13 +1,20 @@
 package ${package}.services;
 
-import java.io.IOException;
-
 import org.apache.tapestry5.SymbolConstants;
+import org.apache.tapestry5.hibernate.HibernateEntityPackageManager;
 import org.apache.tapestry5.ioc.Configuration;
 import org.apache.tapestry5.ioc.MappedConfiguration;
 import org.apache.tapestry5.ioc.ServiceBinder;
+import org.apache.tapestry5.ioc.annotations.Contribute;
+import org.apache.tapestry5.ioc.services.ApplicationDefaults;
+import org.apache.tapestry5.ioc.services.FactoryDefaults;
+import org.apache.tapestry5.ioc.services.SymbolProvider;
+import org.apache.tapestry5.services.BeanBlockContribution;
+import org.apache.tapestry5.services.BeanBlockSource;
+import org.apache.tapestry5.services.DisplayBlockContribution;
 import org.apache.tapestry5.upload.services.UploadSymbols;
 import org.tynamo.builder.Builder;
+import org.tynamo.builder.BuilderDirector;
 
 /**
  * This module is automatically included as part of the Tapestry IoC Registry, it's a good place to
@@ -25,7 +32,9 @@ public class AppModule
 		// invoking the constructor.
 	}
 
-	public static void contributeApplicationDefaults(MappedConfiguration<String, Object> configuration)
+	@Contribute(SymbolProvider.class)
+	@ApplicationDefaults
+	public static void provideSymbols(MappedConfiguration<String, String> configuration)
 	{
 		// Contributions to ApplicationDefaults will override any contributions to
 		// FactoryDefaults (with the same key). Here we're restricting the supported
@@ -39,7 +48,9 @@ public class AppModule
 		configuration.add(UploadSymbols.FILESIZE_MAX, "2048000");
 	}
 
-	public static void contributeFactoryDefaults(MappedConfiguration<String, Object> configuration)
+	@Contribute(SymbolProvider.class)
+	@FactoryDefaults
+	public static void overrideFactorySymbols(MappedConfiguration<String, Object> configuration)
 	{
 		// The application version is incorprated into URLs for most assets. Web
 		// browsers will cache assets because of the far future expires header.
@@ -52,6 +63,16 @@ public class AppModule
 	}
 
 	/**
+	 * Contribution to the BeanBlockSource service to tell the BeanEditForm component about the editors.
+	 */
+	@Contribute(BeanBlockSource.class)
+	public static void addCustomBlocks(Configuration<BeanBlockContribution> configuration)
+	{
+		configuration.add(new DisplayBlockContribution("single-valued-association", "blocks/DisplayBlocks", "showPageLink"));
+		configuration.add(new DisplayBlockContribution("many-valued-association", "blocks/DisplayBlocks", "showPageLinks"));
+	}
+
+	/**
 	 * By default tapestry-hibernate will scan
 	 * InternalConstants.TAPESTRY_APP_PACKAGE_PARAM + ".entities" (witch is equal to "${package}.${artifactId}.entities")
 	 * for annotated entity classes.
@@ -59,7 +80,8 @@ public class AppModule
 	 * Contributes the package "${package}.${artifactId}.model" to the configuration, so that it will be
 	 * scanned for annotated entity classes.
 	 */
-	public static void contributeHibernateEntityPackageManager(Configuration<String> configuration)
+	@Contribute(HibernateEntityPackageManager.class)
+	public static void addPackagesToScan(Configuration<String> configuration)
 	{
 //		If you want to scan other packages add them here:
 //		configuration.add("${package}.${artifactId}.model");
@@ -69,7 +91,8 @@ public class AppModule
 	 * Contributes Builders to the BuilderDirector's builders map.
 	 * Check GOF's <a href="http://en.wikipedia.org/wiki/Builder_pattern">Builder pattern</a>
 	 */
-	public static void contributeBuilderDirector(MappedConfiguration<Class, Builder> configuration)
+	@Contribute(BuilderDirector.class)
+	public static void addBuilders(MappedConfiguration<Class, Builder> configuration)
 	{
 //		configuration.add(org.tynamo.examples.recipe.model.Recipe.class, new RecipeBuilder());
 	}
