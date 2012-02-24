@@ -51,5 +51,10 @@
 			<scope>test</scope>
 		</dependency>
 
+		<dependency>
+			<groupId>org.tynamo</groupId>
+			<artifactId>tapestry-routing</artifactId>
+		</dependency>
+
 	</dependencies>
 </project>
