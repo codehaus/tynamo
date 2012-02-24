@@ -129,6 +129,14 @@
 				<artifactId>tapestry-model-web</artifactId>
 				<version>0.3.0-SNAPSHOT</version>
 			</dependency>
+
+			<dependency>
+				<groupId>org.tynamo</groupId>
+				<artifactId>tapestry-routing</artifactId>
+				<version>0.0.1</version>
+			</dependency>
+
 		</dependencies>
 	</dependencyManagement>
+
 </project>
