@@ -98,8 +98,6 @@ public class ActivitiModule {
 		if (!"".equals(unitName))
 			cfg.setJpaPersistenceUnitName(unitName);
 
-		cfg.setDatabaseSchemaUpdate("create-drop"); // use create-drop for testing only!
-
 		return cfg;
 	}
 
