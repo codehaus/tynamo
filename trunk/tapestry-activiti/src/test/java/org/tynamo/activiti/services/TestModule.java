@@ -22,6 +22,7 @@ public class TestModule {
 	@ApplicationDefaults
 	public static void applicationSymbols(MappedConfiguration<String, String> symbols) {
 		symbols.add(ActivitiSymbols.JOB_EXECUTOR_ACTIVATE, "false");
+		symbols.add(ActivitiSymbols.DATABASE_SCHEMA_UPDATE, "create-drop"); // use create-drop for testing only!
 		symbols.add(JPASymbols.PERSISTENCE_UNIT, "tapestry-activiti");
 	}
 
