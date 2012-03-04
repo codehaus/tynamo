@@ -82,7 +82,7 @@ public class Add
 		this.continueAdding = false;
 	}
 
-	@OnEvent(value = "continue")
+	@OnEvent(value = "stay")
 	void onSaveAndContinue() {
 		this.continueAdding = true;
 	}
