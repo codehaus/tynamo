@@ -24,7 +24,7 @@
 			<br/>
 			<div class="t-beaneditor-row">
 				<t:submit t:id="saveAndStay" event="stay" class="button" value="${message:org.tynamo.i18n.apply}"/>
-				<t:submit t:id="saveAndReturn" event="return" value="${message:org.tynamo.i18n.applyAndReturn}"/>
+				<t:submit t:id="saveAndReturn" event="return" class="button" value="${message:org.tynamo.i18n.applyAndReturn}"/>
 				&nbsp; or &nbsp;
 				<t:eventlink class="button" style="color:red; font-weight:bold;" t:id="cancel">
 					${message:org.tynamo.i18n.cancel}
