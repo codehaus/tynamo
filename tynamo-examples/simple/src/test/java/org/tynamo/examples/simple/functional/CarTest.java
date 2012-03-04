@@ -23,7 +23,7 @@ public class CarTest extends AbstractContainerTest
 		HtmlPage listMakesPage = clickLink(startPage, "List Makes");
 		HtmlPage newMakePage = clickLink(listMakesPage, "New Make");
 		HtmlForm form = newMakePage.getHtmlElementById("form");
-		form.<HtmlInput>getInputByName("name").setValueAttribute("Honda");
+		form.getInputByName("name").setValueAttribute("Honda");
 		
 		listMakesPage = clickButton(newMakePage, "saveAndReturn");
 
@@ -32,7 +32,7 @@ public class CarTest extends AbstractContainerTest
 		HtmlPage listModelsPage = clickLink(startPage, "List Models");
 		HtmlPage newModelPage = clickLink(listModelsPage, "New Model");
 		form = newModelPage.getHtmlElementById("form");
-		form.<HtmlInput>getInputByName("name").setValueAttribute("Civic");
+		form.getInputByName("name").setValueAttribute("Civic");
 		listModelsPage = clickButton(newModelPage, "saveAndReturn");
 
 		startPage = clickLink(listModelsPage, "Home");
@@ -40,7 +40,7 @@ public class CarTest extends AbstractContainerTest
 		HtmlPage listCarsPage = clickLink(startPage, "List Cars");
 		HtmlPage newCarPage = clickLink(listCarsPage, "New Car");
 		form = newModelPage.getHtmlElementById("form");
-		form.<HtmlInput>getInputByName("name").setValueAttribute("Accord");
+		form.getInputByName("name").setValueAttribute("Accord");
 		// kaosko -2009-11-02: not implemented yet
 //		HtmlSelect makeSelect = form.getSelectByName("Make");
 //		makeSelect.setSelectedAttribute("1", true);
@@ -69,28 +69,28 @@ public class CarTest extends AbstractContainerTest
 
 		HtmlPage newMakePage = webClient.getPage(BASEURI +"add/make");
 		HtmlForm form = newMakePage.getHtmlElementById("form");
-		form.<HtmlInput>getInputByName("name").setValueAttribute("Honda");
+		form.getInputByName("name").setValueAttribute("Honda");
 		newMakePage = clickButton(newMakePage, "saveAndReturn");
 		HtmlDefinitionDescription ddElement = (HtmlDefinitionDescription)newMakePage.getByXPath("//dt[contains(text(),'Id')]/following-sibling::dd").get(0);
 		int hondaId = Integer.parseInt(ddElement.getTextContent());
 
 		newMakePage = webClient.getPage(BASEURI +"add/make");
 		form = newMakePage.getHtmlElementById("form");
-		form.<HtmlInput>getInputByName("name").setValueAttribute("Toyota");
+		form.getInputByName("name").setValueAttribute("Toyota");
 		newMakePage = clickButton(newMakePage, "saveAndReturn");
 		ddElement = (HtmlDefinitionDescription)newMakePage.getByXPath("//dt[contains(text(),'Id')]/following-sibling::dd").get(0);
 		int toyotaId = Integer.parseInt(ddElement.getTextContent());
 
 		HtmlPage newModelPage = webClient.getPage(BASEURI +"add/model");
 		HtmlForm newModelForm = newModelPage.getHtmlElementById("form");
-		newModelForm.<HtmlInput>getInputByName("name").setValueAttribute("Prius");
+		newModelForm.getInputByName("name").setValueAttribute("Prius");
 		newModelPage = clickButton(newModelPage, "saveAndReturn");
 		ddElement = (HtmlDefinitionDescription)newModelPage.getByXPath("//dt[contains(text(),'Id')]/following-sibling::dd").get(0);
 		int priusId = Integer.parseInt(ddElement.getTextContent());
 
 		newModelPage = webClient.getPage(BASEURI +"add/model");
 		newModelForm = newModelPage.getHtmlElementById("form");
-		newModelForm.<HtmlInput>getInputByName("name").setValueAttribute("Sedan");
+		newModelForm.getInputByName("name").setValueAttribute("Sedan");
 		clickButton(newModelPage, "saveAndReturn");
 
 		HtmlPage editMakePage = webClient.getPage(BASEURI +"edit/make/" + hondaId);
@@ -101,10 +101,10 @@ public class CarTest extends AbstractContainerTest
 		assertXPathPresent(editMakePage, "//select[@id='palette_set-avail']/option[text()='Prius']");
 		assertXPathPresent(editMakePage, "//select[@id='palette_set-avail']/option[text()='Sedan']");
 
-		HtmlPage editModel = webClient.getPage(BASEURI + "edit/model/" + priusId);
-		form = editModel.getHtmlElementById("form");
+		HtmlPage editModelPage = webClient.getPage(BASEURI + "edit/model/" + priusId);
+		form = editModelPage.getHtmlElementById("form");
 		form.getSelectByName("make").getOptionByText("Toyota").setSelected(true);
-		clickButton(editModel, "saveAndReturn");
+		clickButton(editModelPage, "saveAndReturn");
 
 		editMakePage = webClient.getPage(BASEURI +"edit/make/" + toyotaId);
 		assertXPathNotPresent(editMakePage, "//select[@id='palette_set-avail'][not(node())]");
