@@ -1,9 +1,0 @@
-<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-
-<suite name="Tynamo Example - Recipe" annotations="1.5" verbose="2">
-	<test name="Tynamo Example - Recipe - Test Suite">
-		<packages>
-			<package name="org.tynamo.examples.recipe.tests.functional"/>
-		</packages>
-	</test>
-</suite>
