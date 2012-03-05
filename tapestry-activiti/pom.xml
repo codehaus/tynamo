@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>org.tynamo</groupId>
 		<artifactId>tynamo-parent</artifactId>
-		<version>0.0.8</version>
+		<version>0.0.9</version>
 	</parent>
 
 	<artifactId>tapestry-activiti</artifactId>
@@ -13,6 +13,18 @@
 
 	<name>Tapestry Activiti</name>
 	<description>Activiti Tapestry5 Integration</description>
+
+	<!-- developers section inherited from the parent pom -->
+	<contributors>
+		<contributor>
+			<name>Miguel Omar Carvajal</name>
+			<organization>Carvajal Consultants, Inc.</organization>
+			<organizationUrl>http://carvajalonline.com/</organizationUrl>
+			<roles>
+				<role>author</role>
+			</roles>
+		</contributor>
+	</contributors>
 
 	<scm>
 		<connection>scm:svn:http://svn.codehaus.org/tynamo/trunk/tapestry-activiti</connection>
