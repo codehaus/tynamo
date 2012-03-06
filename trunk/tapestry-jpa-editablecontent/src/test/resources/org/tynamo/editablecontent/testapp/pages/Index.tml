@@ -1,0 +1,12 @@
+<html title="editablecontent Index" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd" xmlns:p="tapestry:parameter">
+        <!-- Most of the page content, including <head>, <body>, etc. tags, comes from Layout.tml -->
+	<head></head>
+	<body>
+		<p><strong>The following text is editable</strong></p>
+		<t:cms.editableContent t:id="testeditablecontent">
+			<div>
+				lorem lipsum etc.
+			</div>
+		</t:cms.editableContent>		
+	</body>
+</html>
