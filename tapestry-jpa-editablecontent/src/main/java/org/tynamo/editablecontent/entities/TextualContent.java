@@ -26,6 +26,8 @@ public class TextualContent {
 	@Column(length = CONTENT_MAX_LENGTH)
 	private String value;
 
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(nullable = false)
 	private Date lastModified = new Date();
 
 	public String getId() {
@@ -44,8 +46,6 @@ public class TextualContent {
 		this.value = value;
 	}
 
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(nullable = false)
 	public Date getLastModified() {
 		return lastModified;
 	}

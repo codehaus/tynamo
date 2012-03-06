@@ -61,6 +61,7 @@ public class RevisionedContent {
 	@Id
 	private String id;
 
+	@Id
 	private long revision;
 
 	@Lob
@@ -68,6 +69,9 @@ public class RevisionedContent {
 	@Column(length = CONTENT_MAX_LENGTH)
 	private byte[] value;
 
+	@Temporal(TemporalType.TIMESTAMP)
+	@NotNull
+	@Column(nullable = false, updatable = false)
 	private Date lastModified = new Date();
 
 	public RevisionedContent() {
@@ -126,18 +130,10 @@ public class RevisionedContent {
 		this.value = value;
 	}
 
-	@Temporal(TemporalType.TIMESTAMP)
-	@NotNull
-	@Column(nullable = false, updatable = false)
 	public Date getLastModified() {
 		return lastModified;
 	}
 
-	public void setLastModified(Date lastModified) {
-		if (lastModified != null) this.lastModified = lastModified;
-	}
-
-	@Id
 	public long getRevision() {
 		return revision;
 	}
