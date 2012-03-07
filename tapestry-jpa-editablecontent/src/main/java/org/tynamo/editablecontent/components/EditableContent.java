@@ -108,7 +108,8 @@ public class EditableContent {
 	}
 
 	public boolean isEditable() {
-		// if (request.getSession(false) == null) return false;
+		if (request.getSession(false) == null) return false;
+		// TODO check role-based authorization
 		return true;
 	}
 
