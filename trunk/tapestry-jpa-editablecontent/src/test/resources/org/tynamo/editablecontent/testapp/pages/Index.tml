@@ -1,9 +1,16 @@
 <html title="editablecontent Index" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd" xmlns:p="tapestry:parameter">
-        <!-- Most of the page content, including <head>, <body>, etc. tags, comes from Layout.tml -->
 	<head></head>
 	<body>
+		<div style="overflow:auto">
+	    <div style="float:right">
+	    	<t:security.loginlink />
+	    	<t:security.notauthenticated>
+		    	(use author:author) 
+	    	</t:security.notauthenticated>
+	    </div>
+    </div>
 		<t:alerts/>
-		<p><strong>The following text is editable</strong></p>
+		<p><strong>The following text is editable with the right permissions</strong></p>
 		<t:tynamo.editableContent t:id="testeditablecontent">
 			<div>
 				lorem lipsum etc.
