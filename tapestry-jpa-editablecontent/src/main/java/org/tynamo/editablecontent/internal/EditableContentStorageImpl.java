@@ -11,7 +11,6 @@ import javax.persistence.criteria.Root;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.apache.tapestry5.ioc.services.ThreadLocale;
-import org.apache.tapestry5.jpa.annotations.CommitAfter;
 import org.tynamo.editablecontent.EditableContentSymbols;
 import org.tynamo.editablecontent.entities.RevisionedContent;
 import org.tynamo.editablecontent.entities.TextualContent;
@@ -30,13 +29,6 @@ public class EditableContentStorageImpl implements EditableContentStorage {
 	private String localizeContentId(final String contentId) {
 		if (threadLocale == null || threadLocale.getLocale() == null) return contentId;
 		return contentId + "_" + threadLocale.getLocale().toString();
-	}
-
-	@Override
-	public String getHtmlContent(String contentId) {
-		// TODO handle cache
-		TextualContent content = getTextualContent(contentId);
-		return content == null ? null : content.getValue();
 	}
 
 	@Override
@@ -70,10 +62,9 @@ public class EditableContentStorageImpl implements EditableContentStorage {
 	}
 
 	@Override
-	@CommitAfter
 	public String updateContent(String contentId, String contentValue, int maxHistory) {
 		contentId = localizeContentId(contentId);
-		TextualContent content = getTextualContent(contentId);
+		TextualContent content = entityManager.find(TextualContent.class, contentId);
 		if (content == null) {
 			content = new TextualContent();
 			content.setId(contentId);
@@ -84,13 +75,15 @@ public class EditableContentStorageImpl implements EditableContentStorage {
 		content.setValue(contentValue);
 		content.setLastModified(new Date());
 
-		// TODO persist previous version
+		// persist previous version
 		entityManager.persist(content);
+		// TODO refresh cache
 		return null;
 	}
 
 	@Override
 	public TextualContent getTextualContent(String contentId) {
+		// TODO handle cache
 		return entityManager.find(TextualContent.class, localizeContentId(contentId));
 	}
 

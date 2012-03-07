@@ -149,11 +149,21 @@
 				<resources>
 					<resource>
 						<directory>src/main/resources</directory>
+						<targetPath>src/main/resources</targetPath>
 						<excludes>
 							<exclude>**</exclude>
 						</excludes>
 					</resource>
 				</resources>
+				<testResources>
+					<testResource>
+						<directory>src/test/resources</directory>
+						<targetPath>src/test/resources</targetPath>
+						<excludes>
+							<exclude>**</exclude>
+						</excludes>
+					</testResource>
+				</testResources>
 			</build>
 		</profile>
 	</profiles>
