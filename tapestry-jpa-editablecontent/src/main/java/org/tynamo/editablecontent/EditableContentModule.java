@@ -19,7 +19,7 @@ public class EditableContentModule {
 
 	@Contribute(ComponentClassResolver.class)
 	public static void setupCkEditorLibrary(Configuration<LibraryMapping> configuration) {
-		configuration.add(new LibraryMapping("cms", EditableContentModule.class.getPackage().getName()));
+		configuration.add(new LibraryMapping("tynamo", EditableContentModule.class.getPackage().getName()));
 	}
 
 	public static void contributeFactoryDefaults(MappedConfiguration<String, String> configuration) {
