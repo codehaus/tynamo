@@ -2,6 +2,7 @@
         <!-- Most of the page content, including <head>, <body>, etc. tags, comes from Layout.tml -->
 	<head></head>
 	<body>
+		<t:alerts/>
 		<p><strong>The following text is editable</strong></p>
 		<t:cms.editableContent t:id="testeditablecontent">
 			<div>

@@ -4,6 +4,7 @@ import org.apache.tapestry5.ComponentResources;
 import org.apache.tapestry5.MarkupWriter;
 import org.apache.tapestry5.PersistenceConstants;
 import org.apache.tapestry5.ValidationDecorator;
+import org.apache.tapestry5.alerts.AlertManager;
 import org.apache.tapestry5.annotations.AfterRenderBody;
 import org.apache.tapestry5.annotations.BeforeRenderBody;
 import org.apache.tapestry5.annotations.Import;
@@ -17,12 +18,12 @@ import org.apache.tapestry5.internal.DefaultValidationDecorator;
 import org.apache.tapestry5.internal.services.MarkupWriterImpl;
 import org.apache.tapestry5.internal.services.RenderQueueImpl;
 import org.apache.tapestry5.ioc.annotations.Inject;
-import org.apache.tapestry5.jpa.annotations.CommitAfter;
 import org.apache.tapestry5.runtime.RenderCommand;
 import org.apache.tapestry5.services.AssetSource;
 import org.apache.tapestry5.services.Environment;
 import org.apache.tapestry5.services.Request;
 import org.slf4j.Logger;
+import org.tynamo.editablecontent.entities.TextualContent;
 import org.tynamo.editablecontent.services.EditableContentStorage;
 
 @Import(stylesheet = "EditableContent.css")
@@ -89,10 +90,14 @@ public class EditableContent {
 
 	@AfterRenderBody
 	public Object renderContent(MarkupWriter writer) {
-		if (!contentStorage.contains(contentId)) return componentResources.getBody();
-		writer.writeRaw(contentStorage.getHtmlContent(contentId));
+		TextualContent content = contentStorage.getTextualContent(contentId);
+		if (content == null) return componentResources.getBody();
+		writer.writeRaw(content.getValue());
 		return true;
 	}
+
+	@Persist(PersistenceConstants.CLIENT)
+	private Long versionForEdit;
 
 	@Persist(PersistenceConstants.SESSION)
 	private boolean inEditMode;
@@ -116,24 +121,37 @@ public class EditableContent {
 	}
 
 	public Object onActionFromEditLink() {
-		inEditMode = !inEditMode;
+		inEditMode = true;
 
-		contentValue = contentStorage.getHtmlContent(contentId);
-		if (contentValue == null) {
+		TextualContent content = contentStorage.getTextualContent(contentId);
+		if (content == null) {
+			versionForEdit = null;
 			contentValue = renderMarkup((RenderCommand) componentResources.getBody());
 			if (contentValue == null) contentValue = "";
+		} else {
+			versionForEdit = content.getVersion();
+			contentValue = content.getValue();
 		}
 
 		return request.isXHR() ? contentZone.getBody() : null;
 	}
 
+	@Inject
+	private AlertManager alertManager;
+
 	public void onValidateFromContentEditorForm() {
 		inEditMode = false;
+		if (versionForEdit != null) {
+			TextualContent content = contentStorage.getTextualContent(contentId);
+			if (versionForEdit != content.getVersion())
+				alertManager.warn("Someone had modified contents after you started editing, those changes were erased!");
+		}
 		contentStorage.updateContent(contentId, contentValue, maxHistory);
 	}
 
-	@CommitAfter
 	Object onSuccess() {
+		TextualContent content = contentStorage.getTextualContent(contentId);
+		versionForEdit = content.getVersion();
 		return request.isXHR() ? contentZone.getBody() : null;
 	}
 
