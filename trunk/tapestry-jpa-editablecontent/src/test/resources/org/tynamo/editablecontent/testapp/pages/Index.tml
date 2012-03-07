@@ -4,10 +4,10 @@
 	<body>
 		<t:alerts/>
 		<p><strong>The following text is editable</strong></p>
-		<t:cms.editableContent t:id="testeditablecontent">
+		<t:tynamo.editableContent t:id="testeditablecontent">
 			<div>
 				lorem lipsum etc.
 			</div>
-		</t:cms.editableContent>		
+		</t:tynamo.editableContent>		
 	</body>
 </html>
