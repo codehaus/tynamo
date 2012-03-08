@@ -7,6 +7,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.Symbol;
@@ -19,11 +20,13 @@ import org.tynamo.editablecontent.services.EditableContentStorage;
 public class EditableContentStorageImpl implements EditableContentStorage {
 	private EntityManager entityManager;
 	private ThreadLocale threadLocale;
+	private HttpServletRequest request;
 
-	public EditableContentStorageImpl(EntityManager entityManager, ThreadLocale persistentLocale,
+	public EditableContentStorageImpl(EntityManager entityManager, ThreadLocale threadLocale, HttpServletRequest request,
 		@Inject @Symbol(EditableContentSymbols.LOCALIZED_CONTENT) boolean localizedContent) {
 		this.entityManager = entityManager;
-		this.threadLocale = localizedContent ? persistentLocale : null;
+		this.threadLocale = localizedContent ? threadLocale : null;
+		this.request = request;
 	}
 
 	private String localizeContentId(final String contentId) {
@@ -74,6 +77,9 @@ public class EditableContentStorageImpl implements EditableContentStorage {
 		}
 		content.setValue(contentValue);
 		content.setLastModified(new Date());
+		String author = request.getRemoteUser();
+		if (author == null) author = request.getRemoteAddr();
+		content.setAuthor(author);
 
 		// persist previous version
 		entityManager.persist(content);

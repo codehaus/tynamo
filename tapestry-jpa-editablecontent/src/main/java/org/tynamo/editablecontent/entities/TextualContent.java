@@ -21,6 +21,9 @@ public class TextualContent {
 	@Version
 	private long version;
 
+	@Column(length = 255)
+	private String author;
+
 	@Lob
 	// should be the default: @Basic(fetch = FetchType.LAZY)
 	@Column(length = CONTENT_MAX_LENGTH)
@@ -56,5 +59,13 @@ public class TextualContent {
 
 	public long getVersion() {
 		return version;
+	}
+
+	public String getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(String author) {
+		this.author = author;
 	}
 }

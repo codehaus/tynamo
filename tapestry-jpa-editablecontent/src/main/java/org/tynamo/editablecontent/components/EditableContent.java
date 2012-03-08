@@ -18,11 +18,13 @@ import org.apache.tapestry5.internal.DefaultValidationDecorator;
 import org.apache.tapestry5.internal.services.MarkupWriterImpl;
 import org.apache.tapestry5.internal.services.RenderQueueImpl;
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.apache.tapestry5.runtime.RenderCommand;
 import org.apache.tapestry5.services.AssetSource;
 import org.apache.tapestry5.services.Environment;
 import org.apache.tapestry5.services.Request;
 import org.slf4j.Logger;
+import org.tynamo.editablecontent.EditableContentSymbols;
 import org.tynamo.editablecontent.entities.TextualContent;
 import org.tynamo.editablecontent.services.EditableContentStorage;
 
@@ -44,6 +46,17 @@ public class EditableContent {
 
 	// @Inject
 	// private WikiContentCache wikiContentCache;
+
+	@Inject
+	@Symbol(EditableContentSymbols.READONLY_BYDEFAULT)
+	public boolean defaultReadOnly;
+
+	public boolean isDefaultReadyOnly() {
+		return defaultReadOnly;
+	}
+
+	@Parameter("defaultReadOnly")
+	private boolean readOnly;
 
 	@Parameter("defaultContentId")
 	private String contentId;
@@ -108,6 +121,7 @@ public class EditableContent {
 	}
 
 	public boolean isEditable() {
+		if (readOnly) return false;
 		if (request.getSession(false) == null) return false;
 		// TODO check role-based authorization
 		return true;
@@ -145,7 +159,8 @@ public class EditableContent {
 		if (versionForEdit != null) {
 			TextualContent content = contentStorage.getTextualContent(contentId);
 			if (versionForEdit != content.getVersion())
-				alertManager.warn("Someone had modified contents after you started editing, those changes were erased!");
+				alertManager.warn(content.getAuthor()
+					+ " had modified contents after you started editing, those changes were erased!");
 		}
 		contentStorage.updateContent(contentId, contentValue, maxHistory);
 	}

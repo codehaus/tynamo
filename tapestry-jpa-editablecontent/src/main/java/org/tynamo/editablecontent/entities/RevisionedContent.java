@@ -59,10 +59,14 @@ public class RevisionedContent {
 	public static final int CONTENT_MAX_LENGTH = 10000;
 
 	@Id
+	@Column(length = 255)
 	private String id;
 
 	@Id
 	private long revision;
+
+	@Column(length = 255)
+	private String author;
 
 	@Lob
 	// should be the default: @Basic(fetch = FetchType.LAZY)
@@ -80,6 +84,7 @@ public class RevisionedContent {
 	public RevisionedContent(TextualContent textualContent) {
 		id = textualContent.getId();
 		revision = textualContent.getVersion();
+		author = textualContent.getAuthor();
 		lastModified = textualContent.getLastModified();
 
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -118,27 +123,19 @@ public class RevisionedContent {
 		return id;
 	}
 
-	public void setId(String id) {
-		this.id = id;
-	}
-
 	public byte[] getValue() {
 		return value;
-	}
-
-	public void setValue(byte[] value) {
-		this.value = value;
 	}
 
 	public Date getLastModified() {
 		return lastModified;
 	}
 
-	public long getRevision() {
-		return revision;
+	public String getAuthor() {
+		return author;
 	}
 
-	public void setRevision(long revision) {
-		this.revision = revision;
+	public long getRevision() {
+		return revision;
 	}
 }
