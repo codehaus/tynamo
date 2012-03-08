@@ -19,8 +19,15 @@
 	</properties>
 
 	<dependencies>
+		<dependency>
+			<groupId>org.testng</groupId>
+			<artifactId>testng</artifactId>
+			<version>5.9</version>
+			<classifier>jdk15</classifier>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
-
+	
 	<scm>
 		<connection>scm:svn:http://svn.codehaus.org/tynamo/trunk/tynamo-common</connection>
 		<developerConnection>scm:svn:https://svn.codehaus.org/tynamo/trunk/tynamo-common</developerConnection>
