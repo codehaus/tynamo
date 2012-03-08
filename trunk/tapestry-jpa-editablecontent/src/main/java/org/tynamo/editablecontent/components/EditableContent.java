@@ -1,5 +1,8 @@
 package org.tynamo.editablecontent.components;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.shiro.SecurityUtils;
 import org.apache.tapestry5.ComponentResources;
 import org.apache.tapestry5.MarkupWriter;
 import org.apache.tapestry5.PersistenceConstants;
@@ -13,6 +16,7 @@ import org.apache.tapestry5.annotations.PageReset;
 import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
+import org.apache.tapestry5.corelib.components.Form;
 import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.internal.DefaultValidationDecorator;
 import org.apache.tapestry5.internal.services.MarkupWriterImpl;
@@ -49,14 +53,25 @@ public class EditableContent {
 
 	@Inject
 	@Symbol(EditableContentSymbols.READONLY_BYDEFAULT)
-	public boolean defaultReadOnly;
+	private boolean defaultReadOnly;
 
-	public boolean isDefaultReadyOnly() {
+	public boolean isDefaultReadOnly() {
 		return defaultReadOnly;
 	}
 
 	@Parameter("defaultReadOnly")
 	private boolean readOnly;
+
+	@Inject
+	@Symbol(EditableContentSymbols.DEFAULT_AUTHORROLE)
+	private String defaultAuthorRole;
+
+	public String getDefaultAuthorRole() {
+		return defaultAuthorRole;
+	}
+
+	@Parameter("defaultAuthorRole")
+	private String authorRole;
 
 	@Parameter("defaultContentId")
 	private String contentId;
@@ -120,11 +135,13 @@ public class EditableContent {
 		return inEditMode;
 	}
 
+	@Inject
+	private HttpServletRequest httpServletRequest;
+
 	public boolean isEditable() {
+		logger.info("user is editor " + SecurityUtils.getSubject().hasRole("editor"));
 		if (readOnly) return false;
-		if (request.getSession(false) == null) return false;
-		// TODO check role-based authorization
-		return true;
+		return httpServletRequest.isUserInRole(authorRole);
 	}
 
 	@InjectComponent
@@ -154,8 +171,16 @@ public class EditableContent {
 	@Inject
 	private AlertManager alertManager;
 
+	@InjectComponent
+	private Form contentEditorForm;
+
 	public void onValidateFromContentEditorForm() {
 		inEditMode = false;
+		if (!httpServletRequest.isUserInRole(authorRole)) {
+			contentEditorForm.recordError("Changes ignored, you are not authorized to modify this content");
+			return;
+		}
+
 		if (versionForEdit != null) {
 			TextualContent content = contentStorage.getTextualContent(contentId);
 			if (versionForEdit != content.getVersion())

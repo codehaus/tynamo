@@ -7,6 +7,7 @@ import org.apache.tapestry5.ioc.MappedConfiguration;
 import org.apache.tapestry5.ioc.ServiceBinder;
 import org.apache.tapestry5.ioc.annotations.SubModule;
 import org.tynamo.editablecontent.EditableContentModule;
+import org.tynamo.editablecontent.EditableContentSymbols;
 import org.tynamo.shiro.extension.realm.text.ExtendedPropertiesRealm;
 
 /**
@@ -24,6 +25,7 @@ public class AppModule {
 
 	public static void contributeApplicationDefaults(MappedConfiguration<String, Object> configuration) {
 		configuration.add(SymbolConstants.SUPPORTED_LOCALES, "en, fi_FI");
+		configuration.add(EditableContentSymbols.DEFAULT_AUTHORROLE, "editor");
 	}
 
 	public static void contributeWebSecurityManager(Configuration<Realm> configuration) {
