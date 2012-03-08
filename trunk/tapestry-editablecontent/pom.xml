@@ -2,8 +2,8 @@
 
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.tynamo</groupId>
-	<artifactId>tapestry-jpa-editablecontent</artifactId>
-	<name>JPA based editable content for Tapestry 5</name>
+	<artifactId>tapestry-editablecontent</artifactId>
+	<name>Editable text content for Tapestry 5</name>
 	<description>JPA based editable content for Tapestry 5</description>
 	<packaging>jar</packaging>
 	<version>0.0.1-SNAPSHOT</version>
@@ -19,16 +19,16 @@
 	</properties>
 
 	<scm>
-		<connection>scm:svn:http://svn.codehaus.org/tynamo/trunk/tapestry-jpa-editablecontent</connection>
-		<developerConnection>scm:svn:https://svn.codehaus.org/tynamo/trunk/tapestry-jpa-editablecontent</developerConnection>
-		<url>http://svn.tynamo.codehaus.org/tynamo/trunk/tapestry-jpa-editablecontent</url>
+		<connection>scm:svn:http://svn.codehaus.org/tynamo/trunk/tapestry-editablecontent</connection>
+		<developerConnection>scm:svn:https://svn.codehaus.org/tynamo/trunk/tapestry-editablecontent</developerConnection>
+		<url>http://svn.tynamo.codehaus.org/tynamo/trunk/tapestry-editablecontent</url>
 	</scm>
 
 	<distributionManagement>
 		<site>
 			<id>tynamo-site</id>
 			<!-- Note the url. Only static files deployed in /constant/ can be decorated by Unity -->
-			<url>dav:https://dav.codehaus.org/tynamo/constant/sites/tapestry-jpa-editablecontent</url>
+			<url>dav:https://dav.codehaus.org/tynamo/constant/sites/tapestry-editablecontent</url>
 		</site>
 	</distributionManagement>
 	
