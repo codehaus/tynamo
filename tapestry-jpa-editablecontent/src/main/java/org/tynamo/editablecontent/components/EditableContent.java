@@ -2,7 +2,6 @@ package org.tynamo.editablecontent.components;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.shiro.SecurityUtils;
 import org.apache.tapestry5.ComponentResources;
 import org.apache.tapestry5.MarkupWriter;
 import org.apache.tapestry5.PersistenceConstants;
@@ -139,7 +138,6 @@ public class EditableContent {
 	private HttpServletRequest httpServletRequest;
 
 	public boolean isEditable() {
-		logger.info("user is editor " + SecurityUtils.getSubject().hasRole("editor"));
 		if (readOnly) return false;
 		return httpServletRequest.isUserInRole(authorRole);
 	}
