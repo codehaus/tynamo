@@ -6,6 +6,8 @@ import org.tynamo.editablecontent.entities.TextualContent;
 public interface EditableContentStorage {
 	public TextualContent getTextualContent(String contentId);
 
+	public String getTextualContentValue(String contentId);
+
 	public boolean contains(String contentId);
 
 	@CommitAfter

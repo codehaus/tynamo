@@ -9,7 +9,7 @@ import org.apache.tapestry5.ioc.annotations.Match;
 import org.apache.tapestry5.jpa.JpaTransactionAdvisor;
 import org.apache.tapestry5.services.ComponentClassResolver;
 import org.apache.tapestry5.services.LibraryMapping;
-import org.tynamo.editablecontent.internal.EditableContentStorageImpl;
+import org.tynamo.editablecontent.internal.services.EditableContentStorageImpl;
 import org.tynamo.editablecontent.services.EditableContentStorage;
 
 public class EditableContentModule {
