@@ -3,9 +3,10 @@
 	<body>
 		<div style="overflow:auto">
 	    <div style="float:right">
-	    	<t:security.loginlink />
+	    	<span style="vertical-align:top"><t:security.loginlink/></span>
 	    	<t:security.notauthenticated>
-		    	(use author:author) 
+		    	<span style="display:inline-block;text-align:right;margin-left:10px">(use author:author<br/>
+		    	or user: user)</span>
 	    	</t:security.notauthenticated>
 	    </div>
     </div>
