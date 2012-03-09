@@ -5,4 +5,5 @@ public class EditableContentSymbols {
 	public static final String LOCALIZED_CONTENT = "editablecontent.localizedcontent";
 	public static final String READONLY_BYDEFAULT = "editablecontent.readonlybydefault";
 	public static final String DEFAULT_AUTHORROLE = "editablecontent.defaultauthorrole";
+	public static final String PERSISTENCEUNIT = "editablecontent.persistenceunit";
 }

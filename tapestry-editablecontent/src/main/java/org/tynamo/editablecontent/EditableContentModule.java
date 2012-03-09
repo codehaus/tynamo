@@ -29,6 +29,7 @@ public class EditableContentModule {
 		configuration.add(EditableContentSymbols.LOCALIZED_CONTENT, Boolean.TRUE.toString());
 		configuration.add(EditableContentSymbols.READONLY_BYDEFAULT, Boolean.FALSE.toString());
 		configuration.add(EditableContentSymbols.DEFAULT_AUTHORROLE, "");
+		configuration.add(EditableContentSymbols.PERSISTENCEUNIT, "");
 	}
 
 	@Match("EditableContentStorage")

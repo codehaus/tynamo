@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.apache.tapestry5.ioc.services.ThreadLocale;
+import org.apache.tapestry5.jpa.EntityManagerManager;
 import org.tynamo.editablecontent.EditableContentSymbols;
 import org.tynamo.editablecontent.entities.RevisionedContent;
 import org.tynamo.editablecontent.entities.TextualContent;
@@ -21,19 +22,45 @@ import org.tynamo.editablecontent.services.EditableContentStorage;
 import com.googlecode.concurrentlinkedhashmap.ConcurrentLinkedHashMap;
 
 public class EditableContentStorageImpl implements EditableContentStorage {
-	private EntityManager entityManager;
+	// private EntityManager entityManager;
 	private ThreadLocale threadLocale;
 	private HttpServletRequest request;
 	private ConcurrentMap<String, String> lruCache;
+	private String persistenceUnitName;
+	private EntityManagerManager entityManagerManager;
 
-	public EditableContentStorageImpl(EntityManager entityManager, ThreadLocale threadLocale, HttpServletRequest request,
-		@Inject @Symbol(EditableContentSymbols.LOCALIZED_CONTENT) boolean localizedContent,
+	public EditableContentStorageImpl(EntityManagerManager entityManagerManager, ThreadLocale threadLocale,
+		HttpServletRequest request, @Inject @Symbol(EditableContentSymbols.LOCALIZED_CONTENT) boolean localizedContent,
+		@Inject @Symbol(EditableContentSymbols.PERSISTENCEUNIT) String persistenceUnitName,
 		@Inject @Symbol(EditableContentSymbols.LRU_CACHE_SIZE) int lruCacheSize) {
-		this.entityManager = entityManager;
+
+		EntityManager entityManager = null;
+		if (persistenceUnitName.isEmpty()) {
+			if (entityManagerManager.getEntityManagers().size() != 1)
+				throw new IllegalArgumentException(
+					"You have to specify the persistenceunit for editable content if multiple persistence units are configured in the system. Contribute a value for EditableContentSymbols.PERSISTENCEUNIT");
+			entityManager = entityManagerManager.getEntityManagers().values().iterator().next();
+		} else {
+			entityManager = entityManagerManager.getEntityManager(persistenceUnitName);
+			if (entityManager == null)
+				throw new IllegalArgumentException(
+					"Persistence unit '"
+						+ persistenceUnitName
+						+ "' is configured for editable content, but it was not found. Check that the contributed name matches with persistenceunit configuration");
+		}
+		this.entityManagerManager = entityManagerManager;
+		// entityManagerManager doesn't not give us a shadow for entityManager but the actual per-thread object so we cannot save a reference to
+		// the entityManager
+		this.persistenceUnitName = persistenceUnitName;
 		this.threadLocale = localizedContent ? threadLocale : null;
 		this.request = request;
 		lruCache = lruCacheSize <= 0 ? null : new ConcurrentLinkedHashMap.Builder<String, String>()
 			.maximumWeightedCapacity(lruCacheSize).build();
+	}
+
+	EntityManager getEntityManager() {
+		return persistenceUnitName.isEmpty() ? entityManagerManager.getEntityManagers().values().iterator().next()
+			: entityManagerManager.getEntityManager(persistenceUnitName);
 	}
 
 	private String localizeContentId(final String contentId) {
@@ -43,6 +70,7 @@ public class EditableContentStorageImpl implements EditableContentStorage {
 
 	@Override
 	public boolean contains(String contentId) {
+		EntityManager entityManager = getEntityManager();
 		contentId = localizeContentId(contentId);
 		CriteriaBuilder qb = entityManager.getCriteriaBuilder();
 		CriteriaQuery<Long> cq = qb.createQuery(Long.class);
@@ -53,6 +81,7 @@ public class EditableContentStorageImpl implements EditableContentStorage {
 	}
 
 	void createRevision(TextualContent content, int maxHistory) {
+		EntityManager entityManager = getEntityManager();
 		RevisionedContent revision = new RevisionedContent(content);
 		entityManager.persist(revision);
 		// delete revisions earlier than max allowed. If maxHistory is 0, keep all revisions
@@ -73,6 +102,7 @@ public class EditableContentStorageImpl implements EditableContentStorage {
 
 	@Override
 	public String updateContent(String contentId, String contentValue, int maxHistory) {
+		EntityManager entityManager = getEntityManager();
 		contentId = localizeContentId(contentId);
 		TextualContent content = entityManager.find(TextualContent.class, contentId);
 		if (content == null) {
@@ -97,6 +127,7 @@ public class EditableContentStorageImpl implements EditableContentStorage {
 
 	@Override
 	public String getTextualContentValue(String contentId) {
+		EntityManager entityManager = getEntityManager();
 		contentId = localizeContentId(contentId);
 		String value = lruCache == null ? null : lruCache.get(contentId);
 		if (value == null) {
@@ -109,7 +140,7 @@ public class EditableContentStorageImpl implements EditableContentStorage {
 
 	@Override
 	public TextualContent getTextualContent(String contentId) {
-		return entityManager.find(TextualContent.class, localizeContentId(contentId));
+		return getEntityManager().find(TextualContent.class, localizeContentId(contentId));
 	}
 
 }
