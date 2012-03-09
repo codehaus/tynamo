@@ -34,6 +34,11 @@
 	
 	<dependencies>
 		<dependency>
+			<groupId>com.googlecode.concurrentlinkedhashmap</groupId>
+			<artifactId>concurrentlinkedhashmap-lru</artifactId>
+			<version>1.2</version>
+		</dependency>
+		<dependency>
 			<groupId>org.tynamo</groupId>
 			<artifactId>tapestry-ckeditor</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
@@ -47,12 +52,6 @@
 		<dependency>
 			<groupId>org.apache.tapestry</groupId>
 			<artifactId>tapestry-beanvalidator</artifactId>
-			<version>${tapestry-release-version}</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.tapestry</groupId>
-			<artifactId>tapestry-test</artifactId>
 			<version>${tapestry-release-version}</version>
 			<scope>provided</scope>
 		</dependency>
@@ -105,6 +104,7 @@
 			<groupId>org.tynamo</groupId>
 			<artifactId>tapestry-model-test</artifactId>
 			<version>0.1.0</version>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.tynamo</groupId>

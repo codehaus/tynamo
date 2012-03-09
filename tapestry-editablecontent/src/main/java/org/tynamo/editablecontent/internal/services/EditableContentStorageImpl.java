@@ -1,7 +1,8 @@
-package org.tynamo.editablecontent.internal;
+package org.tynamo.editablecontent.internal.services;
 
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.ConcurrentMap;
 
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -17,16 +18,22 @@ import org.tynamo.editablecontent.entities.RevisionedContent;
 import org.tynamo.editablecontent.entities.TextualContent;
 import org.tynamo.editablecontent.services.EditableContentStorage;
 
+import com.googlecode.concurrentlinkedhashmap.ConcurrentLinkedHashMap;
+
 public class EditableContentStorageImpl implements EditableContentStorage {
 	private EntityManager entityManager;
 	private ThreadLocale threadLocale;
 	private HttpServletRequest request;
+	private ConcurrentMap<String, String> lruCache;
 
 	public EditableContentStorageImpl(EntityManager entityManager, ThreadLocale threadLocale, HttpServletRequest request,
-		@Inject @Symbol(EditableContentSymbols.LOCALIZED_CONTENT) boolean localizedContent) {
+		@Inject @Symbol(EditableContentSymbols.LOCALIZED_CONTENT) boolean localizedContent,
+		@Inject @Symbol(EditableContentSymbols.LRU_CACHE_SIZE) int lruCacheSize) {
 		this.entityManager = entityManager;
 		this.threadLocale = localizedContent ? threadLocale : null;
 		this.request = request;
+		lruCache = lruCacheSize <= 0 ? null : new ConcurrentLinkedHashMap.Builder<String, String>()
+			.maximumWeightedCapacity(lruCacheSize).build();
 	}
 
 	private String localizeContentId(final String contentId) {
@@ -72,7 +79,7 @@ public class EditableContentStorageImpl implements EditableContentStorage {
 			content = new TextualContent();
 			content.setId(contentId);
 		} else {
-			// TODO fetch current version and store the older version as a previous version to revisionedContent
+			// store the older version as a previous version to revisionedContent
 			if (maxHistory >= 0) createRevision(content, maxHistory);
 		}
 		content.setValue(contentValue);
@@ -83,13 +90,25 @@ public class EditableContentStorageImpl implements EditableContentStorage {
 
 		// persist previous version
 		entityManager.persist(content);
-		// TODO refresh cache
+		// nullify the cache here rather than add the value, just to reset the possibly stale cache
+		if (lruCache != null) lruCache.put(contentId, null);
 		return null;
 	}
 
 	@Override
+	public String getTextualContentValue(String contentId) {
+		contentId = localizeContentId(contentId);
+		String value = lruCache == null ? null : lruCache.get(contentId);
+		if (value == null) {
+			TextualContent content = entityManager.find(TextualContent.class, contentId);
+			value = content.getValue();
+			lruCache.put(contentId, value);
+		}
+		return value;
+	}
+
+	@Override
 	public TextualContent getTextualContent(String contentId) {
-		// TODO handle cache
 		return entityManager.find(TextualContent.class, localizeContentId(contentId));
 	}
 
