@@ -91,7 +91,7 @@ public class EditableContentStorageImpl implements EditableContentStorage {
 		// persist previous version
 		entityManager.persist(content);
 		// nullify the cache here rather than add the value, just to reset the possibly stale cache
-		if (lruCache != null) lruCache.put(contentId, null);
+		if (lruCache != null) lruCache.remove(contentId);
 		return null;
 	}
 

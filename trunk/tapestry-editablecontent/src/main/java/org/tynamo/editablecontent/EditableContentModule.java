@@ -6,9 +6,11 @@ import org.apache.tapestry5.ioc.MethodAdviceReceiver;
 import org.apache.tapestry5.ioc.ServiceBinder;
 import org.apache.tapestry5.ioc.annotations.Contribute;
 import org.apache.tapestry5.ioc.annotations.Match;
+import org.apache.tapestry5.jpa.JpaEntityPackageManager;
 import org.apache.tapestry5.jpa.JpaTransactionAdvisor;
 import org.apache.tapestry5.services.ComponentClassResolver;
 import org.apache.tapestry5.services.LibraryMapping;
+import org.tynamo.editablecontent.entities.TextualContent;
 import org.tynamo.editablecontent.internal.services.EditableContentStorageImpl;
 import org.tynamo.editablecontent.services.EditableContentStorage;
 
@@ -33,4 +35,10 @@ public class EditableContentModule {
 	public static void adviseTransactions(JpaTransactionAdvisor advisor, MethodAdviceReceiver receiver) {
 		advisor.addTransactionCommitAdvice(receiver);
 	}
+
+	@Contribute(JpaEntityPackageManager.class)
+	public static void providePackages(Configuration<String> configuration) {
+		configuration.add(TextualContent.class.getPackage().getName());
+	}
+
 }
