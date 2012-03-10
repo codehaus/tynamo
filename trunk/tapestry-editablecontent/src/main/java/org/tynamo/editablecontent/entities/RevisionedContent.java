@@ -91,7 +91,7 @@ public class RevisionedContent {
 		GZIPOutputStream gzip;
 		try {
 			gzip = new GZIPOutputStream(out);
-			gzip.write(textualContent.getValue().getBytes());
+			gzip.write(textualContent.getValue().getBytes(Charset.forName("UTF-8")));
 			gzip.close();
 		} catch (IOException e) {
 			// ignore, shouldn't happen with a byte[]
