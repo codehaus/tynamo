@@ -85,8 +85,9 @@ public class EditableContentIntegrationTest extends AbstractContainerTest {
 	public void cacheIsUpdated() throws FailingHttpStatusCodeException, MalformedURLException, IOException {
 		logIn();
 		page = webClient.getPage(BASEURI);
+		System.out.println("page is " + page.asText());
 		page = page.getAnchorByText("[ edit ]").click();
-		webClient.waitForBackgroundJavaScript(1000);
+		webClient.waitForBackgroundJavaScript(2000);
 
 		HtmlForm form = page.getForms().get(0);
 		form.getTextAreaByName("contentArea").setTextContent("testvalue");
