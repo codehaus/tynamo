@@ -1,14 +1,30 @@
 package org.tynamo.editablecontent;
 
+import static org.testng.AssertJUnit.assertEquals;
 import static org.testng.AssertJUnit.assertNull;
 import static org.testng.AssertJUnit.assertTrue;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.util.List;
+import java.util.Map;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.spi.PersistenceProvider;
+import javax.persistence.spi.PersistenceProviderResolver;
+import javax.persistence.spi.PersistenceProviderResolverHolder;
+
+import org.apache.tapestry5.internal.jpa.PersistenceParser;
+import org.apache.tapestry5.ioc.internal.util.CollectionFactory;
+import org.apache.tapestry5.jpa.JpaConstants;
+import org.apache.tapestry5.jpa.TapestryPersistenceUnitInfo;
 import org.mortbay.jetty.webapp.WebAppContext;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+import org.tynamo.editablecontent.entities.RevisionedContent;
+import org.tynamo.editablecontent.entities.TextualContent;
 import org.tynamo.test.AbstractContainerTest;
 
 import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
@@ -76,10 +92,37 @@ public class EditableContentIntegrationTest extends AbstractContainerTest {
 		form.getTextAreaByName("contentArea").setTextContent("testvalue");
 		form.getInputByValue("OK").click();
 		webClient.waitForBackgroundJavaScript(1000);
+		EntityManager em = createEntityManager();
+		CriteriaQuery<TextualContent> query = em.getCriteriaBuilder().createQuery(TextualContent.class);
+		query.from(TextualContent.class);
+		List<TextualContent> results = em.createQuery(query).getResultList();
+		assertEquals("author", results.get(0).getAuthor());
+
 		page = webClient.getPage(BASEURI);
-		System.out.println("content is " + page.asText());
 		assertTrue(page.asText().contains("testvalue"));
 		logOut();
 		assertTrue(page.asText().contains("testvalue"));
 	}
+
+	private EntityManager createEntityManager() {
+		PersistenceParser persistenceParser = new PersistenceParser();
+		List<TapestryPersistenceUnitInfo> unitInfos = persistenceParser.parse(this.getClass().getClassLoader()
+			.getResourceAsStream("META-INF/persistence.xml"));
+
+		TapestryPersistenceUnitInfo persistenceUnitInfo = unitInfos.get(0);
+		persistenceUnitInfo.addManagedClass(TextualContent.class);
+		persistenceUnitInfo.addManagedClass(RevisionedContent.class);
+		final Map<String, String> properties = CollectionFactory.newCaseInsensitiveMap();
+		properties.put(JpaConstants.PERSISTENCE_UNIT_NAME, "editablecontent");
+
+		final PersistenceProviderResolver resolver = PersistenceProviderResolverHolder.getPersistenceProviderResolver();
+
+		final List<PersistenceProvider> providers = resolver.getPersistenceProviders();
+		EntityManagerFactory emFactory = providers.get(0).createContainerEntityManagerFactory(persistenceUnitInfo,
+			properties);
+
+		// EntityManagerFactory emFactory = Persistence.createEntityManagerFactory("editablecontent");
+		return emFactory.createEntityManager();
+	}
+
 }
