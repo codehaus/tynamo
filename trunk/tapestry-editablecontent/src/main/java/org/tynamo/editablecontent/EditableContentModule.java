@@ -25,7 +25,7 @@ public class EditableContentModule {
 	}
 
 	public static void contributeFactoryDefaults(MappedConfiguration<String, String> configuration) {
-		configuration.add(EditableContentSymbols.LRU_CACHE_SIZE, "100");
+		configuration.add(EditableContentSymbols.LRU_CACHE_SIZE, "10");
 		configuration.add(EditableContentSymbols.LOCALIZED_CONTENT, Boolean.TRUE.toString());
 		configuration.add(EditableContentSymbols.READONLY_BYDEFAULT, Boolean.FALSE.toString());
 		configuration.add(EditableContentSymbols.DEFAULT_AUTHORROLE, "");
