@@ -7,9 +7,6 @@ import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.Request;
 
-/**
- * Start page of application adwrights-website.
- */
 public class Index {
 	@Persist
 	private String textValue;
