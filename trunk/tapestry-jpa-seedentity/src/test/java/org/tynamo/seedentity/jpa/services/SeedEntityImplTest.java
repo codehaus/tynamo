@@ -6,7 +6,9 @@ import static org.testng.Assert.assertTrue;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -14,11 +16,10 @@ import javax.persistence.Persistence;
 
 import org.apache.tapestry5.ioc.internal.services.PropertyAccessImpl;
 import org.apache.tapestry5.ioc.services.PropertyAccess;
+import org.apache.tapestry5.jpa.EntityManagerManager;
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-import org.tynamo.jpa.JPAEntityManagerSource;
-import org.tynamo.jpa.JPATransactionManager;
 import org.tynamo.seedentity.jpa.entities.AnotherThing;
 import org.tynamo.seedentity.jpa.entities.Thing;
 
@@ -61,14 +62,13 @@ public class SeedEntityImplTest {
 		aThing.setThing(thing2);
 		entities.add(aThing);
 		
-		JPATransactionManager transactionManager = mock(JPATransactionManager.class);
-		when(transactionManager.getEntityManager()).thenReturn(em);
-		JPAEntityManagerSource emSource = mock(JPAEntityManagerSource.class);
-		// Returning null is ok, this test doesn't use sessionFactory (nor does it commit()
-		when(emSource.getEntityManagerFactory()).thenReturn(null);
-		em.getTransaction().begin();
-		SeedEntity service = new SeedEntityImpl(LoggerFactory.getLogger(SeedEntity.class), propertyAccess, emSource, transactionManager, entities);
-		em.getTransaction().commit();
+		Map<String,EntityManager> entityManagers = new HashMap<String,EntityManager>();
+		entityManagers.put("", em);
+		EntityManagerManager entityManagerManager = mock(EntityManagerManager.class);
+		when(entityManagerManager.getEntityManagers()).thenReturn(entityManagers);
+//		em.getTransaction().begin();
+		SeedEntity service = new SeedEntityImpl(LoggerFactory.getLogger(SeedEntity.class), propertyAccess, entityManagerManager, "", entities);
+//		em.getTransaction().commit();
 		List<Thing> resultList = em.createQuery("select t from Thing t").getResultList();
 		assertTrue(resultList.size() == 1);
 		List<AnotherThing> aThingList = em.createQuery("select t from AnotherThing t").getResultList();

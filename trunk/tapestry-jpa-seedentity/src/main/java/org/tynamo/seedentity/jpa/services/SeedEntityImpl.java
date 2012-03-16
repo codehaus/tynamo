@@ -6,7 +6,7 @@ import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
@@ -16,21 +16,38 @@ import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.Type;
 
 import org.apache.tapestry5.ioc.annotations.EagerLoad;
+import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.apache.tapestry5.ioc.services.PropertyAccess;
+import org.apache.tapestry5.jpa.EntityManagerManager;
 import org.slf4j.Logger;
-import org.tynamo.jpa.JPAEntityManagerSource;
-import org.tynamo.jpa.JPATransactionManager;
 import org.tynamo.seedentity.jpa.SeedEntityIdentifier;
 
 @EagerLoad
 public class SeedEntityImpl implements SeedEntity {
 	@SuppressWarnings("unchecked")
-	public SeedEntityImpl(Logger logger, PropertyAccess propertyAccess, JPAEntityManagerSource entityManagerSource, JPATransactionManager transactionManager, List<Object> entities) throws InvocationTargetException, NoSuchMethodException {
-		EntityManager em = transactionManager.getEntityManager();
+	public SeedEntityImpl(Logger logger, PropertyAccess propertyAccess, EntityManagerManager entityManagerManager,  
+		@Inject @Symbol(SeedEntity.PERSISTENCEUNIT) String persistenceUnitName,
+		List<Object> entities) throws InvocationTargetException, NoSuchMethodException {
+		
+		EntityManager entityManager = null;
+		if (persistenceUnitName.isEmpty()) {
+			if (entityManagerManager.getEntityManagers().size() != 1)
+				throw new IllegalArgumentException(
+					"You have to specify the persistenceunit for seedentity if multiple persistence units are configured in the system. Contribute a value for SeedEntity.PERSISTENCEUNIT");
+			entityManager = entityManagerManager.getEntityManagers().values().iterator().next();
+		} else {
+			entityManager = entityManagerManager.getEntityManager(persistenceUnitName);
+			if (entityManager == null)
+				throw new IllegalArgumentException(
+					"Persistence unit '"
+						+ persistenceUnitName
+						+ "' is configured for seedentity, but it was not found. Check that the contributed name matches with persistenceunit configuration");
+		}
+		
 		// FIXME do we need to handle transactions properly
-//		EntityTransaction tx = em.getTransaction();
-//		tx.begin();
-		EntityManagerFactory sessionFactory = entityManagerSource.getEntityManagerFactory();
+		EntityTransaction tx = entityManager.getTransaction();
+		tx.begin();
 		for (Object object : entities) {
 			String uniquelyIdentifyingProperty = null;
 			Object entity;
@@ -44,11 +61,11 @@ public class SeedEntityImpl implements SeedEntity {
 				continue;
 			}
 
-			Metamodel metamodel = em.getMetamodel();
+			Metamodel metamodel = entityManager.getMetamodel();
 			EntityType entityType = metamodel.entity(entity.getClass());
 			Set<SingularAttribute> singularAttributes = entityType.getSingularAttributes();
 
-			CriteriaBuilder cb = em.getCriteriaBuilder();
+			CriteriaBuilder cb = entityManager.getCriteriaBuilder();
 			CriteriaQuery<?> query = cb.createQuery(entity.getClass());
 			Root<?> root = query.from(entityType);
 
@@ -61,7 +78,7 @@ public class SeedEntityImpl implements SeedEntity {
 			for (SingularAttribute a : singularAttributes) {
 				query.where(cb.equal(root.get(a), propertyAccess.get(object, a.getName())));
 			}
-			List results = em.createQuery(query).getResultList();
+			List results = entityManager.createQuery(query).getResultList();
 
 			if (results.size() > 0) {
 				logger.info("At least one existing entity with same unique properties as '" + entity + "' of type '"
@@ -78,10 +95,10 @@ public class SeedEntityImpl implements SeedEntity {
 
 				continue;
 			}
-			em.persist(entity);
+			entityManager.persist(entity);
 			// FIXME need to flush for latter persist() to "see" the previous calls  
 			//em.flush();
 		}
-		transactionManager.commit();
+		tx.commit();
 	}
 }
