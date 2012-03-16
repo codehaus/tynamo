@@ -16,16 +16,16 @@ import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.Type;
 
 import org.apache.tapestry5.ioc.annotations.EagerLoad;
+import org.apache.tapestry5.ioc.services.PropertyAccess;
 import org.slf4j.Logger;
 import org.tynamo.jpa.JPAEntityManagerSource;
 import org.tynamo.jpa.JPATransactionManager;
 import org.tynamo.seedentity.jpa.SeedEntityIdentifier;
-import org.tynamo.seedentity.jpa.tools.BeanUtil;
 
 @EagerLoad
 public class SeedEntityImpl implements SeedEntity {
 	@SuppressWarnings("unchecked")
-	public SeedEntityImpl(Logger logger, JPAEntityManagerSource entityManagerSource, JPATransactionManager transactionManager, List<Object> entities) throws InvocationTargetException, NoSuchMethodException {
+	public SeedEntityImpl(Logger logger, PropertyAccess propertyAccess, JPAEntityManagerSource entityManagerSource, JPATransactionManager transactionManager, List<Object> entities) throws InvocationTargetException, NoSuchMethodException {
 		EntityManager em = transactionManager.getEntityManager();
 		// FIXME do we need to handle transactions properly
 //		EntityTransaction tx = em.getTransaction();
@@ -59,7 +59,7 @@ public class SeedEntityImpl implements SeedEntity {
 			// TODO see http://stackoverflow.com/questions/7077464/how-to-get-singularattribute-mapped-value-of-a-persistent-object
 			// how to use the metamodel api to do this without beanutil 
 			for (SingularAttribute a : singularAttributes) {
-				query.where(cb.equal(root.get(a), BeanUtil.getProperty(object, a.getName())));
+				query.where(cb.equal(root.get(a), propertyAccess.get(object, a.getName())));
 			}
 			List results = em.createQuery(query).getResultList();
 
@@ -74,7 +74,7 @@ public class SeedEntityImpl implements SeedEntity {
 
 				Type idType = entityType.getIdType();
 				SingularAttribute idAttr = entityType.getId(idType.getJavaType());
-				BeanUtil.setProperty(entity, idAttr.getName(), BeanUtil.getProperty(results.get(0), idAttr.getName()));
+				propertyAccess.set(entity, idAttr.getName(), propertyAccess.get(results.get(0), idAttr.getName()));
 
 				continue;
 			}
