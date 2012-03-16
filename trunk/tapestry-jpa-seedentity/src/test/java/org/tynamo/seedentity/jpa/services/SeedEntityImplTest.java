@@ -12,6 +12,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
+import org.apache.tapestry5.ioc.internal.services.PropertyAccessImpl;
+import org.apache.tapestry5.ioc.services.PropertyAccess;
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -24,6 +26,7 @@ public class SeedEntityImplTest {
 	// @Inject
 	// private SeedEntity seedEntity;
 	private EntityManager em;
+	private PropertyAccess propertyAccess = new PropertyAccessImpl();
 
 	@BeforeClass
 	public void openSession() {
@@ -64,7 +67,7 @@ public class SeedEntityImplTest {
 		// Returning null is ok, this test doesn't use sessionFactory (nor does it commit()
 		when(emSource.getEntityManagerFactory()).thenReturn(null);
 		em.getTransaction().begin();
-		SeedEntity service = new SeedEntityImpl(LoggerFactory.getLogger(SeedEntity.class), emSource, transactionManager, entities);
+		SeedEntity service = new SeedEntityImpl(LoggerFactory.getLogger(SeedEntity.class), propertyAccess, emSource, transactionManager, entities);
 		em.getTransaction().commit();
 		List<Thing> resultList = em.createQuery("select t from Thing t").getResultList();
 		assertTrue(resultList.size() == 1);
