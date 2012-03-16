@@ -8,6 +8,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -15,8 +19,6 @@ import org.tynamo.jpa.JPAEntityManagerSource;
 import org.tynamo.jpa.JPATransactionManager;
 import org.tynamo.seedentity.jpa.entities.AnotherThing;
 import org.tynamo.seedentity.jpa.entities.Thing;
-
-import javax.persistence.*;
 
 public class SeedEntityImplTest {
 	// @Inject
