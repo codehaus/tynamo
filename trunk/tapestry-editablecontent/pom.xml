@@ -100,6 +100,7 @@
 			<groupId>org.tynamo</groupId>
 			<artifactId>tapestry-security</artifactId>
 			<version>0.4.2</version>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 	
