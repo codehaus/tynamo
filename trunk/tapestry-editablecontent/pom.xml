@@ -99,7 +99,7 @@
 		<dependency>
 			<groupId>org.tynamo</groupId>
 			<artifactId>tapestry-security</artifactId>
-			<version>0.4.3-SNAPSHOT</version>
+			<version>0.4.3</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
