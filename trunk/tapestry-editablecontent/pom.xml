@@ -1,7 +1,6 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>org.tynamo</groupId>
 	<artifactId>tapestry-editablecontent</artifactId>
 	<name>Editable text content for Tapestry 5</name>
 	<description>JPA based editable content for Tapestry 5</description>
@@ -41,13 +40,7 @@
 		<dependency>
 			<groupId>org.tynamo</groupId>
 			<artifactId>tapestry-ckeditor</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-			<exclusions>
-				<exclusion>
-					<artifactId>tapestry-yuicompressor</artifactId>
-					<groupId>org.apache.tapestry</groupId>
-				</exclusion>
-			</exclusions>
+			<version>0.0.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.tapestry</groupId>
@@ -106,7 +99,7 @@
 		<dependency>
 			<groupId>org.tynamo</groupId>
 			<artifactId>tapestry-security</artifactId>
-			<version>0.4.3-SNAPSHOT</version>
+			<version>0.4.2</version>
 		</dependency>
 	</dependencies>
 	
