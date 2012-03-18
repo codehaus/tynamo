@@ -42,14 +42,6 @@
 			<timezone>+1</timezone>
 		</developer>
 		<developer>
-			<id>dragansah</id>
-			<name>Dragan Sahpaski</name>
-			<email>dragan.sahpaski (-at-) gmail.com</email>
-			<organizationUrl>http://plannowtech.com/</organizationUrl>
-			<url>http://docs.codehaus.org/display/~dragansah</url>
-			<timezone>+1</timezone>
-		</developer>
-		<developer>
 			<id>kaosko</id>
 			<name>Kalle Korhonen</name>
 			<email>kaosko@apache.org</email>
