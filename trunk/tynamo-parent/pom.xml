@@ -348,7 +348,6 @@
 				<configuration>
 					<source>1.6</source>
 					<linksource>true</linksource>
-        <configuration>
 					<taglet>org.apache.tapestry5.javadoc.TapestryDocTaglet</taglet>
 					<tagletArtifact>
 						<groupId>org.apache.tapestry</groupId>                       
