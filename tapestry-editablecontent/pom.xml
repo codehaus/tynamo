@@ -5,7 +5,7 @@
 	<name>Editable text content for Tapestry 5</name>
 	<description>JPA based editable content for Tapestry 5</description>
 	<packaging>jar</packaging>
-	<version>0.0.1</version>
+	<version>0.0.2-SNAPSHOT</version>
 
 	<parent>
 		<groupId>org.tynamo</groupId>
@@ -18,9 +18,9 @@
 	</properties>
 
 	<scm>
-		<connection>scm:svn:http://svn.codehaus.org/tynamo/tags/tapestry-editablecontent-0.0.1</connection>
-		<developerConnection>scm:svn:https://svn.codehaus.org/tynamo/tags/tapestry-editablecontent-0.0.1</developerConnection>
-		<url>http://svn.tynamo.codehaus.org/tynamo/tags/tapestry-editablecontent-0.0.1</url>
+		<connection>scm:svn:http://svn.codehaus.org/tynamo/trunk/tapestry-editablecontent</connection>
+		<developerConnection>scm:svn:https://svn.codehaus.org/tynamo/trunk/tapestry-editablecontent</developerConnection>
+		<url>http://svn.tynamo.codehaus.org/tynamo/trunk/tapestry-editablecontent</url>
 	</scm>
 
 	<distributionManagement>
