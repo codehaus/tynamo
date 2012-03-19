@@ -31,18 +31,15 @@ import org.tynamo.editablecontent.EditableContentSymbols;
 import org.tynamo.editablecontent.entities.TextualContent;
 import org.tynamo.editablecontent.services.EditableContentStorage;
 
+/**
+ * A component that displays html-formatted textual content and allows editing it inline in a ckeditor instance. The initial value is the
+ * nested static html content if any.
+ * 
+ * @tapestrydoc
+ */
+
 @Import(stylesheet = "EditableContent.css")
 public class EditableContent {
-
-	/**
-	 * Message will be displayed if page is not found.
-	 */
-	@Parameter("defaultMessage")
-	private String message;
-
-	public String getDefaultMessage() {
-		return "No content available. Check again later";
-	}
 
 	// @Parameter(defaultPrefix = "literal")
 	// private Integer cacheMaxAge;
@@ -58,6 +55,12 @@ public class EditableContent {
 		return defaultReadOnly;
 	}
 
+	/**
+	 * Set this flag to true to make the component read only. Uses the symbol {@link EditableContentSymbols.READONLY_BYDEFAULT} as the default
+	 * value
+	 * 
+	 * @since 0.0.1
+	 */
 	@Parameter("defaultReadOnly")
 	private boolean readOnly;
 
@@ -69,12 +72,31 @@ public class EditableContent {
 		return defaultAuthorRole;
 	}
 
+	/**
+	 * The role the current user needs to have to edit the contents, as determined by {@link HttpServletRequest#isUserInRole(String roleName)}
+	 * . Uses the symbol {@link EditableContentSymbols.DEFAULT_AUTHORROLE} as the default value
+	 * 
+	 * @since 0.0.1
+	 */
 	@Parameter("defaultAuthorRole")
 	private String authorRole;
 
+	/**
+	 * The contentId used associated with the persistent content. The default is the same as the component id. Use care when determinig the id
+	 * since the ids need to be unique within the same persistent storage and renaming the id later won't migrate the contents under the old
+	 * id.
+	 * 
+	 * @since 0.0.1
+	 */
 	@Parameter("defaultContentId")
 	private String contentId;
 
+	/**
+	 * The max number of most recent revisions of the contents to be preserved. 0 for preserving all, negative for preserving no previous
+	 * revisions.
+	 * 
+	 * @since 0.0.1
+	 */
 	@Parameter(defaultPrefix = "literal", value = "100")
 	private int maxHistory;
 
