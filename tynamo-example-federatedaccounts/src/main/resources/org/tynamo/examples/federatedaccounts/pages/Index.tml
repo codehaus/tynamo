@@ -73,6 +73,12 @@
 						<t:twitter.twitterOauthSignIn/>
 					</div>
 				</div>
+				<div style="float:left">
+					<span style="font-weight:bold">Sign in as an OpenID user</span>
+					<div style="margin-top:40px">
+						<t:openid.openIdSignIn provider="google"/>
+					</div>
+				</div>
 			</div>
 			<t:federated.oauthInlineFrame/>
 			<div style="font-weight:bold;margin-bottom:-80px">Sign in as a local user</div>

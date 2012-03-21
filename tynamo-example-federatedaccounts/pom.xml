@@ -143,6 +143,16 @@
 		</dependency>
 		<dependency>
 			<groupId>org.tynamo.security</groupId>
+			<artifactId>tynamo-federatedaccounts-core</artifactId>
+			<version>0.1.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>org.tynamo.security</groupId>
+			<artifactId>tynamo-federatedaccounts-openid</artifactId>
+			<version>0.1.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>org.tynamo.security</groupId>
 			<artifactId>tynamo-federatedaccounts-rollingtokens</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>

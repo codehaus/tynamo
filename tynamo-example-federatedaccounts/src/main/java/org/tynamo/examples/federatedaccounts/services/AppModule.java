@@ -6,8 +6,10 @@ import org.apache.tapestry5.SymbolConstants;
 import org.apache.tapestry5.ioc.Configuration;
 import org.apache.tapestry5.ioc.MappedConfiguration;
 import org.apache.tapestry5.ioc.ServiceBinder;
+import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.InjectService;
 import org.apache.tapestry5.ioc.annotations.SubModule;
+import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.apache.tapestry5.services.ApplicationStateContribution;
 import org.apache.tapestry5.services.ApplicationStateCreator;
 import org.apache.tapestry5.services.BaseURLSource;
@@ -75,12 +77,14 @@ public class AppModule {
 		configuration.add(authorizingRealm);
 	}
 
-	public static void contributeServiceOverride(MappedConfiguration<Class<?>, Object> configuration) {
+	public static void contributeServiceOverride(MappedConfiguration<Class<?>, Object> configuration,
+		@Inject @Symbol(SymbolConstants.PRODUCTION_MODE) final boolean productionMode) {
 		// In T5.3, you can simply contribute symbols instead
 		BaseURLSource source = new BaseURLSource() {
 			@Override
 			public String getBaseURL(boolean secure) {
-				return String.format("%s://%s", secure ? "https" : "http", "tynamo-federatedaccounts.tynamo.org");
+				return String.format("%s://%s", secure ? "https" : "http",
+					(productionMode ? "tynamo-federatedaccounts.tynamo.org" : "localhost"));
 			}
 		};
 		configuration.add(BaseURLSource.class, source);
