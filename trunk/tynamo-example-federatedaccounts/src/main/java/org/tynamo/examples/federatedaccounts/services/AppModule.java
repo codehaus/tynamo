@@ -84,7 +84,7 @@ public class AppModule {
 			@Override
 			public String getBaseURL(boolean secure) {
 				return String.format("%s://%s", secure ? "https" : "http",
-					(productionMode ? "tynamo-federatedaccounts.tynamo.org" : "localhost"));
+					(productionMode ? "tynamo-federatedaccounts.tynamo.org" : "localhost:8080"));
 			}
 		};
 		configuration.add(BaseURLSource.class, source);
