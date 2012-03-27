@@ -34,7 +34,7 @@ public class Edit
 	private Messages messages;
 
 	@Inject
-	private PersistenceService persitenceService;
+	private PersistenceService persistenceService;
 
 	@Inject
 	private PageRenderLinkSource pageRenderLinkSource;
@@ -80,7 +80,7 @@ public class Edit
 	@OnEvent(EventConstants.SUCCESS)
 	Link success()
 	{
-		persitenceService.save(bean);
+		persistenceService.save(bean);
 		return back();
 	}
 
