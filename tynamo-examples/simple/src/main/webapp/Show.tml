@@ -12,7 +12,7 @@
 				</li>
 				<t:if test="deleteAllowed">
 					<li>
-						<t:eventlink class="deletelink" t:id="delete">${message:org.tynamo.i18n.remove}</t:eventlink>
+						<t:eventlink class="deletelink" t:id="delete" onclick="return confirm('Are you sure ?');">${message:org.tynamo.i18n.remove}</t:eventlink>
 					</li>
 				</t:if>
 			</ul>
