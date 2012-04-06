@@ -100,12 +100,7 @@ public class SeedEntityImpl implements SeedEntity {
 						+ " of type " + entityUpdater.getUpdatedEntity().getClass().getSimpleName()
 						+ " because the identifier of the original entity is not set");
 				propertyAccess.set(entityUpdater.getUpdatedEntity(), idAttr.getName(), identifier);
-				// tx.commit();
-				// entityManager.evict(entityUpdater.getOriginalEntity());
-				// tx = entityManager.getTransaction();
-				// tx.begin();
 				entityManager.merge(entityUpdater.getUpdatedEntity());
-
 				continue;
 			}
 
@@ -162,6 +157,8 @@ public class SeedEntityImpl implements SeedEntity {
 				// Results should include only one object and we don't know any better which is the right object anyway
 				// so use the first one
 				Object existingObject = results.get(0);
+				// Always evict though it's only needed if existing objects are updated
+				entityManager.detach(existingObject);
 				propertyAccess.set(entity, idAttr.getName(), propertyAccess.get(existingObject, idAttr.getName()));
 				continue;
 			}
