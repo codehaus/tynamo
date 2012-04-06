@@ -1,14 +1,25 @@
 package org.tynamo.seedentity.jpa.services;
 
-import java.lang.reflect.InvocationTargetException;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
+import java.lang.reflect.Member;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.persistence.metamodel.EntityType;
 import javax.persistence.metamodel.Metamodel;
@@ -20,16 +31,28 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.apache.tapestry5.ioc.services.PropertyAccess;
 import org.apache.tapestry5.jpa.EntityManagerManager;
+import org.eclipse.persistence.sessions.factories.SessionFactory;
 import org.slf4j.Logger;
-import org.tynamo.seedentity.jpa.SeedEntityIdentifier;
+import org.tynamo.seedentity.SeedEntityIdentifier;
+import org.tynamo.seedentity.SeedEntityUpdater;
 
 @EagerLoad
 public class SeedEntityImpl implements SeedEntity {
 	@SuppressWarnings("unchecked")
-	public SeedEntityImpl(Logger logger, PropertyAccess propertyAccess, EntityManagerManager entityManagerManager,  
-		@Inject @Symbol(SeedEntity.PERSISTENCEUNIT) String persistenceUnitName,
-		List<Object> entities) throws InvocationTargetException, NoSuchMethodException {
-		
+	private Map<Class, SeedEntityIdentifier> typeIdentifiers = new HashMap<Class, SeedEntityIdentifier>();
+	private SessionFactory sessionFactory;
+	private Logger logger;
+	// track newly added entities so you know to update only those ones and otherwise ignore by default
+	private List<Object> newlyAddedEntities = new ArrayList<Object>();
+	private PropertyAccess propertyAccess;
+
+	public SeedEntityImpl(Logger logger, PropertyAccess propertyAccess, EntityManagerManager entityManagerManager,
+		@Inject @Symbol(SeedEntity.PERSISTENCEUNIT) String persistenceUnitName, List<Object> entities) {
+		// Create a new session for this rather than participate in the existing session (through SessionManager)
+		// since we need to manage transactions ourselves
+		this.logger = logger;
+		this.propertyAccess = propertyAccess;
+
 		EntityManager entityManager = null;
 		if (persistenceUnitName.isEmpty()) {
 			if (entityManagerManager.getEntityManagers().size() != 1)
@@ -44,16 +67,62 @@ public class SeedEntityImpl implements SeedEntity {
 						+ persistenceUnitName
 						+ "' is configured for seedentity, but it was not found. Check that the contributed name matches with persistenceunit configuration");
 		}
-		
-		// FIXME do we need to handle transactions properly
+
+		// Session session = sessionSource.create();
+		seed(entityManager, entities);
+		// session.close();
+	}
+
+	@SuppressWarnings("unchecked")
+	void seed(EntityManager entityManager, List<Object> entities) {
+		Metamodel metamodel = entityManager.getMetamodel();
 		EntityTransaction tx = entityManager.getTransaction();
 		tx.begin();
 		for (Object object : entities) {
-			String uniquelyIdentifyingProperty = null;
 			Object entity;
+			if (object instanceof SeedEntityUpdater) {
+				SeedEntityUpdater entityUpdater = (SeedEntityUpdater) object;
+				if (!newlyAddedEntities.contains(entityUpdater.getOriginalEntity())) {
+					if (!entityUpdater.isForceUpdate()) {
+						logger.info("Entity '" + entityUpdater.getUpdatedEntity() + "' of type "
+							+ entityUpdater.getUpdatedEntity().getClass().getSimpleName() + " was not newly added, ignoring update");
+						continue;
+					}
+				}
+				if (!entityUpdater.getOriginalEntity().getClass().equals(entityUpdater.getUpdatedEntity().getClass()))
+					throw new ClassCastException("The type of original entity doesn't match with the updated entity");
+
+				EntityType entityType = metamodel.entity(entityUpdater.getOriginalEntity().getClass());
+				Type idType = entityType.getIdType();
+				SingularAttribute idAttr = entityType.getId(idType.getJavaType());
+
+				Object identifier = propertyAccess.get(entityUpdater.getOriginalEntity(), idAttr.getName());
+				if (identifier == null)
+					throw new IllegalStateException("Cannot make an update to the entity '" + entityUpdater.getUpdatedEntity()
+						+ " of type " + entityUpdater.getUpdatedEntity().getClass().getSimpleName()
+						+ " because the identifier of the original entity is not set");
+				propertyAccess.set(entityUpdater.getUpdatedEntity(), idAttr.getName(), identifier);
+				// tx.commit();
+				// entityManager.evict(entityUpdater.getOriginalEntity());
+				// tx = entityManager.getTransaction();
+				// tx.begin();
+				entityManager.merge(entityUpdater.getUpdatedEntity());
+
+				continue;
+			}
+
+			String uniquelyIdentifyingProperty = null;
 			if (object instanceof SeedEntityIdentifier) {
-				uniquelyIdentifyingProperty = ((SeedEntityIdentifier) object).getUniquelyIdentifyingProperty();
-				entity = ((SeedEntityIdentifier) object).getEntity();
+				// SeedEntityIdentifier interface can be used for setting identifier for specific entity only
+				// or for all enties of the same type
+				SeedEntityIdentifier entityIdentifier = (SeedEntityIdentifier) object;
+				if (entityIdentifier.getEntity() instanceof Class) {
+					typeIdentifiers.put((Class) entityIdentifier.getEntity(), entityIdentifier);
+					continue;
+				} else {
+					uniquelyIdentifyingProperty = entityIdentifier.getUniquelyIdentifyingProperty();
+					entity = entityIdentifier.getEntity();
+				}
 			} else entity = object;
 
 			if (entity.getClass().getAnnotation(Entity.class) == null) {
@@ -61,44 +130,108 @@ public class SeedEntityImpl implements SeedEntity {
 				continue;
 			}
 
-			Metamodel metamodel = entityManager.getMetamodel();
+			if (typeIdentifiers.containsKey(object.getClass()))
+				uniquelyIdentifyingProperty = typeIdentifiers.get(object.getClass()).getUniquelyIdentifyingProperty();
+
+			// create a query using unique properties
+			// Note that we ignore the identifier - so seed entities with manually set ids will be re-seeded
 			EntityType entityType = metamodel.entity(entity.getClass());
 			Set<SingularAttribute> singularAttributes = entityType.getSingularAttributes();
 
 			CriteriaBuilder cb = entityManager.getCriteriaBuilder();
 			CriteriaQuery<?> query = cb.createQuery(entity.getClass());
 			Root<?> root = query.from(entityType);
+			SingularAttribute idAttr = null;
 
-			// FIXME this is wrong - we should only add the singular attributes that are marked as unique
-			// see how Hibernate seedentity does this
-			// and absolutely filter out id attribute
-			
-			// TODO see http://stackoverflow.com/questions/7077464/how-to-get-singularattribute-mapped-value-of-a-persistent-object
-			// how to use the metamodel api to do this without beanutil 
+			Set<Predicate> predicates = new HashSet<Predicate>();
 			for (SingularAttribute a : singularAttributes) {
-				query.where(cb.equal(root.get(a), propertyAccess.get(object, a.getName())));
+				if (a.isId()) {
+					idAttr = a;
+					continue;
+				}
+				if (isUnique(entity.getClass(), a))
+					predicates.add(cb.equal(root.get(a.getName()), propertyAccess.get(entity, a.getName())));
 			}
+			query.where(cb.and(predicates.toArray(new Predicate[0])));
+
 			List results = entityManager.createQuery(query).getResultList();
 
 			if (results.size() > 0) {
-				logger.info("At least one existing entity with same unique properties as '" + entity + "' of type '"
-							+ entity.getClass().getSimpleName() + "' already exists, skipping seeding this entity");
+				logger.info("At least one existing entity with the same unique properties as '" + entity + "' of type '"
+					+ entity.getClass().getSimpleName() + "' already exists, skipping seeding this entity");
 				// Need to set the id to the seed bean so a new seed entity with a relationship to existing seed entity can be
 				// saved.
-
 				// Results should include only one object and we don't know any better which is the right object anyway
 				// so use the first one
-
-				Type idType = entityType.getIdType();
-				SingularAttribute idAttr = entityType.getId(idType.getJavaType());
-				propertyAccess.set(entity, idAttr.getName(), propertyAccess.get(results.get(0), idAttr.getName()));
-
+				Object existingObject = results.get(0);
+				propertyAccess.set(entity, idAttr.getName(), propertyAccess.get(existingObject, idAttr.getName()));
 				continue;
 			}
 			entityManager.persist(entity);
-			// FIXME need to flush for latter persist() to "see" the previous calls  
-			//em.flush();
+			newlyAddedEntities.add(entity);
 		}
 		tx.commit();
+		newlyAddedEntities.clear();
 	}
+
+	private boolean isUnique(Class entityType, SingularAttribute attribute) {
+		if (entityType.isAnnotationPresent(Table.class)) {
+			Table annotation = (Table) entityType.getAnnotation(Table.class);
+			if (annotation.uniqueConstraints() != null) {
+				for (UniqueConstraint uniqueConstraint : annotation.uniqueConstraints())
+					for (String uniqueColumn : uniqueConstraint.columnNames())
+						if (attribute.getName().equals(uniqueColumn)) return true;
+			}
+		}
+
+		Column annotation = (Column) getAnnotation(attribute.getJavaMember(), Column.class);
+		if (annotation != null && annotation.unique()) return true;
+		return false;
+	}
+
+	private Annotation getAnnotation(Member member, Class annotationType) {
+		return member instanceof Field ? ((Field) member).getAnnotation(annotationType)
+			: member instanceof Method ? ((Method) member).getAnnotation(annotationType) : null;
+	}
+
+	// Metamodel metamodel = entityManager.getMetamodel();
+	// EntityType entityType = metamodel.entity(entity.getClass());
+	// Set<SingularAttribute> singularAttributes = entityType.getSingularAttributes();
+	//
+	// CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+	// CriteriaQuery<?> query = cb.createQuery(entity.getClass());
+	// Root<?> root = query.from(entityType);
+	//
+	// // FIXME this is wrong - we should only add the singular attributes that are marked as unique
+	// // see how Hibernate seedentity does this
+	// // and absolutely filter out id attribute
+	//
+	// // TODO see http://stackoverflow.com/questions/7077464/how-to-get-singularattribute-mapped-value-of-a-persistent-object
+	// // how to use the metamodel api to do this without beanutil
+	// for (SingularAttribute a : singularAttributes) {
+	// query.where(cb.equal(root.get(a), propertyAccess.get(object, a.getName())));
+	// }
+	// List results = entityManager.createQuery(query).getResultList();
+	//
+	// if (results.size() > 0) {
+	// logger.info("At least one existing entity with same unique properties as '" + entity + "' of type '"
+	// + entity.getClass().getSimpleName() + "' already exists, skipping seeding this entity");
+	// // Need to set the id to the seed bean so a new seed entity with a relationship to existing seed entity can be
+	// // saved.
+	//
+	// // Results should include only one object and we don't know any better which is the right object anyway
+	// // so use the first one
+	//
+	// Type idType = entityType.getIdType();
+	// SingularAttribute idAttr = entityType.getId(idType.getJavaType());
+	// propertyAccess.set(entity, idAttr.getName(), propertyAccess.get(results.get(0), idAttr.getName()));
+	//
+	// continue;
+	// }
+	// entityManager.persist(entity);
+	// // FIXME need to flush for latter persist() to "see" the previous calls
+	// //em.flush();
+	// }
+	// tx.commit();
+	// }
 }
