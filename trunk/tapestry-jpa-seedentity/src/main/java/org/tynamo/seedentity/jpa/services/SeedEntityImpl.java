@@ -31,7 +31,6 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.apache.tapestry5.ioc.services.PropertyAccess;
 import org.apache.tapestry5.jpa.EntityManagerManager;
-import org.eclipse.persistence.sessions.factories.SessionFactory;
 import org.slf4j.Logger;
 import org.tynamo.seedentity.SeedEntityIdentifier;
 import org.tynamo.seedentity.SeedEntityUpdater;
@@ -40,7 +39,6 @@ import org.tynamo.seedentity.SeedEntityUpdater;
 public class SeedEntityImpl implements SeedEntity {
 	@SuppressWarnings("unchecked")
 	private Map<Class, SeedEntityIdentifier> typeIdentifiers = new HashMap<Class, SeedEntityIdentifier>();
-	private SessionFactory sessionFactory;
 	private Logger logger;
 	// track newly added entities so you know to update only those ones and otherwise ignore by default
 	private List<Object> newlyAddedEntities = new ArrayList<Object>();
