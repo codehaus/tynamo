@@ -4,7 +4,7 @@
 	<artifactId>tapestry-hibernate-seedentity</artifactId>
 	<name>Tynamo Hibernate Seedentity</name>
 	<packaging>jar</packaging>
-	<version>0.1.1</version>
+	<version>0.1.2-SNAPSHOT</version>
 	<description>
 		Object oriented seed entities for your Tapestry 5 Hibernate application
 	</description>
@@ -94,9 +94,9 @@
 	</build>
 
   <scm>
-    <connection>scm:svn:http://svn.codehaus.org/tynamo/tags/tapestry-hibernate-seedentity-0.1.1</connection>
-    <developerConnection>scm:svn:https://svn.codehaus.org/tynamo/tags/tapestry-hibernate-seedentity-0.1.1</developerConnection>
-    <url>http://svn.tynamo.codehaus.org/tynamo/tags/tapestry-hibernate-seedentity-0.1.1</url>
+    <connection>scm:svn:http://svn.codehaus.org/tynamo/trunk/tapestry-hibernate-seedentity</connection>
+    <developerConnection>scm:svn:https://svn.codehaus.org/tynamo/trunk/tapestry-hibernate-seedentity</developerConnection>
+    <url>http://svn.tynamo.codehaus.org/tynamo/trunk/tapestry-hibernate-seedentity</url>
   </scm>
   
 	<repositories>
