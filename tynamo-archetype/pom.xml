@@ -5,7 +5,7 @@
 	<artifactId>tynamo-archetype</artifactId>
 	<name>Archetype - tynamo-archetype</name>
 	<packaging>maven-archetype</packaging>
-	<version>0.3.0</version>
+	<version>0.3.1-SNAPSHOT</version>
 
 	<parent>
 		<groupId>org.tynamo</groupId>
@@ -14,9 +14,9 @@
 	</parent>
 
 	<scm>
-		<connection>scm:svn:http://svn.codehaus.org/tynamo/tags/tynamo-archetype-0.3.0</connection>
-		<developerConnection>scm:svn:https://svn.codehaus.org/tynamo/tags/tynamo-archetype-0.3.0</developerConnection>
-		<url>http://svn.tynamo.codehaus.org/tynamo/tags/tynamo-archetype-0.3.0</url>
+		<connection>scm:svn:http://svn.codehaus.org/tynamo/trunk/tynamo-archetype</connection>
+		<developerConnection>scm:svn:https://svn.codehaus.org/tynamo/trunk/tynamo-archetype</developerConnection>
+		<url>http://svn.tynamo.codehaus.org/tynamo/trunk/tynamo-archetype</url>
 	</scm>
 
 	<distributionManagement>
