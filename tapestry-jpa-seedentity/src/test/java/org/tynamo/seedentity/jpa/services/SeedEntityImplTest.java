@@ -61,6 +61,7 @@ public class SeedEntityImplTest {
 		entities.add(thing2);
 		aThing.setThing(thing2);
 		entities.add(aThing);
+		entities.add(new AnotherThing());
 		
 		Map<String,EntityManager> entityManagers = new HashMap<String,EntityManager>();
 		entityManagers.put("", em);
@@ -72,7 +73,7 @@ public class SeedEntityImplTest {
 		List<Thing> resultList = em.createQuery("select t from Thing t").getResultList();
 		assertTrue(resultList.size() == 1);
 		List<AnotherThing> aThingList = em.createQuery("select t from AnotherThing t").getResultList();
-		assertTrue(resultList.size() == 1);
+		assertTrue(aThingList.size() == 2);
 		//assertTrue(em.createCriteria(Thing.class).list().size() > 0);
 	}
 
