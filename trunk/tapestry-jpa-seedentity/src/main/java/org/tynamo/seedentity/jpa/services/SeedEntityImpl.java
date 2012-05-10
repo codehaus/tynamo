@@ -145,22 +145,26 @@ public class SeedEntityImpl implements SeedEntity {
 				if (isUnique(entity.getClass(), a))
 					predicates.add(cb.equal(root.get(a.getName()), propertyAccess.get(entity, a.getName())));
 			}
-			query.where(cb.and(predicates.toArray(new Predicate[0])));
 
-			List results = entityManager.createQuery(query).getResultList();
+			// always re-seed if there are no unique attributes
+			if (predicates.size() > 0) {
+				query.where(cb.and(predicates.toArray(new Predicate[0])));
 
-			if (results.size() > 0) {
-				logger.info("At least one existing entity with the same unique properties as '" + entity + "' of type '"
-					+ entity.getClass().getSimpleName() + "' already exists, skipping seeding this entity");
-				// Need to set the id to the seed bean so a new seed entity with a relationship to existing seed entity can be
-				// saved.
-				// Results should include only one object and we don't know any better which is the right object anyway
-				// so use the first one
-				Object existingObject = results.get(0);
-				// Always evict though it's only needed if existing objects are updated
-				entityManager.detach(existingObject);
-				propertyAccess.set(entity, idAttr.getName(), propertyAccess.get(existingObject, idAttr.getName()));
-				continue;
+				List results = entityManager.createQuery(query).getResultList();
+
+				if (results.size() > 0) {
+					logger.info("At least one existing entity with the same unique properties as '" + entity + "' of type '"
+						+ entity.getClass().getSimpleName() + "' already exists, skipping seeding this entity");
+					// Need to set the id to the seed bean so a new seed entity with a relationship to existing seed entity can be
+					// saved.
+					// Results should include only one object and we don't know any better which is the right object anyway
+					// so use the first one
+					Object existingObject = results.get(0);
+					// Always evict though it's only needed if existing objects are updated
+					entityManager.detach(existingObject);
+					propertyAccess.set(entity, idAttr.getName(), propertyAccess.get(existingObject, idAttr.getName()));
+					continue;
+				}
 			}
 			entityManager.persist(entity);
 			newlyAddedEntities.add(entity);
