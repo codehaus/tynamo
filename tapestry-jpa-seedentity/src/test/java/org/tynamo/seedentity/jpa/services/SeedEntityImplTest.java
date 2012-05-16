@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import org.tynamo.seedentity.jpa.entities.AnotherThing;
+import org.tynamo.seedentity.jpa.entities.PrettyUniqueThing;
 import org.tynamo.seedentity.jpa.entities.Thing;
 
 public class SeedEntityImplTest {
@@ -63,6 +64,10 @@ public class SeedEntityImplTest {
 		entities.add(aThing);
 		entities.add(new AnotherThing());
 		
+		// SEE: TYNAMO-151
+		entities.add(new PrettyUniqueThing(thing, 1));
+		entities.add(new PrettyUniqueThing(thing, 1));
+		
 		Map<String,EntityManager> entityManagers = new HashMap<String,EntityManager>();
 		entityManagers.put("", em);
 		EntityManagerManager entityManagerManager = mock(EntityManagerManager.class);
@@ -74,6 +79,8 @@ public class SeedEntityImplTest {
 		assertTrue(resultList.size() == 1);
 		List<AnotherThing> aThingList = em.createQuery("select t from AnotherThing t").getResultList();
 		assertTrue(aThingList.size() == 2);
+		List<AnotherThing> aPrettyUniqueThingList = em.createQuery("select t from PrettyUniqueThing t").getResultList();
+		assertTrue(aPrettyUniqueThingList.size() == 1);
 		//assertTrue(em.createCriteria(Thing.class).list().size() > 0);
 	}
 
