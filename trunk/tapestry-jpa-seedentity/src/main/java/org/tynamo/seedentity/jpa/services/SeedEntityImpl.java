@@ -15,12 +15,15 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.persistence.metamodel.Attribute;
 import javax.persistence.metamodel.EntityType;
 import javax.persistence.metamodel.Metamodel;
 import javax.persistence.metamodel.SingularAttribute;
@@ -142,7 +145,7 @@ public class SeedEntityImpl implements SeedEntity {
 					idAttr = a;
 					continue;
 				}
-				if (isUnique(entity.getClass(), a))
+				if (isUnique(entityManager, entity.getClass(), a))
 					predicates.add(cb.equal(root.get(a.getName()), propertyAccess.get(entity, a.getName())));
 			}
 
@@ -173,13 +176,42 @@ public class SeedEntityImpl implements SeedEntity {
 		newlyAddedEntities.clear();
 	}
 
-	private boolean isUnique(Class entityType, SingularAttribute attribute) {
+	private boolean isUnique(EntityManager entityManager, Class entityType, SingularAttribute attribute) {
 		if (entityType.isAnnotationPresent(Table.class)) {
 			Table annotation = (Table) entityType.getAnnotation(Table.class);
 			if (annotation.uniqueConstraints() != null) {
 				for (UniqueConstraint uniqueConstraint : annotation.uniqueConstraints())
-					for (String uniqueColumn : uniqueConstraint.columnNames())
-						if (attribute.getName().equals(uniqueColumn)) return true;
+					for (String uniqueColumn : uniqueConstraint.columnNames()) {
+						String columnName = attribute.getName();
+						// check customised name in @Column
+						Column columnAnnotation = (Column) getAnnotation(attribute.getJavaMember(), Column.class);
+						if (columnAnnotation != null && columnAnnotation.name() != null)
+							columnName = columnAnnotation.name();
+
+						// check @ManyToOne
+						if (attribute.getPersistentAttributeType().equals(Attribute.PersistentAttributeType.MANY_TO_ONE)) {
+							JoinColumn joinColumnAnnotation = (JoinColumn) getAnnotation(attribute.getJavaMember(), JoinColumn.class);
+							if (joinColumnAnnotation != null && joinColumnAnnotation.name() != null) {
+								columnName = joinColumnAnnotation.name();
+							}
+							else {
+								// lookup the referenced @ManyToOne entity and find it's primary key to create the default generated FK
+								// column name
+								EntityType<?> referencedEntity = entityManager.getMetamodel().entity(attribute.getJavaType());
+								for (SingularAttribute<?, ?> singularAttr : referencedEntity.getSingularAttributes()) {
+									if (!singularAttr.isId())
+										continue;
+									Column columnAnn = (Column) getAnnotation(singularAttr.getJavaMember(), Column.class);
+									// according to JPA2 specification 
+									columnName = String.format("%s_%s",
+											attribute.getName(),
+											columnAnn == null ? singularAttr.getName() : columnAnn.name());
+								}
+							}
+						}
+
+						if (columnName.equals(uniqueColumn)) return true;
+					}
 			}
 		}
 
