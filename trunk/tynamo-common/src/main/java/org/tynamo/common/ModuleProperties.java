@@ -15,7 +15,6 @@ public class ModuleProperties {
 		InputStream inputStream = aClass.getResourceAsStream("module.properties");
 		if (inputStream == null) {
 			version = aClass.getPackage().getImplementationVersion();
-			System.out.println("resource path is " + aClass.getResource(""));
 			if (aClass.getResource("").toString().startsWith("file:") && "false".equalsIgnoreCase(System.getProperty("tapestry.production-mode"))) version = "development-SNAPSHOT"; 
 			if (version == null) throw new IllegalArgumentException("Neither properties file '" + expectedPropertyPath + "' nor META-INF/manifest.mf was found");
 		}
