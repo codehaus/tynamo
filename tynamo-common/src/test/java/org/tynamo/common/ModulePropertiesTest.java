@@ -16,12 +16,12 @@ public class ModulePropertiesTest {
 	public void setUpEnvironment(){
 		originalProductionModeValue = System.getProperty("tapestry.production-mode");
 		System.setProperty("tapestry.production-mode", "true");
-		
 	}
 
 	@AfterClass
 	public void restoreEnvironment(){
-		System.setProperty("tapestry.production-mode", originalProductionModeValue);
+		if (originalProductionModeValue == null) System.clearProperty("tapestry.production-mode");
+		else System.setProperty("tapestry.production-mode", originalProductionModeValue);
 	}
 	
 	@Test
