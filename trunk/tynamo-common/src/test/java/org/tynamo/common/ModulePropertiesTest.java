@@ -40,7 +40,6 @@ public class ModulePropertiesTest {
 	
 	@Test public void testVersion(){
 		assertEquals("1.0", ModuleProperties.getVersion(Filtered.class));
-		
 	}
 	
 	@Test (expectedExceptions = IllegalArgumentException.class)
@@ -52,4 +51,15 @@ public class ModulePropertiesTest {
 	public void testVersionWithNonexistent(){
 		ModuleProperties.getVersion(NonExistent.class);
 	}
+	
+	@Test (expectedExceptions = IllegalArgumentException.class)
+	public void testGetModulePropertyNonExistent(){
+		ModuleProperties.getPropertyValue(NonExistent.class, "module.buildnumber");
+	}
+
+	@Test
+	public void testGetModulePropertyFiltered(){
+	  assertEquals("123",	ModuleProperties.getPropertyValue(Filtered.class, "module.buildnumber"));
+	}
+	
 }
