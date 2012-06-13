@@ -23,6 +23,7 @@ import org.tynamo.seedentity.hibernate.entities.ActionItem;
 import org.tynamo.seedentity.hibernate.entities.NaturalThing;
 import org.tynamo.seedentity.hibernate.entities.NonUniqueThing;
 import org.tynamo.seedentity.hibernate.entities.Thing;
+import org.tynamo.seedentity.hibernate.entities.TotallyNonUniqueThing;
 import org.tynamo.seedentity.hibernate.entities.Worker;
 
 public class SeedEntityImplTest {
@@ -38,6 +39,7 @@ public class SeedEntityImplTest {
 		configuration.addAnnotatedClass(NonUniqueThing.class);
 		configuration.addAnnotatedClass(ActionItem.class);
 		configuration.addAnnotatedClass(Worker.class);
+		configuration.addAnnotatedClass(TotallyNonUniqueThing.class);
 		configuration.configure("/hibernate-test.cfg.xml");
 		sessionFactory = configuration.buildSessionFactory();
 	}
@@ -77,7 +79,16 @@ public class SeedEntityImplTest {
 		seedEntityImpl.seed(session, entities);
 		assertEquals(session.createCriteria(NonUniqueThing.class).list().size(), 1);
 	}
-
+	
+	@Test()
+	public void alwaysSeedNonUniqueThings() {
+		List<Object> entities = new ArrayList<Object>();
+		entities.add(new TotallyNonUniqueThing("one"));
+		entities.add(new TotallyNonUniqueThing("two"));
+		seedEntityImpl.seed(session, entities);
+		assertEquals(session.createCriteria(TotallyNonUniqueThing.class).list().size(), 2);
+	}
+	
 	@Test
 	public void seedWorkersAndUpdateWithPartialCommits() {
 		List<Object> entities = new ArrayList<Object>();
