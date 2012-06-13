@@ -118,10 +118,12 @@ public class SeedEntityImpl implements SeedEntity {
 			for (PropertyDescriptor descriptor : descriptors)
 				nonUniqueProperties.add(descriptor.getName());
 
+			boolean uniquePropertyExists = uniquelyIdentifyingProperty != null;
 			if (uniquelyIdentifyingProperty == null) {
 				Set<String> uniqueProperties = findPossiblePropertiesWithUniqueColumnAnnotation(entity, descriptors);
 				for (String uniqueProperty : uniqueProperties) {
 					nonUniqueProperties.remove(uniqueProperty);
+					uniquePropertyExists = true;
 				}
 			} else nonUniqueProperties.remove(uniquelyIdentifyingProperty);
 
@@ -130,7 +132,7 @@ public class SeedEntityImpl implements SeedEntity {
 				example.excludeProperty(nonUniqueProperty);
 			List<Object> results = session.createCriteria(entity.getClass()).add(example).list();
 
-			if (results.size() > 0) {
+			if (results.size() > 0 && uniquePropertyExists) {
 				logger.info("At least one existing entity with same unique properties as '" + entity + "' of type '"
 						+ entity.getClass().getSimpleName() + "' already exists, skipping seeding this entity");
 				// Need to set the id to the seed bean so a new seed entity with a relationship to existing seed entity can be
