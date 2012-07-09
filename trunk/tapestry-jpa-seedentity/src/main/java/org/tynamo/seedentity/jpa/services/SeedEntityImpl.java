@@ -16,7 +16,6 @@ import javax.persistence.Entity;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -126,7 +125,7 @@ public class SeedEntityImpl implements SeedEntity {
 				continue;
 			}
 
-			if (typeIdentifiers.containsKey(object.getClass()))
+			if (uniquelyIdentifyingProperty == null && typeIdentifiers.containsKey(object.getClass()))
 				uniquelyIdentifyingProperty = typeIdentifiers.get(object.getClass()).getUniquelyIdentifyingProperty();
 
 			// create a query using unique properties
@@ -142,12 +141,16 @@ public class SeedEntityImpl implements SeedEntity {
 			Set<Predicate> predicates = new HashSet<Predicate>();
 			for (SingularAttribute a : singularAttributes) {
 				if (a.isId()) {
+					// FIXME doesn't deal with composite ids
 					idAttr = a;
 					continue;
 				}
-				if (isUnique(entityManager, entity.getClass(), a))
+				if (uniquelyIdentifyingProperty == null && isUnique(entityManager, entity.getClass(), a))
 					predicates.add(cb.equal(root.get(a.getName()), propertyAccess.get(entity, a.getName())));
 			}
+			if (uniquelyIdentifyingProperty != null)
+				predicates.add(cb.equal(root.get(uniquelyIdentifyingProperty),
+					propertyAccess.get(entity, uniquelyIdentifyingProperty)));
 
 			// always re-seed if there are no unique attributes
 			if (predicates.size() > 0) {
@@ -185,27 +188,23 @@ public class SeedEntityImpl implements SeedEntity {
 						String columnName = attribute.getName();
 						// check customised name in @Column
 						Column columnAnnotation = (Column) getAnnotation(attribute.getJavaMember(), Column.class);
-						if (columnAnnotation != null && columnAnnotation.name() != null)
-							columnName = columnAnnotation.name();
+						if (columnAnnotation != null && columnAnnotation.name() != null) columnName = columnAnnotation.name();
 
 						// check @ManyToOne
 						if (attribute.getPersistentAttributeType().equals(Attribute.PersistentAttributeType.MANY_TO_ONE)) {
 							JoinColumn joinColumnAnnotation = (JoinColumn) getAnnotation(attribute.getJavaMember(), JoinColumn.class);
 							if (joinColumnAnnotation != null && joinColumnAnnotation.name() != null) {
 								columnName = joinColumnAnnotation.name();
-							}
-							else {
+							} else {
 								// lookup the referenced @ManyToOne entity and find it's primary key to create the default generated FK
 								// column name
 								EntityType<?> referencedEntity = entityManager.getMetamodel().entity(attribute.getJavaType());
 								for (SingularAttribute<?, ?> singularAttr : referencedEntity.getSingularAttributes()) {
-									if (!singularAttr.isId())
-										continue;
+									if (!singularAttr.isId()) continue;
 									Column columnAnn = (Column) getAnnotation(singularAttr.getJavaMember(), Column.class);
-									// according to JPA2 specification 
-									columnName = String.format("%s_%s",
-											attribute.getName(),
-											columnAnn == null ? singularAttr.getName() : columnAnn.name());
+									// according to JPA2 specification
+									columnName = String.format("%s_%s", attribute.getName(), columnAnn == null ? singularAttr.getName()
+										: columnAnn.name());
 								}
 							}
 						}
