@@ -80,6 +80,20 @@ public class SeedEntityImpl implements SeedEntity {
 		tx.begin();
 		for (Object object : entities) {
 			Object entity;
+			if (object instanceof String) {
+				try {
+					entityManager.createNativeQuery(object.toString()).executeUpdate();
+					tx.commit();
+					tx.begin();
+				} catch (Exception e) {
+					logger.info("Couldn't execute native seed query '" + object
+						+ "', perhaps already executed? Rolling back all statements up to this point. Query failed with: "
+						+ e.getMessage());
+					tx.rollback();
+					tx.begin();
+				}
+				continue;
+			}
 			if (object instanceof SeedEntityUpdater) {
 				SeedEntityUpdater entityUpdater = (SeedEntityUpdater) object;
 				if (!newlyAddedEntities.contains(entityUpdater.getOriginalEntity())) {

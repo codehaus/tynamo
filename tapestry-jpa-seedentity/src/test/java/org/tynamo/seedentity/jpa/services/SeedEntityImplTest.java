@@ -47,6 +47,9 @@ public class SeedEntityImplTest {
 	public void seedEntities() throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
 		List<Object> entities = new ArrayList<Object>();
 
+		entities.add("alter table Thing add column extracolumn int");
+		entities.add("alter table Thing add column extracolumn int");
+
 		Thing thing = new Thing();
 		thing.setName("MeinName");
 		thing.setNumber(12);
