@@ -2,6 +2,8 @@ package org.tynamo.common;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.Properties;
 
 public class ModuleProperties {
@@ -18,7 +20,18 @@ public class ModuleProperties {
 			if (version == null) throw new IllegalArgumentException("Neither properties file '" + expectedPropertyPath + "' nor '" + aClass.getPackage().getName() + "' package-specific Implementation-Version in META-INF/manifest.mf was found");
 		}
 		else version = getPropertyValue(aClass, VERSION);
-		if (version.endsWith("SNAPSHOT")) version += "-" + System.currentTimeMillis();
+		if (version.endsWith("SNAPSHOT")) {
+			long timestamp = System.currentTimeMillis();
+			try {
+				// adapted from http://stackoverflow.com/questions/2057351/how-do-i-get-the-last-modification-time-of-a-java-resource
+				URL url = aClass.getResource("");
+				URLConnection connection = url.openConnection();
+				timestamp = connection.getLastModified();
+				connection.getInputStream().close();
+			} catch (Throwable t) {//ignore
+			}
+			version += "-" + timestamp;
+		}
 		return version;
 	}
 	
