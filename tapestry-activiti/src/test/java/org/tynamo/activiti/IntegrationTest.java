@@ -14,7 +14,6 @@ import org.testng.annotations.Test;
 import org.tynamo.activiti.services.ActivitiModule;
 import org.tynamo.activiti.services.ServiceA;
 import org.tynamo.activiti.services.TestModule;
-import org.tynamo.jpa.JPACoreModule;
 
 import java.util.HashSet;
 import java.util.List;
@@ -30,7 +29,7 @@ public class IntegrationTest {
 
 	@BeforeClass
 	public void setup() {
-		setup_registry(JPACoreModule.class, ActivitiModule.class, TestModule.class);
+		setup_registry( ActivitiModule.class, TestModule.class);
 		processEngine = registry.getService(ProcessEngine.class);
 		runtimeService = registry.getService(RuntimeService.class);
 		taskService = registry.getService(TaskService.class);

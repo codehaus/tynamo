@@ -2,12 +2,10 @@ package org.tynamo.activiti;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-
 import org.activiti.engine.impl.interceptor.Session;
 import org.activiti.engine.impl.interceptor.SessionFactory;
 import org.activiti.engine.impl.variable.EntityManagerSession;
 import org.activiti.engine.impl.variable.EntityManagerSessionImpl;
-import org.tynamo.jpa.JPATransactionManager;
 
 /**
  * Session Factory for {@link EntityManagerSession}.
@@ -18,13 +16,13 @@ import org.tynamo.jpa.JPATransactionManager;
  *
  */
 public class TapestryEntityManagerSessionFactory implements SessionFactory {
-	private final JPATransactionManager transactionManager;
+	protected EntityManager entityManager;
 	protected EntityManagerFactory entityManagerFactory;
 	protected boolean handleTransactions;
 	protected boolean closeEntityManager;
 
-	public TapestryEntityManagerSessionFactory(JPATransactionManager transactionManager, Object entityManagerFactory, boolean handleTransactions, boolean closeEntityManager) {
-		this.transactionManager = transactionManager;
+	public TapestryEntityManagerSessionFactory(EntityManager entityManager, Object entityManagerFactory, boolean handleTransactions, boolean closeEntityManager) {
+		this.entityManager = entityManager;
 		this.entityManagerFactory = (EntityManagerFactory) entityManagerFactory;
 		this.handleTransactions = handleTransactions;
 		this.closeEntityManager = closeEntityManager;
@@ -35,8 +33,6 @@ public class TapestryEntityManagerSessionFactory implements SessionFactory {
 	}
 
 	public Session openSession() {
-		EntityManager entityManager = transactionManager.getEntityManager();
-
 		if (entityManager == null)
 			return new EntityManagerSessionImpl(entityManagerFactory, handleTransactions, closeEntityManager);
 
