@@ -24,7 +24,16 @@ public class ServiceElResolver extends ELResolver {
 			//According to javadoc, can only be a String
 			String key = (String) property;
 
-			Object service = objectLocator.getService(key, Object.class);
+			Object service = null;
+
+			try {
+				service = objectLocator.getService(key, Object.class);
+			} catch(Exception e) {
+				/*
+				 * key is not a Tapestry Service, which could still be an Activiti variable or some such thing,
+				 * so we let Activiti handle it by returning null.
+				 */
+			}
 
 			if (service != null) {
 				context.setPropertyResolved(true);
@@ -39,7 +48,13 @@ public class ServiceElResolver extends ELResolver {
 	public void setValue(ELContext context, Object base, Object property, Object value) {
 		if (base == null) {
 			String key = (String) property;
-			Object service = objectLocator.getService(key, Object.class);
+			Object service = null;
+
+			try {
+				service = objectLocator.getService(key, Object.class);
+			} catch(Exception e) {
+				//key is not a Tapestry Service.
+			}
 
 			if (service != null)
 				throw new ActivitiException("Cannot set value of '" + property + "', it resolves to a service defined in the Tapestry.");
