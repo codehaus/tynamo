@@ -2,11 +2,13 @@ package org.tynamo.activiti.services;
 
 import org.activiti.engine.*;
 import org.activiti.engine.impl.cfg.StandaloneProcessEngineConfiguration;
+import org.activiti.engine.impl.interceptor.SessionFactory;
 import org.activiti.engine.impl.variable.EntityManagerSession;
 import org.activiti.engine.repository.DeploymentBuilder;
 import org.apache.tapestry5.ioc.MappedConfiguration;
 import org.apache.tapestry5.ioc.ObjectLocator;
 import org.apache.tapestry5.ioc.Resource;
+import org.apache.tapestry5.ioc.ServiceBinder;
 import org.apache.tapestry5.ioc.services.PropertyShadowBuilder;
 import org.apache.tapestry5.ioc.services.SymbolSource;
 import org.apache.tapestry5.ioc.services.TypeCoercer;
@@ -18,10 +20,6 @@ import org.tynamo.activiti.TapestryExpressionManager;
 
 import java.io.IOException;
 import java.util.Collection;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import org.activiti.engine.impl.interceptor.SessionFactory;
-import org.apache.tapestry5.ioc.annotations.Symbol;
 
 /**
  * Defines the Activiti services {@link ProcessEngine}, {@link RepositoryService}, {@link RuntimeService}, {@link FormService},
@@ -30,6 +28,10 @@ import org.apache.tapestry5.ioc.annotations.Symbol;
 public class ActivitiModule {
 
 	private static Logger log = LoggerFactory.getLogger(ActivitiModule.class);
+
+	public static void bind(ServiceBinder binder) {
+		binder.bind(SessionFactory.class, TapestryEntityManagerSessionFactory.class);
+	}
 
 	/**
 	 * Configure the defaults for Activiti, most of these values were obtained
@@ -55,14 +57,6 @@ public class ActivitiModule {
 		configuration.add(ActivitiSymbols.JPA_HANDLE_TRANSACTION, "true");
 		configuration.add(ActivitiSymbols.JPA_CLOSE_ENTITY_MANAGER, "true");
 		configuration.add(ActivitiSymbols.JPA_PERSISTENCE_UNIT_NAME, "");
-	}
-
-	public static SessionFactory buildActivitiSessionFactory(
-			EntityManager em,
-			EntityManagerFactory emf,
-			@Symbol(ActivitiSymbols.JPA_HANDLE_TRANSACTION) boolean jpaHandleTransaction,
-			@Symbol(ActivitiSymbols.JPA_CLOSE_ENTITY_MANAGER) boolean jpaCloseEntityManager) {
-		return new TapestryEntityManagerSessionFactory(em, emf, jpaHandleTransaction, jpaCloseEntityManager);
 	}
 
 	/**
