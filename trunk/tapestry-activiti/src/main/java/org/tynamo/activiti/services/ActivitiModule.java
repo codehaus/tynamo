@@ -9,9 +9,8 @@ import org.apache.tapestry5.ioc.MappedConfiguration;
 import org.apache.tapestry5.ioc.ObjectLocator;
 import org.apache.tapestry5.ioc.Resource;
 import org.apache.tapestry5.ioc.ServiceBinder;
-import org.apache.tapestry5.ioc.services.PropertyShadowBuilder;
-import org.apache.tapestry5.ioc.services.SymbolSource;
-import org.apache.tapestry5.ioc.services.TypeCoercer;
+import org.apache.tapestry5.ioc.annotations.Contribute;
+import org.apache.tapestry5.ioc.services.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tynamo.activiti.ActivitiSymbols;
@@ -37,26 +36,30 @@ public class ActivitiModule {
 	 * Configure the defaults for Activiti, most of these values were obtained
 	 * from the User's Guide and are Activit's defaults.
 	 */
-	public static void contributeFactoryDefaults(MappedConfiguration<String, String> configuration) {
+	@Contribute(SymbolProvider.class)
+	@FactoryDefaults
+	public static void factoryDefaults(MappedConfiguration<String, Object> configuration) {
 		configuration.add(ActivitiSymbols.HISTORY, ProcessEngineConfiguration.HISTORY_AUDIT);
 		configuration.add(ActivitiSymbols.MAIL_SERVER_HOST, "localhost");
-		configuration.add(ActivitiSymbols.MAIL_SERVER_PORT, "25");
+		configuration.add(ActivitiSymbols.MAIL_SERVER_PORT, 25);
 		configuration.add(ActivitiSymbols.MAIL_SERVER_DEFAULT_FROM, "activiti@activiti.org");
 		configuration.add(ActivitiSymbols.MAIL_SERVER_USERNAME, "");
 		configuration.add(ActivitiSymbols.MAIL_SERVER_PASSWORD, "");
 		configuration.add(ActivitiSymbols.DATABASE_TYPE, "h2");
-		configuration.add(ActivitiSymbols.DATABASE_SCHEMA_UPDATE, "false");
+		configuration.add(ActivitiSymbols.DATABASE_SCHEMA_UPDATE, ProcessEngineConfiguration.DB_SCHEMA_UPDATE_TRUE);
 		configuration.add(ActivitiSymbols.JDBC_DRIVER, "org.h2.Driver");
 		configuration.add(ActivitiSymbols.JDBC_URL, "jdbc:h2:mem:activiti-jpa;DB_CLOSE_DELAY=1000");
 		configuration.add(ActivitiSymbols.JDBC_USERNAME, "sa");
 		configuration.add(ActivitiSymbols.JDBC_PASSWORD, "");
-		configuration.add(ActivitiSymbols.JDBC_MAX_ACTIVE_CONNECTIONS, "10");
-		configuration.add(ActivitiSymbols.JDBC_MAX_IDLE_CONNECTIONS, "10");
-		configuration.add(ActivitiSymbols.JDBC_MAX_CHECKOUT_TIME, "20000");
-		configuration.add(ActivitiSymbols.JDBC_MAX_WAIT_TIME, "20000");
-		configuration.add(ActivitiSymbols.JPA_HANDLE_TRANSACTION, "true");
-		configuration.add(ActivitiSymbols.JPA_CLOSE_ENTITY_MANAGER, "true");
+		configuration.add(ActivitiSymbols.JDBC_MAX_ACTIVE_CONNECTIONS, 10);
+		configuration.add(ActivitiSymbols.JDBC_MAX_IDLE_CONNECTIONS, 10);
+		configuration.add(ActivitiSymbols.JDBC_MAX_CHECKOUT_TIME, 20000);
+		configuration.add(ActivitiSymbols.JDBC_MAX_WAIT_TIME, 20000);
+		configuration.add(ActivitiSymbols.JPA_HANDLE_TRANSACTION, true);
+		configuration.add(ActivitiSymbols.JPA_CLOSE_ENTITY_MANAGER, true);
 		configuration.add(ActivitiSymbols.JPA_PERSISTENCE_UNIT_NAME, "");
+
+		configuration.add(ActivitiSymbols.JOB_EXECUTOR_ACTIVATE, true);
 	}
 
 	/**
