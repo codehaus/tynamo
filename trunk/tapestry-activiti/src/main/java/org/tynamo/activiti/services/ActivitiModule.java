@@ -4,12 +4,11 @@ import org.activiti.engine.*;
 import org.activiti.engine.impl.cfg.StandaloneProcessEngineConfiguration;
 import org.activiti.engine.impl.interceptor.SessionFactory;
 import org.activiti.engine.impl.variable.EntityManagerSession;
+import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.repository.DeploymentBuilder;
-import org.apache.tapestry5.ioc.MappedConfiguration;
-import org.apache.tapestry5.ioc.ObjectLocator;
-import org.apache.tapestry5.ioc.Resource;
-import org.apache.tapestry5.ioc.ServiceBinder;
+import org.apache.tapestry5.ioc.*;
 import org.apache.tapestry5.ioc.annotations.Contribute;
+import org.apache.tapestry5.ioc.annotations.EagerLoad;
 import org.apache.tapestry5.ioc.services.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -66,52 +65,46 @@ public class ActivitiModule {
 	 * Configure Tapestry service for the Activiti configuration
 	 * {@link ProcessEngineConfiguration}.
 	 */
-	public static ProcessEngineConfiguration buildProcessEngineConfiguration(
+	@Contribute(ProcessEngine.class)
+	public static void defaultProcessEngineConfiguration(
+			final Configuration<ProcessEngineConfigurer> configurers,
 			final SymbolSource symbolSource,
-			final TypeCoercer typeCoercer,
-			final SessionFactory sessionFactory,
-			final ObjectLocator objectLocator) {
+			final TypeCoercer typeCoercer) {
 
-		StandaloneProcessEngineConfiguration cfg = new StandaloneProcessEngineConfiguration() {
+		configurers.add(new ProcessEngineConfigurer() {
 			@Override
-			protected void initJpa() {
-				super.initJpa();
-				if (jpaEntityManagerFactory != null) {
-					sessionFactories.put(EntityManagerSession.class, sessionFactory);
+			public void configure(ProcessEngineConfiguration cfg) {
+
+				// Configures Activiti's {@link ProcessEngine} based on the {@link ActivitiSymbols}.
+				cfg.setHistory(symbolSource.valueForSymbol(ActivitiSymbols.HISTORY));
+				cfg.setMailServerHost(symbolSource.valueForSymbol(ActivitiSymbols.MAIL_SERVER_HOST));
+				cfg.setMailServerPort(typeCoercer.coerce(symbolSource.valueForSymbol(ActivitiSymbols.MAIL_SERVER_PORT), Integer.class));
+				cfg.setMailServerDefaultFrom(symbolSource.valueForSymbol(ActivitiSymbols.MAIL_SERVER_DEFAULT_FROM));
+				cfg.setMailServerUsername(symbolSource.valueForSymbol(ActivitiSymbols.MAIL_SERVER_USERNAME));
+				cfg.setMailServerPassword(symbolSource.valueForSymbol(ActivitiSymbols.MAIL_SERVER_PASSWORD));
+				cfg.setDatabaseType(symbolSource.valueForSymbol(ActivitiSymbols.DATABASE_TYPE));
+				cfg.setDatabaseSchemaUpdate(symbolSource.valueForSymbol(ActivitiSymbols.DATABASE_SCHEMA_UPDATE));
+				cfg.setJdbcDriver(symbolSource.valueForSymbol(ActivitiSymbols.JDBC_DRIVER));
+				cfg.setJdbcUrl(symbolSource.valueForSymbol(ActivitiSymbols.JDBC_URL));
+				cfg.setJdbcUsername(symbolSource.valueForSymbol(ActivitiSymbols.JDBC_USERNAME));
+				cfg.setJdbcPassword(symbolSource.valueForSymbol(ActivitiSymbols.JDBC_PASSWORD));
+
+				cfg.setJdbcMaxActiveConnections(typeCoercer.coerce(symbolSource.valueForSymbol(ActivitiSymbols.JDBC_MAX_ACTIVE_CONNECTIONS), Integer.class));
+				cfg.setJdbcMaxIdleConnections(typeCoercer.coerce(symbolSource.valueForSymbol(ActivitiSymbols.JDBC_MAX_IDLE_CONNECTIONS), Integer.class));
+				cfg.setJdbcMaxCheckoutTime(typeCoercer.coerce(symbolSource.valueForSymbol(ActivitiSymbols.JDBC_MAX_CHECKOUT_TIME), Integer.class));
+				cfg.setJdbcMaxWaitTime(typeCoercer.coerce(symbolSource.valueForSymbol(ActivitiSymbols.JDBC_MAX_WAIT_TIME), Integer.class));
+				cfg.setJobExecutorActivate(typeCoercer.coerce(symbolSource.valueForSymbol(ActivitiSymbols.JOB_EXECUTOR_ACTIVATE), Boolean.class));
+				cfg.setJpaHandleTransaction(typeCoercer.coerce(symbolSource.valueForSymbol(ActivitiSymbols.JPA_HANDLE_TRANSACTION), Boolean.class));
+				cfg.setJpaCloseEntityManager(typeCoercer.coerce(symbolSource.valueForSymbol(ActivitiSymbols.JPA_CLOSE_ENTITY_MANAGER), Boolean.class));
+
+				String unitName = symbolSource.valueForSymbol(ActivitiSymbols.JPA_PERSISTENCE_UNIT_NAME);
+				if (!"".equals(unitName)) {
+					cfg.setJpaPersistenceUnitName(unitName);
 				}
+
+				//To change body of implemented methods use File | Settings | File Templates.
 			}
-		};
-
-		// Configures Activiti's {@link ProcessEngine} based on the {@link ActivitiSymbols}.
-		cfg.setHistory(symbolSource.valueForSymbol(ActivitiSymbols.HISTORY));
-		cfg.setMailServerHost(symbolSource.valueForSymbol(ActivitiSymbols.MAIL_SERVER_HOST));
-		cfg.setMailServerPort(typeCoercer.coerce(symbolSource.valueForSymbol(ActivitiSymbols.MAIL_SERVER_PORT), Integer.class));
-		cfg.setMailServerDefaultFrom(symbolSource.valueForSymbol(ActivitiSymbols.MAIL_SERVER_DEFAULT_FROM));
-		cfg.setMailServerUsername(symbolSource.valueForSymbol(ActivitiSymbols.MAIL_SERVER_USERNAME));
-		cfg.setMailServerPassword(symbolSource.valueForSymbol(ActivitiSymbols.MAIL_SERVER_PASSWORD));
-		cfg.setDatabaseType(symbolSource.valueForSymbol(ActivitiSymbols.DATABASE_TYPE));
-		cfg.setDatabaseSchemaUpdate(symbolSource.valueForSymbol(ActivitiSymbols.DATABASE_SCHEMA_UPDATE));
-		cfg.setJdbcDriver(symbolSource.valueForSymbol(ActivitiSymbols.JDBC_DRIVER));
-		cfg.setJdbcUrl(symbolSource.valueForSymbol(ActivitiSymbols.JDBC_URL));
-		cfg.setJdbcUsername(symbolSource.valueForSymbol(ActivitiSymbols.JDBC_USERNAME));
-		cfg.setJdbcPassword(symbolSource.valueForSymbol(ActivitiSymbols.JDBC_PASSWORD));
-		cfg.setJdbcMaxActiveConnections(typeCoercer.coerce(symbolSource.valueForSymbol(ActivitiSymbols.JDBC_MAX_ACTIVE_CONNECTIONS), Integer.class));
-		cfg.setJdbcMaxIdleConnections(typeCoercer.coerce(symbolSource.valueForSymbol(ActivitiSymbols.JDBC_MAX_IDLE_CONNECTIONS), Integer.class));
-		cfg.setJdbcMaxCheckoutTime(typeCoercer.coerce(symbolSource.valueForSymbol(ActivitiSymbols.JDBC_MAX_CHECKOUT_TIME), Integer.class));
-		cfg.setJdbcMaxWaitTime(typeCoercer.coerce(symbolSource.valueForSymbol(ActivitiSymbols.JDBC_MAX_WAIT_TIME), Integer.class));
-		cfg.setJobExecutorActivate(typeCoercer.coerce(symbolSource.valueForSymbol(ActivitiSymbols.JOB_EXECUTOR_ACTIVATE), Boolean.class));
-		cfg.setJpaHandleTransaction(typeCoercer.coerce(symbolSource.valueForSymbol(ActivitiSymbols.JPA_HANDLE_TRANSACTION), Boolean.class));
-		cfg.setJpaCloseEntityManager(typeCoercer.coerce(symbolSource.valueForSymbol(ActivitiSymbols.JPA_CLOSE_ENTITY_MANAGER), Boolean.class));
-
-		//Allows Tapestry Services to be looked up by service id
-		cfg.setExpressionManager(new TapestryExpressionManager(objectLocator));
-
-		String unitName = symbolSource.valueForSymbol(ActivitiSymbols.JPA_PERSISTENCE_UNIT_NAME);
-		if (!"".equals(unitName)) {
-			cfg.setJpaPersistenceUnitName(unitName);
-		}
-
-		return cfg;
+		});
 	}
 
 	/**
@@ -121,24 +114,47 @@ public class ActivitiModule {
 	 * automatically in Activiti. Deploying resources this way will check if the
 	 * resource changed and only then deploy to the Activiti database.</p>
 	 */
-	public static ProcessEngine buildProcessEngine(ProcessEngineConfiguration processEngineConfiguration,
-	                                               Collection<Resource> processes) throws IOException {
+	public static ProcessEngine buildProcessEngine(
+			final Collection<ProcessEngineConfigurer> processEngineConfigurers,
+			final SessionFactory sessionFactory,
+			final ObjectLocator objectLocator) {
 
-		ProcessEngine engine = processEngineConfiguration.buildProcessEngine();
+		StandaloneProcessEngineConfiguration processEngineConfiguration = new StandaloneProcessEngineConfiguration() {
+			@Override
+			protected void initJpa() {
+				super.initJpa();
+				if (jpaEntityManagerFactory != null) {
+					sessionFactories.put(EntityManagerSession.class, sessionFactory);
+				}
+			}
+		};
 
-		DeploymentBuilder deployment = engine.getRepositoryService().createDeployment()
+		for (ProcessEngineConfigurer configurer : processEngineConfigurers) {
+			configurer.configure(processEngineConfiguration);
+		}
+
+		//Allows Tapestry Services to be looked up by service id
+		processEngineConfiguration.setExpressionManager(new TapestryExpressionManager(objectLocator));
+
+		return processEngineConfiguration.buildProcessEngine();
+	}
+
+	@EagerLoad
+	public static Deployment buildDeployment(
+			final RepositoryService repositoryService,
+			final Collection<Resource> processes) throws IOException {
+
+		DeploymentBuilder builder = repositoryService.createDeployment()
 				//This option ensure that processes are deployed only if they are new or do not have any changes in comparison to the latest revision in the database.
 				.enableDuplicateFiltering()
 				.name("TapestryAutoDeployment");
 
 		for (Resource resource : processes) {
 			log.info("Auto deploying process " + resource.getFile());
-			deployment.addInputStream(resource.getFile(), resource.openStream());
+			builder.addInputStream(resource.getFile(), resource.openStream());
 		}
 
-		deployment.deploy();
-
-		return engine;
+		return builder.deploy();
 	}
 
 	/**
