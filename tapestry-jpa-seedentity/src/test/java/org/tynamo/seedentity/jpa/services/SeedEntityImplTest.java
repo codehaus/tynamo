@@ -3,6 +3,7 @@ package org.tynamo.seedentity.jpa.services;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.testng.Assert.assertTrue;
+import static org.testng.Assert.assertEquals;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -71,8 +72,12 @@ public class SeedEntityImplTest {
 		entities.add(new AnotherThing());
 
 		// SEE: TYNAMO-151
+		Thing thing3 = new Thing();
+		entities.add(thing3);
 		entities.add(new PrettyUniqueThing(thing, 1));
 		entities.add(new PrettyUniqueThing(thing, 1));
+		entities.add(new PrettyUniqueThing(thing, 2));
+		entities.add(new PrettyUniqueThing(thing3, 1));
 
 		entities.add(new SeedEntityIdentifier(new ThingWithMultipleUniques("hello", "world"), "firstName"));
 		entities.add(new SeedEntityIdentifier(new ThingWithMultipleUniques("hello", "anotherWorld"), "firstName"));
@@ -86,11 +91,11 @@ public class SeedEntityImplTest {
 			entityManagerManager, "", entities);
 		// em.getTransaction().commit();
 		List<Thing> resultList = em.createQuery("select t from Thing t").getResultList();
-		assertTrue(resultList.size() == 1);
+		assertTrue(resultList.size() == 2);
 		List<AnotherThing> aThingList = em.createQuery("select t from AnotherThing t").getResultList();
 		assertTrue(aThingList.size() == 2);
 		List<AnotherThing> aPrettyUniqueThingList = em.createQuery("select t from PrettyUniqueThing t").getResultList();
-		assertTrue(aPrettyUniqueThingList.size() == 1);
+		assertEquals(aPrettyUniqueThingList.size(), 3);
 		// assertTrue(em.createCriteria(Thing.class).list().size() > 0);
 
 		List<AnotherThing> thingWithMultipleUniquesList = em.createQuery("select t from ThingWithMultipleUniques t")

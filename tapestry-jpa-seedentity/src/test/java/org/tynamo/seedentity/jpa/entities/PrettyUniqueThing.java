@@ -10,7 +10,7 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 @Entity
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = { "thing_id", "order_no" }))
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = { "THING_ID", "order_no" }))
 public class PrettyUniqueThing
 {
 	@Id

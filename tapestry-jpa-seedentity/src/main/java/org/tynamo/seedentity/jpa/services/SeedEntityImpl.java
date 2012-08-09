@@ -223,7 +223,8 @@ public class SeedEntityImpl implements SeedEntity {
 							}
 						}
 
-						if (columnName.equals(uniqueColumn)) return true;
+						System.out.println(columnName+" "+uniqueColumn);
+						if (columnName.equalsIgnoreCase(uniqueColumn)) return true;
 					}
 			}
 		}
