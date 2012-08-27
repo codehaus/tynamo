@@ -19,6 +19,7 @@ import org.tynamo.examples.federatedaccounts.session.CurrentUserImpl;
 import org.tynamo.examples.federatedaccounts.session.FederatedAccountsAuthorizingRealm;
 import org.tynamo.security.federatedaccounts.FederatedAccountSymbols;
 import org.tynamo.security.federatedaccounts.facebook.services.FacebookFederatedAccountsModule;
+import org.tynamo.security.federatedaccounts.openid.services.OpenidFederatedAccountsModule;
 import org.tynamo.security.federatedaccounts.services.FederatedAccountService;
 import org.tynamo.security.federatedaccounts.services.FederatedAccountsModule;
 import org.tynamo.security.federatedaccounts.twitter.services.TwitterFederatedAccountsModule;
@@ -27,7 +28,7 @@ import org.tynamo.shiro.extension.realm.text.ExtendedPropertiesRealm;
 
 // all specified just because I'm often running the within IDE, not packaged in jars 
 @SubModule(value = { SecurityModule.class, FederatedAccountsModule.class, FacebookFederatedAccountsModule.class,
-		TwitterFederatedAccountsModule.class })
+		TwitterFederatedAccountsModule.class, OpenidFederatedAccountsModule.class })
 public class AppModule {
 	private static String version = ModuleProperties.getVersion(AppModule.class);
 
