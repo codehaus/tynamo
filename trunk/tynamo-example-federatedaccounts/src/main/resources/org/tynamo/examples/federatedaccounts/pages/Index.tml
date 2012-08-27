@@ -69,13 +69,13 @@
 				</div>
 				<div style="float:left">
 					<span style="font-weight:bold">Sign in as a Twitter user</span>
-					<div style="margin-top:40px">
+					<div style="margin-top:10px">
 						<t:twitter.twitterOauthSignIn/>
 					</div>
 				</div>
-				<div style="float:left">
+				<div style="float:left;margin-top:10px">
 					<span style="font-weight:bold">Sign in as an OpenID user</span>
-					<div style="margin-top:40px">
+					<div>
 						<t:openid.openIdSignIn provider="google"/>
 					</div>
 				</div>
