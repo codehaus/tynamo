@@ -36,7 +36,7 @@ public class Add
 	private Messages messages;
 
 	@Inject
-	private PersistenceService persitenceService;
+	private PersistenceService persistenceService;
 
 	@Inject
 	private PageRenderLinkSource pageRenderLinkSource;
@@ -92,7 +92,7 @@ public class Add
 	@OnEvent(EventConstants.SUCCESS)
 	Link success()
 	{
-		persitenceService.save(bean);
+		persistenceService.save(bean);
 		alertManager.info(messages.getFormatter(Utils.ADDED_MESSAGE).format(bean));
 		return !continueAdding ? pageRenderLinkSource.createPageRenderLinkWithContext(Show.class, beanType, bean) : null;
 	}

@@ -36,6 +36,17 @@
 		</dependency>
 
 		<dependency>
+			<groupId>org.apache.tapestry</groupId>
+			<artifactId>tapestry-hibernate</artifactId>
+			<version>5.4-alpha-1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.tapestry</groupId>
+			<artifactId>tapestry-core</artifactId>
+			<version>5.3.5</version>
+		</dependency>
+		
+		<dependency>
 			<groupId>org.tynamo</groupId>
 			<artifactId>tapestry-model-hibernate</artifactId>
 		</dependency>

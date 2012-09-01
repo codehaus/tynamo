@@ -8,9 +8,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
-
 import javax.validation.constraints.NotNull;
-import org.tynamo.descriptor.annotation.PropertyDescriptor;
+
+import org.hibernate.search.annotations.DocumentId;
+import org.hibernate.search.annotations.Field;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
@@ -25,6 +26,7 @@ public class Fruit
 
 	private Origin origin = Origin.AMERICA;
 
+	@DocumentId
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	public Integer getId()
@@ -39,6 +41,7 @@ public class Fruit
 
 	private String name;
 
+	@Field
 	public String getName()
 	{
 		return name;

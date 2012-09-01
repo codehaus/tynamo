@@ -28,7 +28,7 @@
 
 	<br/>
 
-	<t:beandisplay object="bean" lean="true">
+	<t:beandisplay object="bean" lean="true" t:mixins="tynamo/BeanModelAdvisor">
 		<p:categories>
 			<t:pagelink page="collections/AddC" context="[beanType,bean,'categories']">Add Category</t:pagelink>
 			<t:tynamo.composition owner="bean" collection="bean.categories" collectionDescriptor="categoriesDescriptor"/>
