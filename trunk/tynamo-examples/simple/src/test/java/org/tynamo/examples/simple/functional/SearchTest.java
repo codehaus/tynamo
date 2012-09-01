@@ -6,7 +6,6 @@ import org.tynamo.test.AbstractContainerTest;
 
 import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.gargoylesoftware.htmlunit.html.HtmlSelect;
 
 public class SearchTest extends AbstractContainerTest
 {

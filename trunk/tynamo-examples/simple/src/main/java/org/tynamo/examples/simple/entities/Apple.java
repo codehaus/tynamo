@@ -1,10 +1,13 @@
 package org.tynamo.examples.simple.entities;
 
+import javax.persistence.Entity;
+
+import org.hibernate.search.annotations.Field;
+import org.hibernate.search.annotations.Indexed;
 import org.hibernate.validator.constraints.Length;
 import org.tynamo.descriptor.annotation.PropertyDescriptor;
 
-import javax.persistence.Entity;
-
+@Indexed
 @Entity
 public class Apple extends Fruit
 {
@@ -12,6 +15,7 @@ public class Apple extends Fruit
 	private String color;
 	private String history;
 
+	@Field
 	public String getColor()
 	{
 		return color;

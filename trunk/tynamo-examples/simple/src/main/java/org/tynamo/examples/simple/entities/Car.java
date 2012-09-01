@@ -1,12 +1,14 @@
 package org.tynamo.examples.simple.entities;
 
-import org.hibernate.validator.constraints.Length;
+import java.io.Serializable;
 
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.OneToOne;
-import java.io.Serializable;
 
+import org.hibernate.validator.constraints.Length;
+
+//@Indexed
 @Entity
 public class Car implements Serializable
 {
@@ -17,6 +19,7 @@ public class Car implements Serializable
 
 	private String notes;
 
+//	@DocumentId
 	@EmbeddedId
 	public CarPk getId()
 	{

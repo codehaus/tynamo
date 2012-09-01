@@ -35,7 +35,7 @@ public class Show
 	private Messages messages;
 
 	@Inject
-	private PersistenceService persitenceService;
+	private PersistenceService persistenceService;
 
 	@Inject
 	private DescriptorService descriptorService;
@@ -98,7 +98,7 @@ public class Show
 	@OnEvent("delete")
 	Link delete()
 	{
-		persitenceService.remove(bean);
+		persistenceService.remove(bean);
 		return pageRenderLinkSource.createPageRenderLinkWithContext(List.class, beanType);
 	}
 
