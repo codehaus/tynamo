@@ -65,7 +65,7 @@
 		<dependency>
 			<groupId>org.activiti</groupId>
 			<artifactId>activiti-engine</artifactId>
-			<version>5.9</version>
+			<version>5.10</version>
 			<exclusions>
 				<exclusion>
 					<groupId>org.springframework</groupId>
@@ -98,7 +98,7 @@
 	<repositories>
 		<repository>
 			<id>Activiti Repo</id>
-			<url>http://maven.alfresco.com/nexus/content/repositories/activiti</url>
+			<url>https://maven.alfresco.com/nexus/content/repositories/activiti</url>
 		</repository>
 	</repositories>
 
