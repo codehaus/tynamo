@@ -8,7 +8,7 @@ import org.apache.lucene.queryParser.ParseException;
 import org.apache.lucene.util.Version;
 import org.apache.tapestry5.EventConstants;
 import org.apache.tapestry5.PersistenceConstants;
-import org.apache.tapestry5.annotations.Component;
+import org.apache.tapestry5.annotations.InjectComponent;
 import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
@@ -19,6 +19,7 @@ import org.apache.tapestry5.hibernate.HibernateGridDataSource;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.hibernate.search.FullTextSession;
+import org.tynamo.components.SearchFilters;
 import org.tynamo.descriptor.TynamoClassDescriptor;
 import org.tynamo.descriptor.TynamoPropertyDescriptor;
 import org.tynamo.hibernate.SearchableHibernateGridDataSource;
@@ -61,8 +62,11 @@ public class List
 	@Property
 	private Object bean;
 
-	@Component
+	@InjectComponent
 	private Grid grid;
+
+	@InjectComponent
+	private SearchFilters searchFilters;
 
 	@OnEvent(EventConstants.ACTIVATE)
 	Object onActivate(Class clazz)
@@ -142,7 +146,6 @@ public class List
 	{
 		return descriptorService.getClassDescriptor(beanType).isSearchable();
 	}
-	
 	
 	Object onSuccessFromFulltextSearch() {
 		return null;
