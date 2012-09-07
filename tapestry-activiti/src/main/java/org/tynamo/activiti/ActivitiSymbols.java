@@ -7,6 +7,9 @@ package org.tynamo.activiti;
  *
  */
 public class ActivitiSymbols {
+
+	public static final String USE_DEFAULT_SYMBOLS_BASED_CONFIGURER = "activiti.default-configurer";
+
 	/**
 	 * History is the component that captures what happened during process execution and stores it permanently.
 	 * In contrast to the runtime data, the history data will remain present in the DB also after process instances have completed.

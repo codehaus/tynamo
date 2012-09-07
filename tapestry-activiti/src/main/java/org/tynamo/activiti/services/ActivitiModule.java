@@ -9,6 +9,7 @@ import org.activiti.engine.repository.DeploymentBuilder;
 import org.apache.tapestry5.ioc.*;
 import org.apache.tapestry5.ioc.annotations.Contribute;
 import org.apache.tapestry5.ioc.annotations.EagerLoad;
+import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.apache.tapestry5.ioc.services.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,6 +39,9 @@ public class ActivitiModule {
 	@Contribute(SymbolProvider.class)
 	@FactoryDefaults
 	public static void factoryDefaults(MappedConfiguration<String, Object> configuration) {
+
+		configuration.add(ActivitiSymbols.USE_DEFAULT_SYMBOLS_BASED_CONFIGURER, true);
+
 		configuration.add(ActivitiSymbols.HISTORY, ProcessEngineConfiguration.HISTORY_AUDIT);
 		configuration.add(ActivitiSymbols.MAIL_SERVER_HOST, "localhost");
 		configuration.add(ActivitiSymbols.MAIL_SERVER_PORT, 25);
@@ -69,42 +73,44 @@ public class ActivitiModule {
 	public static void defaultProcessEngineConfiguration(
 			final Configuration<ProcessEngineConfigurer> configurers,
 			final SymbolSource symbolSource,
-			final TypeCoercer typeCoercer) {
+			final TypeCoercer typeCoercer,
+			@Symbol(ActivitiSymbols.USE_DEFAULT_SYMBOLS_BASED_CONFIGURER) final boolean useDefaultConfigurer) {
 
-		configurers.add(new ProcessEngineConfigurer() {
-			@Override
-			public void configure(ProcessEngineConfiguration cfg) {
+		if (useDefaultConfigurer) {
+			configurers.add(new ProcessEngineConfigurer() {
+				@Override
+				public void configure(ProcessEngineConfiguration cfg) {
 
-				// Configures Activiti's {@link ProcessEngine} based on the {@link ActivitiSymbols}.
-				cfg.setHistory(symbolSource.valueForSymbol(ActivitiSymbols.HISTORY));
-				cfg.setMailServerHost(symbolSource.valueForSymbol(ActivitiSymbols.MAIL_SERVER_HOST));
-				cfg.setMailServerPort(typeCoercer.coerce(symbolSource.valueForSymbol(ActivitiSymbols.MAIL_SERVER_PORT), Integer.class));
-				cfg.setMailServerDefaultFrom(symbolSource.valueForSymbol(ActivitiSymbols.MAIL_SERVER_DEFAULT_FROM));
-				cfg.setMailServerUsername(symbolSource.valueForSymbol(ActivitiSymbols.MAIL_SERVER_USERNAME));
-				cfg.setMailServerPassword(symbolSource.valueForSymbol(ActivitiSymbols.MAIL_SERVER_PASSWORD));
-				cfg.setDatabaseType(symbolSource.valueForSymbol(ActivitiSymbols.DATABASE_TYPE));
-				cfg.setDatabaseSchemaUpdate(symbolSource.valueForSymbol(ActivitiSymbols.DATABASE_SCHEMA_UPDATE));
-				cfg.setJdbcDriver(symbolSource.valueForSymbol(ActivitiSymbols.JDBC_DRIVER));
-				cfg.setJdbcUrl(symbolSource.valueForSymbol(ActivitiSymbols.JDBC_URL));
-				cfg.setJdbcUsername(symbolSource.valueForSymbol(ActivitiSymbols.JDBC_USERNAME));
-				cfg.setJdbcPassword(symbolSource.valueForSymbol(ActivitiSymbols.JDBC_PASSWORD));
+					// Configures Activiti's {@link ProcessEngine} based on the {@link ActivitiSymbols}.
+					cfg.setHistory(symbolSource.valueForSymbol(ActivitiSymbols.HISTORY));
+					cfg.setMailServerHost(symbolSource.valueForSymbol(ActivitiSymbols.MAIL_SERVER_HOST));
+					cfg.setMailServerPort(typeCoercer.coerce(symbolSource.valueForSymbol(ActivitiSymbols.MAIL_SERVER_PORT), Integer.class));
+					cfg.setMailServerDefaultFrom(symbolSource.valueForSymbol(ActivitiSymbols.MAIL_SERVER_DEFAULT_FROM));
+					cfg.setMailServerUsername(symbolSource.valueForSymbol(ActivitiSymbols.MAIL_SERVER_USERNAME));
+					cfg.setMailServerPassword(symbolSource.valueForSymbol(ActivitiSymbols.MAIL_SERVER_PASSWORD));
+					cfg.setDatabaseType(symbolSource.valueForSymbol(ActivitiSymbols.DATABASE_TYPE));
+					cfg.setDatabaseSchemaUpdate(symbolSource.valueForSymbol(ActivitiSymbols.DATABASE_SCHEMA_UPDATE));
+					cfg.setJdbcDriver(symbolSource.valueForSymbol(ActivitiSymbols.JDBC_DRIVER));
+					cfg.setJdbcUrl(symbolSource.valueForSymbol(ActivitiSymbols.JDBC_URL));
+					cfg.setJdbcUsername(symbolSource.valueForSymbol(ActivitiSymbols.JDBC_USERNAME));
+					cfg.setJdbcPassword(symbolSource.valueForSymbol(ActivitiSymbols.JDBC_PASSWORD));
 
-				cfg.setJdbcMaxActiveConnections(typeCoercer.coerce(symbolSource.valueForSymbol(ActivitiSymbols.JDBC_MAX_ACTIVE_CONNECTIONS), Integer.class));
-				cfg.setJdbcMaxIdleConnections(typeCoercer.coerce(symbolSource.valueForSymbol(ActivitiSymbols.JDBC_MAX_IDLE_CONNECTIONS), Integer.class));
-				cfg.setJdbcMaxCheckoutTime(typeCoercer.coerce(symbolSource.valueForSymbol(ActivitiSymbols.JDBC_MAX_CHECKOUT_TIME), Integer.class));
-				cfg.setJdbcMaxWaitTime(typeCoercer.coerce(symbolSource.valueForSymbol(ActivitiSymbols.JDBC_MAX_WAIT_TIME), Integer.class));
-				cfg.setJobExecutorActivate(typeCoercer.coerce(symbolSource.valueForSymbol(ActivitiSymbols.JOB_EXECUTOR_ACTIVATE), Boolean.class));
-				cfg.setJpaHandleTransaction(typeCoercer.coerce(symbolSource.valueForSymbol(ActivitiSymbols.JPA_HANDLE_TRANSACTION), Boolean.class));
-				cfg.setJpaCloseEntityManager(typeCoercer.coerce(symbolSource.valueForSymbol(ActivitiSymbols.JPA_CLOSE_ENTITY_MANAGER), Boolean.class));
+					cfg.setJdbcMaxActiveConnections(typeCoercer.coerce(symbolSource.valueForSymbol(ActivitiSymbols.JDBC_MAX_ACTIVE_CONNECTIONS), Integer.class));
+					cfg.setJdbcMaxIdleConnections(typeCoercer.coerce(symbolSource.valueForSymbol(ActivitiSymbols.JDBC_MAX_IDLE_CONNECTIONS), Integer.class));
+					cfg.setJdbcMaxCheckoutTime(typeCoercer.coerce(symbolSource.valueForSymbol(ActivitiSymbols.JDBC_MAX_CHECKOUT_TIME), Integer.class));
+					cfg.setJdbcMaxWaitTime(typeCoercer.coerce(symbolSource.valueForSymbol(ActivitiSymbols.JDBC_MAX_WAIT_TIME), Integer.class));
+					cfg.setJobExecutorActivate(typeCoercer.coerce(symbolSource.valueForSymbol(ActivitiSymbols.JOB_EXECUTOR_ACTIVATE), Boolean.class));
+					cfg.setJpaHandleTransaction(typeCoercer.coerce(symbolSource.valueForSymbol(ActivitiSymbols.JPA_HANDLE_TRANSACTION), Boolean.class));
+					cfg.setJpaCloseEntityManager(typeCoercer.coerce(symbolSource.valueForSymbol(ActivitiSymbols.JPA_CLOSE_ENTITY_MANAGER), Boolean.class));
 
-				String unitName = symbolSource.valueForSymbol(ActivitiSymbols.JPA_PERSISTENCE_UNIT_NAME);
-				if (!"".equals(unitName)) {
-					cfg.setJpaPersistenceUnitName(unitName);
+					String unitName = symbolSource.valueForSymbol(ActivitiSymbols.JPA_PERSISTENCE_UNIT_NAME);
+					if (!"".equals(unitName)) {
+						cfg.setJpaPersistenceUnitName(unitName);
+					}
+
 				}
-
-				//To change body of implemented methods use File | Settings | File Templates.
-			}
-		});
+			});
+		}
 	}
 
 	/**
