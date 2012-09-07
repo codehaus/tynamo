@@ -5,6 +5,10 @@
 				<t:pagelink class="newlink" page="Add" context="beanType">${newlinkMessage}</t:pagelink>
 			</li>
 		</ul>
+		<t:form t:id="searchFilterForm">
+			<t:tynamo.searchFilters beanType="beanType"/>
+			<input type="submit" value="Filter results"/>
+		</t:form>
 	</p:subMenuBlock>
 
 	<h1>${title}</h1>
@@ -15,6 +19,7 @@
 			<input type="submit" value="Search"/>
 		</t:form>
 	</t:if>
+	
 	<t:grid t:id="grid" source="source" row="bean" inPlace="true" add="__id__" reorder="__id__" t:mixins="tynamo/BeanModelAdvisor">
 	<p:__id__header>
 		</p:__id__header>
