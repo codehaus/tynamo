@@ -1,6 +1,7 @@
 package org.tynamo.examples.simple.pages;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.queryParser.MultiFieldQueryParser;
@@ -15,15 +16,16 @@ import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.SetupRender;
 import org.apache.tapestry5.corelib.components.Grid;
 import org.apache.tapestry5.grid.GridDataSource;
-import org.apache.tapestry5.hibernate.HibernateGridDataSource;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.hibernate.search.FullTextSession;
+import org.hibernate.search.query.dsl.QueryBuilder;
 import org.tynamo.components.SearchFilters;
 import org.tynamo.descriptor.TynamoClassDescriptor;
 import org.tynamo.descriptor.TynamoPropertyDescriptor;
 import org.tynamo.hibernate.SearchableHibernateGridDataSource;
 import org.tynamo.routing.annotations.At;
+import org.tynamo.search.SearchFilterPredicate;
 import org.tynamo.services.DescriptorService;
 import org.tynamo.services.PersistenceService;
 import org.tynamo.util.TynamoMessages;
@@ -103,8 +105,9 @@ public class List
 	{
 		// return new TynamoGridDataSource(persistenceService, beanType);
 //		return new HibernateGridDataSource(session, beanType);
+		Map<TynamoPropertyDescriptor, SearchFilterPredicate> propertySearchFilterMap = searchFilters.getActiveFilterMap();
 
-		if (searchTerms == null) return new HibernateGridDataSource(session, beanType); 
+		if (searchTerms == null) return new SearchableHibernateGridDataSource(session, beanType, propertySearchFilterMap);
 
 		TynamoClassDescriptor classDescriptor = descriptorService.getClassDescriptor(beanType);
 		java.util.List<String> fieldNames = new ArrayList<String>();
@@ -120,11 +123,13 @@ public class List
 		// required
 		org.apache.lucene.search.Query query = parser.parse(searchTerms);
 
+		QueryBuilder qb = session.getSearchFactory().buildQueryBuilder().forEntity(beanType).get();
+
 		// NOTE Hibernate Search DSL checks that the fields exists, otherwise it throws exceptions. Lucene is more forgiving
 		// QueryBuilder qb = session.getSearchFactory().buildQueryBuilder().forEntity( beanType ).get();
 		// org.apache.lucene.search.Query query = qb.keyword().onFields(fieldNames.toArray(new String[0])).matching(searchTerms).createQuery();
-
-		return new SearchableHibernateGridDataSource(session, beanType, session.createFullTextQuery(query, beanType));
+		return new SearchableHibernateGridDataSource(session, beanType, session.createFullTextQuery(query, beanType),
+			propertySearchFilterMap);
 	}
 
 	public Object[] getShowPageContext()
@@ -147,8 +152,7 @@ public class List
 		return descriptorService.getClassDescriptor(beanType).isSearchable();
 	}
 	
-	Object onSuccessFromFulltextSearch() {
-		return null;
+	void onSuccessFromSearchFilterForm() {
 	}
 	
 

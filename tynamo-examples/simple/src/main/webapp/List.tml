@@ -5,6 +5,7 @@
 				<t:pagelink class="newlink" page="Add" context="beanType">${newlinkMessage}</t:pagelink>
 			</li>
 		</ul>
+		<h2>Filters</h2>
 		<t:form t:id="searchFilterForm">
 			<t:tynamo.searchFilters beanType="beanType"/>
 			<input type="submit" value="Filter results"/>
