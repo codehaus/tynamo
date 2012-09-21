@@ -6,6 +6,8 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+import org.hibernate.search.annotations.Field;
+import org.hibernate.search.annotations.Indexed;
 import org.tynamo.PageType;
 import org.tynamo.descriptor.annotation.MethodDescriptor;
 import org.tynamo.descriptor.annotation.beaneditor.BeanModel;
@@ -16,7 +18,7 @@ import org.tynamo.descriptor.annotation.beaneditor.BeanModels;
 @BeanModels({
 		@BeanModel(pageType = PageType.LIST, exclude = "id, text")
 })
-
+@Indexed
 public class Thing
 {
 	private Integer id;
@@ -48,6 +50,7 @@ public class Thing
 	/**
 	 * @return Returns the name.
 	 */
+	@Field
 	public String getName()
 	{
 		return name;
@@ -78,6 +81,7 @@ public class Thing
 	}
 
 	@Column(length = 300)
+	@Field
 	public String getText()
 	{
 		return text;

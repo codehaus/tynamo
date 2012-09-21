@@ -41,22 +41,22 @@ import org.tynamo.util.Utils;
 @At("/{0}")
 public class List
 {
-	
+
 	@Inject
 	private DescriptorService descriptorService;
 
 	@Inject
 	private PersistenceService persistenceService;
-	
+
 	@Inject
 	private FullTextSession session;
-	
+
 	@Inject
 	private Messages messages;
 
 	@Property(write = false)
 	private Class beanType;
-	
+
 	@Persist(PersistenceConstants.FLASH)
 	@Property
 	private String searchTerms;
@@ -97,9 +97,9 @@ public class List
 	}
 
 	/**
-	 * The source of data for the Grid to display.
-	 * This will usually be a List or array but can also be an explicit GridDataSource
-	 * @throws ParseException 
+	 * The source of data for the Grid to display. This will usually be a List or array but can also be an explicit GridDataSource
+	 * 
+	 * @throws ParseException
 	 */
 	public GridDataSource getSource() throws ParseException
 	{
@@ -116,7 +116,10 @@ public class List
 			if (propertyDescriptor.isSearchable() && propertyDescriptor.isString())
 				fieldNames.add(propertyDescriptor.getName());
 		}
-		
+		// don't bother with a text query if there are no @Fields
+		if (fieldNames.size() <= 0)
+			return new SearchableHibernateGridDataSource(session, beanType, propertySearchFilterMap);
+
 		MultiFieldQueryParser parser = new MultiFieldQueryParser(Version.LUCENE_36, fieldNames.toArray(new String[0]),
 			new StandardAnalyzer(Version.LUCENE_36));
 		// parser.setDefaultOperator(QueryParser.AND_OPERATOR); // overrides the default OR_OPERATOR, so that all words in the search are
@@ -146,14 +149,18 @@ public class List
 	{
 		return TynamoMessages.add(messages, beanType);
 	}
-	
-	public boolean isSearchable()
+
+	public boolean isSearchable() throws ParseException
 	{
-		return descriptorService.getClassDescriptor(beanType).isSearchable();
+		boolean searchable = descriptorService.getClassDescriptor(beanType).isSearchable();
+		if (!searchable) return false;
+		// hide the search field if there are no results
+		return (searchTerms == null && searchFilters.getActiveFilterMap().size() == 0 && getSource().getAvailableRows() <= 0) ? false
+			: true;
 	}
-	
+
 	void onSuccessFromSearchFilterForm() {
 	}
-	
+
 
 }
