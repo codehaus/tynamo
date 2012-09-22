@@ -18,6 +18,7 @@ import org.apache.tapestry5.corelib.components.Grid;
 import org.apache.tapestry5.grid.GridDataSource;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.services.Request;
 import org.hibernate.search.FullTextSession;
 import org.hibernate.search.query.dsl.QueryBuilder;
 import org.tynamo.components.SearchFilters;
@@ -157,6 +158,15 @@ public class List
 		// hide the search field if there are no results
 		return (searchTerms == null && searchFilters.getActiveFilterMap().size() == 0 && getSource().getAvailableRows() <= 0) ? false
 			: true;
+	}
+
+	@Inject
+	private Request request;
+
+	void onSearchTermsChanged() {
+		String searchTerms = request.getParameter("param");
+		if (searchTerms != null) this.searchTerms = searchTerms;
+		// return request.isXHR() ? termZone.getBody() : null;
 	}
 
 	void onSuccessFromSearchFilterForm() {
