@@ -15,8 +15,9 @@
 	<h1>${title}</h1>
 
 	<t:if test="searchable">
+		<t:zone t:id="termZone"/>
 		<t:form t:id="fulltextSearch">
-			<t:textfield t:id="searchTerms"/>
+			<t:textfield t:id="searchTerms" t:mixins="tynamo/zoneUpdater" t:clientEvent="change" t:event="searchTermsChanged" t:zone="termZone"/>
 			<input type="submit" value="Search"/>
 		</t:form>
 	</t:if>
