@@ -8,7 +8,6 @@ import org.apache.lucene.queryParser.MultiFieldQueryParser;
 import org.apache.lucene.queryParser.ParseException;
 import org.apache.lucene.util.Version;
 import org.apache.tapestry5.EventConstants;
-import org.apache.tapestry5.PersistenceConstants;
 import org.apache.tapestry5.annotations.InjectComponent;
 import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.annotations.Persist;
@@ -58,7 +57,7 @@ public class List
 	@Property(write = false)
 	private Class beanType;
 
-	@Persist(PersistenceConstants.FLASH)
+	@Persist
 	@Property
 	private String searchTerms;
 
@@ -99,7 +98,7 @@ public class List
 
 	/**
 	 * The source of data for the Grid to display. This will usually be a List or array but can also be an explicit GridDataSource
-	 * 
+	 *
 	 * @throws ParseException
 	 */
 	public GridDataSource getSource() throws ParseException
@@ -156,8 +155,21 @@ public class List
 		boolean searchable = descriptorService.getClassDescriptor(beanType).isSearchable();
 		if (!searchable) return false;
 		// hide the search field if there are no results
-		return (searchTerms == null && searchFilters.getActiveFilterMap().size() == 0 && getSource().getAvailableRows() <= 0) ? false
-			: true;
+		return !isSearchCriteriaSet() && getSource().getAvailableRows() <= 0 ? false : true;
+	}
+
+	public boolean isFiltersAvailable() {
+		return searchFilters.getDisplayableDescriptorMap() != null
+			&& searchFilters.getDisplayableDescriptorMap().size() > 0;
+	}
+
+	public boolean isSearchCriteriaSet() {
+		return searchTerms != null || searchFilters.getActiveFilterMap().size() > 0;
+	}
+
+	void onActionFromResetSearchCriteria() {
+		searchTerms = null;
+		searchFilters.resetFilters();
 	}
 
 	@Inject
@@ -172,5 +184,8 @@ public class List
 	void onSuccessFromSearchFilterForm() {
 	}
 
+	public int getBeanCount() {
+		return persistenceService.count(beanType);
+	}
 
 }
