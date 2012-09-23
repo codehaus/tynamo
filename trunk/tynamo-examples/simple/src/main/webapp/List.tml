@@ -5,20 +5,26 @@
 				<t:pagelink class="newlink" page="Add" context="beanType">${newlinkMessage}</t:pagelink>
 			</li>
 		</ul>
-		<h2>Filter</h2>
-		<t:form t:id="searchFilterForm">
-			<t:tynamo.searchFilters beanType="beanType"/>
-			<input type="submit" value="Filter results"/>
-		</t:form>
+		<t:if test="filtersAvailable">
+			<h2>Filter</h2>
+			<t:form t:id="searchFilterForm">
+				<t:tynamo.searchFilters beanType="beanType"/>
+				<input type="submit" value="Filter results"/>
+			</t:form>
+		</t:if>
 	</p:subMenuBlock>
 
 	<h1>${title}</h1>
 
 	<t:if test="searchable">
-		<t:zone t:id="termZone"/>
 		<t:form t:id="fulltextSearch">
-			<t:textfield t:id="searchTerms" t:mixins="tynamo/zoneUpdater" t:clientEvent="change" t:event="searchTermsChanged" t:zone="termZone"/>
-			<input type="submit" value="Search"/>
+			<t:zone t:id="termsZone">
+				<t:textfield t:id="searchTerms" t:mixins="tynamo/zoneUpdater" t:clientEvent="change" t:event="searchTermsChanged" t:zone="termsZone"/>
+				<button type="button" onclick="$(searchFilterForm).submit()">Search</button>
+				<t:if test="searchCriteriaSet">
+					${source.availableRows} results (<t:actionlink t:id="resetSearchCriteria">${beanCount} total</t:actionlink> )
+				</t:if>
+			</t:zone>
 		</t:form>
 	</t:if>
 
