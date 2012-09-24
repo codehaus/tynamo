@@ -12,9 +12,10 @@
 		<property name="hbm2ddl.auto">update</property>
 		<property name="hibernate.show_sql">true</property>
 		<property name="hibernate.format_sql">true</property>
-		<!-- 
+		<!--
 		<property name="hibernate.search.indexing_strategy" value="manual" />
-		 -->
 		<property name="hibernate.search.default.indexBase">/var/tynamo/examples-simple</property>
+		 -->
+		<property name="hibernate.search.default.directory_provider">org.hibernate.search.store.impl.RAMDirectoryProvider</property>
 	</session-factory>
 </hibernate-configuration>
