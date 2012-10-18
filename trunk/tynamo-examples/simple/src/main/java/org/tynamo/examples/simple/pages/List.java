@@ -1,5 +1,6 @@
 package org.tynamo.examples.simple.pages;
 
+import org.apache.tapestry5.Block;
 import org.apache.tapestry5.EventConstants;
 import org.apache.tapestry5.annotations.InjectComponent;
 import org.apache.tapestry5.annotations.OnEvent;
@@ -37,6 +38,10 @@ public class List
 
 	@Property
 	private Object bean;
+
+	@Inject
+	@Property
+	private Block resultcountBlock;
 
 	@InjectComponent
 	private Grid grid;
