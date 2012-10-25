@@ -112,7 +112,10 @@ public class ActivitiSymbols {
 
 	/**
 	 * Flag indicating that the engine should begin and commit/rollback the transaction on the used EntityManager instances.
-	 * Set to false when Java Transaction API (JTA) is used.
+	 * Set to false when Java Transaction API (JTA) is used or when using Tapestry's own start/stop transaction management using @CommitAfter. 
+         * 
+         * Note that if you want Tapestry to manage your transactions by setting this to false, you will need
+         * to properly annotate your methods w/ @CommitAfter so that Tapestry's JPA handling can start/stop the transactions as needed. 
 	 */
 	public static final String JPA_HANDLE_TRANSACTION = "activiti.jpa-handle-transaction";
 
