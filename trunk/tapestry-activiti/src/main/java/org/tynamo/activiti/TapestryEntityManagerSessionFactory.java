@@ -19,16 +19,13 @@ import javax.persistence.EntityManagerFactory;
 public class TapestryEntityManagerSessionFactory implements SessionFactory {
 
 	private EntityManager em;
-	private EntityManagerFactory emf;
 	private boolean handleTransactions;
 	private boolean closeEntityManager;
 
 	public TapestryEntityManagerSessionFactory(EntityManager em,
-	                                           EntityManagerFactory emf,
 	                                           @Symbol(ActivitiSymbols.JPA_HANDLE_TRANSACTION) boolean handleTransactions,
 	                                           @Symbol(ActivitiSymbols.JPA_CLOSE_ENTITY_MANAGER) boolean closeEntityManager) {
 		this.em = em;
-		this.emf = emf;
 		this.handleTransactions = handleTransactions;
 		this.closeEntityManager = closeEntityManager;
 	}
@@ -38,8 +35,10 @@ public class TapestryEntityManagerSessionFactory implements SessionFactory {
 	}
 
 	public Session openSession() {
-		return em != null ?
-				new EntityManagerSessionImpl(emf, em, false, false) :
-				new EntityManagerSessionImpl(emf, handleTransactions, closeEntityManager);
+		if (handleTransactions) {    
+                    return new EntityManagerSessionImpl(em.getEntityManagerFactory(), handleTransactions, closeEntityManager);                    
+                } else {
+                    return new EntityManagerSessionImpl(em.getEntityManagerFactory(), em, false, false) ;
+                }
 	}
 }
