@@ -16,6 +16,7 @@ package org.tynamo.jdo.internal.test;
 import javax.jdo.JDOException;
 import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
+import javax.jdo.identity.LongIdentity;
 import org.apache.tapestry5.services.Request;
 import org.apache.tapestry5.services.Session;
 import org.apache.tapestry5.test.TapestryTestCase;
@@ -68,7 +69,7 @@ public class EntityPersistentFieldStrategyTest extends TapestryTestCase {
                 
         EntityPersistentFieldStrategy strategy = new EntityPersistentFieldStrategy(pm, mockRequest);        
         
-        expect(pm.getObjectId(userEntity)).andReturn(new org.datanucleus.identity.LongIdentity(User.class,1L));
+        expect(pm.getObjectId(userEntity)).andReturn(new LongIdentity(User.class,1L));
 
         replay();
         

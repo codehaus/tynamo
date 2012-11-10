@@ -14,7 +14,12 @@
 package org.tynamo.jdo.internal;
 
 import org.apache.tapestry5.model.MutableComponentModel;
-import org.apache.tapestry5.services.*;
+import org.apache.tapestry5.plastic.MethodAdvice;
+import org.apache.tapestry5.plastic.MethodInvocation;
+import org.apache.tapestry5.plastic.PlasticClass;
+import org.apache.tapestry5.plastic.PlasticMethod;
+import org.apache.tapestry5.services.transform.ComponentClassTransformWorker2;
+import org.apache.tapestry5.services.transform.TransformationSupport;
 import org.tynamo.jdo.JDOTransactionManager;
 import org.tynamo.jdo.annotations.CommitAfter;
 
@@ -22,17 +27,16 @@ import org.tynamo.jdo.annotations.CommitAfter;
  * Searches for methods that have the {@link CommitAfter} annotation and adds
  * logic around the method to commit or abort the transaction.
  */
-public class CommitAfterWorker implements ComponentClassTransformWorker {
+public class CommitAfterWorker implements ComponentClassTransformWorker2 {
 
     private final JDOTransactionManager manager;
-    private final ComponentMethodAdvice advice = new ComponentMethodAdvice() {
+    
+    private final MethodAdvice advice = new MethodAdvice() {
 
-        public void advise(ComponentMethodInvocation invocation) {
+        public void advise(MethodInvocation invocation) {
             try {
                 invocation.proceed();
-
-                // Success or checked exception:
-
+                
                 manager.commit();
             } catch (RuntimeException ex) {
                 manager.abort();
@@ -46,9 +50,9 @@ public class CommitAfterWorker implements ComponentClassTransformWorker {
         this.manager = manager;
     }
 
-    public void transform(ClassTransformation transformation, MutableComponentModel model) {
-        for (TransformMethod sig : transformation.matchMethodsWithAnnotation(CommitAfter.class)) {
-            sig.addAdvice(advice);
+    public void transform(PlasticClass pc, TransformationSupport ts, MutableComponentModel mcm) {
+        for (PlasticMethod pm : pc.getMethodsWithAnnotation(CommitAfter.class)) {
+            pm.addAdvice(advice);
         }
     }
 }

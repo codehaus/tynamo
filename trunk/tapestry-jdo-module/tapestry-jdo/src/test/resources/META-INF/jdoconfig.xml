@@ -4,7 +4,7 @@
     xsi:noNamespaceSchemaLocation="http://java.sun.com/xml/ns/jdo/jdoconfig">
     <!--property name="javax.jdo.option.NontransactionalWrite" value="true"/-->
     <persistence-manager-factory name="tapestryjdotest">
-        <property name="javax.jdo.PersistenceManagerFactoryClass" value="org.datanucleus.jdo.JDOPersistenceManagerFactory"/>
+        <property name="javax.jdo.PersistenceManagerFactoryClass" value="org.datanucleus.api.jdo.JDOPersistenceManagerFactory"/>
         <property name="javax.jdo.option.RetainValues" value="true"/>
 		<property name="javax.jdo.option.ConnectionDriverName" value="org.h2.Driver" />
 		<property name="javax.jdo.option.ConnectionURL" value="jdbc:h2:~/.h2/test-jdo-database" />
