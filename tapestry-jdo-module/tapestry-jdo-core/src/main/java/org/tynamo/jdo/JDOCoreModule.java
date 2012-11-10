@@ -101,11 +101,9 @@ public class JDOCoreModule
 	}
 
 	public static JDOPersistenceManagerSource buildJDOEntityManagerSource(Logger logger,
-	        @Inject @Symbol(JDOSymbols.PMF_NAME) String pmfName, RegistryShutdownHub hub)
+	        @Inject @Symbol(JDOSymbols.PMF_NAME) String pmfName)
 	{
 		JDOPersistenceManagerSourceImpl hss = new JDOPersistenceManagerSourceImpl(logger, pmfName);
-
-		hub.addRegistryShutdownListener(hss);
 
 		return hss;
 	}

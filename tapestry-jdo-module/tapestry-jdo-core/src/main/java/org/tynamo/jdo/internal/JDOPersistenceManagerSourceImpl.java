@@ -11,42 +11,46 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package org.tynamo.jdo.internal;
-
 
 import javax.jdo.JDOHelper;
 import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
-import org.apache.tapestry5.ioc.services.RegistryShutdownListener;
+import org.apache.tapestry5.ioc.annotations.PostInjection;
+import org.apache.tapestry5.ioc.services.RegistryShutdownHub;
 import org.slf4j.Logger;
 import org.tynamo.jdo.JDOPersistenceManagerSource;
 
-public class JDOPersistenceManagerSourceImpl implements JDOPersistenceManagerSource, RegistryShutdownListener {
-	private final PersistenceManagerFactory persistenceManagerFactory;
+public class JDOPersistenceManagerSourceImpl implements JDOPersistenceManagerSource {
 
-	public JDOPersistenceManagerSourceImpl(Logger logger, String pmfName) {
-		long startTime = System.currentTimeMillis();
+    private final PersistenceManagerFactory persistenceManagerFactory;
 
-		long configurationComplete = System.currentTimeMillis();
+    public JDOPersistenceManagerSourceImpl(Logger logger, String pmfName) {
+        long startTime = System.currentTimeMillis();
 
-		persistenceManagerFactory = JDOHelper.getPersistenceManagerFactory(pmfName);				
+        long configurationComplete = System.currentTimeMillis();
 
-		long factoryCreated = System.currentTimeMillis();
+        persistenceManagerFactory = JDOHelper.getPersistenceManagerFactory(pmfName);
 
-		logger.info(JDOCoreMessages.startupTiming(configurationComplete - startTime, factoryCreated - startTime));
-	}
+        long factoryCreated = System.currentTimeMillis();
 
-	public PersistenceManager create() {
-		return persistenceManagerFactory.getPersistenceManager();
-	}
+        logger.info(JDOCoreMessages.startupTiming(configurationComplete - startTime, factoryCreated - startTime));
+    }
 
-	public PersistenceManagerFactory getPersistenceManagerFactory() {
-		return persistenceManagerFactory;
-	}
+    public PersistenceManager create() {
+        return persistenceManagerFactory.getPersistenceManager();
+    }
 
-	public void registryDidShutdown() {
-		persistenceManagerFactory.close();
-	}
+    public PersistenceManagerFactory getPersistenceManagerFactory() {
+        return persistenceManagerFactory;
+    }
 
+    @PostInjection
+    public void listenForShutdown(RegistryShutdownHub hub) {
+        hub.addRegistryShutdownListener(new Runnable() {
+            public void run() {
+                persistenceManagerFactory.close();
+            }
+        });
+    }
 }

@@ -15,9 +15,9 @@
 package org.tynamo.jdo.internal;
 
 import java.lang.reflect.Method;
-import org.apache.tapestry5.ioc.Invocation;
-import org.apache.tapestry5.ioc.MethodAdvice;
 import org.apache.tapestry5.ioc.MethodAdviceReceiver;
+import org.apache.tapestry5.plastic.MethodAdvice;
+import org.apache.tapestry5.plastic.MethodInvocation;
 import org.tynamo.jdo.JDOTransactionAdvisor;
 import org.tynamo.jdo.JDOTransactionManager;
 import org.tynamo.jdo.annotations.CommitAfter;
@@ -30,7 +30,7 @@ public class JDOTransactionAdvisorImpl implements JDOTransactionAdvisor {
      * exception ... so we can use a single shared advice object.
      */
     private final MethodAdvice advice = new MethodAdvice() {
-        public void advise(Invocation invocation) {
+        public void advise(MethodInvocation invocation) {
             try {
                 invocation.proceed();
             }
