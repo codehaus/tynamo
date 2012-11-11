@@ -64,22 +64,7 @@ public class TapestryJDOIntegrationTest extends WebdriverSeleniumTestCase {
         assertEquals(getText("//span[@id='name']").length(), 0);
     }
 
-    /**
-     * TAPESTRY-2244
-     */
-//	public void using_cached_with_form() {
-//		start("Cached Form", "setup");
-//		start()
-//		assertTextSeries("name_%d", 0);
-//
-//		type("name", "name1");
-//		clickAndWait(SUBMIT);
-//		assertTextSeries("name_%d", 0, "name1");
-//
-//		type("name", "name2");
-//		clickAndWait(SUBMIT);
-//		assertTextSeries("name_%d", 0, "name1", "name2");
-//	}
+
     public void commit_after_on_component_methods() {
         open("/");
 
