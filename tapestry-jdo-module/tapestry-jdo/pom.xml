@@ -14,7 +14,7 @@
     <parent>
         <groupId>org.tynamo</groupId>
         <artifactId>tapestry-jdo-module</artifactId>
-        <version>0.0.2</version>
+        <version>0.0.3-SNAPSHOT</version>
     </parent>
 
     <dependencies>
