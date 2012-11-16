@@ -112,28 +112,28 @@
 			<dependency>
 				<groupId>org.tynamo</groupId>
 				<artifactId>tapestry-model-core</artifactId>
-				<version>0.4.1-SNAPSHOT</version>
+				<version>0.4.2-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>org.tynamo</groupId>
 				<artifactId>tapestry-model-hibernate</artifactId>
-				<version>0.4.1-SNAPSHOT</version>
+				<version>0.4.2-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>org.tynamo</groupId>
 				<artifactId>tapestry-model-test</artifactId>
-				<version>0.4.1-SNAPSHOT</version>
+				<version>0.4.2-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>org.tynamo</groupId>
 				<artifactId>tapestry-model-web</artifactId>
-				<version>0.4.1-SNAPSHOT</version>
+				<version>0.4.2-SNAPSHOT</version>
 			</dependency>
 
 			<dependency>
 				<groupId>org.tynamo</groupId>
 				<artifactId>tapestry-routing</artifactId>
-				<version>0.0.2</version>
+				<version>0.0.4</version>
 			</dependency>
 
 		</dependencies>
