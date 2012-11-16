@@ -25,7 +25,7 @@ import org.tynamo.services.PersistenceService;
 import org.tynamo.util.TynamoMessages;
 import org.tynamo.util.Utils;
 
-@At(value = "/catalog/{0}/categories/new", order = "before:AddC")
+@At(value = "/catalog/{0}/categories/new", order = "before:collections/AddC")
 public class CatalogCategoriesAddC
 {
 
