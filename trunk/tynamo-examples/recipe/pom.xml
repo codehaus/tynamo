@@ -46,6 +46,7 @@
 		</dependency>
 
 	</dependencies>
+
 	<profiles>
 		<!-- Do not generate the tapestry-component-report on windows because it will fail with "javadoc: error - cannot find doclet class"
 		see https://issues.apache.org/jira/browse/TAP5-871
@@ -65,7 +66,7 @@
 					<plugin>
 						<groupId>org.apache.tapestry</groupId>
 						<artifactId>tapestry-component-report</artifactId>
-						<version>${tapestry-release-version}</version>
+						<version>5.2.6</version>
 						<configuration>
 							<rootPackage>org.tynamo.examples.simple</rootPackage>
 						</configuration>

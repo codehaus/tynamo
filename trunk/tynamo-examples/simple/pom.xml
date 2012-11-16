@@ -20,7 +20,7 @@
 			<plugin>
 				<groupId>org.apache.tapestry</groupId>
 				<artifactId>tapestry-component-report</artifactId>
-				<version>${tapestry-release-version}</version>
+				<version>5.2.6</version>
 				<configuration>
 					<rootPackage>org.tynamo.examples.simple</rootPackage>
 				</configuration>
