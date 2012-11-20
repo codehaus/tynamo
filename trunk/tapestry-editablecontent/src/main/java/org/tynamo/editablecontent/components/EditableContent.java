@@ -1,7 +1,11 @@
 package org.tynamo.editablecontent.components;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.tapestry5.Asset;
 import org.apache.tapestry5.ComponentResources;
 import org.apache.tapestry5.MarkupWriter;
 import org.apache.tapestry5.PersistenceConstants;
@@ -22,6 +26,7 @@ import org.apache.tapestry5.internal.services.MarkupWriterImpl;
 import org.apache.tapestry5.internal.services.RenderQueueImpl;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.Symbol;
+import org.apache.tapestry5.json.JSONObject;
 import org.apache.tapestry5.runtime.RenderCommand;
 import org.apache.tapestry5.services.AssetSource;
 import org.apache.tapestry5.services.Environment;
@@ -46,6 +51,40 @@ public class EditableContent {
 
 	// @Inject
 	// private WikiContentCache wikiContentCache;
+
+	@Inject
+	@Symbol(EditableContentSymbols.DEFAULT_EDITORPARAMETERS)
+	private String defaultEditorParameters;
+
+	@Inject
+	AssetSource assetSource;
+
+	public Map<String, ?> getDefaultEditorParameters() {
+		if (defaultEditorParameters.startsWith("classpath:")) {
+			Asset ckEditorConfig = assetSource.getClasspathAsset(defaultEditorParameters);
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("customConfig", ckEditorConfig.toClientURL());
+			return map;
+		}
+		// assume json if classpath asset wasn't specified
+
+		// it's possible I missed a direct way of doing this but there's no built-in String to Map coercion
+		JSONObject jsonObject = new JSONObject(defaultEditorParameters);
+		Map<String, Object> map = new HashMap<String, Object>();
+		for (String key : jsonObject.keys())
+			map.put(key, jsonObject.get(key));
+		return map;
+	}
+
+	/**
+	 * Set configuration options for the underlying ckeditor parameters attribute. Uses the symbol
+	 * {@link EditableContentSymbols.DEFAULT_EDITORPARAMETERS} as the default value
+	 * 
+	 * @since 0.0.3
+	 */
+	@Parameter(value = "defaultEditorParameters")
+	@Property(write = false)
+	private Map<String, ?> editorParameters;
 
 	@Inject
 	@Symbol(EditableContentSymbols.READONLY_BYDEFAULT)
@@ -222,8 +261,6 @@ public class EditableContent {
 
 	@Inject
 	private Environment environment;
-	@Inject
-	private AssetSource assetSource;
 
 	@Inject
 	private Logger logger;
