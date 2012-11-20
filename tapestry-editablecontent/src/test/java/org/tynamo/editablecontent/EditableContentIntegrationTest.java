@@ -20,7 +20,7 @@ import org.apache.tapestry5.internal.jpa.PersistenceParser;
 import org.apache.tapestry5.ioc.internal.util.CollectionFactory;
 import org.apache.tapestry5.jpa.JpaConstants;
 import org.apache.tapestry5.jpa.TapestryPersistenceUnitInfo;
-import org.mortbay.jetty.webapp.WebAppContext;
+import org.eclipse.jetty.webapp.WebAppContext;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import org.tynamo.editablecontent.entities.RevisionedContent;
