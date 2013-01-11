@@ -1,37 +1,17 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>org.tynamo.security</groupId>
 	<artifactId>tynamo-federatedaccounts-rollingtokens</artifactId>
 	<name>Rolling Tokens for Tapestry Security</name>
-	<description>Rolling tokens based RememberMe for Tapestry Security</description>
+	<description>JPA Rolling tokens based RememberMe for Tapestry Security</description>
 	<packaging>jar</packaging>
-	<version>0.0.3-SNAPSHOT</version>
 
 	<parent>
-		<groupId>org.tynamo</groupId>
-		<artifactId>tynamo-parent</artifactId>
-		<version>0.0.9</version>
+		<groupId>org.tynamo.security</groupId>
+		<artifactId>tynamo-federatedaccounts-parent</artifactId>
+		<version>0.3.0</version>
 	</parent>
 
-	<properties>
-		<tapestry-release-version>5.3.3</tapestry-release-version>
-	</properties>
-
-	<scm>
-		<connection>scm:svn:http://svn.codehaus.org/tynamo/trunk/tynamo-federatedaccounts-rollingtokens</connection>
-		<developerConnection>scm:svn:https://svn.codehaus.org/tynamo/trunk/tynamo-federatedaccounts-rollingtokens</developerConnection>
-		<url>http://svn.tynamo.codehaus.org/tynamo/trunk/tynamo-federatedaccounts-rollingtokens</url>
-	</scm>
-
-	<distributionManagement>
-		<site>
-			<id>tynamo-site</id>
-			<!-- Note the url. Only static files deployed in /constant/ can be decorated by Unity -->
-			<url>dav:https://dav.codehaus.org/tynamo/constant/sites/tynamo-federatedaccounts-rollingtokens</url>
-		</site>
-	</distributionManagement>
-	
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.tapestry</groupId>
@@ -79,28 +59,29 @@
 			<artifactId>mockito-all</artifactId>
 			<scope>test</scope>
 		</dependency>
+
 		<dependency>
 			<groupId>org.tynamo</groupId>
 			<artifactId>tynamo-common</artifactId>
-			<version>0.0.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.tynamo</groupId>
 			<artifactId>tapestry-model-test</artifactId>
 			<version>0.1.0</version>
 		</dependency>
+
 		<dependency>
 			<groupId>org.tynamo</groupId>
 			<artifactId>tapestry-security</artifactId>
-			<version>0.4.4</version>
 		</dependency>
+
 		<dependency>
 			<groupId>org.tynamo.security</groupId>
 			<artifactId>tynamo-federatedaccounts-core</artifactId>
-			<version>0.1.0</version>
 		</dependency>
+
 	</dependencies>
-	
+
 	<build>
 		<resources>
 			<resource>
@@ -163,7 +144,7 @@
 
 		</plugins>
 	</build>
-	
+
 	<profiles>
 		<profile>
 			<id>repositories</id>
