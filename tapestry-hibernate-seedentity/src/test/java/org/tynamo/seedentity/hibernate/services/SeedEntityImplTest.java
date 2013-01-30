@@ -12,7 +12,7 @@ import org.apache.tapestry5.hibernate.HibernateSessionSource;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.hibernate.cfg.AnnotationConfiguration;
+import org.hibernate.cfg.Configuration;
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
@@ -20,6 +20,8 @@ import org.testng.annotations.Test;
 import org.tynamo.seedentity.SeedEntityIdentifier;
 import org.tynamo.seedentity.SeedEntityUpdater;
 import org.tynamo.seedentity.hibernate.entities.ActionItem;
+import org.tynamo.seedentity.hibernate.entities.BaseUniqueEntity;
+import org.tynamo.seedentity.hibernate.entities.ChildUniqueEntity;
 import org.tynamo.seedentity.hibernate.entities.NaturalThing;
 import org.tynamo.seedentity.hibernate.entities.NonUniqueThing;
 import org.tynamo.seedentity.hibernate.entities.Thing;
@@ -33,13 +35,15 @@ public class SeedEntityImplTest {
 
 	@BeforeClass
 	public void buildSessionFactory() {
-		AnnotationConfiguration configuration = new AnnotationConfiguration();
+		Configuration configuration = new Configuration();
 		configuration.addAnnotatedClass(Thing.class);
 		configuration.addAnnotatedClass(NaturalThing.class);
 		configuration.addAnnotatedClass(NonUniqueThing.class);
 		configuration.addAnnotatedClass(ActionItem.class);
 		configuration.addAnnotatedClass(Worker.class);
 		configuration.addAnnotatedClass(TotallyNonUniqueThing.class);
+		configuration.addAnnotatedClass(BaseUniqueEntity.class);
+		configuration.addAnnotatedClass(ChildUniqueEntity.class);
 		configuration.configure("/hibernate-test.cfg.xml");
 		sessionFactory = configuration.buildSessionFactory();
 	}
@@ -58,7 +62,7 @@ public class SeedEntityImplTest {
 		Thing thing = new Thing();
 		List<Object> entities = new ArrayList<Object>();
 		entities.add(thing);
-		HibernateSessionSource sessionSource = mock(HibernateSessionSource.class);
+		mock(HibernateSessionSource.class);
 		seedEntityImpl.seed(session, entities);
 		assertTrue(session.createCriteria(Thing.class).list().size() > 0);
 	}
@@ -128,4 +132,13 @@ public class SeedEntityImplTest {
 		assertEquals(session.createCriteria(NaturalThing.class).list().size(), 1);
 	}
 
+	@Test
+	public void seedInheritanceMappingChildEntitiesWithTwoUniqueConstraintOnBaseClass() {
+		List<Object> entities = new ArrayList<Object>();
+		entities.add(new ChildUniqueEntity(1, "child", "First Child", "Max"));
+		entities.add(new ChildUniqueEntity(2, "child", "First Child", "Mary"));
+		entities.add(new ChildUniqueEntity(3, "child", "Second Child", "Max"));
+		seedEntityImpl.seed(session, entities);
+		assertEquals(session.createCriteria(ChildUniqueEntity.class).list().size(), 1);
+	}
 }

@@ -5,6 +5,7 @@ import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -26,6 +27,7 @@ import org.hibernate.Transaction;
 import org.hibernate.annotations.NaturalId;
 import org.hibernate.criterion.Example;
 import org.hibernate.metadata.ClassMetadata;
+import org.hibernate.persister.entity.SingleTableEntityPersister;
 import org.slf4j.Logger;
 import org.tynamo.seedentity.SeedEntityIdentifier;
 import org.tynamo.seedentity.SeedEntityUpdater;
@@ -118,73 +120,89 @@ public class SeedEntityImpl implements SeedEntity {
 			for (PropertyDescriptor descriptor : descriptors)
 				nonUniqueProperties.add(descriptor.getName());
 
-			boolean uniquePropertyExists = uniquelyIdentifyingProperty != null;
-			if (uniquelyIdentifyingProperty == null) {
-				Set<String> uniqueProperties = findPossiblePropertiesWithUniqueColumnAnnotation(entity, descriptors);
-				for (String uniqueProperty : uniqueProperties) {
-					nonUniqueProperties.remove(uniqueProperty);
-					uniquePropertyExists = true;
-				}
-			} else nonUniqueProperties.remove(uniquelyIdentifyingProperty);
-
-			Example example = Example.create(entity);
-			for (String nonUniqueProperty : nonUniqueProperties)
-				example.excludeProperty(nonUniqueProperty);
-			List<Object> results = session.createCriteria(entity.getClass()).add(example).list();
-
-			if (results.size() > 0 && uniquePropertyExists) {
-				logger.info("At least one existing entity with same unique properties as '" + entity + "' of type '"
-						+ entity.getClass().getSimpleName() + "' already exists, skipping seeding this entity");
-				// Need to set the id to the seed bean so a new seed entity with a relationship to existing seed entity can be
-				// saved.
-				Object existingObject = results.get(0);
-				// Always evict though it's only needed if existing objects are updated
-				session.evict(existingObject);
-
-				// Results should include only one object and we don't know any better which is the right object anyway
-				// so use the first one
-				ClassMetadata metadata = sessionFactory.getClassMetadata(entity.getClass());
-				metadata.setIdentifier(entity, metadata.getIdentifier(existingObject, EntityMode.POJO), EntityMode.POJO);
-
-				continue;
+			Set<Set<String>> setsOfUniqueProperties;
+			if (uniquelyIdentifyingProperty == null)
+				setsOfUniqueProperties = findPossiblePropertiesWithUniqueColumnAnnotation(entity, descriptors);
+			else {
+				setsOfUniqueProperties = new HashSet<Set<String>>();
+				setsOfUniqueProperties.add(new HashSet<String>(Arrays.asList(uniquelyIdentifyingProperty)));
 			}
-			session.save(entity);
-			newlyAddedEntities.add(entity);
+			
+			boolean entityWithSameValuesFound = false;
+			for (Set<String> uniqueProperties : setsOfUniqueProperties) {
+				HashSet<String> nonUniquePropertiesCopy = new HashSet<String>(nonUniqueProperties);
+				nonUniquePropertiesCopy.removeAll(uniqueProperties);
+				Example example = Example.create(entity);
+				for (String nonUniqueProperty : nonUniquePropertiesCopy)
+					example.excludeProperty(nonUniqueProperty);
+				List<Object> results = session.createCriteria(entity.getClass()).add(example).list();
+
+				if (results.size() > 0) {
+					logger.info("At least one existing entity with same unique properties as '" + entity + "' of type '"
+						+ entity.getClass().getSimpleName() + "' already exists, skipping seeding this entity");
+					// Need to set the id to the seed bean so a new seed entity with a relationship to existing seed entity can be
+					// saved.
+					Object existingObject = results.get(0);
+					// Always evict though it's only needed if existing objects are updated
+					session.evict(existingObject);
+
+					// Results should include only one object and we don't know any better which is the right object anyway
+					// so use the first one
+					ClassMetadata metadata = sessionFactory.getClassMetadata(entity.getClass());
+					metadata.setIdentifier(entity, metadata.getIdentifier(existingObject, EntityMode.POJO), EntityMode.POJO);
+
+					entityWithSameValuesFound = true;
+					break;
+				}
+			}
+			if (!entityWithSameValuesFound) {
+				session.save(entity);
+				newlyAddedEntities.add(entity);
+			}
 		}
 		tx.commit();
 		newlyAddedEntities.clear();
 	}
 
-	private Set<String> findPossiblePropertiesWithUniqueColumnAnnotation(Object entity, PropertyDescriptor[] descriptors) {
-		Set<String> uniqueProperties = new HashSet<String>();
+	private Set<Set<String>> findPossiblePropertiesWithUniqueColumnAnnotation(Object entity, PropertyDescriptor[] descriptors) {
+		Set<Set<String>> uniqueProperties = new HashSet<Set<String>>();
 
-		if (entity.getClass().isAnnotationPresent(Table.class)) {
-			Table annotation = entity.getClass().getAnnotation(Table.class);
-			if (annotation.uniqueConstraints() != null) {
-				for (UniqueConstraint uniqueConstraint : annotation.uniqueConstraints())
-					for (String uniqueColumn : uniqueConstraint.columnNames())
-						uniqueProperties.add(uniqueColumn);
+		Class<?> entityClass = entity.getClass();
+		for(;;) {
+			if (entityClass.isAnnotationPresent(Table.class)) {
+				Table annotation = entityClass.getAnnotation(Table.class);
+				if (annotation.uniqueConstraints() != null) {
+					for (UniqueConstraint uniqueConstraint : annotation.uniqueConstraints())
+							uniqueProperties.add(new HashSet<String>(Arrays.asList(uniqueConstraint.columnNames())));
+				}
 			}
-		}
 
-		Class<? extends Object> aClass = entity.getClass();
-		Method[] methods = aClass.getDeclaredMethods();
-		for (Method method : methods) {
-			if (!method.isAnnotationPresent(NaturalId.class) && !method.isAnnotationPresent(Column.class)) continue;
-			Column columnAnnotation = method.getAnnotation(Column.class);
-			if (columnAnnotation != null && !columnAnnotation.unique()) continue;
-			PropertyDescriptor descriptor = findPropertyForMethod(method, descriptors);
-			if (descriptor != null) uniqueProperties.add(descriptor.getName());
-		}
+			Method[] methods = entityClass.getDeclaredMethods();
+			for (Method method : methods) {
+				if (!method.isAnnotationPresent(NaturalId.class) && !method.isAnnotationPresent(Column.class))
+					continue;
+				Column columnAnnotation = method.getAnnotation(Column.class);
+				if (columnAnnotation != null && !columnAnnotation.unique())
+					continue;
+				PropertyDescriptor descriptor = findPropertyForMethod(method, descriptors);
+				if (descriptor != null)
+					uniqueProperties.add(new HashSet<String>(Arrays.asList(descriptor.getName())));
+			}
 
-		// Fields
-		Field[] fields = aClass.getDeclaredFields();
-		for (Field currentField : fields) {
-			currentField.setAccessible(true);
-			if (!currentField.isAnnotationPresent(NaturalId.class) && !currentField.isAnnotationPresent(Column.class)) continue;
-			Column columnAnnotation = currentField.getAnnotation(Column.class);
-			if (columnAnnotation != null && !columnAnnotation.unique()) continue;
-			uniqueProperties.add(currentField.getName());
+			// Fields
+			Field[] fields = entityClass.getDeclaredFields();
+			for (Field currentField : fields) {
+				currentField.setAccessible(true);
+				if (!currentField.isAnnotationPresent(NaturalId.class) && !currentField.isAnnotationPresent(Column.class))
+					continue;
+				Column columnAnnotation = currentField.getAnnotation(Column.class);
+				if (columnAnnotation != null && !columnAnnotation.unique())
+					continue;
+				uniqueProperties.add(new HashSet<String>(Arrays.asList(currentField.getName())));
+			}
+			ClassMetadata superClassMetadata = sessionFactory.getClassMetadata(entityClass.getSuperclass());
+			if(!(superClassMetadata instanceof SingleTableEntityPersister)) break;
+			entityClass = entityClass.getSuperclass();
 		}
 
 		return uniqueProperties;
