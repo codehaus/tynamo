@@ -1,7 +1,7 @@
 <div xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd" xmlns:p="tapestry:parameter" class="editablecontent_container">
 	<t:zone t:id="contentZone">
 		<t:if test="edited">
-			<t:form t:id="contentEditorForm" id="contentEditorForm" t:zone="contentZone">
+			<t:form t:id="contentEditorForm" id="contentEditorForm" t:zone="^">
 				<t:errors/>
 				<t:textArea t:id="contentArea" t:mixins="tynamo/CKEditor" value="contentValue" parameters="editorParameters" />
 				<t:actionlink t:id="cancelLink" zone="contentZone">Cancel</t:actionlink>
@@ -13,7 +13,7 @@
 				<t:if test="editable">
 					<div style="overflow:auto">
 						<div class="editablecontent_actions">
-							<t:actionlink t:id="editLink" zone="contentZone">[ edit ]</t:actionlink>
+							<t:actionlink t:id="editLink" zone="^">[ edit ]</t:actionlink>
 						</div>
 					</div>
 				</t:if>
