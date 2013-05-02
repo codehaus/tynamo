@@ -4,7 +4,7 @@
 	<artifactId>tynamo-test</artifactId>
 	<name>Tynamo Test</name>
 	<packaging>jar</packaging>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.1</version>
 
 	<parent>
 		<groupId>org.tynamo</groupId>
@@ -13,9 +13,9 @@
 	</parent>
 	
 	<scm>
-		<connection>scm:svn:http://svn.codehaus.org/tynamo/trunk/tynamo-test</connection>
-		<developerConnection>scm:svn:https://svn.codehaus.org/tynamo/trunk/tynamo-test</developerConnection>
-		<url>http://svn.tynamo.codehaus.org/tynamo/trunk/tynamo-test</url>
+		<connection>scm:svn:http://svn.codehaus.org/tynamo/tags/tynamo-test-0.0.1</connection>
+		<developerConnection>scm:svn:https://svn.codehaus.org/tynamo/tags/tynamo-test-0.0.1</developerConnection>
+		<url>http://svn.tynamo.codehaus.org/tynamo/tags/tynamo-test-0.0.1</url>
 	</scm>
 
 	<dependencies>
