@@ -32,13 +32,6 @@
 			<scope>compile</scope>
 		</dependency>
 
-<!--
-		<dependency>
-			<groupId>org.tynamo</groupId>
-			<artifactId>tapestry-model-annotations</artifactId>
-		</dependency>
--->
-
 		<dependency>
 			<groupId>net.sourceforge.htmlunit</groupId>
 			<artifactId>htmlunit</artifactId>
