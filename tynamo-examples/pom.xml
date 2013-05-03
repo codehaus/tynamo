@@ -2,7 +2,6 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>org.tynamo</groupId>
 	<artifactId>examples</artifactId>
 	<packaging>pom</packaging>
 	<name>Tynamo Examples</name>
@@ -15,7 +14,6 @@
 		<module>security</module>
 -->
 	</modules>
-
 
 	<parent>
 		<groupId>org.tynamo</groupId>
@@ -154,8 +152,8 @@
 			</dependency>
 			<dependency>
 				<groupId>org.tynamo</groupId>
-				<artifactId>tapestry-model-test</artifactId>
-				<version>0.5.1-SNAPSHOT</version>
+				<artifactId>tynamo-test</artifactId>
+				<version>0.0.1</version>
 			</dependency>
 			<dependency>
 				<groupId>org.tynamo</groupId>
@@ -167,6 +165,12 @@
 				<groupId>org.tynamo</groupId>
 				<artifactId>tapestry-routing</artifactId>
 				<version>0.0.4</version>
+				<exclusions>
+					<exclusion>
+						<groupId>org.apache.tapestry</groupId>
+						<artifactId>tapestry-core</artifactId>
+					</exclusion>
+				</exclusions>
 			</dependency>
 
 		</dependencies>
