@@ -32,7 +32,7 @@ public class CarPk implements Serializable
 
 	private Make make;
 
-	private Model model;
+	private CarModel carModel;
 
 	@Transient
 //	#todo @InitialValue("model.make")
@@ -49,19 +49,19 @@ public class CarPk implements Serializable
 	@NotNull
 	@ManyToOne(optional = false)
 //	#todo @PossibleValues("make.models")
-	public Model getModel()
+	public CarModel getCarModel()
 	{
-		return model;
+		return carModel;
 	}
 
-	public void setModel(Model model)
+	public void setCarModel(CarModel carModel)
 	{
-		this.model = model;
+		this.carModel = carModel;
 	}
 
 	public String toString()
 	{
-		return getModel() == null ? null : getModel().toString() + ", " + getModel().getMake().toString() + ", " + name;
+		return getCarModel() == null ? null : getCarModel().toString() + ", " + getCarModel().getMake().toString() + ", " + name;
 	}
 
 }

@@ -29,8 +29,8 @@ public class CarTest extends AbstractContainerTest
 
 		startPage = clickLink(listMakesPage, "Home");
 
-		HtmlPage listModelsPage = clickLink(startPage, "List Models");
-		HtmlPage newModelPage = clickLink(listModelsPage, "New Model");
+		HtmlPage listModelsPage = clickLink(startPage, "List Car Models");
+		HtmlPage newModelPage = clickLink(listModelsPage, "New Car Model");
 		form = newModelPage.getHtmlElementById("form");
 		form.getInputByName("name").setValueAttribute("Civic");
 		listModelsPage = clickButton(newModelPage, "saveAndReturn");
@@ -81,14 +81,14 @@ public class CarTest extends AbstractContainerTest
 		ddElement = (HtmlDefinitionDescription)newMakePage.getByXPath("//dt[contains(text(),'Id')]/following-sibling::dd").get(0);
 		int toyotaId = Integer.parseInt(ddElement.getTextContent());
 
-		HtmlPage newModelPage = webClient.getPage(BASEURI +"add/model");
+		HtmlPage newModelPage = webClient.getPage(BASEURI +"add/carmodel");
 		HtmlForm newModelForm = newModelPage.getHtmlElementById("form");
 		newModelForm.getInputByName("name").setValueAttribute("Prius");
 		newModelPage = clickButton(newModelPage, "saveAndReturn");
 		ddElement = (HtmlDefinitionDescription)newModelPage.getByXPath("//dt[contains(text(),'Id')]/following-sibling::dd").get(0);
 		int priusId = Integer.parseInt(ddElement.getTextContent());
 
-		newModelPage = webClient.getPage(BASEURI +"add/model");
+		newModelPage = webClient.getPage(BASEURI +"add/carmodel");
 		newModelForm = newModelPage.getHtmlElementById("form");
 		newModelForm.getInputByName("name").setValueAttribute("Sedan");
 		clickButton(newModelPage, "saveAndReturn");
@@ -101,7 +101,7 @@ public class CarTest extends AbstractContainerTest
 		assertXPathPresent(editMakePage, "//select[@id='palette_set-avail']/option[text()='Prius']");
 		assertXPathPresent(editMakePage, "//select[@id='palette_set-avail']/option[text()='Sedan']");
 
-		HtmlPage editModelPage = webClient.getPage(BASEURI + "edit/model/" + priusId);
+		HtmlPage editModelPage = webClient.getPage(BASEURI + "edit/carmodel/" + priusId);
 		form = editModelPage.getHtmlElementById("form");
 		form.getSelectByName("make").getOptionByText("Toyota").setSelected(true);
 		clickButton(editModelPage, "saveAndReturn");

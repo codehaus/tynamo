@@ -1,6 +1,5 @@
 package org.tynamo.examples.simple.entities;
 
-import javax.validation.constraints.NotNull;
 import org.tynamo.descriptor.annotation.PropertyDescriptor;
 
 import javax.persistence.*;
@@ -9,7 +8,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-public class Model implements Serializable
+public class CarModel implements Serializable
 {
 
 	private Integer id;
@@ -53,7 +52,7 @@ public class Model implements Serializable
 		this.make = make;
 	}
 
-	@OneToMany(mappedBy = "id.model")
+	@OneToMany(mappedBy = "id.carModel")
 	@PropertyDescriptor(readOnly = true)
 	public Set<Car> getCars()
 	{
@@ -71,7 +70,7 @@ public class Model implements Serializable
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 
-		Model item = (Model) o;
+		CarModel item = (CarModel) o;
 		return getId() != null ? getId().equals(item.getId()) : item.getId() == null;
 	}
 
