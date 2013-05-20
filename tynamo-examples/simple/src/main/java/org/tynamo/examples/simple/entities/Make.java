@@ -38,28 +38,28 @@ public class Make implements Serializable
 		this.name = name;
 	}
 
-	private Set<Model> models = new HashSet<Model>();
+	private Set<CarModel> carModels = new HashSet<CarModel>();
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "make")
 	@PropertyDescriptor(searchable = false)
-	@CollectionDescriptor(addExpression = "addModel", removeExpression = "removeModel")
-	public Set<Model> getModels() {
-		return models;
+	@CollectionDescriptor(addExpression = "addCarModel", removeExpression = "removeCarModel")
+	public Set<CarModel> getCarModels() {
+		return carModels;
 	}
 
-	public void setModels(final Set<Model> theModels)
+	public void setCarModels(final Set<CarModel> theCarModels)
 	{
-		models = theModels;
+		carModels = theCarModels;
 	}
 
-	public void addModel(Model model) {
-		model.setMake(this);
-		models.add(model);
+	public void addCarModel(CarModel carModel) {
+		carModel.setMake(this);
+		carModels.add(carModel);
 	}
 
-	public void removeModel(Model model) {
-		models.remove(model);
-		model.setMake(null);
+	public void removeCarModel(CarModel carModel) {
+		carModels.remove(carModel);
+		carModel.setMake(null);
 	}
 
 	@Override

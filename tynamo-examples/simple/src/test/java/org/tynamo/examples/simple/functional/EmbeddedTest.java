@@ -21,6 +21,6 @@ public class EmbeddedTest extends AbstractContainerTest
 
 		assertXPathPresent(showPersonPage, "//dd[text()='John']");
 		assertXPathPresent(showPersonPage, "//dd[text()='Doe']");
-		assertXPathPresent(showPersonPage, "//dd[text()='Sunnyville']");
+		assertXPathPresent(showPersonPage, "//dd[contains(text(),'Sunnyville')]");
 	}
 }

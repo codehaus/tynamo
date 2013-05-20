@@ -18,7 +18,7 @@ public class AssociationTest extends AbstractContainerTest
 		form.<HtmlInput>getInputByName("name").setValueAttribute("Honda");
 		HtmlPage listMakesPage = clickButton(newMakePage, "saveAndReturn");
 
-		HtmlPage newModelPage = webClient.getPage(BASEURI +"add/model");
+		HtmlPage newModelPage = webClient.getPage(BASEURI +"add/carmodel");
 		HtmlForm newModelForm = newModelPage.getHtmlElementById("form");
 		newModelForm.<HtmlInput>getInputByName("name").setValueAttribute("Civic");
 

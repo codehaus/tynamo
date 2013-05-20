@@ -6,6 +6,7 @@ import org.tynamo.descriptor.annotation.BlobDescriptor;
 import org.tynamo.descriptor.extension.TynamoBlob;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Entity
 public class Person
@@ -46,6 +47,7 @@ public class Person
 		this.address = address;
 	}
 
+	@NotNull
 	public String getFirstName()
 	{
 		return firstName;
@@ -56,6 +58,7 @@ public class Person
 		this.firstName = firstName;
 	}
 
+	@NotNull
 	public String getLastName()
 	{
 		return lastName;
@@ -116,5 +119,11 @@ public class Person
 	public int hashCode()
 	{
 		return (getId() != null ? getId().hashCode() : 0);
+	}
+
+	@Override
+	public String toString()
+	{
+		return firstName + " " + lastName;
 	}
 }
