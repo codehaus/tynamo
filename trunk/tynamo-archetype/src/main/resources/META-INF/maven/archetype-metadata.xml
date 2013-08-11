@@ -14,15 +14,19 @@
 		</fileSet>
 
 		<fileSet filtered="true">
-			<directory>src/main/webapp/WEB-INF/</directory>
+			<directory>src/main/webapp</directory>
 			<includes>
-				<include>web.xml</include>
+				<include>About.tml</include>
+				<include>Contact.tml</include>
+				<include>WEB-INF/web.xml</include>
 			</includes>
 		</fileSet>
 
 		<fileSet filtered="false">
 			<directory>src/main/webapp</directory>
 			<excludes>
+				<exclude>About.tml</exclude>
+				<exclude>Contact.tml</exclude>
 				<exclude>WEB-INF/web.xml</exclude>
 			</excludes>
 		</fileSet>
