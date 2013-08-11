@@ -25,7 +25,7 @@
 				</div>
 			</div>
 
-			<div id="sub">
+			<div id="sub" class="sub">
 				<h2>${message:menu}</h2>
 				<t:delegate to="subMenuBlock" />
 			</div>
