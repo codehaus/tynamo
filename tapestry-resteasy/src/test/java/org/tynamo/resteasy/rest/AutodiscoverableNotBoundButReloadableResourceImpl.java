@@ -1,5 +1,0 @@
-package org.tynamo.resteasy.rest;
-
-public class AutodiscoverableNotBoundButReloadableResourceImpl implements AutodiscoverableNotBoundButReloadableResource
-{
-}
