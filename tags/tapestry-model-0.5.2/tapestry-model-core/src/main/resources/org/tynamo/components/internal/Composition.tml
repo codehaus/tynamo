@@ -1,0 +1,11 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<div class="composition" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd" xmlns:p="tapestry:parameter">
+
+	<p style="color:red;font-weight:bold">
+		Since Tapestry 5.3, this component doesn't work due to the environment cloaking issue.
+		For more information see the <a
+			href="http://tapestry.1045711.n5.nabble.com/5-3-Too-much-environment-cloaking-bug-td5005584.html">5.3 Too
+		much environment cloaking bug</a> thread on the mailing list.
+	</p>
+
+</div>
